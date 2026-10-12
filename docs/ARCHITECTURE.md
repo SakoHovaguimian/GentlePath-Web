@@ -34,7 +34,7 @@ Root layout passes only a public runtime configuration to `RuntimeProvider`. Pro
 - URL: committed filters, selected dashboard model, list query.
 - Component state: forms, disclosure, pending UI.
 - Zustand: existing dashboard density/chrome only; do not duplicate server data there.
-- Local storage: appearance, consent choice, per-user push opt-in and FCM registration identifier. Never auth tokens.
+- Local storage: appearance and motion, consent choice, per-user push opt-in and FCM registration identifier. Never auth tokens.
 - Server process: demo records and demo credentials. Live data lives on the backend.
 
-The existing custom UI system remains in `src/components/ui`; this migration does not replace it with Astryx. See [migration decisions](MIGRATION.md).
+The custom UI system in `src/components/ui` includes the reusable LeafLaunch foundation. Theme CSS is canonical; preference services are constructed in the client container, and shared providers own appearance/motion/navigation/assistant presentation. Components receive callbacks; server data stays in domain services and query hooks. See [UI system](UI_SYSTEM.md) and [migration decisions](MIGRATION.md).

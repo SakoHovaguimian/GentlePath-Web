@@ -1,21 +1,8 @@
+import {
+  AccentThemeSchema,
+  defaultAppearancePreference,
+} from '@/models/appearance';
 export function ThemeScript() {
-  const script = `
-    (function() {
-      try {
-        const raw = localStorage.getItem('semantic-web-theme');
-        const value = raw ? JSON.parse(raw) : { mode: 'light', accent: 'aqua' };
-        var root = document.documentElement;
-        root.classList.toggle('dark-mode', value.mode === 'dark');
-        root.dataset.theme = value.mode || 'light';
-        root.dataset.accent = value.accent || 'aqua';
-      } catch (error) {
-        var root = document.documentElement;
-        root.classList.remove('dark-mode');
-        root.dataset.theme = 'light';
-        root.dataset.accent = 'aqua';
-      }
-    })();
-  `;
-
+  const script = `(function(){var root=document.documentElement;var fallback=${JSON.stringify(defaultAppearancePreference)};try{var value=JSON.parse(localStorage.getItem('semantic-web-theme')||'null');if(!value||!${JSON.stringify(AccentThemeSchema.options)}.includes(value.accent)||!['light','dark'].includes(value.mode))value=fallback;}catch(error){value=fallback;}root.classList.toggle('dark-mode',value.mode==='dark');root.dataset.theme=value.mode;root.dataset.accent=value.accent;try{root.dataset.motion=localStorage.getItem('portal-motion')==='"reduced"'?'reduced':'system';}catch(error){root.dataset.motion='system';}})();`;
   return <script dangerouslySetInnerHTML={{ __html: script }} />;
 }

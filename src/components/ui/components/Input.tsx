@@ -1,11 +1,20 @@
-import type { InputHTMLAttributes, ReactNode } from 'react';
-import { cn } from '../lib/cn';
+'use client';
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+import type { ComponentPropsWithRef, ReactNode } from 'react';
+import { cn } from '../lib/cn';
+export { Field } from './Field';
+
+type InputProps = ComponentPropsWithRef<'input'> & {
   leadingIcon?: ReactNode;
 };
 
-export function Input({ id, className, leadingIcon, ...props }: InputProps) {
+export function Input({
+  id,
+  type,
+  className,
+  leadingIcon,
+  ...props
+}: InputProps) {
   return (
     <div className="group relative">
       {leadingIcon ? (
@@ -15,28 +24,17 @@ export function Input({ id, className, leadingIcon, ...props }: InputProps) {
       ) : null}
       <input
         id={id}
+        type={type}
         className={cn(
-          'w-full rounded-xl border border-secondary bg-primary px-4 py-2.5 text-sm text-primary shadow-none outline-none transition placeholder:text-placeholder focus:border-brand focus:ring-4 focus:ring-brand/12 disabled:cursor-not-allowed disabled:bg-disabled_subtle disabled:text-disabled',
+          'ui-input min-h-12 w-full min-w-0 rounded-lg border border-[var(--color-control-border)] bg-primary px-4 py-2.5 text-sm text-primary shadow-none outline-none transition placeholder:text-placeholder hover:border-primary focus:border-brand focus:ring-4 focus:ring-brand/12 aria-invalid:border-error aria-invalid:focus:ring-error/12 read-only:bg-secondary_subtle disabled:cursor-not-allowed disabled:border-secondary disabled:bg-disabled_subtle disabled:text-disabled',
           leadingIcon ? 'pl-11' : null,
+          type === 'date' || type === 'time'
+            ? 'scheme-light dark:scheme-dark'
+            : null,
           className,
         )}
         {...props}
       />
     </div>
-  );
-}
-
-export function Field({
-  labelText,
-  children,
-}: {
-  labelText: string;
-  children: ReactNode;
-}) {
-  return (
-    <label className="flex flex-col gap-1.5 text-sm font-medium text-secondary">
-      <span>{labelText}</span>
-      {children}
-    </label>
   );
 }

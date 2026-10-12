@@ -1,0 +1,36 @@
+.surface {
+  position: relative;
+  isolation: isolate;
+}
+
+.content {
+  display: contents;
+}
+
+/* Keep each control above the cell's native link, including disabled controls.
+   Headers and tables without a record destination never get this treatment. */
+.content
+  :is(
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    label,
+    summary,
+    [role='button'],
+    [role='checkbox'],
+    [role='switch'],
+    [role='combobox'],
+    [contenteditable='true'],
+    [tabindex]
+  ) {
+  position: relative;
+  z-index: 1;
+}
+
+.link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}

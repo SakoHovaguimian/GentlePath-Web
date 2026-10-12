@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
 import { displayLiteral, sourceFile } from './string-literals.mjs';
+import { titleCaseViolations } from './title-case.mjs';
 function files(dir) {
   return fs
     .readdirSync(dir, { withFileTypes: true })
@@ -14,6 +15,14 @@ function files(dir) {
     );
 }
 let failures = 0;
+for (const violation of titleCaseViolations(
+  fs.readFileSync('src/strings.ts', 'utf8'),
+)) {
+  console.error(
+    `src/strings.ts:${violation.line}: ${violation.key} must use title case. Expected: ${violation.expected}`,
+  );
+  failures++;
+}
 for (const file of files('src')) {
   if (file === path.join('src', 'strings.ts')) continue;
   const source = fs.readFileSync(file, 'utf8');

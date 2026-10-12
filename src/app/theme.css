@@ -1,51 +1,70 @@
 @theme {
+  --font-ios-push:
+    -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  --ios-push-background: rgb(246 247 249 / 90%);
+  --ios-push-border: rgb(255 255 255 / 65%);
+  --ios-push-text: rgb(20 22 25);
+  --ios-push-secondary: rgb(89 93 100);
+  --ios-push-icon-background: var(--color-brand-600);
+  --ios-push-icon-foreground: var(--color-white);
+  --ios-push-shadow:
+    0 8px 32px rgb(16 24 40 / 18%), inset 0 1px 0 rgb(255 255 255 / 70%);
   /* FONT FAMILY */
-  --font-body:
-    var(--font-inter, 'Inter'), -apple-system, 'Segoe UI', Roboto, Arial,
-    sans-serif;
+  --font-body: Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display:
-    var(--font-inter, 'Inter'), -apple-system, 'Segoe UI', Roboto, Arial,
-    sans-serif;
-  --font-mono:
-    ui-monospace, 'Roboto Mono', SFMono-Regular, Menlo, Monaco, Consolas,
-    'Liberation Mono', 'Courier New', monospace;
+    Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', SFMono-Regular, Consolas, monospace;
 
-  /* FONT SIZE */
-  --text-xs: calc(var(--spacing) * 3);
-  --text-xs--line-height: calc(var(--spacing) * 4.5);
+  /* FONT SIZE: readable controls, body text, and captions at every width. */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.25rem;
 
-  --text-sm: calc(var(--spacing) * 3.5);
-  --text-sm--line-height: calc(var(--spacing) * 5);
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5rem;
 
-  --text-md: calc(var(--spacing) * 4);
-  --text-md--line-height: calc(var(--spacing) * 6);
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.75rem;
+  --text-md: var(--text-base);
+  --text-md--line-height: var(--text-base--line-height);
 
-  --text-lg: calc(var(--spacing) * 4.5);
-  --text-lg--line-height: calc(var(--spacing) * 7);
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
 
-  --text-xl: calc(var(--spacing) * 5);
-  --text-xl--line-height: calc(var(--spacing) * 7.5);
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
 
-  --text-display-xs: calc(var(--spacing) * 6);
-  --text-display-xs--line-height: calc(var(--spacing) * 8);
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.25rem;
 
-  --text-display-sm: calc(var(--spacing) * 7.5);
-  --text-display-sm--line-height: calc(var(--spacing) * 9.5);
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.5rem;
 
-  --text-display-md: calc(var(--spacing) * 9);
-  --text-display-md--line-height: calc(var(--spacing) * 11);
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 3rem;
+
+  --text-5xl: 3.25rem;
+  --text-5xl--line-height: 4rem;
+
+  --text-display-xs: var(--text-2xl);
+  --text-display-xs--line-height: var(--text-2xl--line-height);
+
+  --text-display-sm: var(--text-3xl);
+  --text-display-sm--line-height: var(--text-3xl--line-height);
+
+  --text-display-md: var(--text-4xl);
+  --text-display-md--line-height: var(--text-4xl--line-height);
   --text-display-md--letter-spacing: -0.72px;
 
-  --text-display-lg: calc(var(--spacing) * 12);
-  --text-display-lg--line-height: calc(var(--spacing) * 15);
+  --text-display-lg: var(--text-5xl);
+  --text-display-lg--line-height: var(--text-5xl--line-height);
   --text-display-lg--letter-spacing: -0.96px;
 
-  --text-display-xl: calc(var(--spacing) * 15);
-  --text-display-xl--line-height: calc(var(--spacing) * 18);
+  --text-display-xl: 4rem;
+  --text-display-xl--line-height: 4.75rem;
   --text-display-xl--letter-spacing: -1.2px;
 
-  --text-display-2xl: calc(var(--spacing) * 18);
-  --text-display-2xl--line-height: calc(var(--spacing) * 22.5);
+  --text-display-2xl: 5rem;
+  --text-display-2xl--line-height: 6rem;
   --text-display-2xl--letter-spacing: -1.44px;
 
   /* MAX WIDTH */
@@ -59,13 +78,13 @@
   /* RADIUS */
   --radius-none: 0px;
   --radius-xs: 0.125rem;
-  --radius-sm: 0.25rem;
+  --radius-sm: 0.375rem;
   --radius-DEFAULT: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  --radius-3xl: 1.5rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
   --radius-full: 9999px;
 
   /* SHADOW */
@@ -146,18 +165,18 @@
   --color-white: rgb(255 255 255);
   --color-black: rgb(0 0 0);
 
-  --color-brand-25: rgb(252 250 255);
-  --color-brand-50: rgb(249 245 255);
-  --color-brand-100: rgb(244 235 255);
-  --color-brand-200: rgb(233 215 254);
-  --color-brand-300: rgb(214 187 251);
-  --color-brand-400: rgb(182 146 246);
-  --color-brand-500: rgb(158 119 237);
-  --color-brand-600: rgb(127 86 217);
-  --color-brand-700: rgb(105 65 198);
-  --color-brand-800: rgb(83 56 158);
-  --color-brand-900: rgb(66 48 125);
-  --color-brand-950: rgb(44 28 95);
+  --color-brand-25: color-mix(in srgb, var(--color-accent-light) 3%, white);
+  --color-brand-50: color-mix(in srgb, var(--color-accent-light) 6%, white);
+  --color-brand-100: color-mix(in srgb, var(--color-accent-light) 12%, white);
+  --color-brand-200: color-mix(in srgb, var(--color-accent-light) 22%, white);
+  --color-brand-300: color-mix(in srgb, var(--color-accent-light) 38%, white);
+  --color-brand-400: color-mix(in srgb, var(--color-accent-light) 58%, white);
+  --color-brand-500: color-mix(in srgb, var(--color-accent-light) 78%, white);
+  --color-brand-600: var(--color-accent-light);
+  --color-brand-700: color-mix(in srgb, var(--color-accent-light) 88%, black);
+  --color-brand-800: color-mix(in srgb, var(--color-accent-light) 75%, black);
+  --color-brand-900: color-mix(in srgb, var(--color-accent-light) 62%, black);
+  --color-brand-950: color-mix(in srgb, var(--color-accent-light) 48%, black);
 
   --color-error-25: rgb(255 251 250);
   --color-error-50: rgb(254 243 242);
@@ -926,6 +945,201 @@
   --outline-color-brand-solid: var(--color-bg-brand-solid);
   --outline-color-brand-solid_hover: var(--color-bg-brand-solid_hover);
   --outline-color-brand_alt: var(--color-border-brand_alt);
+
+  /* PORTAL DESIGN SYSTEM --------------------------------------------- */
+  /* Canonical values owned here and documented in DESIGN.md. Feature code should consume
+     semantic utilities such as bg-surface, text-primary, text-secondary,
+     text-accent and border-border rather than copying these values. */
+
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+
+  /* First-class semantic aliases used by Leaf Launch. */
+  --color-surface: #ffffff;
+  --color-body: #f7fafb;
+  --color-primary: #111827;
+  --color-secondary: #596579;
+  /* Reference green is retained for artwork; action green supports white text. */
+  --color-reference-green: #22c55e;
+  --color-soft-green: #ecfdf3;
+  --color-accent-light: #16803c;
+  --color-accent: var(--color-accent-light);
+  --color-border: #cbd3df;
+  --color-control-border: #8592a5;
+  --color-switch-thumb: var(--color-white);
+  --color-error: #c62838;
+  --color-success: var(--color-success-600);
+
+  /* Existing Untitled/Astryx-compatible semantic tokens. */
+  --color-text-primary: var(--color-primary);
+  --color-text-secondary: var(--color-secondary);
+  --color-text-secondary_hover: color-mix(
+    in srgb,
+    var(--color-primary) 84%,
+    var(--color-surface)
+  );
+  --color-text-tertiary: #687280;
+  --color-text-tertiary_hover: var(--color-secondary);
+  --color-text-quaternary: color-mix(
+    in srgb,
+    var(--color-primary) 46%,
+    var(--color-surface)
+  );
+  --color-text-error-primary: var(--color-error);
+  --color-text-error-primary_hover: color-mix(
+    in srgb,
+    var(--color-error) 86%,
+    black
+  );
+  --color-text-primary_on-brand: var(--color-white);
+  --color-text-secondary_on-brand: color-mix(
+    in srgb,
+    var(--color-white) 84%,
+    var(--color-accent)
+  );
+  --color-text-tertiary_on-brand: color-mix(
+    in srgb,
+    var(--color-white) 72%,
+    var(--color-accent)
+  );
+  --color-text-quaternary_on-brand: color-mix(
+    in srgb,
+    var(--color-white) 62%,
+    var(--color-accent)
+  );
+  --color-text-brand-primary: var(--color-accent);
+  --color-text-brand-secondary: var(--color-accent);
+  --color-text-brand-secondary_hover: color-mix(
+    in srgb,
+    var(--color-accent) 86%,
+    black
+  );
+  --color-text-brand-tertiary: var(--color-accent);
+  --color-text-brand-tertiary_alt: var(--color-accent);
+
+  --color-border-primary: var(--color-border);
+  --color-border-secondary: #e5e7eb;
+  --color-border-secondary_alt: color-mix(
+    in srgb,
+    var(--color-primary) 10%,
+    transparent
+  );
+  --color-border-tertiary: color-mix(
+    in srgb,
+    var(--color-primary) 7%,
+    var(--color-surface)
+  );
+  --color-border-error: var(--color-error);
+  --color-border-error_subtle: color-mix(
+    in srgb,
+    var(--color-error) 42%,
+    var(--color-surface)
+  );
+  --color-border-brand: var(--color-accent);
+  --color-border-brand_alt: var(--color-accent);
+
+  --color-fg-primary: var(--color-primary);
+  --color-fg-secondary: var(--color-secondary);
+  --color-fg-secondary_hover: color-mix(
+    in srgb,
+    var(--color-primary) 84%,
+    var(--color-surface)
+  );
+  --color-fg-tertiary: color-mix(
+    in srgb,
+    var(--color-primary) 58%,
+    var(--color-surface)
+  );
+  --color-fg-tertiary_hover: var(--color-secondary);
+  --color-fg-brand-primary: var(--color-accent);
+  --color-fg-brand-primary_alt: var(--color-accent);
+  --color-fg-brand-secondary: var(--color-accent);
+  --color-fg-brand-secondary_alt: var(--color-accent);
+  --color-fg-brand-secondary_hover: color-mix(
+    in srgb,
+    var(--color-accent) 86%,
+    black
+  );
+  --color-fg-error-primary: var(--color-error);
+
+  --color-bg-primary: var(--color-surface);
+  --color-bg-primary_alt: var(--color-surface);
+  --color-bg-primary_hover: color-mix(
+    in srgb,
+    var(--color-accent) 4%,
+    var(--color-surface)
+  );
+  --color-bg-secondary: var(--color-body);
+  --color-bg-secondary_alt: var(--color-body);
+  --color-bg-secondary_subtle: color-mix(
+    in srgb,
+    var(--color-accent) 2%,
+    var(--color-body)
+  );
+  --color-bg-secondary_hover: color-mix(
+    in srgb,
+    var(--color-accent) 7%,
+    var(--color-body)
+  );
+  --color-bg-tertiary: color-mix(
+    in srgb,
+    var(--color-accent) 9%,
+    var(--color-body)
+  );
+  --color-bg-quaternary: color-mix(
+    in srgb,
+    var(--color-accent) 14%,
+    var(--color-body)
+  );
+  --color-bg-active: color-mix(
+    in srgb,
+    var(--color-accent) 7%,
+    var(--color-body)
+  );
+  --color-bg-brand-primary: color-mix(
+    in srgb,
+    var(--color-accent) 5%,
+    var(--color-soft-green)
+  );
+  --color-bg-brand-primary_alt: color-mix(
+    in srgb,
+    var(--color-accent) 7%,
+    var(--color-body)
+  );
+  --color-bg-brand-secondary: color-mix(
+    in srgb,
+    var(--color-accent) 14%,
+    var(--color-body)
+  );
+  --color-bg-brand-solid: var(--color-accent);
+  --color-bg-brand-solid_hover: color-mix(
+    in srgb,
+    var(--color-accent) 86%,
+    black
+  );
+  --color-bg-brand-section: color-mix(in srgb, var(--color-accent) 78%, black);
+  --color-bg-brand-section_subtle: color-mix(
+    in srgb,
+    var(--color-accent) 88%,
+    black
+  );
+  --color-bg-error-solid: var(--color-error);
+  --color-bg-error-solid_hover: color-mix(
+    in srgb,
+    var(--color-error) 86%,
+    black
+  );
+
+  --color-focus-ring: var(--color-accent);
+  --color-focus-ring-error: var(--color-error);
+  --color-button-primary-icon: color-mix(
+    in srgb,
+    var(--color-white) 78%,
+    var(--color-accent)
+  );
+  --color-button-primary-icon_hover: var(--color-white);
+  --color-icon-fg-brand: var(--color-accent);
+  --color-slider-handle-border: var(--color-accent);
 }
 
 @layer base {
@@ -1353,10 +1567,221 @@
     --outline-color-brand_alt: var(--color-border-brand_alt);
     --outline-color-error: var(--color-border-error);
     --outline-color-error_subtle: var(--color-border-error_subtle);
+
+    /* PORTAL DARK MODE ---------------------------------------------- */
+    --color-surface: #141c24;
+    --color-body: #0d141b;
+    --color-primary: #f2f6fb;
+    --color-control-border: #738398;
+    --color-secondary: color-mix(
+      in srgb,
+      var(--color-primary) 72%,
+      var(--color-surface)
+    );
+    --color-accent: #70e69b;
+    --color-border: color-mix(
+      in srgb,
+      var(--color-primary) 18%,
+      var(--color-surface)
+    );
+    --color-error: #ff8a8a;
+    --color-success: var(--color-success-400);
+
+    /* Keep direct brand utilities aligned with the brighter dark-mode mint. */
+    --color-brand-300: color-mix(
+      in srgb,
+      var(--color-accent) 72%,
+      var(--color-surface)
+    );
+    --color-brand-400: color-mix(
+      in srgb,
+      var(--color-accent) 88%,
+      var(--color-surface)
+    );
+    --color-brand-500: var(--color-accent);
+    --color-brand-600: color-mix(in srgb, var(--color-accent) 86%, black);
+    --color-brand-700: color-mix(in srgb, var(--color-accent) 72%, black);
+
+    --color-text-primary: var(--color-primary);
+    --color-text-secondary: var(--color-secondary);
+    --color-text-secondary_hover: color-mix(
+      in srgb,
+      var(--color-primary) 84%,
+      var(--color-surface)
+    );
+    --color-text-tertiary: color-mix(
+      in srgb,
+      var(--color-primary) 58%,
+      var(--color-surface)
+    );
+    --color-text-tertiary_hover: var(--color-secondary);
+    --color-text-quaternary: color-mix(
+      in srgb,
+      var(--color-primary) 46%,
+      var(--color-surface)
+    );
+    --color-text-error-primary: var(--color-error);
+    --color-text-error-primary_hover: color-mix(
+      in srgb,
+      var(--color-error) 84%,
+      white
+    );
+    --color-text-brand-primary: var(--color-accent);
+    --color-text-brand-secondary: var(--color-accent);
+    --color-text-brand-secondary_hover: color-mix(
+      in srgb,
+      var(--color-accent) 84%,
+      white
+    );
+    --color-text-brand-tertiary: var(--color-accent);
+    --color-text-brand-tertiary_alt: var(--color-accent);
+
+    /* Mint solid actions need dark content for contrast. */
+    --color-text-primary_on-brand: var(--color-body);
+    --color-text-secondary_on-brand: color-mix(
+      in srgb,
+      var(--color-body) 86%,
+      var(--color-accent)
+    );
+    --color-text-tertiary_on-brand: color-mix(
+      in srgb,
+      var(--color-body) 74%,
+      var(--color-accent)
+    );
+    --color-text-quaternary_on-brand: color-mix(
+      in srgb,
+      var(--color-body) 64%,
+      var(--color-accent)
+    );
+
+    --color-border-primary: var(--color-border);
+    --color-border-secondary: color-mix(
+      in srgb,
+      var(--color-primary) 12%,
+      var(--color-surface)
+    );
+    --color-border-secondary_alt: color-mix(
+      in srgb,
+      var(--color-primary) 10%,
+      transparent
+    );
+    --color-border-tertiary: color-mix(
+      in srgb,
+      var(--color-primary) 7%,
+      var(--color-surface)
+    );
+    --color-border-error: var(--color-error);
+    --color-border-error_subtle: color-mix(
+      in srgb,
+      var(--color-error) 42%,
+      var(--color-surface)
+    );
+    --color-border-brand: var(--color-accent);
+    --color-border-brand_alt: var(--color-accent);
+
+    --color-fg-primary: var(--color-primary);
+    --color-fg-secondary: var(--color-secondary);
+    --color-fg-secondary_hover: color-mix(
+      in srgb,
+      var(--color-primary) 84%,
+      var(--color-surface)
+    );
+    --color-fg-tertiary: color-mix(
+      in srgb,
+      var(--color-primary) 58%,
+      var(--color-surface)
+    );
+    --color-fg-tertiary_hover: var(--color-secondary);
+    --color-fg-brand-primary: var(--color-accent);
+    --color-fg-brand-primary_alt: var(--color-accent);
+    --color-fg-brand-secondary: var(--color-accent);
+    --color-fg-brand-secondary_alt: var(--color-accent);
+    --color-fg-brand-secondary_hover: color-mix(
+      in srgb,
+      var(--color-accent) 84%,
+      white
+    );
+    --color-fg-error-primary: var(--color-error);
+
+    --color-bg-primary: var(--color-surface);
+    --color-bg-primary-solid: var(--color-body);
+    --color-bg-primary_alt: var(--color-surface);
+    --color-bg-primary_hover: color-mix(
+      in srgb,
+      var(--color-accent) 7%,
+      var(--color-surface)
+    );
+    --color-bg-secondary: var(--color-body);
+    --color-bg-secondary_alt: var(--color-surface);
+    --color-bg-secondary_subtle: color-mix(
+      in srgb,
+      var(--color-primary) 2%,
+      var(--color-body)
+    );
+    --color-bg-secondary_hover: color-mix(
+      in srgb,
+      var(--color-accent) 8%,
+      var(--color-surface)
+    );
+    --color-bg-tertiary: color-mix(
+      in srgb,
+      var(--color-primary) 7%,
+      var(--color-surface)
+    );
+    --color-bg-quaternary: color-mix(
+      in srgb,
+      var(--color-primary) 12%,
+      var(--color-surface)
+    );
+    --color-bg-active: color-mix(
+      in srgb,
+      var(--color-accent) 10%,
+      var(--color-surface)
+    );
+    --color-bg-overlay: color-mix(in srgb, black 72%, transparent);
+    --color-bg-brand-primary: color-mix(
+      in srgb,
+      var(--color-accent) 10%,
+      var(--color-surface)
+    );
+    --color-bg-brand-primary_alt: color-mix(
+      in srgb,
+      var(--color-accent) 8%,
+      var(--color-body)
+    );
+    --color-bg-brand-secondary: color-mix(
+      in srgb,
+      var(--color-accent) 16%,
+      var(--color-surface)
+    );
+    --color-bg-brand-solid: var(--color-accent);
+    --color-bg-brand-solid_hover: color-mix(
+      in srgb,
+      var(--color-accent) 88%,
+      white
+    );
+    --color-bg-brand-section: var(--color-surface);
+    --color-bg-brand-section_subtle: var(--color-body);
+    --color-bg-error-solid: var(--color-error);
+    --color-bg-error-solid_hover: color-mix(
+      in srgb,
+      var(--color-error) 88%,
+      white
+    );
+
+    --color-focus-ring: var(--color-accent);
+    --color-focus-ring-error: var(--color-error);
+    --color-button-primary-icon: var(--color-body);
+    --color-button-primary-icon_hover: var(--color-body);
+    --color-icon-fg-brand: var(--color-accent);
+    --color-icon-fg-brand_on-brand: var(--color-body);
+    --color-slider-handle-bg: var(--color-accent);
+    --color-slider-handle-border: var(--color-surface);
   }
 }
 
-:root[data-accent='blue'] {
+:root[data-accent='blue'],
+.accent-preview[data-accent='blue'] {
   --color-brand-25: rgb(245 250 255);
   --color-brand-50: rgb(239 248 255);
   --color-brand-100: rgb(209 233 255);
@@ -1371,7 +1796,8 @@
   --color-brand-950: rgb(16 42 86);
 }
 
-:root[data-accent='indigo'] {
+:root[data-accent='indigo'],
+.accent-preview[data-accent='indigo'] {
   --color-brand-25: rgb(245 248 255);
   --color-brand-50: rgb(238 244 255);
   --color-brand-100: rgb(224 234 255);
@@ -1386,7 +1812,8 @@
   --color-brand-950: rgb(31 35 91);
 }
 
-:root[data-accent='mint'] {
+:root[data-accent='mint'],
+.accent-preview[data-accent='mint'] {
   --color-brand-25: rgb(244 255 250);
   --color-brand-50: rgb(236 253 243);
   --color-brand-100: rgb(209 250 223);
@@ -1401,7 +1828,8 @@
   --color-brand-950: rgb(5 51 33);
 }
 
-:root[data-accent='salmon'] {
+:root[data-accent='salmon'],
+.accent-preview[data-accent='salmon'] {
   --color-brand-25: rgb(255 245 246);
   --color-brand-50: rgb(255 241 243);
   --color-brand-100: rgb(255 228 232);
@@ -1416,7 +1844,8 @@
   --color-brand-950: rgb(76 5 25);
 }
 
-:root[data-accent='violet'] {
+:root[data-accent='violet'],
+.accent-preview[data-accent='violet'] {
   --color-brand-25: rgb(252 250 255);
   --color-brand-50: rgb(249 245 255);
   --color-brand-100: rgb(244 235 255);
@@ -1431,7 +1860,8 @@
   --color-brand-950: rgb(44 28 95);
 }
 
-:root[data-accent='amber'] {
+:root[data-accent='amber'],
+.accent-preview[data-accent='amber'] {
   --color-brand-25: rgb(255 252 245);
   --color-brand-50: rgb(255 250 235);
   --color-brand-100: rgb(254 240 199);
@@ -1446,7 +1876,8 @@
   --color-brand-950: rgb(78 29 9);
 }
 
-:root[data-accent='teal'] {
+:root[data-accent='teal'],
+.accent-preview[data-accent='teal'] {
   --color-brand-25: rgb(246 254 249);
   --color-brand-50: rgb(240 253 250);
   --color-brand-100: rgb(204 251 239);
@@ -1461,7 +1892,8 @@
   --color-brand-950: rgb(4 47 46);
 }
 
-:root[data-accent='rose'] {
+:root[data-accent='rose'],
+.accent-preview[data-accent='rose'] {
   --color-brand-25: rgb(255 245 246);
   --color-brand-50: rgb(255 241 242);
   --color-brand-100: rgb(255 228 230);
@@ -1476,7 +1908,8 @@
   --color-brand-950: rgb(76 5 25);
 }
 
-:root[data-accent='sky'] {
+:root[data-accent='sky'],
+.accent-preview[data-accent='sky'] {
   --color-brand-25: rgb(240 249 255);
   --color-brand-50: rgb(224 242 254);
   --color-brand-100: rgb(186 230 253);
@@ -1491,7 +1924,8 @@
   --color-brand-950: rgb(8 47 73);
 }
 
-:root[data-accent='emerald'] {
+:root[data-accent='emerald'],
+.accent-preview[data-accent='emerald'] {
   --color-brand-25: rgb(236 253 245);
   --color-brand-50: rgb(209 250 229);
   --color-brand-100: rgb(167 243 208);
@@ -1504,4 +1938,358 @@
   --color-brand-800: rgb(6 78 59);
   --color-brand-900: rgb(6 64 50);
   --color-brand-950: rgb(2 44 34);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+  }
+
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    font-weight: var(--font-weight-normal);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer utilities {
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optional accent palettes, including their appearance previews. */
+:root[data-accent='aqua'],
+.accent-preview[data-accent='aqua'] {
+  --color-brand-25: rgb(239 253 252);
+  --color-brand-50: rgb(224 250 247);
+  --color-brand-100: rgb(196 244 238);
+  --color-brand-200: rgb(153 236 227);
+  --color-brand-300: rgb(108 224 212);
+  --color-brand-400: rgb(70 208 196);
+  --color-brand-500: rgb(36 185 174);
+  --color-brand-600: rgb(24 157 147);
+  --color-brand-700: rgb(21 129 120);
+  --color-brand-800: rgb(23 102 95);
+  --color-brand-900: rgb(22 84 79);
+  --color-brand-950: rgb(9 51 49);
+}
+
+:root[data-accent='seafoam'],
+.accent-preview[data-accent='seafoam'] {
+  --color-brand-25: rgb(240 255 250);
+  --color-brand-50: rgb(226 252 244);
+  --color-brand-100: rgb(197 247 230);
+  --color-brand-200: rgb(156 239 210);
+  --color-brand-300: rgb(114 227 188);
+  --color-brand-400: rgb(72 210 164);
+  --color-brand-500: rgb(39 184 141);
+  --color-brand-600: rgb(25 152 114);
+  --color-brand-700: rgb(22 124 94);
+  --color-brand-800: rgb(24 98 76);
+  --color-brand-900: rgb(21 81 64);
+  --color-brand-950: rgb(10 49 38);
+}
+
+:root[data-accent='coral'],
+.accent-preview[data-accent='coral'] {
+  --color-brand-25: rgb(255 248 245);
+  --color-brand-50: rgb(255 242 237);
+  --color-brand-100: rgb(255 226 214);
+  --color-brand-200: rgb(255 201 178);
+  --color-brand-300: rgb(253 168 134);
+  --color-brand-400: rgb(248 131 94);
+  --color-brand-500: rgb(239 98 61);
+  --color-brand-600: rgb(216 72 39);
+  --color-brand-700: rgb(176 53 31);
+  --color-brand-800: rgb(141 47 30);
+  --color-brand-900: rgb(112 40 27);
+  --color-brand-950: rgb(76 24 15);
+}
+
+:root[data-accent='sunset'],
+.accent-preview[data-accent='sunset'] {
+  --color-brand-25: rgb(255 251 240);
+  --color-brand-50: rgb(255 246 223);
+  --color-brand-100: rgb(255 233 182);
+  --color-brand-200: rgb(255 214 132);
+  --color-brand-300: rgb(255 185 79);
+  --color-brand-400: rgb(250 154 33);
+  --color-brand-500: rgb(236 125 13);
+  --color-brand-600: rgb(211 97 9);
+  --color-brand-700: rgb(171 72 11);
+  --color-brand-800: rgb(138 58 16);
+  --color-brand-900: rgb(111 47 17);
+  --color-brand-950: rgb(74 29 10);
+}
+
+:root[data-accent='orchid'],
+.accent-preview[data-accent='orchid'] {
+  --color-brand-25: rgb(252 247 255);
+  --color-brand-50: rgb(247 240 255);
+  --color-brand-100: rgb(237 222 255);
+  --color-brand-200: rgb(221 194 254);
+  --color-brand-300: rgb(198 157 251);
+  --color-brand-400: rgb(173 115 245);
+  --color-brand-500: rgb(149 79 232);
+  --color-brand-600: rgb(124 55 208);
+  --color-brand-700: rgb(101 42 176);
+  --color-brand-800: rgb(83 39 141);
+  --color-brand-900: rgb(68 34 115);
+  --color-brand-950: rgb(43 20 74);
+}
+
+/* App-specific roles derive from the canonical palette above. */
+@theme {
+  --landing-background: var(--color-white);
+  --landing-foreground: #173c2a;
+  --landing-green: var(--color-accent-light);
+  --landing-green-hover: var(--landing-forest);
+  --landing-on-accent: var(--color-white);
+  --landing-muted: #5f6d66;
+  --landing-soft: #f5f8f6;
+  --landing-mint: #eaf5ef;
+  --landing-sage: #d1e5d8;
+  --landing-peach: #f8e9d8;
+  --landing-on-peach: var(--landing-forest);
+  --landing-forest: #123d2c;
+  --landing-on-dark: var(--color-white);
+  --landing-on-dark-muted: #c9ded1;
+  --landing-border: #dce6df;
+  --landing-shadow: 0 24px 60px -24px
+    color-mix(in srgb, var(--landing-forest) 28%, var(--color-transparent));
+  --landing-phone-shadow: 0 30px 60px -18px
+    color-mix(in srgb, var(--landing-forest) 35%, var(--color-transparent));
+  --dashboard-shell-bg: var(--color-bg-secondary);
+  --dashboard-shell-bg-emphasis: var(--color-bg-secondary_subtle);
+  --dashboard-shell-panel: color-mix(
+    in srgb,
+    var(--color-bg-primary) 90%,
+    var(--color-transparent)
+  );
+  --dashboard-shell-panel-solid: var(--color-bg-primary);
+  --dashboard-shell-border: var(--color-border-secondary);
+  --dashboard-shell-border-strong: var(--color-border-primary);
+  --dashboard-shell-topbar: color-mix(
+    in srgb,
+    var(--color-bg-secondary) 92%,
+    var(--color-transparent)
+  );
+  --dashboard-shell-overlay: color-mix(
+    in srgb,
+    var(--color-black) 58%,
+    var(--color-transparent)
+  );
+  --dashboard-shell-shadow:
+    0 1px 2px
+      color-mix(in srgb, var(--color-primary) 4%, var(--color-transparent)),
+    0 10px 18px
+      color-mix(in srgb, var(--color-primary) 4%, var(--color-transparent));
+  --dashboard-shell-shadow-lg: 0 18px 36px
+    color-mix(in srgb, var(--color-primary) 6%, var(--color-transparent));
+  --control-selected-border-width: 2px;
+  --control-focus-outline-width: 3px;
+  --dashboard-sidebar-width: 17rem;
+  --dashboard-sidebar-radius: 2.25rem;
+  --dashboard-sidebar-item-radius: var(--radius-2xl);
+  --dashboard-sidebar-item-border: color-mix(
+    in srgb,
+    var(--color-accent) 40%,
+    var(--color-transparent)
+  );
+  --dashboard-sidebar-item-background: linear-gradient(
+    110deg,
+    color-mix(in srgb, var(--color-accent) 14%, var(--color-transparent)),
+    color-mix(in srgb, var(--color-accent) 6%, var(--color-transparent))
+  );
+  --dashboard-sidebar-shadow:
+    10px 0 32px -12px
+      color-mix(in srgb, var(--color-primary) 24%, var(--color-transparent)),
+    2px 0 8px
+      color-mix(in srgb, var(--color-primary) 8%, var(--color-transparent));
+  --color-nav-icon-bg: color-mix(
+    in srgb,
+    var(--color-white) 70%,
+    var(--color-transparent)
+  );
+  --color-chart-primary: var(--color-accent);
+  --color-chart-secondary: var(--color-utility-blue-400);
+  --color-chart-tertiary: var(--color-utility-indigo-400);
+  --color-chart-previous: var(--color-utility-gray-400);
+  --color-chart-forecast: var(--color-utility-green-500);
+  --color-chart-refunds: var(--color-utility-indigo-200);
+  --color-chart-neutral: var(--color-utility-gray-300);
+  --color-chart-success: var(--color-utility-green-400);
+  --color-text-on-error: var(--color-text-white);
+  --color-preview-light-surface: var(--color-white);
+  --color-preview-light-body: var(--color-gray-100);
+  --color-preview-light-border: var(--color-gray-300);
+  --color-preview-dark-body: var(--color-black);
+  --color-preview-dark-surface: var(--color-gray-800);
+  --color-preview-dark-border: var(--color-gray-600);
+  --color-section-accent-start: var(--color-bg-brand-primary);
+  --color-section-accent-end: var(--color-bg-brand-secondary);
+  --color-section-decoration: color-mix(
+    in srgb,
+    var(--color-accent) 12%,
+    var(--color-transparent)
+  );
+  --color-action-start: color-mix(
+    in srgb,
+    var(--color-accent) 97%,
+    var(--color-white)
+  );
+  --color-action-end: color-mix(
+    in srgb,
+    var(--color-accent) 92%,
+    var(--color-black)
+  );
+}
+
+@layer base {
+  .dark-mode {
+    /* Public dark surfaces use the same semantic roles as the Portal. */
+    --landing-background: var(--color-bg-secondary);
+    --landing-foreground: var(--color-primary);
+    --landing-green: var(--color-accent);
+    --landing-green-hover: var(--color-bg-brand-solid_hover);
+    --landing-on-accent: var(--color-text-primary_on-brand);
+    --landing-muted: var(--color-secondary);
+    --landing-soft: var(--color-bg-primary);
+    --landing-mint: var(--color-bg-brand-primary);
+    --landing-sage: var(--color-brand-300);
+    --landing-peach: var(--color-bg-tertiary);
+    --landing-on-peach: var(--color-primary);
+    --landing-forest: var(--color-bg-primary);
+    --landing-on-dark: var(--color-primary);
+    --landing-on-dark-muted: var(--color-secondary);
+    --landing-border: var(--color-border-secondary);
+    --landing-shadow: var(--dashboard-shell-shadow-lg);
+    --landing-phone-shadow: var(--dashboard-shell-shadow-lg);
+    --color-text-on-error: var(--color-body);
+    --dashboard-shell-overlay: color-mix(
+      in srgb,
+      var(--color-black) 72%,
+      var(--color-transparent)
+    );
+    --dashboard-shell-shadow:
+      0 1px 2px
+        color-mix(in srgb, var(--color-black) 30%, var(--color-transparent)),
+      0 14px 30px
+        color-mix(in srgb, var(--color-black) 18%, var(--color-transparent));
+    --dashboard-shell-shadow-lg: 0 20px 40px
+      color-mix(in srgb, var(--color-black) 24%, var(--color-transparent));
+    --dashboard-sidebar-shadow:
+      10px 0 32px -12px
+        color-mix(in srgb, var(--color-black) 55%, var(--color-transparent)),
+      2px 0 8px
+        color-mix(in srgb, var(--color-black) 30%, var(--color-transparent));
+    --color-nav-icon-bg: color-mix(
+      in srgb,
+      var(--color-white) 8%,
+      var(--color-transparent)
+    );
+  }
+}
+
+/* Selected accents feed the same semantic roles as the default Leaf green palette. */
+:root[data-accent]:not([data-accent='brand']) {
+  --color-accent: var(--color-brand-800);
+}
+:root.dark-mode[data-accent]:not([data-accent='brand']) {
+  --color-accent: var(--color-brand-400);
+}
+
+/* The default swatch must remain independent of the currently selected accent. */
+.accent-preview[data-accent='brand'] {
+  --color-brand-300: color-mix(
+    in srgb,
+    var(--color-accent-light) 38%,
+    var(--color-white)
+  );
+  --color-brand-600: var(--color-accent-light);
+}
+
+/* Shared interaction timing: short presses, settled selection, restrained entrances. */
+:root {
+  --motion-duration-press: 90ms;
+  --motion-duration-fast: 140ms;
+  --motion-duration-base: 200ms;
+  --motion-duration-enter: 240ms;
+  --motion-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-ease-spring: cubic-bezier(0.2, 1.2, 0.4, 1);
+  --motion-button-press-scale: 0.97;
+}
+
+/* Shared state alpha: selection and hover follow both accent and color mode. */
+:root {
+  --selection-fill-opacity: 8%;
+  --selection-emphasis-opacity: 14%;
+  --selection-hover-opacity: 5%;
+  --selection-border-opacity: 50%;
+  --color-selection-fill: color-mix(
+    in srgb,
+    var(--color-accent) var(--selection-fill-opacity),
+    var(--color-surface)
+  );
+  --color-selection-hover: color-mix(
+    in srgb,
+    var(--color-accent) var(--selection-hover-opacity),
+    var(--color-surface)
+  );
+  --color-selection-border: color-mix(
+    in srgb,
+    var(--color-accent) var(--selection-border-opacity),
+    var(--color-surface)
+  );
+  --color-bg-brand-primary: var(--color-selection-fill);
+  --color-bg-brand-primary_alt: var(--color-selection-fill);
+  --color-bg-brand-secondary: color-mix(
+    in srgb,
+    var(--color-accent) var(--selection-emphasis-opacity),
+    var(--color-surface)
+  );
+  --color-bg-primary_hover: var(--color-selection-hover);
+  --color-section-accent-start: var(--color-selection-fill);
+  --color-section-accent-end: var(--color-bg-brand-secondary);
+  --dashboard-sidebar-item-background: var(--color-selection-fill);
+  --dashboard-sidebar-item-border: var(--color-selection-border);
+}
+:root.dark-mode {
+  --selection-fill-opacity: 14%;
+  --selection-emphasis-opacity: 22%;
+  --selection-hover-opacity: 8%;
+  --selection-border-opacity: 55%;
 }

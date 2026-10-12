@@ -1,52 +1,57 @@
 'use client';
 
-import { cn } from '../lib/cn';
-
-export type SegmentedTab<T extends string> = {
-  value: T;
-  label: string;
-  meta?: string;
-};
+import { strings } from '@/strings';
+import { useCompactSectionNavigation } from '../lib/useCompactSectionNavigation';
+import type { SegmentedTabsProps } from '../models/segmentedTabsProps';
+import { SegmentedChoices } from './SegmentedChoices';
+import { Select } from './Select';
+import { UiIcon } from './UiIcon';
+export type { SegmentedTab } from '../models/segmentedTab';
 
 export function SegmentedTabs<T extends string>({
   tabs,
   value,
   onValueChange,
-}: {
-  tabs: Array<SegmentedTab<T>>;
-  value: T;
-  onValueChange: (value: T) => void;
-}) {
+  label = strings.componentLibrary.segmentedLabel,
+  disabled = false,
+}: SegmentedTabsProps<T>) {
+  const compact = useCompactSectionNavigation();
+  const choices = (
+    <SegmentedChoices
+      tabs={tabs}
+      value={value}
+      onValueChange={onValueChange}
+      label={label}
+      disabled={disabled}
+    />
+  );
+
+  if (tabs.length <= 2) return choices;
+
   return (
-    <div className="inline-flex flex-wrap items-center gap-2 rounded-xl border border-secondary bg-secondary_subtle p-1.5">
-      {tabs.map((tab) => {
-        const active = tab.value === value;
-        return (
-          <button
-            key={tab.value}
-            type="button"
-            onClick={() => onValueChange(tab.value)}
-            className={cn(
-              'rounded-lg px-4 py-2 text-left text-sm transition',
-              active
-                ? 'bg-primary text-primary shadow-[var(--dashboard-shell-shadow)] ring-1 ring-secondary'
-                : 'text-secondary hover:bg-secondary_subtle hover:text-primary',
-            )}
+    <div className="ui-section-navigation">
+      {compact && (
+        <div className="ui-section-navigation-compact">
+          <Select
+            aria-label={label}
+            aria-controls={tabs.find((tab) => tab.value === value)?.panelId}
+            leadingIcon={<UiIcon name="menu" className="size-5" />}
+            value={value}
+            disabled={disabled}
+            onValueChange={(next) => {
+              const tab = tabs.find((tab) => tab.value === next);
+              if (tab) onValueChange(tab.value);
+            }}
           >
-            <span className="block font-semibold">{tab.label}</span>
-            {tab.meta ? (
-              <span
-                className={cn(
-                  'mt-0.5 block text-xs',
-                  active ? 'text-white/75' : 'text-tertiary',
-                )}
-              >
-                {tab.meta}
-              </span>
-            ) : null}
-          </button>
-        );
-      })}
+            {tabs.map((tab) => (
+              <option key={tab.value} value={tab.value}>
+                {tab.label}
+              </option>
+            ))}
+          </Select>
+        </div>
+      )}
+      <div className="ui-section-navigation-wide">{choices}</div>
     </div>
   );
 }

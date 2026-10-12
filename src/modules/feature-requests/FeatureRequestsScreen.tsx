@@ -11,6 +11,9 @@ import {
   ErrorState,
   Field,
   Input,
+  Page,
+  PageHeader,
+  MobileRecordRow,
 } from '@/components/ui';
 import { useCreateFeatureRequest, useFeatureRequests } from './hooks';
 
@@ -26,22 +29,15 @@ export function FeatureRequestsScreen({ query = '' }: { query?: string }) {
   }
 
   return (
-    <div className="grid gap-4">
+    <Page>
+      <PageHeader
+        title={strings.ui.appShell.featureRequests}
+        description={
+          strings.ui.featureRequestsScreen
+            .shareIdeasForImprovingYourWorkspaceAndFollowYour
+        }
+      />
       <Card className="grid gap-4">
-        <div className="grid gap-2">
-          <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
-            {strings.ui.featureRequestsScreen.intake}
-          </p>
-          <h2 className="m-0 text-2xl font-semibold tracking-tight text-primary">
-            {strings.ui.featureRequestsScreen.featureRequestQueue}
-          </h2>
-          <p className="m-0 text-sm leading-6 text-secondary">
-            {
-              strings.ui.featureRequestsScreen
-                .shareIdeasForImprovingYourWorkspaceAndFollowYour
-            }
-          </p>
-        </div>
         <form noValidate onSubmit={handleSubmit} className="grid gap-3">
           <Field labelText={strings.ui.featureRequestsScreen.newFeatureRequest}>
             <Input
@@ -91,6 +87,21 @@ export function FeatureRequestsScreen({ query = '' }: { query?: string }) {
       ) : null}
       {data && data.data.length > 0 ? (
         <DataTable
+          caption={strings.ui.featureRequestsScreen.featureRequestQueue}
+          getRowKey={(row) => row.id}
+          getRowHref={(row) => `/feature-requests/${row.id}`}
+          renderMobileRow={(row) => (
+            <MobileRecordRow
+              title={
+                <Link href={`/feature-requests/${row.id}`}>{row.message}</Link>
+              }
+              footer={
+                <time dateTime={row.updatedAt}>
+                  {new Date(row.updatedAt).toLocaleString()}
+                </time>
+              }
+            />
+          )}
           columns={[
             {
               key: 'message',
@@ -113,6 +124,6 @@ export function FeatureRequestsScreen({ query = '' }: { query?: string }) {
           rows={data.data}
         />
       ) : null}
-    </div>
+    </Page>
   );
 }

@@ -1,5 +1,6 @@
 import {
   AppearancePreferenceSchema,
+  defaultAppearancePreference,
   type AppearancePreference,
 } from '@/models/appearance';
 export class ThemePreferenceService {
@@ -9,7 +10,7 @@ export class ThemePreferenceService {
         JSON.parse(localStorage.getItem('semantic-web-theme') || '{}'),
       );
     } catch {
-      return { mode: 'light', accent: 'aqua' };
+      return defaultAppearancePreference;
     }
   }
   async savePreference(value: AppearancePreference) {

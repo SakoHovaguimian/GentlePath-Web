@@ -5,6 +5,7 @@ export type ToastPresentation = {
   kind: 'toast';
   title: string;
   description?: string;
+  appearance?: 'standard' | 'ios-push';
   intent?: ToastIntent;
   position?: ToastPosition;
   durationMs?: number;

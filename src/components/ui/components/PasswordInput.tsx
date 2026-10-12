@@ -2,6 +2,7 @@
 import { useState, type ComponentProps } from 'react';
 import { Input } from './Input';
 import { strings } from '@/strings';
+import { Button } from './Button';
 export function PasswordInput(
   props: Omit<ComponentProps<typeof Input>, 'type'>,
 ) {
@@ -11,20 +12,21 @@ export function PasswordInput(
       <Input
         {...props}
         type={visible ? 'text' : 'password'}
-        className={`pr-20 ${props.className || ''}`}
+        className={`pr-32 ${props.className || ''}`}
       />
-      <button
+      <Button
+        variant="ghost"
         type="button"
         disabled={props.disabled}
         aria-pressed={visible}
         aria-label={
           visible ? strings.auth.hidePassword : strings.auth.showPassword
         }
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-secondary focus-visible:outline-2 focus-visible:outline-brand"
+        className="absolute right-1 top-1/2 -translate-y-1/2 px-2 text-xs"
         onClick={() => setVisible((value) => !value)}
       >
         {visible ? strings.auth.hidePassword : strings.auth.showPassword}
-      </button>
+      </Button>
     </div>
   );
 }

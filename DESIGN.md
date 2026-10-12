@@ -1,76 +1,95 @@
 ---
 version: alpha
 name: Portal
-description: A calm operational workspace with a consistent sidebar, white and slate surfaces, and configurable accent colors.
+description: A readable operational workbench with the reusable LeafLaunch component foundation, shared motion, and accent-aware light and dark surfaces.
 colors:
-  surface: "#ffffff"
-  background: "#f3f6fb"
-  text: "#0f172a"
-  muted: "#475569"
-  border: "#e2e8f0"
+  surface: '#ffffff'
+  background: '#f7fafb'
+  text: '#111827'
+  muted: '#596579'
+  border: '#e5e7eb'
+  accent: '#17665f'
 typography:
   sans:
-    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontFamily: 'IBM Plex Sans, system-ui, sans-serif'
+    fontSize: '1.125rem'
+    lineHeight: '1.75rem'
   mono:
-    fontFamily: "IBM Plex Mono, ui-monospace, monospace"
+    fontFamily: 'IBM Plex Mono, ui-monospace, monospace'
 rounded:
-  DEFAULT: "0.75rem"
-  card: "1rem"
+  DEFAULT: '0.625rem'
+  card: '0.875rem'
 spacing:
-  panel: "1.5rem"
-  field-gap: "1rem"
+  panel: '1.5rem'
+  field-gap: '1rem'
 components:
-  button: {}
-  card: {}
-  input: {}
-  dialog: {}
+  button:
+    borderRadius: '0.625rem'
+  card:
+    borderRadius: '0.875rem'
+  input:
+    borderRadius: '0.625rem'
+  dialog:
+    borderRadius: '1.25rem'
 ---
 
 # Portal design context
 
 ## Overview
 
-Portal serves operators managing people, requests, and conversations. Its reference is a quiet administrative workbench: persistent navigation, precise type, clear records, and restrained accents. Product register governs authenticated routes. The experience route is a component showcase, not a promise of live business features.
+Portal is an English-language starter for operators managing people, requests, and conversations. The reusable LeafLaunch Web foundation is part of every new project: shared controls, page patterns, mobile navigation, motion, and theming. Product register governs the authenticated application. `/dev-settings/components` is the protected, local component library; `/experience` remains the optional immersive showcase. Neither preview promises live business integrations.
 
-English is the authored locale. No jurisdiction-specific market is assumed. Desktop and narrow browsers are supported. The existing visual identity is retained by this migration; avoid a rebrand, nested decorative cards, or gradients on ordinary form/data surfaces. The configurable accent and light/dark pairing carry expression.
+The signature is a readable operational workbench with an accent-aware rounded sidebar, flat record surfaces, and measured selection motion. Preserve Portal's identity and routes. Aqua remains the default; Leaf green is an optional palette. Existing saved light/dark and accent choices remain valid. Avoid decorative nested cards and marketing effects in routine data entry.
 
-Runtime CSS is canonical (ownership model B). `src/app/theme.css` defines palette/semantic utilities, `semantic-tokens.css` maps operational surfaces, and `globals.css` provides shared behavior. This file mirrors accepted values and explains intent; it does not generate a second palette.
+Runtime CSS is canonical (ownership model B). `src/app/theme.css` owns every palette, semantic role, state alpha, type size, radius, shell shadow, layer, and motion token. The former `semantic-tokens.css` overrides are retired. `globals.css` imports focused shared behavior styles. This document mirrors accepted values and intent; it does not generate a second theme.
 
 ## Colors
 
-Light surfaces use `colors.surface`, `colors.background`, `colors.text`, `colors.muted`, and `colors.border` through the CSS semantic roles. Dark mode maps those same roles to slate surfaces and lighter text. Brand action and focus colors derive from the selected accent; success, warning, and danger retain their meaning. Never indicate state by color alone.
+Light mode uses the exact surface/background/text/muted/border values above. The default Aqua action derives from `--color-brand-800` (#17665f); optional accents use their deep palette shade for readable light-mode actions. Dark mode uses #0d141b for the canvas and #141c24 for panels, lighter text, and the selected accent's brighter shade. Leaf green uses #16803c in light mode and #70e69b in dark mode.
+
+Selection fill mixes the selected accent into the current surface: 8% in light mode and 14% in dark mode. Emphasized surfaces use 14%/22%; hover uses 5%/8%; soft selected borders use 50%/55%. These percentages belong to theme.css. Tiles, chips, section cards, sidebar selection, and listbox options share these roles. Never mix an optional accent into a fixed mint background. Focus rings and filled checkbox/radio/switch frames retain strong semantic strokes. Success, warning, and danger remain independent of brand choice.
 
 ## Typography
 
-IBM Plex Sans owns body and headings through Next font variables in `src/app/layout.tsx`; IBM Plex Mono owns technical values. Use restrained semibold headings and readable body text. User-visible text comes from `src/strings.ts`. Do not expose architectural jargon in routine tasks.
+Actions, titles, field labels, navigation, table headers, options, and short statuses use Title Case (every word capitalized); descriptions and validation use sentence case. Follow [copy casing](docs/STRINGS.md#copy-casing), including preserved acronyms and brand spelling.
+
+IBM Plex Sans owns body and headings through Next font variables; IBM Plex Mono owns technical values. Body: 18px/28px. Controls, navigation, labels, and table values: 16px/24px. Captions, badges, and table headers: at least 14px/20px. Use rem-based named utilities, allow labels to wrap, and keep the root font size independent of spacing. All authored display copy belongs in src/strings.ts.
 
 ## Layout
 
-The shared AppShell owns navigation and header geometry. Content uses semantic cards, 1rem field gaps, and approximately 1.5rem panel padding. Tables scroll horizontally at narrow widths. Forms remain in natural document flow; chat owns its bounded message scroller. New banners must not shift primary controls. Global scrollbars remain visible and reserve stable width.
+AppShell owns a fixed 17rem sidebar at 64rem and above. Short screens scroll the sidebar without trapping the document. Below 64rem, a full-screen Radix navigation menu supplies the same destinations, account block, focus trap, Escape, and safe-area padding. The header shows workspace context and theme control. Screens own their PageHeader h1; the component specimen uses a lower heading level.
+
+Page → PageHeader → content. Directories use DataPanel and DataTable; mobile summaries use MobileRecordRow below 48rem. Tables without summaries keep a labeled, focusable horizontal scroller. Settings use SectionStack/SplitSection; explicit actions use FormActions, with sticky actions only on spacious desktop. Document scrolling remains natural for forms and inactive panels remain mounted for drafts.
+
+Component-library navigation uses one scroll legend. It stays to the left on desktop and becomes a wrapping list at compact widths. There is no second section dropdown.
 
 ## Elevation & Depth
 
-Borders and surface contrast carry hierarchy. Shared shell shadows are intentionally subtle; overlays use the existing stronger shadow and backdrop. Do not add arbitrary shadow systems to modules.
+Borders and surface contrast carry structure. theme.css owns the subtle shared card shadow, stronger sidebar shadow, and overlay shadow. Primary actions and accented section previews use the established restrained gradients. Avoid arbitrary per-screen shadows or gradients on ordinary inputs and records.
 
 ## Shapes
 
-Inputs/buttons use the established rounded control family. Cards use larger corners. Preserve the existing Radix modal/sheet geometry; long overlay content must remain reachable within the viewport.
+Control corners use 10px; cards use 14px; larger dialogs retain the 20px family. The sidebar uses a 36px outer corner. Selected strokes are inset so state changes preserve geometry. Busy buttons preserve their labels' footprint and accessible name. Overlays stay inside dynamic viewport and safe-area bounds.
 
 ## Components
 
-`src/components/ui` owns Button, Field/Input, Card, DataTable, QueryBoundary, AlertModal, SheetPanel, ToastStack, and AppShell. `PresentationProvider` owns imperative alerts/toasts/sheets. The settings page owns theme selection; theme storage survives navigation. Reuse those components in chat, privacy, and notification flows.
+`src/components/ui` and its barrel own reusable primitives. See [UI system](docs/UI_SYSTEM.md) for the inventory and extension workflow. Domain services stay in modules; shared controls receive data and callbacks. Assistant/media components never acquire LeafLaunch backend dependencies.
 
-| Role | Runtime mapping | Consumers |
-| --- | --- | --- |
-| Light surface/background | semantic-tokens.css → --color-bg-primary / --color-bg-secondary | cards, forms, shell |
-| Text hierarchy | --color-text-primary / --color-text-secondary | labels, headings, supporting text |
-| Borders | --color-border-secondary | shared inputs and panels |
-| Body/display/mono | layout.tsx → --font-body / --font-display / --font-mono | global CSS and utilities |
-| Theme/accent | root data-theme/data-accent + dark-mode | semantic CSS and shared controls |
-| Scrollbars | globals.css → semantic border/background colors | all scroll containers |
+| Role                  | Canonical runtime path                                                           | Consumers                                                 |
+| --------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Palette and surface   | theme.css → --color-accent / --color-surface / --color-bg-*                      | all shared UI                                             |
+| Selection alpha       | --selection-_-opacity → --color-selection-_                                      | tiles, chips, listboxes, section cards, navigation        |
+| Typography and shapes | theme.css → --text-* / --radius-*                                                | controls, pages, tables                                   |
+| Theme preference      | appearancePreference → service/container → ThemePreferenceProvider + ThemeScript | shell, Appearance, library                                |
+| Motion preference     | motionPreference → service/container → MotionPreferenceProvider + ThemeScript    | CSS and JavaScript motion                                 |
+| Interaction timing    | --motion-duration-press/fast/base/enter + shared styles                          | controls, segmented indicators, list reordering, overlays |
+| Overlays              | PresentationProvider + Modal/Sheet/ImagePreview                                  | application and previews                                  |
+| Scrollbars            | globals.css, semantic colors, forced-colors fallback                             | every product-owned scroller                              |
 
-Busy actions stay disabled until complete. Errors use text and role=alert; toasts use the shared live region. See [UX-CONTRACT.md](UX-CONTRACT.md) for operation outcomes and canonical behavior.
+Motion timing is 90ms for presses, 140ms for feedback, 200ms for settled selection, and 240ms for entrances. Segmented indicators measure real label geometry after layout and resize, with a first-render fallback. More than two choices use Select below 600px; two choices retain their capsule. Panels stay mounted and inactive panels are hidden/inert. Reordered lists use shared FLIP motion and keyboard move controls. Device reduced motion and the saved Reduced choice both disable movement without changing state or dialog placement.
+
+Stepper defaults to LeafLaunch's horizontal segmented bars with numbered/check markers. `orientation="vertical"` uses connected stacked stages; `orientation="responsive"` switches by container width at 34rem. Labels wrap in compact horizontal examples. Eligibility and progression belong to the caller, never the display component.
 
 ## Do's and Don'ts
 
-Reuse semantic tokens and shared primitives. Preserve focus visibility, native form semantics, dark mode, and reduced motion. Keep chart examples labeled and demo-only. Do not add a new design library or duplicate hard-coded colors for this architecture migration.
+Reuse shared components, semantic tokens, motion helpers, and presentation ownership. Check mobile, keyboard, dark/light accents, and reduced motion after system changes. Keep demo previews local. Do not add browser authentication, auth-token storage, new string catalogs, fixed feature palettes, or equivalent screen-local controls.

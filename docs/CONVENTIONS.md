@@ -10,6 +10,8 @@ Use the public session for display only. Permission checks and ownership belong 
 
 Reuse `Button`, `Field`, `Input`, `QueryBoundary`, and `PresentationProvider`. Keep form data on failure, disable duplicate submits, show inline errors, and confirm destructive actions through the shared alert. Use semantic theme classes and all copy from [strings](STRINGS.md). Native date input is the chosen profile control; OS locale/geometry is accepted.
 
+Author actions, headings, field labels, navigation, table headers, options, and short statuses in Title Case. Use sentence case for supporting prose and validation. Follow the [copy casing rules](STRINGS.md#copy-casing) when naming catalog keys or documenting exceptions; ESLint and the string checker enforce them.
+
 ## Verification
 
 Do not write tests. Run `npm run check`, `DEMO_MODE=true npm run build`, and `git diff --check`. Use the demo for browser and HTTP smoke checks. Do not run Xcode builds unless explicitly asked. Do not make live writes, trigger browser permission prompts, or emit production analytics as generic verification.

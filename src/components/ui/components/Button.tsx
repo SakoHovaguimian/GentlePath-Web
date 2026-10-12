@@ -1,33 +1,16 @@
+'use client';
+
 import { Slot } from '@radix-ui/react-slot';
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
-import { cn } from '../lib/cn';
-
-const buttonVariants = {
-  primary:
-    'bg-brand-solid text-white shadow-[var(--dashboard-shell-shadow)] ring-1 ring-transparent ring-inset hover:bg-brand-solid_hover disabled:bg-disabled disabled:text-fg-disabled disabled:ring-disabled_subtle',
-  secondary:
-    'bg-primary text-secondary shadow-none ring-1 ring-secondary ring-inset hover:bg-primary_hover hover:text-secondary_hover disabled:bg-disabled_subtle disabled:text-fg-disabled disabled:ring-disabled',
-  destructive:
-    'bg-error-solid text-white shadow-[var(--dashboard-shell-shadow)] ring-1 ring-transparent ring-inset hover:bg-error-solid_hover disabled:bg-disabled disabled:text-fg-disabled disabled:ring-disabled_subtle',
-  ghost:
-    'bg-transparent text-secondary ring-1 ring-transparent hover:bg-secondary_subtle hover:text-primary disabled:text-fg-disabled',
-} as const;
-
-export function buttonClassName(
-  variant: keyof typeof buttonVariants = 'primary',
-  className?: string,
-) {
-  return cn(
-    'bouncy-button group inline-flex h-max items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-100 ease-linear focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed',
-    buttonVariants[variant],
-    className,
-  );
-}
+import type { ComponentPropsWithRef, PropsWithChildren } from 'react';
+import { buttonClassName } from '../lib/buttonStyles';
+import type { ButtonVariant } from '../models/buttonVariant';
+import { Spinner } from './Spinner';
 
 type ButtonProps = PropsWithChildren<
-  ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: keyof typeof buttonVariants;
+  ComponentPropsWithRef<'button'> & {
+    variant?: ButtonVariant;
     asChild?: boolean;
+    loading?: boolean;
   }
 >;
 
@@ -37,6 +20,10 @@ export function Button({
   asChild = false,
   className,
   type,
+  loading = false,
+  disabled,
+  onClickCapture,
+  tabIndex,
   ...props
 }: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
@@ -45,9 +32,43 @@ export function Button({
     <Comp
       className={buttonClassName(variant, className)}
       {...(!asChild ? { type: type ?? 'button' } : {})}
+      {...(!asChild ? { disabled: disabled || loading } : {})}
+      data-variant={variant}
+      aria-disabled={asChild && (disabled || loading) ? true : undefined}
+      tabIndex={asChild && (disabled || loading) ? -1 : tabIndex}
+      onClickCapture={(event) => {
+        if (asChild && (disabled || loading)) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        onClickCapture?.(event);
+      }}
+      aria-busy={loading || undefined}
       {...props}
     >
-      {children}
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {loading ? (
+            <>
+              <span
+                aria-hidden="true"
+                className="invisible inline-flex items-center gap-2"
+              >
+                {children}
+              </span>
+              <span className="sr-only">{children}</span>
+              <span className="absolute inset-0 grid place-items-center">
+                <Spinner />
+              </span>
+            </>
+          ) : (
+            children
+          )}
+        </>
+      )}
     </Comp>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { strings } from '@/strings';
+import { motionDuration } from '@/components/ui/lib/motionPreferences';
 import {
   createContext,
   useCallback,
@@ -75,12 +76,18 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
   const [activeOverlay, setActiveOverlay] = useState<OverlayQueueItem | null>(
     null,
   );
+  const activeOverlayRef = useRef<OverlayQueueItem | null>(null);
+  const [closedOverlay, setClosedOverlay] = useState<OverlayQueueItem | null>(
+    null,
+  );
+  const resolvedOverlayId = useRef<string | null>(null);
   const [motionConfig, setMotionConfig] =
     useState<PresentationMotionConfig>(defaultMotion);
   const queueRef = useRef<OverlayQueueItem[]>([]);
   const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
     new Map(),
   );
+  const toastMotionRef = useRef(new Map<string, boolean>());
 
   const resolveMotion = useCallback(
     (target: MotionTarget, override?: PresentationMotionOverride) => {
@@ -100,22 +107,45 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
   );
 
   const dismissToast = useCallback((id: string) => {
+    if (!toastMotionRef.current.has(id)) return;
     const timer = timersRef.current.get(id);
     if (timer) {
       clearTimeout(timer);
       timersRef.current.delete(id);
     }
-    setToasts((current) => current.filter((toast) => toast.id !== id));
+    const duration = toastMotionRef.current.get(id)
+      ? motionDuration('--motion-duration-fast')
+      : 0;
+    if (!duration) {
+      toastMotionRef.current.delete(id);
+      setToasts((current) => current.filter((toast) => toast.id !== id));
+      return;
+    }
+    setToasts((current) =>
+      current.map((toast) =>
+        toast.id === id ? { ...toast, exiting: true } : toast,
+      ),
+    );
+    timersRef.current.set(
+      id,
+      setTimeout(() => {
+        timersRef.current.delete(id);
+        toastMotionRef.current.delete(id);
+        setToasts((current) => current.filter((toast) => toast.id !== id));
+      }, duration),
+    );
   }, []);
 
   const clearToasts = useCallback(() => {
     timersRef.current.forEach((timer) => clearTimeout(timer));
     timersRef.current.clear();
+    toastMotionRef.current.clear();
     setToasts([]);
   }, []);
 
   const advanceOverlayQueue = useCallback(() => {
     const next = queueRef.current.shift() ?? null;
+    activeOverlayRef.current = next;
     setActiveOverlay(next);
   }, []);
 
@@ -124,14 +154,17 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
       new Promise<boolean>((resolve) => {
         const queueItem = { ...overlay, resolve } as OverlayQueueItem;
 
-        if (activeOverlay) {
+        // Track occupancy synchronously, keeping showAlert/showSheet stable
+        // while overlays open/close and preserving same-tick queue requests.
+        if (activeOverlayRef.current) {
           queueRef.current.push(queueItem);
           return;
         }
 
+        activeOverlayRef.current = queueItem;
         setActiveOverlay(queueItem);
       }),
-    [activeOverlay],
+    [],
   );
 
   const showToast = useCallback(
@@ -142,6 +175,7 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
         id,
         title: request.title,
         description: request.description,
+        appearance: request.appearance,
         intent: request.intent ?? 'info',
         position: request.position ?? 'top-right',
         actionLabel: request.actionLabel,
@@ -151,6 +185,7 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
         motionDurationMs: motion.durationMs,
       };
 
+      toastMotionRef.current.set(id, motion.enabled);
       setToasts((current) => [...current, toast]);
       const timer = setTimeout(
         () => dismissToast(id),
@@ -204,22 +239,22 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
 
   const resolveOverlay = useCallback(
     (value: boolean) => {
-      setActiveOverlay((current) => {
-        if (!current) {
-          return current;
-        }
-        current.resolve(value);
-        return null;
-      });
+      if (!activeOverlay || resolvedOverlayId.current === activeOverlay.id)
+        return;
+      resolvedOverlayId.current = activeOverlay.id;
+      activeOverlay.resolve(value);
+      setClosedOverlay(activeOverlay);
+      setActiveOverlay(null);
       queueMicrotask(advanceOverlayQueue);
     },
-    [advanceOverlayQueue],
+    [activeOverlay, advanceOverlayQueue],
   );
 
   useEffect(
     () => () => {
       timersRef.current.forEach((timer) => clearTimeout(timer));
       timersRef.current.clear();
+      toastMotionRef.current.clear();
     },
     [],
   );
@@ -250,83 +285,49 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
     [clearToasts, dismissToast, motionConfig, showAlert, showSheet, showToast],
   );
 
+  const alert =
+    activeOverlay?.kind === 'alert'
+      ? activeOverlay
+      : closedOverlay?.kind === 'alert'
+        ? closedOverlay
+        : null;
+  const sheet =
+    activeOverlay?.kind === 'sheet'
+      ? activeOverlay
+      : closedOverlay?.kind === 'sheet'
+        ? closedOverlay
+        : null;
   return (
     <PresentationContext.Provider value={service}>
       {children}
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
       <AlertModal
         open={activeOverlay?.kind === 'alert'}
-        title={activeOverlay?.kind === 'alert' ? activeOverlay.title : ''}
-        description={
-          activeOverlay?.kind === 'alert' ? activeOverlay.description : ''
-        }
-        tone={activeOverlay?.kind === 'alert' ? activeOverlay.tone : undefined}
-        alignment={
-          activeOverlay?.kind === 'alert' ? activeOverlay.alignment : undefined
-        }
-        confirmLabel={
-          activeOverlay?.kind === 'alert'
-            ? activeOverlay.confirmLabel
-            : undefined
-        }
-        cancelLabel={
-          activeOverlay?.kind === 'alert'
-            ? activeOverlay.cancelLabel
-            : undefined
-        }
-        details={
-          activeOverlay?.kind === 'alert' ? activeOverlay.details : undefined
-        }
-        motionEnabled={
-          activeOverlay?.kind === 'alert'
-            ? resolveMotion('alert', activeOverlay.motion).enabled
-            : motionConfig.enabled
-        }
-        motionDurationMs={
-          activeOverlay?.kind === 'alert'
-            ? resolveMotion('alert', activeOverlay.motion).durationMs
-            : motionConfig.alertDurationMs
-        }
+        title={alert?.title ?? ''}
+        description={alert?.description ?? ''}
+        tone={alert?.tone}
+        alignment={alert?.alignment}
+        confirmLabel={alert?.confirmLabel}
+        cancelLabel={alert?.cancelLabel}
+        details={alert?.details}
+        motionEnabled={resolveMotion('alert', alert?.motion).enabled}
+        motionDurationMs={resolveMotion('alert', alert?.motion).durationMs}
         onCancel={() => resolveOverlay(false)}
         onConfirm={() => resolveOverlay(true)}
       />
       <SheetPanel
         open={activeOverlay?.kind === 'sheet'}
-        title={activeOverlay?.kind === 'sheet' ? activeOverlay.title : ''}
-        description={
-          activeOverlay?.kind === 'sheet'
-            ? activeOverlay.description
-            : undefined
-        }
-        tone={activeOverlay?.kind === 'sheet' ? activeOverlay.tone : undefined}
-        side={activeOverlay?.kind === 'sheet' ? activeOverlay.side : undefined}
-        size={activeOverlay?.kind === 'sheet' ? activeOverlay.size : undefined}
-        confirmLabel={
-          activeOverlay?.kind === 'sheet'
-            ? activeOverlay.confirmLabel
-            : undefined
-        }
-        cancelLabel={
-          activeOverlay?.kind === 'sheet'
-            ? activeOverlay.cancelLabel
-            : undefined
-        }
-        details={
-          activeOverlay?.kind === 'sheet' ? activeOverlay.details : undefined
-        }
-        content={
-          activeOverlay?.kind === 'sheet' ? activeOverlay.content : undefined
-        }
-        motionEnabled={
-          activeOverlay?.kind === 'sheet'
-            ? resolveMotion('sheet', activeOverlay.motion).enabled
-            : motionConfig.enabled
-        }
-        motionDurationMs={
-          activeOverlay?.kind === 'sheet'
-            ? resolveMotion('sheet', activeOverlay.motion).durationMs
-            : motionConfig.sheetDurationMs
-        }
+        title={sheet?.title ?? ''}
+        description={sheet?.description}
+        tone={sheet?.tone}
+        side={sheet?.side}
+        size={sheet?.size}
+        confirmLabel={sheet?.confirmLabel}
+        cancelLabel={sheet?.cancelLabel}
+        details={sheet?.details}
+        content={sheet?.content}
+        motionEnabled={resolveMotion('sheet', sheet?.motion).enabled}
+        motionDurationMs={resolveMotion('sheet', sheet?.motion).durationMs}
         onCancel={() => resolveOverlay(false)}
         onConfirm={() => resolveOverlay(true)}
       />

@@ -12,7 +12,9 @@
     "lint": "eslint src scripts",
     "typecheck": "next typegen && tsc --noEmit",
     "check:strings": "node scripts/check-strings.mjs",
-    "check": "npm run lint && npm run typecheck && npm run check:strings"
+    "check": "npm run lint && npm run typecheck && npm run check:strings && npm run check:colors && npm run check:ui",
+    "check:colors": "node scripts/check-colors.mjs",
+    "check:ui": "node scripts/check-ui.mjs"
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.45.8",
@@ -26,8 +28,11 @@
     "jose": "^6.2.3",
     "next": "16.2.10",
     "react": "19.2.4",
+    "react-aria": "^3.53.1",
     "react-aria-components": "^1.15.1",
     "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1",
     "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.4.0",

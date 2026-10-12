@@ -1,0 +1,16 @@
+/* Fill images are absolutely positioned: reserve real grid tracks and a minimum
+   frame size independently of image loading and percentage-height resolution. */
+.ui-image-mosaic {
+  grid-auto-rows: 8rem;
+}
+
+.ui-image-mosaic-tile {
+  height: 100%;
+  min-height: 8rem;
+}
+
+@container (min-width: 32rem) {
+  .ui-image-mosaic {
+    grid-auto-rows: 10rem;
+  }
+}

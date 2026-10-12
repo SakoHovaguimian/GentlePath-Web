@@ -16,6 +16,10 @@ Open http://localhost:3001. The sample environment sets `DEMO_MODE=true`. Sign i
 
 Demo mode includes users, profile updates, feature requests, dashboard counts, a shared chat, and simulated alerts. It makes no Firebase, backend, Socket.IO, Messaging, or Amplitude calls. Optional analytics and browser push controls explain their demo state.
 
+## Component foundation
+
+Open `/dev-settings/components` after signing in. Portal includes the LeafLaunch shared component foundation, mobile navigation and record layouts, animated segmented controls, horizontal/vertical steppers, persistent panels, Markdown editing, media previews, and shared light/dark/accent/motion settings. Previews stay local. Read [UI system](docs/UI_SYSTEM.md) before extending a screen.
+
 ## Live mode
 
 Set `DEMO_MODE=false`, provide `PORTAL_API_URL`, `FIREBASE_WEB_API_KEY`, and a random `SESSION_SECRET` of at least 32 characters, then restart. `PORTAL_API_URL` includes the backend prefix, such as `http://localhost:3000/api`. Configure optional Socket.IO, Firebase Messaging, and Amplitude values from [.env.example](.env.example).
@@ -34,7 +38,7 @@ DEMO_MODE=true npm start
 npm run check:strings
 ```
 
-The repository contains no tests by instruction. `check` runs ESLint, route-aware TypeScript, and the display-string check. Keep the npm lockfile committed.
+The repository contains no tests by instruction. `check` runs ESLint, route-aware TypeScript, display-string checks, semantic-color checks, and shared-control checks. Keep the npm lockfile committed.
 
 ## Find your way around
 

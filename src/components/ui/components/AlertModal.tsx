@@ -2,7 +2,7 @@
 
 import { labels, strings } from '@/strings';
 import * as Dialog from '@radix-ui/react-dialog';
-import type { ReactNode } from 'react';
+import { useRef, type CSSProperties, type ReactNode } from 'react';
 import { Button } from './Button';
 import { cn } from '../lib/cn';
 
@@ -29,8 +29,7 @@ const layoutClasses: Record<AlertAlignment, string> = {
   center:
     'left-1/2 top-1/2 w-[min(92vw,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-2xl',
   top: 'left-1/2 top-6 w-[min(92vw,40rem)] -translate-x-1/2 rounded-2xl',
-  right:
-    'right-0 top-0 h-screen w-[min(94vw,34rem)] rounded-none rounded-l-2xl',
+  right: 'right-0 top-0 h-dvh w-[min(94vw,34rem)] rounded-none rounded-l-2xl',
 };
 
 export function AlertModal({
@@ -60,6 +59,7 @@ export function AlertModal({
   motionEnabled?: boolean;
   motionDurationMs?: number;
 }) {
+  const returnFocusRef = useRef<HTMLElement | null>(null);
   return (
     <Dialog.Root
       open={open}
@@ -67,28 +67,52 @@ export function AlertModal({
     >
       <Dialog.Portal>
         <Dialog.Overlay
+          data-motion={motionEnabled ? undefined : 'off'}
           className={cn(
-            'fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm',
-            motionEnabled &&
-              'data-[state=open]:animate-in data-[state=open]:fade-in-0',
+            'ui-backdrop fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm',
           )}
           style={
             motionEnabled
-              ? { animationDuration: `${motionDurationMs}ms` }
+              ? ({
+                  '--ui-overlay-duration': `${motionDurationMs}ms`,
+                } as CSSProperties)
               : undefined
           }
         />
         <Dialog.Content
+          data-motion={motionEnabled ? undefined : 'off'}
+          onOpenAutoFocus={() => {
+            returnFocusRef.current =
+              document.activeElement instanceof HTMLElement
+                ? document.activeElement
+                : null;
+          }}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            // A completed workflow may have focused its result during modal exit.
+            // Preserve that deliberate destination instead of restoring the trigger.
+            const focused = document.activeElement;
+            if (
+              focused instanceof HTMLElement &&
+              focused !== document.body &&
+              event.target instanceof HTMLElement &&
+              !event.target.contains(focused)
+            )
+              return;
+            if (returnFocusRef.current?.isConnected) {
+              returnFocusRef.current.focus();
+            }
+          }}
           className={cn(
-            'fixed z-[90] max-h-[calc(100dvh-2rem)] overflow-y-auto border bg-primary p-6 shadow-[var(--dashboard-shell-shadow-lg)] outline-none',
-            motionEnabled &&
-              'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+            'ui-dialog fixed z-[90] max-h-[calc(100dvh-2rem)] overflow-y-auto border bg-primary p-6 shadow-[var(--dashboard-shell-shadow-lg)] outline-none',
             toneClasses[tone],
             layoutClasses[alignment],
           )}
           style={
             motionEnabled
-              ? { animationDuration: `${motionDurationMs}ms` }
+              ? ({
+                  '--ui-overlay-duration': `${motionDurationMs}ms`,
+                } as CSSProperties)
               : undefined
           }
         >
@@ -96,7 +120,7 @@ export function AlertModal({
             <div className="flex flex-col items-start gap-4 text-left">
               <div
                 className={cn(
-                  'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em]',
+                  'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-[0.16em]',
                   accentClasses[tone],
                 )}
               >

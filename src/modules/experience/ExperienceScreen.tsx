@@ -353,7 +353,7 @@ export function ExperienceScreen() {
       >
         <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10">
           <div>
-            <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
+            <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
               {strings.ui.experienceScreen.showcase}
             </p>
             <h1 className="mt-1 font-display text-xl font-semibold tracking-tight text-primary">
@@ -362,7 +362,8 @@ export function ExperienceScreen() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {sections.map((section) => (
-              <button
+              <Button
+                variant="ghost"
                 key={section.id}
                 type="button"
                 onClick={() => scrollToSection(section.id)}
@@ -373,11 +374,11 @@ export function ExperienceScreen() {
                 }`}
               >
                 {section.label}
-              </button>
+              </Button>
             ))}
             <Link
               href={'/dashboard' as never}
-              className="bouncy-button rounded-lg bg-brand-solid px-4 py-2 text-sm font-semibold text-white shadow-[var(--dashboard-shell-shadow)] transition hover:bg-brand-solid_hover"
+              className="bouncy-button rounded-lg bg-brand-solid px-4 py-2 text-sm font-semibold text-[var(--color-text-primary_on-brand)] shadow-[var(--dashboard-shell-shadow)] transition hover:bg-brand-solid_hover"
             >
               {strings.ui.experienceScreen.backToDashboard}
             </Link>
@@ -392,7 +393,7 @@ export function ExperienceScreen() {
           data-visible={visibleState('hero')}
         >
           <article className="rounded-[28px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow-lg)] sm:p-8 lg:p-10">
-            <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-secondary">
+            <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-brand-secondary">
               {strings.ui.experienceScreen.restyledSystem}
             </p>
             <h2 className="mt-4 font-display text-[clamp(2.75rem,6vw,4.5rem)] font-semibold leading-none tracking-[-0.04em] text-primary">
@@ -425,17 +426,18 @@ export function ExperienceScreen() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={'/dashboard' as never}
-                className="bouncy-button rounded-lg bg-brand-solid px-5 py-3 text-sm font-semibold text-white shadow-[var(--dashboard-shell-shadow)] transition hover:bg-brand-solid_hover"
+                className="bouncy-button rounded-lg bg-brand-solid px-5 py-3 text-sm font-semibold text-[var(--color-text-primary_on-brand)] shadow-[var(--dashboard-shell-shadow)] transition hover:bg-brand-solid_hover"
               >
                 {strings.ui.experienceScreen.enterPortal}
               </Link>
-              <button
+              <Button
+                variant="ghost"
                 type="button"
                 onClick={() => scrollToSection('solutions')}
                 className="bouncy-button rounded-lg border border-secondary bg-primary px-5 py-3 text-sm font-semibold text-primary transition hover:bg-secondary_subtle"
               >
                 {strings.ui.experienceScreen.exploreTheSystem}
-              </button>
+              </Button>
             </div>
           </article>
 
@@ -446,14 +448,14 @@ export function ExperienceScreen() {
             <article className="rounded-[28px] border border-secondary bg-primary p-5 shadow-[var(--dashboard-shell-shadow)]">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-tertiary">
+                  <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
                     {strings.ui.experienceScreen.previewSurface}
                   </p>
                   <h3 className="mt-2 text-xl font-semibold text-primary">
                     {strings.ui.experienceScreen.liveDashboardMock}
                   </h3>
                 </div>
-                <span className="inline-flex rounded-full bg-brand-primary px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-secondary">
+                <span className="inline-flex rounded-full bg-brand-primary px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-brand-secondary">
                   {strings.ui.experienceScreen.active}
                 </span>
               </div>
@@ -468,7 +470,7 @@ export function ExperienceScreen() {
                       key={label}
                       className="rounded-xl border border-secondary bg-primary p-4"
                     >
-                      <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-tertiary">
+                      <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
                         {label}
                       </p>
                       <p className="mt-3 text-2xl font-semibold text-primary">
@@ -507,7 +509,7 @@ export function ExperienceScreen() {
                   key={item.label}
                   className="rounded-2xl border border-secondary bg-primary p-4 shadow-[var(--dashboard-shell-shadow)]"
                 >
-                  <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-tertiary">
+                  <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
                     {item.label}
                   </p>
                   <p className="mt-2 text-sm font-semibold text-primary">
@@ -543,7 +545,8 @@ export function ExperienceScreen() {
           </div>
           <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
             {solutions.map((solution, index) => (
-              <button
+              <Button
+                variant="ghost"
                 key={solution.title}
                 type="button"
                 onClick={() => void handleSolutionPresentation(index)}
@@ -564,7 +567,7 @@ export function ExperienceScreen() {
                     {strings.ui.experienceScreen.openPreview}
                   </p>
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         </section>
@@ -674,14 +677,14 @@ export function ExperienceScreen() {
             <article className="rounded-[24px] border border-secondary bg-secondary_subtle p-5">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-tertiary">
+                  <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
                     {strings.ui.experienceScreen.dashboardPreview}
                   </p>
                   <h3 className="mt-2 text-2xl font-semibold text-primary">
                     {strings.ui.experienceScreen.neutralCanvasSelectiveAccent}
                   </h3>
                 </div>
-                <span className="inline-flex rounded-full bg-brand-primary px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-secondary">
+                <span className="inline-flex rounded-full bg-brand-primary px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-brand-secondary">
                   {strings.ui.experienceScreen.preview}
                 </span>
               </div>
@@ -973,7 +976,8 @@ export function ExperienceScreen() {
                   key={faq.question}
                   className="rounded-2xl border border-secondary bg-primary shadow-[var(--dashboard-shell-shadow)]"
                 >
-                  <button
+                  <Button
+                    variant="ghost"
                     type="button"
                     onClick={() =>
                       setExpandedFaq((current) =>
@@ -989,7 +993,7 @@ export function ExperienceScreen() {
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-secondary_subtle text-primary transition-transform duration-300 ease-out">
                       {isOpen ? '−' : '+'}
                     </span>
-                  </button>
+                  </Button>
                   <div
                     className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
                       isOpen

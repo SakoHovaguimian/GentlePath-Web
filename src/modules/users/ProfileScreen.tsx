@@ -1,7 +1,16 @@
 'use client';
 import { strings } from '@/strings';
 import { useState } from 'react';
-import { Button, Card, Field, Input, QueryBoundary } from '@/components/ui';
+import {
+  Button,
+  Card,
+  Field,
+  Input,
+  QueryBoundary,
+  Page,
+  PageHeader,
+  FormActions,
+} from '@/components/ui';
 import type { User } from '@/models';
 import { useSessionState } from '@/providers/AppProviders';
 import { usePresentationService } from '@/presentation/PresentationProvider';
@@ -10,9 +19,12 @@ export function ProfileScreen() {
   const { session } = useSessionState();
   const query = useUser(session?.user.id || '');
   return (
-    <QueryBoundary query={query}>
-      {(user) => <ProfileForm key={user.id} user={user} />}
-    </QueryBoundary>
+    <Page>
+      <PageHeader title={strings.ui.profileScreen.yourProfile} />
+      <QueryBoundary query={query}>
+        {(user) => <ProfileForm key={user.id} user={user} />}
+      </QueryBoundary>
+    </Page>
   );
 }
 function ProfileForm({ user }: { user: User }) {
@@ -26,9 +38,6 @@ function ProfileForm({ user }: { user: User }) {
   );
   return (
     <Card className="grid gap-5">
-      <h1 className="text-2xl font-semibold">
-        {strings.ui.profileScreen.yourProfile}
-      </h1>
       <form
         noValidate
         className="grid gap-4"
@@ -100,14 +109,17 @@ function ProfileForm({ user }: { user: User }) {
             {mutation.error.message}
           </p>
         )}
-        <Button
-          type="submit"
-          disabled={!firstName.trim() || !lastName.trim() || mutation.isPending}
-        >
-          {mutation.isPending
-            ? strings.ui.profileScreen.savingProfile
-            : strings.ui.profileScreen.saveProfile}
-        </Button>
+        <FormActions variant="plain">
+          <Button
+            loading={mutation.isPending}
+            type="submit"
+            disabled={
+              !firstName.trim() || !lastName.trim() || mutation.isPending
+            }
+          >
+            {strings.ui.profileScreen.saveProfile}
+          </Button>
+        </FormActions>
       </form>
     </Card>
   );

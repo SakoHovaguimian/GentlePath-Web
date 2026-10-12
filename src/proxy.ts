@@ -27,6 +27,7 @@ export const config = {
     '/users/:path*',
     '/feature-requests/:path*',
     '/settings/:path*',
+    '/dev-settings/:path*',
     '/profile/:path*',
     '/experience/:path*',
     '/chat/:path*',

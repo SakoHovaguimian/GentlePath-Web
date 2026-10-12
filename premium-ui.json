@@ -3,12 +3,24 @@
   "sourceRoots": ["src"],
   "locale": "en-US",
   "canonicalMap": "UX-CONTRACT.md",
-  "requiredCapabilities": ["Date", "Form", "Scrollbar", "Toast", "CRUD"],
-  "ownership": { "Date": "native" },
+  "requiredCapabilities": [
+    "Select/Listbox",
+    "Date",
+    "Form",
+    "Scrollbar",
+    "Toast",
+    "CRUD"
+  ],
+  "ownership": {
+    "Date": "native",
+    "Select/Listbox": "authored"
+  },
   "requiredCommands": ["check", "build"],
   "commands": {
     "check": "npm run check",
     "build": "DEMO_MODE=true npm run build"
   },
-  "evidence": { "manualWorkflows": "docs/VERIFICATION.md" }
+  "evidence": {
+    "manualWorkflows": "docs/VERIFICATION.md"
+  }
 }

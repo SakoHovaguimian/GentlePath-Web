@@ -5,6 +5,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { Card } from './Card';
 import { Button } from './Button';
+import { Spinner } from './Spinner';
 
 /**
  * Loading skeleton that matches the Card layout
@@ -39,8 +40,11 @@ function QueryErrorState({
   const message = getErrorMessage(error);
 
   return (
-    <Card className="grid gap-3 border-error-subtle bg-error-subtle">
-      <span className="inline-flex w-fit items-center rounded-full bg-error px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-on-error">
+    <Card
+      role="alert"
+      className="grid gap-3 border-error_subtle bg-error-primary"
+    >
+      <span className="inline-flex w-fit items-center rounded-full bg-error px-2.5 py-1 text-xs font-semibold tracking-[0.14em] text-on-error">
         {strings.ui.queryBoundary.error}
       </span>
       <h3 className="m-0 text-lg font-semibold text-primary">
@@ -90,6 +94,8 @@ type QueryBoundaryProps<T> = {
   loadingMessage?: string;
   /** Whether to show error state (defaults to true) */
   showError?: boolean;
+  /** Pads the error state when rendered inside a DataPanel or other surface */
+  inset?: boolean;
 };
 
 /**
@@ -121,15 +127,17 @@ export function QueryBoundary<T>({
   loadingFallback,
   loadingMessage,
   showError = true,
+  inset = false,
 }: QueryBoundaryProps<T>): ReactNode {
   if (query.isLoading) {
     return loadingFallback ?? <LoadingState message={loadingMessage} />;
   }
 
   if (query.isError && showError) {
-    return (
+    const error = (
       <QueryErrorState error={query.error} onRetry={() => query.refetch()} />
     );
+    return inset ? <div className="p-4 sm:p-6">{error}</div> : error;
   }
 
   if (query.data === undefined) {
@@ -149,7 +157,7 @@ export function InlineLoading({
 }) {
   return (
     <div className="flex items-center gap-2 text-secondary">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+      <Spinner className="size-4" />
       <span className="text-sm">{message}</span>
     </div>
   );

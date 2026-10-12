@@ -1,10 +1,12 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import type { AppSession } from '@/models';
 import { AppShell } from '@/components/ui';
 import { useSessionState } from '@/providers/AppProviders';
+import { ThemeToggle } from '@/modules/settings/components/ThemeToggle';
+import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
 import { ShellActions } from '@/components/ShellActions';
 
 export function ProtectedShell({
@@ -14,18 +16,19 @@ export function ProtectedShell({
   children: ReactNode;
   initialSession: AppSession;
 }) {
-  const router = useRouter();
+  const navigate = useGuardedNavigate();
   const pathname = usePathname();
   const { session } = useSessionState();
 
   return (
     <AppShell
       session={session ?? initialSession}
-      utilitySlot={<ShellActions />}
+      accountSlot={<ShellActions />}
+      utilitySlot={<ThemeToggle />}
       activePath={pathname}
       onNavigate={(href) => {
         if (href !== pathname) {
-          router.push(href as never);
+          void navigate(href);
         }
       }}
     >

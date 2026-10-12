@@ -1,144 +1,23 @@
-import { strings } from '@/strings';
-import type { ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import { cn } from '../lib/cn';
+import { Message } from './Message';
+import { IosPushNotification } from './IosPushNotification';
+import { Button } from './Button';
 
-export type ToastIntent = 'info' | 'success' | 'warning' | 'danger';
-export type ToastPosition =
-  | 'top-left'
-  | 'top-center'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-center'
-  | 'bottom-right';
+import type { ToastItem } from '../models/toastItem';
+import type { ToastPosition } from '../models/toastPosition';
+export type { ToastItem } from '../models/toastItem';
+export type { ToastIntent } from '../models/toastIntent';
+export type { ToastPosition } from '../models/toastPosition';
 
-export type ToastItem = {
-  id: string;
-  title: string;
-  description?: string;
-  intent: ToastIntent;
-  position: ToastPosition;
-  motionEnabled?: boolean;
-  motionDurationMs?: number;
-  actionLabel?: string;
-  onAction?: () => void | Promise<void>;
-  meta?: ReactNode;
+const positions: Record<ToastPosition, string> = {
+  'top-left': 'top-4 left-4',
+  'top-center': 'top-4 left-1/2 -translate-x-1/2',
+  'top-right': 'top-4 right-4',
+  'bottom-left': 'bottom-4 left-4',
+  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2',
+  'bottom-right': 'bottom-4 right-4',
 };
-
-const positionClasses: Record<ToastPosition, string> = {
-  'top-left': 'top-4 left-4 items-start',
-  'top-center': 'top-4 left-1/2 -translate-x-1/2 items-center',
-  'top-right': 'top-4 right-4 items-end',
-  'bottom-left': 'bottom-4 left-4 items-start',
-  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2 items-center',
-  'bottom-right': 'bottom-4 right-4 items-end',
-};
-
-const intentClasses: Record<ToastIntent, string> = {
-  info: 'bg-primary',
-  success: 'bg-primary',
-  warning: 'bg-primary',
-  danger: 'bg-primary',
-};
-
-const intentAccentClasses: Record<
-  ToastIntent,
-  { bar: string; iconBg: string; iconFg: string }
-> = {
-  info: {
-    bar: 'bg-brand-solid',
-    iconBg: 'bg-brand-primary/35',
-    iconFg: 'text-brand-secondary',
-  },
-  success: {
-    bar: 'bg-success-primary',
-    iconBg: 'bg-success-secondary/35',
-    iconFg: 'text-success-primary',
-  },
-  warning: {
-    bar: 'bg-warning-primary',
-    iconBg: 'bg-warning-secondary/35',
-    iconFg: 'text-warning-primary',
-  },
-  danger: {
-    bar: 'bg-error-primary',
-    iconBg: 'bg-error-secondary/35',
-    iconFg: 'text-error-primary',
-  },
-};
-
-function ToastIntentIcon({ intent }: { intent: ToastIntent }) {
-  if (intent === 'success') {
-    return (
-      <svg
-        viewBox="0 0 20 20"
-        className="h-4 w-4"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M4.5 10.5 8 14l7.5-7.5"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-
-  if (intent === 'danger') {
-    return (
-      <svg
-        viewBox="0 0 20 20"
-        className="h-4 w-4"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="m6 6 8 8M14 6l-8 8"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
-
-  if (intent === 'warning') {
-    return (
-      <svg
-        viewBox="0 0 20 20"
-        className="h-4 w-4"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M10 5.5v5.5m0 3h.01"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" aria-hidden="true">
-      <path
-        d="M10 8v5m0-8.5h.01"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function getEntryAnimationClass(position: ToastPosition) {
-  return position.startsWith('top')
-    ? 'slide-in-from-top-3'
-    : 'slide-in-from-bottom-3';
-}
 
 export function ToastStack({
   toasts,
@@ -147,113 +26,78 @@ export function ToastStack({
   toasts: ToastItem[];
   onDismiss: (id: string) => void;
 }) {
-  const grouped = toasts.reduce<Record<ToastPosition, ToastItem[]>>(
-    (accumulator, toast) => {
-      accumulator[toast.position].push(toast);
-      return accumulator;
-    },
-    {
-      'top-left': [],
-      'top-center': [],
-      'top-right': [],
-      'bottom-left': [],
-      'bottom-center': [],
-      'bottom-right': [],
-    },
-  );
-
   return (
     <>
-      {Object.entries(grouped).map(([position, items]) =>
-        items.length > 0 ? (
+      {(Object.keys(positions) as ToastPosition[]).map((position) => {
+        const items = toasts.filter((toast) => toast.position === position);
+        return items.length ? (
           <div
             key={position}
             className={cn(
-              'pointer-events-none fixed z-[70] flex w-[min(92vw,24rem)] flex-col gap-3',
-              positionClasses[position as ToastPosition],
+              'pointer-events-none fixed z-[120] grid max-h-[calc(100dvh-2rem)] w-[min(92vw,26rem)] gap-3 overflow-y-auto',
+              positions[position],
             )}
           >
             {items.map((toast) => (
               <div
                 key={toast.id}
+                data-position={position}
+                data-exiting={toast.exiting || undefined}
+                data-motion={toast.motionEnabled === false ? 'off' : undefined}
                 className={cn(
-                  'pointer-events-auto relative overflow-hidden rounded-xl border border-secondary p-0 shadow-[var(--dashboard-shell-shadow-lg)]',
-                  toast.motionEnabled !== false &&
-                    `animate-in fade-in-0 ${getEntryAnimationClass(toast.position)}`,
-                  intentClasses[toast.intent],
+                  'ui-toast pointer-events-auto',
+                  toast.appearance !== 'ios-push' &&
+                    'rounded-lg bg-primary shadow-[var(--dashboard-shell-shadow-lg)]',
                 )}
                 style={
                   toast.motionEnabled === false
                     ? undefined
-                    : {
-                        animationDuration: `${toast.motionDurationMs ?? 220}ms`,
-                      }
+                    : ({
+                        '--ui-overlay-duration': `${toast.motionDurationMs ?? 220}ms`,
+                      } as CSSProperties)
                 }
               >
-                <span
-                  className={cn(
-                    'absolute inset-y-0 left-0 w-1',
-                    intentAccentClasses[toast.intent].bar,
-                  )}
-                />
-                <div className="flex items-start gap-3 px-4 py-3.5">
-                  <span
-                    className={cn(
-                      'mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-                      intentAccentClasses[toast.intent].iconBg,
-                      intentAccentClasses[toast.intent].iconFg,
-                    )}
-                  >
-                    <ToastIntentIcon intent={toast.intent} />
-                  </span>
-                  <div className="min-w-0 flex-1 pl-0.5">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="m-0 text-sm font-semibold text-primary">
-                          {toast.title}
-                        </p>
-                        {toast.description ? (
-                          <p className="mt-1 text-sm leading-5 text-secondary">
-                            {toast.description}
-                          </p>
-                        ) : null}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => onDismiss(toast.id)}
-                        className="inline-flex h-6 w-6 items-center justify-center rounded-full text-base leading-none text-tertiary transition hover:bg-secondary_subtle hover:text-primary"
-                        aria-label={strings.ui.toastStack.dismissToast(
-                          toast.title,
-                        )}
-                      >
-                        <span aria-hidden="true">
-                          {strings.ui.toastStack.text}
-                        </span>
-                      </button>
-                    </div>
-                    {toast.meta ? (
-                      <div className="mt-2 text-[11px] uppercase tracking-[0.16em] text-tertiary">
+                {toast.appearance === 'ios-push' ? (
+                  <IosPushNotification
+                    title={toast.title}
+                    body={toast.description}
+                    onDismiss={() => onDismiss(toast.id)}
+                  />
+                ) : (
+                  <Message
+                    title={toast.title}
+                    description={toast.description}
+                    intent={toast.intent}
+                    className={
+                      !toast.description
+                        ? 'items-center py-2 [&>svg]:mt-0'
+                        : undefined
+                    }
+                    onDismiss={() => onDismiss(toast.id)}
+                  />
+                )}
+                {(toast.meta || (toast.actionLabel && toast.onAction)) && (
+                  <div className="flex flex-wrap items-center gap-2 p-3 pt-0">
+                    {toast.meta && (
+                      <span className="text-xs text-secondary">
                         {toast.meta}
-                      </div>
-                    ) : null}
-                    {toast.actionLabel && toast.onAction ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          void toast.onAction?.();
-                        }}
-                        className="mt-2 inline-flex items-center rounded-lg bg-secondary_subtle px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-primary transition hover:bg-primary_hover"
+                      </span>
+                    )}
+                    {toast.actionLabel && toast.onAction && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => void toast.onAction?.()}
                       >
                         {toast.actionLabel}
-                      </button>
-                    ) : null}
+                      </Button>
+                    )}
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
-        ) : null,
-      )}
+        ) : null;
+      })}
     </>
   );
 }

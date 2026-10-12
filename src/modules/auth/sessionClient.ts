@@ -10,6 +10,7 @@ const allowedRedirectPrefixes = [
   '/settings',
   '/profile',
   '/experience',
+  '/dev-settings',
   '/chat',
 ] as const;
 

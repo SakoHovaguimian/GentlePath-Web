@@ -1,0 +1,578 @@
+/* Motion is shared by every internal control. State stays with native inputs/React Aria. */
+.ui-button,
+.ui-input,
+.ui-choice,
+.ui-choice-label,
+.ui-switch,
+.ui-selection-tile,
+.ui-card,
+.ui-badge,
+.ui-chip,
+.ui-drop-zone,
+.ui-select-option,
+.ui-sidebar-link,
+.ui-table-row {
+  transition-property:
+    background-color, border-color, color, box-shadow, opacity, scale;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-ease-out);
+}
+
+.ui-button {
+  transition-duration: var(--motion-duration-base);
+  transition-timing-function: var(--motion-ease-spring);
+}
+.ui-button:is(:active, [data-pressed]):not(:disabled):not(
+    [aria-disabled='true']
+  ) {
+  scale: var(--motion-button-press-scale);
+  transition-duration: var(--motion-duration-press);
+}
+.ui-button[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+.ui-button-primary {
+  background-image: linear-gradient(
+    180deg,
+    var(--color-action-start),
+    var(--color-action-end)
+  );
+}
+.ui-button-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--color-bg-brand-solid_hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-button-primary:disabled,
+.ui-button-primary[aria-disabled='true'] {
+  background-image: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ui-button-primary:hover:not(:disabled):not([aria-disabled='true'])::before {
+    opacity: 1;
+  }
+  .ui-section-card:hover .ui-section-chevron {
+    translate: 0.2rem 0;
+  }
+  [dir='rtl'] .ui-section-card:hover .ui-section-chevron {
+    translate: -0.2rem 0;
+  }
+  .ui-selection-tile:hover:not(:has(:disabled)) .ui-tile-icon {
+    scale: 1.06;
+  }
+}
+.ui-button-primary[data-preview-state='hover']::before {
+  opacity: 1;
+}
+
+.ui-sidebar-link::before {
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.ui-section-chevron,
+.ui-tile-icon,
+.ui-choice-frame,
+.ui-switch-frame {
+  transition:
+    translate var(--motion-duration-base) var(--motion-ease-out),
+    scale var(--motion-duration-base) var(--motion-ease-spring),
+    opacity var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-section-card {
+  --motion-button-press-scale: 0.99;
+}
+.ui-selection-tile:active:not(:has(:disabled)) {
+  scale: 0.99;
+}
+.ui-choice-label:active:not(:has(:disabled)) .ui-choice-frame,
+.ui-switch-label:active:not(:has(:disabled)) .ui-switch-frame {
+  scale: 0.93;
+}
+.ui-switch-thumb {
+  transition:
+    translate var(--motion-duration-base) var(--motion-ease-spring),
+    scale var(--motion-duration-press) var(--motion-ease-out),
+    opacity var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-switch-label:active:not(:has(:disabled)) .ui-switch-thumb {
+  scale: 1.08 0.94;
+}
+
+.ui-checkbox-mark,
+.ui-checkbox-mixed {
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-out),
+    scale var(--motion-duration-base) var(--motion-ease-spring);
+}
+.ui-checkbox-mark path {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  transition: stroke-dashoffset var(--motion-duration-base)
+    var(--motion-ease-out);
+}
+.ui-checkbox:checked + .ui-checkbox-mark,
+.ui-checkbox:indeterminate ~ .ui-checkbox-mixed {
+  opacity: 1;
+  scale: 1;
+}
+.ui-checkbox:checked + .ui-checkbox-mark path {
+  stroke-dashoffset: 0;
+}
+.ui-checkbox:indeterminate + .ui-checkbox-mark {
+  opacity: 0;
+}
+.ui-radio-dot {
+  opacity: 0;
+  transform: scale(0.6);
+  transform-origin: center;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-out),
+    transform var(--motion-duration-base) var(--motion-ease-spring);
+}
+.ui-radio:checked + .ui-radio-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+.ui-choice:disabled
+  ~ :is(.ui-checkbox-mark, .ui-checkbox-mixed, .ui-radio-dot) {
+  opacity: 0.4;
+}
+.ui-choice:disabled:not(:checked):not(:indeterminate)
+  ~ :is(.ui-checkbox-mark, .ui-checkbox-mixed, .ui-radio-dot) {
+  opacity: 0;
+}
+
+.ui-segmented-indicator {
+  width: var(--ui-segment-width, 0px);
+  height: var(--ui-segment-height, 0px);
+  transform: translate(var(--ui-segment-x, 0px), var(--ui-segment-y, 0px));
+  opacity: 0;
+}
+.ui-segmented[data-ready='true'] .ui-segmented-indicator {
+  transition:
+    transform var(--motion-duration-base) var(--motion-ease-spring),
+    width var(--motion-duration-base) var(--motion-ease-out),
+    height var(--motion-duration-base) var(--motion-ease-out),
+    opacity var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-segment {
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-out),
+    transform var(--motion-duration-base) var(--motion-ease-spring);
+}
+.ui-segment:active {
+  transform: scale(0.96);
+}
+
+.ui-select-trigger {
+  transition-duration: var(--motion-duration-fast);
+}
+.ui-select-trigger:is(:active, [data-pressed]):not(:disabled) {
+  scale: 0.995;
+}
+.ui-select-chevron {
+  transition: rotate var(--motion-duration-base) var(--motion-ease-out);
+}
+.ui-select[data-open] .ui-select-chevron {
+  rotate: 180deg;
+}
+.ui-select[data-open]:not([data-invalid]) .ui-select-trigger {
+  border-color: var(--color-border-brand);
+}
+.ui-select-value {
+  animation: ui-value-enter var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-select-option:active:not([data-disabled]) {
+  scale: 0.99;
+}
+.ui-option-check {
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-out),
+    scale var(--motion-duration-base) var(--motion-ease-spring);
+}
+.ui-select-option:not([data-selected]) .ui-option-check {
+  scale: 0.65;
+}
+
+.ui-popover,
+.ui-tooltip {
+  transform-origin: var(--trigger-anchor-point, center top);
+}
+.ui-popover[data-entering],
+.ui-tooltip[data-entering] {
+  animation: ui-popover-enter var(--motion-duration-base) var(--motion-ease-out);
+}
+.ui-popover[data-exiting],
+.ui-tooltip[data-exiting] {
+  animation: ui-popover-exit var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-popover[data-placement='top'],
+.ui-tooltip[data-placement='top'] {
+  --ui-popover-offset: -0.375rem;
+}
+.ui-message,
+.ui-state,
+.ui-badge,
+.ui-chip {
+  animation: ui-content-enter var(--motion-duration-base) var(--motion-ease-out);
+}
+.ui-token-value {
+  animation: ui-value-enter var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-drop-zone[data-dragging='true'] {
+  scale: 1.01;
+}
+.ui-backdrop[data-state='open'] {
+  animation: ui-fade-in var(--ui-overlay-duration, var(--motion-duration-enter))
+    var(--motion-ease-out);
+}
+.ui-backdrop[data-state='closed'] {
+  animation: ui-fade-out var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-dialog[data-state='open'] {
+  animation: ui-dialog-enter
+    var(--ui-overlay-duration, var(--motion-duration-enter))
+    var(--motion-ease-out);
+}
+.ui-dialog[data-state='closed'] {
+  animation: ui-dialog-exit var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-sheet[data-state='open'] {
+  animation: ui-sheet-enter
+    var(--ui-overlay-duration, var(--motion-duration-enter))
+    var(--motion-ease-out);
+}
+.ui-sheet[data-state='closed'] {
+  animation: ui-sheet-exit var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-sheet[data-side='left'] {
+  --ui-sheet-x: -1.5rem;
+  --ui-sheet-y: 0px;
+}
+.ui-sheet[data-side='right'] {
+  --ui-sheet-x: 1.5rem;
+  --ui-sheet-y: 0px;
+}
+.ui-sheet[data-side='bottom'] {
+  --ui-sheet-x: 0px;
+  --ui-sheet-y: 1.5rem;
+}
+.ui-toast {
+  animation: ui-content-enter
+    var(--ui-overlay-duration, var(--motion-duration-enter))
+    var(--motion-ease-out);
+}
+.ui-toast[data-position^='top'] {
+  --ui-content-offset: -0.5rem;
+}
+.ui-toast[data-exiting='true'] {
+  animation: ui-content-exit var(--motion-duration-fast) var(--motion-ease-out)
+    forwards;
+  pointer-events: none;
+}
+.ui-toast .ui-message {
+  animation: none;
+}
+[data-motion='off'],
+[data-motion='off'] * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Background refresh indicator for DataPanel and other record surfaces. */
+.ui-progress-line {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 1;
+  height: 2px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-out);
+}
+.ui-progress-line[data-active] {
+  opacity: 1;
+}
+.ui-progress-line::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  width: 35%;
+  border-radius: 9999px;
+  background: var(--color-bg-brand-solid);
+  animation: ui-progress-slide 1.2s var(--motion-ease-out) infinite;
+}
+@keyframes ui-progress-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+/* Persistent layers let forward/backward changes reverse mid-transition. */
+.ui-step-bar-fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--motion-duration-base) var(--motion-ease-out);
+}
+.ui-step-bar:dir(rtl) .ui-step-bar-fill {
+  transform-origin: right center;
+}
+.ui-step-bar[data-filled='true'] .ui-step-bar-fill {
+  transform: scaleX(1);
+}
+.ui-step-marker {
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-out),
+    border-color var(--motion-duration-base) var(--motion-ease-out),
+    color var(--motion-duration-base) var(--motion-ease-out);
+}
+.ui-step-number,
+.ui-step-check {
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-out),
+    transform var(--motion-duration-base) var(--motion-ease-out);
+}
+.ui-step-number {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+.ui-step-check {
+  opacity: 0;
+  transform: scale(0.5) rotate(-45deg);
+}
+.ui-step-marker[data-complete='true'] .ui-step-number {
+  opacity: 0;
+  transform: scale(0.5) rotate(45deg);
+}
+.ui-step-marker[data-complete='true'] .ui-step-check {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+@keyframes ui-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ui-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes ui-content-enter {
+  from {
+    opacity: 0;
+    translate: 0 var(--ui-content-offset, 0.375rem);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes ui-content-exit {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 var(--ui-content-offset, 0.375rem);
+  }
+}
+@keyframes ui-value-enter {
+  from {
+    opacity: 0.5;
+    translate: 0 0.125rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes ui-popover-enter {
+  from {
+    opacity: 0;
+    translate: 0 var(--ui-popover-offset, 0.375rem);
+    scale: 0.98;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+@keyframes ui-popover-exit {
+  from {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    translate: 0 var(--ui-popover-offset, 0.375rem);
+    scale: 0.98;
+  }
+}
+@keyframes ui-dialog-enter {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes ui-dialog-exit {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+@keyframes ui-sheet-enter {
+  from {
+    opacity: 0;
+    transform: translate(var(--ui-sheet-x), var(--ui-sheet-y));
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@keyframes ui-sheet-exit {
+  from {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--ui-sheet-x), var(--ui-sheet-y));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([class*='ui-'], [class*='ui-'] *) {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ui-button:is(:active, [data-pressed]),
+  .ui-select-trigger:is(:active, [data-pressed]),
+  .ui-selection-tile:active,
+  .ui-segment:active,
+  .ui-select-option:active,
+  .ui-choice-frame,
+  .ui-switch-frame,
+  .ui-switch-thumb,
+  .ui-tile-icon,
+  .ui-drop-zone {
+    scale: 1 !important;
+  }
+  .ui-section-chevron {
+    translate: none !important;
+  }
+  .ui-segment:active {
+    transform: none !important;
+  }
+  .ui-progress-line::after {
+    width: 100%;
+  }
+}
+@media (forced-colors: active) {
+  .ui-choice {
+    appearance: auto;
+  }
+  .ui-checkbox-mark,
+  .ui-checkbox-mixed,
+  .ui-radio-dot {
+    display: none;
+  }
+}
+
+/* Conversation entries share the application's motion timing and reduced-motion contract. */
+@keyframes ui-chat-message-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ui-chat-message {
+  animation: ui-chat-message-enter var(--motion-duration-base)
+    var(--motion-ease-out) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-chat-message {
+    animation: none;
+  }
+}
+
+/* Preview the insertion gap while the picked-up row follows the pointer. */
+.ui-reorder-row[data-reordering='true'] {
+  transition: translate var(--motion-duration-fast) var(--motion-ease-out);
+}
+.ui-reorder-row[data-dragging='true'] {
+  z-index: 1;
+  background: var(--color-bg-primary);
+  box-shadow: var(--dashboard-shell-shadow-lg);
+  outline: 2px solid var(--color-border-brand);
+  outline-offset: -2px;
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-reorder-row {
+    transition: none;
+  }
+}
+
+html[data-motion='reduced'] {
+  :where([class*='ui-'], [class*='ui-'] *) {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ui-button:is(:active, [data-pressed]),
+  .ui-select-trigger:is(:active, [data-pressed]),
+  .ui-selection-tile:active,
+  .ui-segment:active,
+  .ui-select-option:active,
+  .ui-choice-frame,
+  .ui-switch-frame,
+  .ui-switch-thumb,
+  .ui-tile-icon,
+  .ui-drop-zone {
+    scale: 1 !important;
+  }
+  .ui-section-chevron {
+    translate: none !important;
+  }
+  .ui-segment:active {
+    transform: none !important;
+  }
+  .ui-progress-line::after {
+    width: 100%;
+  }
+}

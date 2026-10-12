@@ -66,12 +66,12 @@ export function FeatureRequestDetailScreen({
   return (
     <Card className="grid gap-5">
       <div className="grid gap-2">
-        <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
+        <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
           {strings.ui.featureRequestDetailScreen.requestDetail}
         </p>
-        <h2 className="m-0 text-2xl font-semibold tracking-tight text-primary">
+        <h1 className="m-0 text-2xl font-semibold tracking-tight text-primary">
           {strings.ui.featureRequestDetailScreen.featureRequestDetail}
-        </h2>
+        </h1>
       </div>
       <form
         noValidate

@@ -11,7 +11,7 @@ import {
   DataTable,
   MetricCard,
   ErrorState,
-  buttonClassName,
+  PageHeader,
 } from '@/components/ui';
 import {
   useDashboardOverview,
@@ -90,19 +90,23 @@ const refundReasons = [
   {
     label: strings.ui.dashboardScreen.missingFeaturesINeed,
     value: 24.9,
-    color: '#6366f1',
+    color: 'var(--color-chart-tertiary)',
   },
   {
     label: strings.ui.dashboardScreen.notSatisfiedAboutTheQualityOfTheProduct,
     value: 19.3,
-    color: '#60a5fa',
+    color: 'var(--color-chart-secondary)',
   },
   {
     label: strings.ui.dashboardScreen.theProductDoesnTLookAsAdvertised,
     value: 9.6,
-    color: '#4ade80',
+    color: 'var(--color-chart-success)',
   },
-  { label: strings.ui.dashboardScreen.other, value: 9.3, color: '#cbd5e1' },
+  {
+    label: strings.ui.dashboardScreen.other,
+    value: 9.3,
+    color: 'var(--color-chart-neutral)',
+  },
 ] as const;
 
 function buildLinePath(
@@ -150,7 +154,7 @@ function DashboardPanel({
     <Card className="grid gap-4 p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-tertiary">
+          <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
             {eyebrow}
           </p>
           <h3 className="mt-2 text-base font-semibold text-primary">{title}</h3>
@@ -163,7 +167,7 @@ function DashboardPanel({
             {value}
           </div>
           {delta ? (
-            <span className="inline-flex rounded-full bg-brand-primary px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-secondary">
+            <span className="inline-flex rounded-full bg-brand-primary px-2 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-brand-secondary">
               {delta}
             </span>
           ) : null}
@@ -205,7 +209,7 @@ function LineChart({
         <path
           d={buildLinePath(secondary, 320, 150, 12)}
           fill="none"
-          stroke="rgba(148, 163, 184, 0.7)"
+          stroke="var(--color-chart-previous)"
           strokeWidth="2"
           strokeLinecap="round"
         />
@@ -214,7 +218,7 @@ function LineChart({
         <path
           d={buildLinePath(tertiary, 320, 150, 12)}
           fill="none"
-          stroke="#22c55e"
+          stroke="var(--color-chart-forecast)"
           strokeWidth="2"
           strokeLinecap="round"
         />
@@ -242,7 +246,7 @@ function ComparisonBars() {
           {strings.ui.dashboardScreen.direct}
         </span>
         <span className="inline-flex items-center gap-2 text-primary">
-          <span className="h-2.5 w-2.5 rounded-full bg-sky-400" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-secondary)]" />
           <strong>{strings.ui.dashboardScreen.value24k}</strong>{' '}
           {strings.ui.dashboardScreen.indirect}
         </span>
@@ -261,7 +265,7 @@ function ComparisonBars() {
                 }}
               />
               <span
-                className="w-4 rounded-t-md bg-sky-400"
+                className="w-4 rounded-t-md bg-[var(--color-chart-secondary)]"
                 style={{
                   height: `${(indirectRevenue[index] / maxValue) * 100}%`,
                 }}
@@ -269,7 +273,7 @@ function ComparisonBars() {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-6 gap-4 text-center text-[11px] font-medium uppercase tracking-[0.12em] text-tertiary">
+        <div className="grid grid-cols-6 gap-4 text-center text-xs font-medium uppercase tracking-[0.12em] text-tertiary">
           {comparisonMonths.map((month) => (
             <span key={month}>{month}</span>
           ))}
@@ -286,7 +290,7 @@ function CountriesDonut() {
         className="relative h-52 w-52 rounded-full"
         style={{
           background:
-            'conic-gradient(var(--color-brand-500) 0 38%, #60a5fa 38% 66%, #818cf8 66% 100%)',
+            'conic-gradient(var(--color-brand-500) 0 38%, var(--color-chart-secondary) 38% 66%, var(--color-chart-tertiary) 66% 100%)',
         }}
       >
         <div className="absolute inset-5 rounded-full bg-primary" />
@@ -294,8 +298,8 @@ function CountriesDonut() {
       <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-secondary">
         {[
           [strings.ui.dashboardScreen.unitedStates, 'var(--color-brand-500)'],
-          [strings.ui.dashboardScreen.italy, '#60a5fa'],
-          [strings.ui.dashboardScreen.other, '#818cf8'],
+          [strings.ui.dashboardScreen.italy, 'var(--color-chart-secondary)'],
+          [strings.ui.dashboardScreen.other, 'var(--color-chart-tertiary)'],
         ].map(([label, color]) => (
           <span key={label} className="inline-flex items-center gap-2">
             <span
@@ -313,7 +317,7 @@ function CountriesDonut() {
 function TopChannelsTable() {
   return (
     <div className="overflow-hidden rounded-xl border border-secondary bg-primary">
-      <div className="grid grid-cols-[1.5fr_repeat(4,minmax(0,1fr))] gap-3 border-b border-secondary bg-secondary_subtle px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-tertiary">
+      <div className="grid grid-cols-[1.5fr_repeat(4,minmax(0,1fr))] gap-3 border-b border-secondary bg-secondary_subtle px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
         <span>{strings.ui.dashboardScreen.source}</span>
         <span>{strings.ui.dashboardScreen.visitors}</span>
         <span>{strings.ui.dashboardScreen.revenue}</span>
@@ -328,9 +332,11 @@ function TopChannelsTable() {
           >
             <span className="font-medium text-primary">{channel.source}</span>
             <span>{channel.visitors}</span>
-            <span className="text-emerald-500">{channel.revenue}</span>
+            <span className="text-success-primary">{channel.revenue}</span>
             <span>{channel.sales}</span>
-            <span className="text-sky-500">{channel.conversion}</span>
+            <span className="text-[var(--color-chart-secondary)]">
+              {channel.conversion}
+            </span>
           </div>
         ))}
       </div>
@@ -362,7 +368,7 @@ function SalesVsRefundsBars() {
             </div>
             <div className="flex h-20 items-start">
               <span
-                className="w-6 rounded-b-md bg-indigo-200 dark:bg-indigo-300"
+                className="w-6 rounded-b-md bg-[var(--color-chart-refunds)]"
                 style={{
                   height: `${(Math.abs(salesVsRefundsRefunds[index]) / maxValue) * 100}%`,
                 }}
@@ -371,7 +377,7 @@ function SalesVsRefundsBars() {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-6 gap-4 text-center text-[11px] font-medium uppercase tracking-[0.12em] text-tertiary">
+      <div className="grid grid-cols-6 gap-4 text-center text-xs font-medium uppercase tracking-[0.12em] text-tertiary">
         {comparisonMonths.map((month) => (
           <span key={month}>{month}</span>
         ))}
@@ -384,7 +390,7 @@ function RefundReasonsCard() {
   return (
     <Card className="grid gap-5">
       <div>
-        <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
+        <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
           {strings.ui.dashboardScreen.breakdown}
         </p>
         <h3 className="mt-2 text-xl font-semibold text-primary">
@@ -455,44 +461,34 @@ export function DashboardScreen() {
 
   return (
     <div className="grid gap-6">
-      <Card className="overflow-hidden p-0">
-        <div className="border-b border-secondary bg-secondary_subtle px-6 py-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
-                {strings.ui.dashboardScreen.overview}
-              </p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-primary">
-                {strings.ui.dashboardScreen.dashboard}
-              </h2>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex rounded-lg border border-secondary bg-primary px-3 py-2 text-sm font-medium text-secondary">
-                {overview.data
-                  ? new Date(overview.data.dateRange.from).toLocaleDateString(
-                      'en-US',
-                    ) +
-                    ' – ' +
-                    new Date(overview.data.dateRange.to).toLocaleDateString(
-                      'en-US',
-                    )
-                  : strings.common.pendingValue}
-              </span>
-              <Link className={buttonClassName()} href="/experience">
-                {strings.ui.dashboardScreen.openShowcase}
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="grid gap-3 px-6 py-6">
-          <p className="m-0 max-w-4xl text-sm leading-7 text-secondary">
-            {
-              strings.ui.dashboardScreen
-                .reviewYourWorkspaceActivityBrowseRecordsAndManageIncoming
-            }
-          </p>
-        </div>
-      </Card>
+      <PageHeader
+        title={strings.ui.dashboardScreen.dashboard}
+        description={
+          strings.ui.dashboardScreen
+            .reviewYourWorkspaceActivityBrowseRecordsAndManageIncoming
+        }
+        meta={
+          overview.data && (
+            <span>
+              {strings.ui.dashboardScreen.dateRange(
+                new Date(overview.data.dateRange.from).toLocaleDateString(
+                  'en-US',
+                ),
+                new Date(overview.data.dateRange.to).toLocaleDateString(
+                  'en-US',
+                ),
+              )}
+            </span>
+          )
+        }
+        action={
+          <Button asChild variant="secondary">
+            <Link href="/dev-settings/components">
+              {strings.designSystem.openLibrary}
+            </Link>
+          </Button>
+        }
+      />
 
       {(overview.isPending || models.isPending || records.isPending) && (
         <Card>{strings.ui.dashboardScreen.loadingWorkspaceData}</Card>
@@ -523,7 +519,7 @@ export function DashboardScreen() {
 
       <Card className="grid gap-4">
         <div>
-          <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
+          <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
             {strings.ui.dashboardScreen.density}
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-primary">
@@ -548,7 +544,7 @@ export function DashboardScreen() {
           </Button>
         </div>
         <div className="rounded-xl border border-secondary bg-secondary_subtle p-4">
-          <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-tertiary">
+          <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
             {strings.ui.dashboardScreen.selectedModel}
           </p>
           <p className="mt-2 text-sm font-semibold text-primary">
@@ -586,7 +582,7 @@ export function DashboardScreen() {
                     {strings.ui.dashboardScreen.current}
                   </span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-neutral)]" />
                     {strings.ui.dashboardScreen.previous}
                   </span>
                 </div>
@@ -627,11 +623,11 @@ export function DashboardScreen() {
                     {strings.ui.dashboardScreen.current}
                   </span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-neutral)]" />
                     {strings.ui.dashboardScreen.previous}
                   </span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-forecast)]" />
                     {strings.ui.dashboardScreen.forecast}
                   </span>
                 </div>
@@ -661,7 +657,7 @@ export function DashboardScreen() {
         <Card className="grid gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
+              <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
                 {strings.ui.dashboardScreen.records}
               </p>
               <h3 className="mt-2 text-xl font-semibold text-primary">
@@ -683,7 +679,7 @@ export function DashboardScreen() {
 
         <Card className="grid gap-4">
           <div>
-            <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
+            <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
               {strings.ui.dashboardScreen.registry}
             </p>
             <h3 className="mt-2 text-xl font-semibold text-primary">
@@ -703,7 +699,7 @@ export function DashboardScreen() {
                   >
                     {entry.displayName}
                   </Link>
-                  <span className="inline-flex rounded-full bg-brand-primary px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-secondary">
+                  <span className="inline-flex rounded-full bg-brand-primary px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-brand-secondary">
                     {entry.recordCount}
                   </span>
                 </div>

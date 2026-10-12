@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 @import './theme.css';
-@import './semantic-tokens.css';
+@import '../components/ui/styles/states.css';
+@import '../components/ui/styles/motion.css';
+@import '../components/ui/styles/layout.css';
+@import '../components/ui/styles/stepper.css';
+@import '../components/ui/styles/choices.css';
+@import '../components/ui/styles/navigation.css';
+@import '../components/ui/styles/imageMosaic.css';
 
 @plugin "tailwindcss-react-aria-components";
 @plugin "tailwindcss-animate";
@@ -9,6 +15,7 @@
 
 html,
 body {
+  background: var(--color-bg-primary);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -19,18 +26,7 @@ body {
 }
 
 body {
-  min-height: 100vh;
-  background:
-    radial-gradient(
-      circle at top left,
-      color-mix(in srgb, var(--color-brand-500) 5%, transparent),
-      transparent 28%
-    ),
-    linear-gradient(
-      180deg,
-      var(--dashboard-shell-bg),
-      var(--dashboard-shell-bg-emphasis)
-    );
+  min-height: 100dvh;
 }
 
 html {
@@ -121,7 +117,11 @@ input[type='number'] {
   background-position: center;
   background-size: 44px 44px;
   opacity: 0.65;
-  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.5), transparent 88%);
+  mask-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-black) 50%, var(--color-transparent)),
+    transparent 88%
+  );
   animation: auth-grid-pan 22s linear infinite alternate;
   pointer-events: none;
 }
@@ -300,11 +300,92 @@ html {
 *::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-tertiary);
 }
-textarea {
-  resize: none;
-}
 @media (forced-colors: active) {
   * {
     scrollbar-color: auto;
   }
+}
+
+@layer components {
+  .ui-section-accent {
+    background:
+      radial-gradient(
+        ellipse 3rem 4rem at 82% 110%,
+        var(--color-section-decoration) 98%,
+        var(--color-transparent)
+      ),
+      radial-gradient(
+        ellipse 6rem 9rem at 95% 110%,
+        var(--color-section-decoration) 98%,
+        var(--color-transparent)
+      ),
+      linear-gradient(
+        120deg,
+        var(--color-section-accent-start),
+        var(--color-section-accent-end)
+      );
+  }
+
+  .ui-input {
+    scroll-margin-block: 8rem;
+  }
+
+  .ui-button[data-preview-state='focused'],
+  .ui-input[data-preview-state='focused'] {
+    outline: var(--control-focus-outline-width) solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .ui-button[data-preview-state='hover'][data-variant='primary'] {
+    background: var(--color-bg-brand-solid_hover);
+  }
+
+  .ui-button[data-preview-state='hover'][data-variant='secondary'],
+  .ui-button[data-preview-state='hover'][data-variant='ghost'] {
+    background: var(--color-bg-secondary_hover);
+  }
+
+  .ui-button[data-preview-state='hover'][data-variant='destructive'] {
+    background: var(--color-bg-error-secondary);
+  }
+
+  .ui-choice {
+    margin: 0;
+  }
+}
+
+main [id] {
+  scroll-margin-top: 12rem;
+}
+
+@media (forced-colors: active) {
+  .ui-switch {
+    appearance: auto;
+  }
+
+  .ui-switch + span {
+    display: none;
+  }
+}
+
+html[data-motion='reduced'] {
+  scroll-behavior: auto;
+}
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+html[data-motion='reduced'] :is(.experience-reveal, .hero-panel) {
+  opacity: 1 !important;
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+*::-webkit-scrollbar-thumb:active {
+  background: var(--color-text-secondary);
 }

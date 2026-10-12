@@ -2,7 +2,7 @@
 
 import { labels, strings } from '@/strings';
 import * as Dialog from '@radix-ui/react-dialog';
-import type { ReactNode } from 'react';
+import { useRef, type CSSProperties, type ReactNode } from 'react';
 import { Button } from './Button';
 import { cn } from '../lib/cn';
 import type { AlertTone } from './AlertModal';
@@ -28,8 +28,8 @@ const accentClasses: Record<SheetTone, string> = {
 };
 
 const sideClasses: Record<SheetSide, string> = {
-  left: 'left-0 top-0 h-screen rounded-none rounded-r-2xl',
-  right: 'right-0 top-0 h-screen rounded-none rounded-l-2xl',
+  left: 'left-0 top-0 h-dvh rounded-none rounded-r-2xl',
+  right: 'right-0 top-0 h-dvh rounded-none rounded-l-2xl',
   bottom:
     'bottom-0 left-1/2 w-[min(96vw,72rem)] -translate-x-1/2 rounded-t-2xl rounded-b-none',
 };
@@ -46,9 +46,9 @@ const sizeClasses: Record<SheetSide, Record<SheetSize, string>> = {
     lg: 'w-[min(94vw,40rem)]',
   },
   bottom: {
-    sm: 'min-h-[18rem]',
-    md: 'min-h-[24rem]',
-    lg: 'min-h-[32rem]',
+    sm: 'min-h-[min(18rem,92dvh)]',
+    md: 'min-h-[min(24rem,92dvh)]',
+    lg: 'min-h-[min(32rem,92dvh)]',
   },
 };
 
@@ -83,6 +83,7 @@ export function SheetPanel({
   motionEnabled?: boolean;
   motionDurationMs?: number;
 }) {
+  const returnFocusRef = useRef<HTMLElement | null>(null);
   return (
     <Dialog.Root
       open={open}
@@ -90,38 +91,45 @@ export function SheetPanel({
     >
       <Dialog.Portal>
         <Dialog.Overlay
+          data-motion={motionEnabled ? undefined : 'off'}
           className={cn(
-            'fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm',
-            motionEnabled &&
-              'data-[state=open]:animate-in data-[state=open]:fade-in-0',
+            'ui-backdrop fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm',
           )}
           style={
             motionEnabled
-              ? { animationDuration: `${motionDurationMs}ms` }
+              ? ({
+                  '--ui-overlay-duration': `${motionDurationMs}ms`,
+                } as CSSProperties)
               : undefined
           }
         />
         <Dialog.Content
+          data-side={side}
+          data-motion={motionEnabled ? undefined : 'off'}
+          {...(!description ? { 'aria-describedby': undefined } : {})}
+          onOpenAutoFocus={() => {
+            returnFocusRef.current =
+              document.activeElement instanceof HTMLElement
+                ? document.activeElement
+                : null;
+          }}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            if (returnFocusRef.current?.isConnected) {
+              returnFocusRef.current.focus();
+            }
+          }}
           className={cn(
-            'fixed z-[90] flex border bg-primary shadow-[var(--dashboard-shell-shadow-lg)] outline-none',
-            motionEnabled &&
-              'data-[state=open]:animate-in data-[state=open]:fade-in-0',
-            motionEnabled &&
-              side === 'left' &&
-              'data-[state=open]:slide-in-from-left-8',
-            motionEnabled &&
-              side === 'right' &&
-              'data-[state=open]:slide-in-from-right-8',
-            motionEnabled &&
-              side === 'bottom' &&
-              'data-[state=open]:slide-in-from-bottom-8',
+            'ui-sheet fixed z-[90] flex max-h-dvh overflow-y-auto border bg-primary shadow-[var(--dashboard-shell-shadow-lg)] outline-none',
             toneClasses[tone],
             sideClasses[side],
             sizeClasses[side][size],
           )}
           style={
             motionEnabled
-              ? { animationDuration: `${motionDurationMs}ms` }
+              ? ({
+                  '--ui-overlay-duration': `${motionDurationMs}ms`,
+                } as CSSProperties)
               : undefined
           }
         >
@@ -129,7 +137,7 @@ export function SheetPanel({
             <div className="flex items-start gap-4">
               <div
                 className={cn(
-                  'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em]',
+                  'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-[0.16em]',
                   accentClasses[tone],
                 )}
               >
