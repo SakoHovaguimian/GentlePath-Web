@@ -43,7 +43,7 @@ Stepper uses the LeafLaunch horizontal bars by default. Pass `orientation="verti
 
 ## Overlays and guarded drafts
 
-Use PresentationProvider for queued alerts, sheets, and toasts; use Modal for composed forms. Preserve focus restoration, Escape, safe actions first, dynamic viewport bounds, and safe-area spacing. React Aria popup portals in Modal stay inside its focus scope; closing a popup with Escape does not close the parent modal. Toasts sit above the overlay stack.
+Use PresentationProvider for queued alerts, sheets, and toasts; use Modal for composed forms. Preserve focus restoration, Escape, safe actions first, dynamic viewport bounds, and safe-area spacing. The direct react-aria dependency is pinned to the exact version used by react-aria-components so they share PortalProvider context. Keep these versions aligned during upgrades. React Aria popup portals in Modal stay inside its focus scope; closing a popup with Escape does not close the parent modal. Toasts sit above the overlay stack.
 
 NavigationGuardProvider and useUnsavedFormGuard are available to forms. The shell navigates through useGuardedNavigate. Register dirty/busy refs, pass guarded navigation to breadcrumbs/links, and clear dirty state only after successful save/discard. Guard registration does not automatically intercept every arbitrary Next Link or browser history action. Never store private drafts or credentials in browser storage. Optional dictation starts only after an explicit user action; generated suggestions require review and a separate save.
 

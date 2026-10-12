@@ -59,7 +59,7 @@ export function Select({
         id={id}
         aria-invalid={invalid}
         className={cn(
-          'ui-select-trigger ui-input flex min-h-12 w-full min-w-0 cursor-pointer items-center gap-3 rounded-lg border border-[var(--color-control-border)] bg-primary px-4 py-2.5 text-left text-sm text-primary outline-none focus-visible:ring-4 focus-visible:ring-brand/12 aria-invalid:border-error aria-invalid:focus-visible:ring-error/12 disabled:cursor-not-allowed disabled:border-secondary disabled:bg-disabled_subtle disabled:text-disabled',
+          'ui-select-trigger ui-input flex min-h-12 w-full min-w-0 cursor-pointer items-center gap-3 rounded-lg border border-control-border bg-primary px-4 py-2.5 text-left text-sm text-primary outline-none focus-visible:ring-4 focus-visible:ring-brand/12 aria-invalid:border-error aria-invalid:focus-visible:ring-error/12 disabled:cursor-not-allowed disabled:border-secondary disabled:bg-disabled_subtle disabled:text-disabled',
           className,
         )}
       >
@@ -85,7 +85,7 @@ export function Select({
       </AriaButton>
       <Popover
         offset={6}
-        className="ui-popover ui-select-popover z-[100] flex w-[var(--trigger-width)] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-lg border border-[var(--color-control-border)] bg-primary p-1 shadow-[var(--dashboard-shell-shadow-lg)]"
+        className="ui-popover ui-select-popover z-100 flex w-(--trigger-width) max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-lg border border-brand bg-primary p-1 shadow-(--dashboard-shell-shadow-lg)"
       >
         <ListBox
           className="ui-select-list min-h-0 max-h-[min(22rem,60dvh)] shrink overflow-y-auto overscroll-contain outline-none"
@@ -95,7 +95,7 @@ export function Select({
             <ListBoxItem
               id={option.value}
               textValue={option.label}
-              className="ui-select-option flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-secondary outline-none data-[focused]:bg-secondary_subtle data-[selected]:bg-brand-primary data-[selected]:text-brand-secondary data-[focus-visible]:outline-2 data-[focus-visible]:-outline-offset-2 data-[focus-visible]:outline-brand data-[disabled]:cursor-not-allowed data-[disabled]:text-disabled"
+              className="ui-select-option flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-secondary outline-none data-focused:bg-secondary_subtle selected:bg-brand-primary selected:text-brand-secondary data-focus-visible:outline-2 data-focus-visible:-outline-offset-2 data-focus-visible:outline-brand data-disabled:cursor-not-allowed data-disabled:text-disabled"
             >
               {({ isSelected }) => (
                 <>

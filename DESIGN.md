@@ -8,7 +8,7 @@ colors:
   text: '#111827'
   muted: '#596579'
   border: '#e5e7eb'
-  accent: '#17665f'
+  primary: '#17665f'
 typography:
   sans:
     fontFamily: 'IBM Plex Sans, system-ui, sans-serif'
@@ -24,13 +24,13 @@ spacing:
   field-gap: '1rem'
 components:
   button:
-    borderRadius: '0.625rem'
+    rounded: '0.625rem'
   card:
-    borderRadius: '0.875rem'
+    rounded: '0.875rem'
   input:
-    borderRadius: '0.625rem'
+    rounded: '0.625rem'
   dialog:
-    borderRadius: '1.25rem'
+    rounded: '1.25rem'
 ---
 
 # Portal design context
@@ -41,7 +41,7 @@ Portal is an English-language starter for operators managing people, requests, a
 
 The signature is a readable operational workbench with an accent-aware rounded sidebar, flat record surfaces, and measured selection motion. Preserve Portal's identity and routes. Aqua remains the default; Leaf green is an optional palette. Existing saved light/dark and accent choices remain valid. Avoid decorative nested cards and marketing effects in routine data entry.
 
-Runtime CSS is canonical (ownership model B). `src/app/theme.css` owns every palette, semantic role, state alpha, type size, radius, shell shadow, layer, and motion token. The former `semantic-tokens.css` overrides are retired. `globals.css` imports focused shared behavior styles. This document mirrors accepted values and intent; it does not generate a second theme.
+Runtime CSS is canonical (ownership model B). `src/app/theme.css` owns every palette, semantic role, state alpha, type size, radius, shell shadow, and motion token. The former `semantic-tokens.css` overrides are retired. `globals.css` imports focused shared behavior styles. This document mirrors accepted values and intent; it does not generate a second theme.
 
 ## Colors
 
@@ -78,7 +78,7 @@ Control corners use 10px; cards use 14px; larger dialogs retain the 20px family.
 | Role                  | Canonical runtime path                                                           | Consumers                                                 |
 | --------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | Palette and surface   | theme.css → --color-accent / --color-surface / --color-bg-*                      | all shared UI                                             |
-| Selection alpha       | --selection-_-opacity → --color-selection-_                                      | tiles, chips, listboxes, section cards, navigation        |
+| Selection alpha       | `--selection-*-opacity` → `--color-selection-*`                                   | tiles, chips, listboxes, section cards, navigation        |
 | Typography and shapes | theme.css → --text-* / --radius-*                                                | controls, pages, tables                                   |
 | Theme preference      | appearancePreference → service/container → ThemePreferenceProvider + ThemeScript | shell, Appearance, library                                |
 | Motion preference     | motionPreference → service/container → MotionPreferenceProvider + ThemeScript    | CSS and JavaScript motion                                 |

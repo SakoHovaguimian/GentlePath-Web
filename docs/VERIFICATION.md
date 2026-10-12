@@ -35,6 +35,32 @@ Temporary feature-request verification data was removed. Existing demo content w
 - Local demo browser review covered sign-in copy, dashboard headings and table headers, navigation action names, profile field labels and the save CTA, and the shared component library's headings, controls, and feedback titles. Profile labels fit the browser's compact layout. Supporting prose, sample Markdown, demo credentials, and record content retain their original case. No profile or domain mutations were submitted.
 - Live backend, analytics, and push integrations were not exercised for this copy change.
 
+## Shared UI foundation verification — October 12, 2026
+
+- `npm run check` passes without warnings: ESLint, route type generation, TypeScript, display strings, semantic colors, and shared UI ownership.
+- `DEMO_MODE=true npm run build` passes for the component library and existing application routes. `git diff --check` passes. No tests were written and no Xcode builds were run.
+- All 22 pasted Tailwind IntelliSense canonical-class diagnostics in Select and MultiSelect were addressed. Production browser inspection confirms the canonical classes generate selected backgrounds/text, keyboard focus outlines, trigger-width popups, themed borders, and overlay shadows.
+- `npm ls react-aria react-aria-components` confirms React Aria Components 1.21.1 shares the single React Aria 3.52.1 dependency. The direct dependency is pinned exactly; upgrades must retain a shared PortalProvider context.
+
+| Area | Observed demo result |
+| --- | --- |
+| Component route | Demo sign-in reaches the protected component library. One page h1 and one component scroll legend; the duplicate section dropdown is removed. |
+| Stepper | Horizontal stages share a row; vertical stages share a column. Selecting a stage synchronizes both specimens' complete/current states. Labels fit at 390px and 1280px with no horizontal document overflow. |
+| Theme states | Blue selections use the same surface blend across tiles, chips, and listbox options: 8% in light mode and 14% in dark mode. Section-card hover uses the shared accent/surface token. Success, warning, and error retain their semantic colors. |
+| Motion | Saved Reduced motion survives reload and removes indicator/button transitions. Four-choice segmented controls use the authored Select at compact widths; two choices retain their capsule. |
+| Mobile navigation | At 390×844 the menu fills the viewport, focuses its close action, and restores the opener after Escape. |
+| Select and MultiSelect | Selecting two MultiSelect options gives both the themed fill; keyboard movement shows a visible brand outline. Clearing selections returns the placeholder. Popup shadows and borders render after the canonical-class cleanup. |
+| Modal popup | At 390×844 the Select popup stays inside the dialog and its focus scope, fits the trigger and viewport, and closes on the first Escape while the dialog remains open. The next Escape closes the dialog and restores Open Dialog focus. |
+| Directory preview | An unmatched local search shows the empty state; clearing the search restores rows. |
+
+Verification used local demo data. Temporary selections were cleared, preview appearance was restored, and viewport overrides were reset. No live backend mutations, analytics events, notification permission prompts, or assistant-generation integrations were used.
+
+### Supplemental audit limitations
+
+The Frontend Design Premium strict text audit reports 17 findings in this component-based implementation: nine authored `<Select>` usages misread as native `<select>`, seven composed/prop-forwarding actions it cannot trace, and one shared TextArea whose inherited `resize-none` is not visible at its caller. These were reviewed against the shared implementations and manual workflows; the report is not a clean audit. The repository's TypeScript-based shared UI check passes and distinguishes component identifiers from native elements.
+
+The supplemental DESIGN.md linter reports no errors and three unused-color warnings for the documented text, muted, and border roles. Runtime CSS remains canonical; these entries record the accepted palette rather than generate utilities.
+
 ## Live integration limits
 
 Firebase REST authentication/refresh, backend provisioning and authorization, Socket.IO ticket issuance/broadcasts, browser permission/device registration, FCM foreground/background delivery, and Amplitude event delivery require real configuration and backend endpoints. Those external flows were not exercised. No production analytics events or push permission prompts were triggered.

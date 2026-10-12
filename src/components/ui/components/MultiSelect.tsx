@@ -71,7 +71,7 @@ export function MultiSelect<Value extends string>({
         aria-labelledby={labelledBy}
         aria-describedby={describedBy}
         aria-invalid={invalid}
-        className="ui-select-trigger ui-input flex min-h-12 w-full min-w-0 cursor-pointer items-center gap-3 rounded-lg border border-[var(--color-control-border)] bg-primary px-4 py-2.5 text-left text-sm text-primary outline-none focus-visible:ring-4 focus-visible:ring-brand/12 disabled:cursor-not-allowed disabled:bg-disabled_subtle disabled:text-disabled"
+        className="ui-select-trigger ui-input flex min-h-12 w-full min-w-0 cursor-pointer items-center gap-3 rounded-lg border border-control-border bg-primary px-4 py-2.5 text-left text-sm text-primary outline-none focus-visible:ring-4 focus-visible:ring-brand/12 disabled:cursor-not-allowed disabled:bg-disabled_subtle disabled:text-disabled"
       >
         <SelectValue className="min-w-0 flex-1 wrap-anywhere">
           {() =>
@@ -89,7 +89,7 @@ export function MultiSelect<Value extends string>({
       </AriaButton>
       <Popover
         offset={6}
-        className="ui-popover ui-select-popover z-[100] flex w-[var(--trigger-width)] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-lg border border-[var(--color-control-border)] bg-primary p-1 shadow-[var(--dashboard-shell-shadow-lg)]"
+        className="ui-popover ui-select-popover z-100 flex w-(--trigger-width) max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-lg border border-brand bg-primary p-1 shadow-(--dashboard-shell-shadow-lg)"
       >
         <ListBox
           items={options}
@@ -99,7 +99,7 @@ export function MultiSelect<Value extends string>({
             <ListBoxItem
               id={option.value}
               textValue={option.label}
-              className="ui-select-option flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-secondary outline-none data-[focused]:bg-secondary_subtle data-[selected]:bg-brand-primary data-[selected]:text-brand-secondary data-[focus-visible]:outline-2 data-[focus-visible]:-outline-offset-2 data-[focus-visible]:outline-brand"
+              className="ui-select-option flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-secondary outline-none data-focused:bg-secondary_subtle selected:bg-brand-primary selected:text-brand-secondary data-focus-visible:outline-2 data-focus-visible:-outline-offset-2 data-focus-visible:outline-brand"
             >
               {({ isSelected }) => (
                 <>
