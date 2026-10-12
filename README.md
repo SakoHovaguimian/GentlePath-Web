@@ -38,7 +38,7 @@ DEMO_MODE=true npm start
 npm run check:strings
 ```
 
-The repository contains no tests by instruction. `check` runs ESLint, route-aware TypeScript, display-string checks, semantic-color checks, and shared-control checks. Keep the npm lockfile committed.
+The repository contains no tests by instruction. `check` runs ESLint with zero warnings allowed, route-aware TypeScript, Next.js editor plugin diagnostics, display-string checks, semantic-color checks, shared-control checks, and Tailwind canonical-class checks. Keep the npm lockfile committed.
 
 ## Find your way around
 

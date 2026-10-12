@@ -26,13 +26,12 @@ function guardedClick(
   onNavigate(href);
 }
 
-export function Breadcrumbs({
-  items,
-  onNavigate,
-}: {
+interface BreadcrumbsProps {
   items: BreadcrumbItem[];
   onNavigate?: (href: string) => void;
-}) {
+}
+
+export function Breadcrumbs({ items, onNavigate }: BreadcrumbsProps) {
   return (
     <nav aria-label={strings.pageLayout.breadcrumbs} className="min-w-0">
       <ol className="m-0 flex min-w-0 list-none flex-wrap items-center gap-x-1 gap-y-1 p-0 text-sm">

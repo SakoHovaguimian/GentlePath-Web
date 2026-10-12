@@ -8,6 +8,14 @@ import { Button } from './Button';
 import { UiIcon } from './UiIcon';
 import { cn } from '../lib/cn';
 
+interface StepperProps<Key extends string> {
+  steps: StepperStep<Key>[];
+  label: string;
+  orientation?: StepperOrientation;
+  disabled?: boolean;
+  onSelect: (key: Key) => void;
+}
+
 // Segmented progress for multi-stage flows. Each segment is a button so
 // reachable stages can be revisited; unreachable stages stay disabled.
 export function Stepper<Key extends string>({
@@ -16,13 +24,7 @@ export function Stepper<Key extends string>({
   disabled = false,
   onSelect,
   orientation = 'horizontal',
-}: {
-  steps: StepperStep<Key>[];
-  label: string;
-  orientation?: StepperOrientation;
-  disabled?: boolean;
-  onSelect: (key: Key) => void;
-}) {
+}: StepperProps<Key>) {
   const id = useId();
   if (!steps.length) return null;
   return (
@@ -83,7 +85,7 @@ export function Stepper<Key extends string>({
                       className={cn(
                         'ui-step-marker grid shrink-0 place-items-center rounded-full border text-xs font-semibold',
                         step.state === 'current'
-                          ? 'border-brand bg-brand-solid text-[var(--color-text-primary_on-brand)]'
+                          ? 'border-brand bg-brand-solid text-(--color-text-primary_on-brand)'
                           : step.state === 'complete'
                             ? 'border-brand bg-brand-primary text-brand-secondary'
                             : 'border-secondary bg-primary text-tertiary',

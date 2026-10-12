@@ -55,7 +55,7 @@ export function FloatingAssistantProvider({
       className={
         inline
           ? undefined
-          : 'max-w-[calc(100vw-2rem)] rounded-full px-5 py-3 shadow-[var(--dashboard-shell-shadow-lg)]'
+          : 'max-w-[calc(100vw-2rem)] rounded-full px-5 py-3 shadow-(--dashboard-shell-shadow-lg)'
       }
       disabled={entries.every((entry) => entry.disabled)}
       aria-haspopup="dialog"

@@ -1,10 +1,11 @@
+import type { Metadata } from 'next';
 import './globals.css';
 import { getRuntimeConfig } from '@/config/environment';
 import { RuntimeProvider } from '@/providers/RuntimeProvider';
 import { AnalyticsProvider } from '@/services/analytics/components/AnalyticsProvider';
 import { CookieConsentControls } from '@/services/privacy/components/CookieConsentControls';
 import { strings } from '@/strings';
-export const metadata = {
+export const metadata: Metadata = {
   title: { default: strings.app.name, template: `%s | ${strings.app.name}` },
   description: strings.app.description,
 };

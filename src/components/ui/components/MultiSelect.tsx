@@ -8,7 +8,7 @@ import {
   Select as AriaSelect,
   SelectValue,
 } from 'react-aria-components';
-import type { AriaAttributes, Ref } from 'react';
+import type { MultiSelectProps } from '../models/multiSelectProps';
 import { cn } from '../lib/cn';
 import { Button } from './Button';
 import { UiIcon } from './UiIcon';
@@ -29,23 +29,7 @@ export function MultiSelect<Value extends string>({
   'aria-labelledby': labelledBy,
   'aria-describedby': describedBy,
   'aria-invalid': invalid,
-}: {
-  value: readonly Value[];
-  options: readonly { value: Value; label: string }[];
-  onValueChange: (value: Value[]) => void;
-  label: string;
-  placeholder: string;
-  selectionLabel: (count: number) => string;
-  clearLabel: string;
-  className?: string;
-  disabled?: boolean;
-  selectAllLabel?: string;
-  id?: string;
-  ref?: Ref<HTMLButtonElement>;
-  'aria-labelledby'?: string;
-  'aria-describedby'?: string;
-  'aria-invalid'?: AriaAttributes['aria-invalid'];
-}) {
+}: MultiSelectProps<Value>) {
   return (
     <AriaSelect
       selectionMode="multiple"

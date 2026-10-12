@@ -60,7 +60,7 @@ export function ChatScreen() {
                   className="rounded-xl border border-secondary p-4"
                 >
                   <p className="text-sm font-semibold">{item.author}</p>
-                  <p className="whitespace-pre-wrap break-words text-sm text-secondary">
+                  <p className="whitespace-pre-wrap wrap-break-word text-sm text-secondary">
                     {item.message}
                   </p>
                   <time

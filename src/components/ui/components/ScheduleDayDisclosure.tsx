@@ -6,6 +6,18 @@ import { UiIcon } from './UiIcon';
 import { cn } from '../lib/cn';
 import { strings } from '@/strings';
 
+interface ScheduleDayDisclosureProps {
+  day: string;
+  wideTitle?: boolean;
+  summary: ReactNode;
+  expanded: boolean;
+  disabled: boolean;
+  invalid: boolean;
+  onToggle: () => void;
+  onEditFocus: () => void;
+  children: ReactNode;
+}
+
 // Keep weekly days and dated exceptions scannable while revealing their controls.
 export function ScheduleDayDisclosure({
   day,
@@ -17,17 +29,7 @@ export function ScheduleDayDisclosure({
   onToggle,
   onEditFocus,
   children,
-}: {
-  day: string;
-  wideTitle?: boolean;
-  summary: ReactNode;
-  expanded: boolean;
-  disabled: boolean;
-  invalid: boolean;
-  onToggle: () => void;
-  onEditFocus: () => void;
-  children: ReactNode;
-}) {
+}: ScheduleDayDisclosureProps) {
   const id = useId();
   const copy = strings.schedule;
   return (

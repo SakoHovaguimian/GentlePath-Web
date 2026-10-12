@@ -1,5 +1,6 @@
+import type { Metadata } from 'next';
 import { strings } from '@/strings';
-export const metadata = { title: strings.ui.appShell.users };
+export const metadata: Metadata = { title: strings.ui.appShell.users };
 import { UsersScreen } from '@/modules/users/UsersScreen';
 export default async function Page({
   searchParams,

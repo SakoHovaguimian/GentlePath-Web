@@ -34,7 +34,7 @@ export function ToastStack({
           <div
             key={position}
             className={cn(
-              'pointer-events-none fixed z-[120] grid max-h-[calc(100dvh-2rem)] w-[min(92vw,26rem)] gap-3 overflow-y-auto',
+              'pointer-events-none fixed z-120 grid max-h-[calc(100dvh-2rem)] w-[min(92vw,26rem)] gap-3 overflow-y-auto',
               positions[position],
             )}
           >
@@ -47,7 +47,7 @@ export function ToastStack({
                 className={cn(
                   'ui-toast pointer-events-auto',
                   toast.appearance !== 'ios-push' &&
-                    'rounded-lg bg-primary shadow-[var(--dashboard-shell-shadow-lg)]',
+                    'rounded-lg bg-primary shadow-(--dashboard-shell-shadow-lg)',
                 )}
                 style={
                   toast.motionEnabled === false

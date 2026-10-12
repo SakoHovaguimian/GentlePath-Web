@@ -4,19 +4,21 @@ import { useEffect, useLayoutEffect, useRef, type ReactNode } from 'react';
 import { useFloatingAssistantContext } from '../lib/floatingAssistantContext';
 import { FloatingAssistantDialog } from './FloatingAssistantDialog';
 
+interface FloatingAssistantActionProps {
+  id: string;
+  title: string;
+  description: string;
+  disabled: boolean;
+  onOpen?: () => void;
+}
+
 export function FloatingAssistantAction({
   id,
   title,
   description,
   disabled,
   onOpen,
-}: {
-  id: string;
-  title: string;
-  description: string;
-  disabled: boolean;
-  onOpen?: () => void;
-}) {
+}: FloatingAssistantActionProps) {
   const { register, unregister } = useFloatingAssistantContext();
   const action = useRef(onOpen);
   useLayoutEffect(() => {

@@ -349,7 +349,7 @@ export function ExperienceScreen() {
     >
       <div
         data-showcase-header="true"
-        className="sticky top-0 z-40 border-b border-secondary bg-[var(--dashboard-shell-topbar)] backdrop-blur"
+        className="sticky top-0 z-40 border-b border-secondary bg-(--dashboard-shell-topbar) backdrop-blur"
       >
         <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10">
           <div>
@@ -369,7 +369,7 @@ export function ExperienceScreen() {
                 onClick={() => scrollToSection(section.id)}
                 className={`bouncy-button rounded-lg border px-4 py-2 text-sm font-medium transition ${
                   activeSection === section.id
-                    ? 'border-brand/60 bg-brand-primary text-primary shadow-[var(--dashboard-shell-shadow)]'
+                    ? 'border-brand/60 bg-brand-primary text-primary shadow-(--dashboard-shell-shadow)'
                     : 'border-secondary bg-primary text-secondary hover:border-primary hover:text-primary'
                 }`}
               >
@@ -378,7 +378,7 @@ export function ExperienceScreen() {
             ))}
             <Link
               href={'/dashboard' as never}
-              className="bouncy-button rounded-lg bg-brand-solid px-4 py-2 text-sm font-semibold text-[var(--color-text-primary_on-brand)] shadow-[var(--dashboard-shell-shadow)] transition hover:bg-brand-solid_hover"
+              className="bouncy-button rounded-lg bg-brand-solid px-4 py-2 text-sm font-semibold text-(--color-text-primary_on-brand) shadow-(--dashboard-shell-shadow) transition hover:bg-brand-solid_hover"
             >
               {strings.ui.experienceScreen.backToDashboard}
             </Link>
@@ -392,7 +392,7 @@ export function ExperienceScreen() {
           className="experience-reveal grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]"
           data-visible={visibleState('hero')}
         >
-          <article className="rounded-[28px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow-lg)] sm:p-8 lg:p-10">
+          <article className="rounded-3xl border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow-lg) sm:p-8 lg:p-10">
             <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-brand-secondary">
               {strings.ui.experienceScreen.restyledSystem}
             </p>
@@ -426,7 +426,7 @@ export function ExperienceScreen() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={'/dashboard' as never}
-                className="bouncy-button rounded-lg bg-brand-solid px-5 py-3 text-sm font-semibold text-[var(--color-text-primary_on-brand)] shadow-[var(--dashboard-shell-shadow)] transition hover:bg-brand-solid_hover"
+                className="bouncy-button rounded-lg bg-brand-solid px-5 py-3 text-sm font-semibold text-(--color-text-primary_on-brand) shadow-(--dashboard-shell-shadow) transition hover:bg-brand-solid_hover"
               >
                 {strings.ui.experienceScreen.enterPortal}
               </Link>
@@ -445,7 +445,7 @@ export function ExperienceScreen() {
             className="grid gap-4"
             style={{ transform: `translate3d(0, ${-heroParallax}px, 0)` }}
           >
-            <article className="rounded-[28px] border border-secondary bg-primary p-5 shadow-[var(--dashboard-shell-shadow)]">
+            <article className="rounded-3xl border border-secondary bg-primary p-5 shadow-(--dashboard-shell-shadow)">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
@@ -507,7 +507,7 @@ export function ExperienceScreen() {
               {showcaseStats.map((item) => (
                 <article
                   key={item.label}
-                  className="rounded-2xl border border-secondary bg-primary p-4 shadow-[var(--dashboard-shell-shadow)]"
+                  className="rounded-2xl border border-secondary bg-primary p-4 shadow-(--dashboard-shell-shadow)"
                 >
                   <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em] text-tertiary">
                     {item.label}
@@ -550,7 +550,7 @@ export function ExperienceScreen() {
                 key={solution.title}
                 type="button"
                 onClick={() => void handleSolutionPresentation(index)}
-                className="bouncy-button group grid min-h-[15rem] gap-4 rounded-[24px] border border-secondary bg-primary p-6 text-left shadow-[var(--dashboard-shell-shadow)] transition duration-200 hover:border-primary"
+                className="bouncy-button group grid min-h-60 gap-4 rounded-[24px] border border-secondary bg-primary p-6 text-left shadow-(--dashboard-shell-shadow) transition duration-200 hover:border-primary"
               >
                 <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary text-sm font-semibold uppercase tracking-[0.16em] text-brand-secondary">
                   {strings.ui.experienceScreen.value0}
@@ -577,7 +577,7 @@ export function ExperienceScreen() {
           className="experience-reveal grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]"
           data-visible={visibleState('workflow')}
         >
-          <article className="grid gap-5 rounded-[28px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow)] sm:p-8">
+          <article className="grid gap-5 rounded-3xl border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow) sm:p-8">
             <div className="grid gap-3">
               <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-brand-secondary">
                 {strings.ui.experienceScreen.workflow}
@@ -618,7 +618,7 @@ export function ExperienceScreen() {
           </article>
 
           <div className="grid gap-4">
-            <article className="rounded-[28px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow)]">
+            <article className="rounded-3xl border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow)">
               <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-brand-secondary">
                 {strings.ui.experienceScreen.whatChanged}
               </p>
@@ -659,7 +659,7 @@ export function ExperienceScreen() {
 
         <section
           id="gallery"
-          className="experience-reveal grid gap-6 rounded-[28px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow)]"
+          className="experience-reveal grid gap-6 rounded-3xl border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow)"
           data-visible={visibleState('gallery')}
         >
           <div className="grid gap-2">
@@ -786,7 +786,7 @@ export function ExperienceScreen() {
 
         <section
           id="motion"
-          className="experience-reveal grid gap-6 rounded-[28px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow)]"
+          className="experience-reveal grid gap-6 rounded-3xl border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow)"
           data-visible={visibleState('motion')}
         >
           <div className="grid gap-2">
@@ -904,7 +904,7 @@ export function ExperienceScreen() {
             </h2>
           </div>
           <div className="grid gap-4 lg:grid-cols-3">
-            <article className="rounded-[24px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow)]">
+            <article className="rounded-[24px] border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow)">
               <h3 className="text-xl font-semibold text-primary">
                 {strings.ui.experienceScreen.contactDetails}
               </h3>
@@ -921,7 +921,7 @@ export function ExperienceScreen() {
                 </p>
               </div>
             </article>
-            <article className="rounded-[24px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow)]">
+            <article className="rounded-[24px] border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow)">
               <h3 className="text-xl font-semibold text-primary">
                 {strings.ui.experienceScreen.officeHours}
               </h3>
@@ -937,7 +937,7 @@ export function ExperienceScreen() {
                 </p>
               </div>
             </article>
-            <article className="rounded-[24px] border border-secondary bg-primary p-6 shadow-[var(--dashboard-shell-shadow)]">
+            <article className="rounded-[24px] border border-secondary bg-primary p-6 shadow-(--dashboard-shell-shadow)">
               <h3 className="text-xl font-semibold text-primary">
                 {strings.ui.experienceScreen.mockAddress}
               </h3>
@@ -974,7 +974,7 @@ export function ExperienceScreen() {
               return (
                 <article
                   key={faq.question}
-                  className="rounded-2xl border border-secondary bg-primary shadow-[var(--dashboard-shell-shadow)]"
+                  className="rounded-2xl border border-secondary bg-primary shadow-(--dashboard-shell-shadow)"
                 >
                   <Button
                     variant="ghost"

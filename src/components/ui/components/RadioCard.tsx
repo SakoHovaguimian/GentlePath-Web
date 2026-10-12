@@ -18,7 +18,7 @@ export function RadioCard({
     <Radio
       {...props}
       className={cn(
-        'ui-selection-tile h-full items-start rounded-xl border border-secondary bg-primary p-5 hover:border-brand/50 hover:bg-primary_hover has-[:checked]:border-brand has-[:checked]:bg-brand-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60 [&>.ui-choice-frame]:mt-3',
+        'ui-selection-tile h-full items-start rounded-xl border border-secondary bg-primary p-5 hover:border-brand/50 hover:bg-primary_hover has-checked:border-brand has-checked:bg-brand-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60 [&>.ui-choice-frame]:mt-3',
         className,
       )}
       label={

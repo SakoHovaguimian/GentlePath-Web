@@ -72,7 +72,7 @@ export function ThemeControls() {
               <span
                 aria-hidden="true"
                 data-accent={theme.accent}
-                className="accent-preview size-5 rounded-full bg-[var(--color-brand-600)]"
+                className="accent-preview size-5 rounded-full bg-(--color-brand-600)"
               />
             }
             onValueChange={(value) =>

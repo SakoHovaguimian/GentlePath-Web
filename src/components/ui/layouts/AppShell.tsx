@@ -75,17 +75,17 @@ export function AppShell({
     contextSlot,
   };
   return (
-    <div className="ui-app-shell min-h-dvh bg-[var(--dashboard-shell-bg)] lg:ps-[var(--dashboard-sidebar-width)]">
+    <div className="ui-app-shell min-h-dvh bg-(--dashboard-shell-bg) lg:ps-(--dashboard-sidebar-width)">
       <a
         href="#main-content"
-        className="fixed start-4 top-4 z-50 -translate-y-24 rounded-lg bg-primary px-4 py-3 text-sm text-primary shadow-md focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-brand"
+        className="fixed inset-s-4 top-4 z-50 -translate-y-24 rounded-lg bg-primary px-4 py-3 text-sm text-primary shadow-md focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-brand"
       >
         {strings.componentLibrary.skipToContent}
       </a>
       <AppSidebar {...sidebar} />
       <div className="min-w-0">
-        <header className="top-0 z-30 border-b border-[var(--dashboard-shell-border)] bg-[var(--dashboard-shell-topbar)] backdrop-blur lg:sticky">
-          <div className="mx-auto flex min-h-16 max-w-[88rem] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-10">
+        <header className="top-0 z-30 border-b border-(--dashboard-shell-border) bg-(--dashboard-shell-topbar) backdrop-blur lg:sticky">
+          <div className="mx-auto flex min-h-16 max-w-352 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-10">
             <div className="flex min-w-0 items-center gap-3">
               <MobileNavigationMenu
                 key={`${session.user.id}:${activePath}`}
@@ -106,7 +106,7 @@ export function AppShell({
             )}
           </div>
           {bannerSlot && (
-            <div className="mx-auto max-w-[88rem] px-4 pb-3 sm:px-6 lg:px-10">
+            <div className="mx-auto max-w-352 px-4 pb-3 sm:px-6 lg:px-10">
               {bannerSlot}
             </div>
           )}
@@ -114,7 +114,7 @@ export function AppShell({
         <main
           id="main-content"
           tabIndex={-1}
-          className="mx-auto flex w-full min-w-0 max-w-[88rem] flex-col gap-8 px-4 pt-6 pb-12 outline-none sm:px-6 lg:px-10 lg:pt-8 lg:pb-16"
+          className="mx-auto flex w-full min-w-0 max-w-352 flex-col gap-8 px-4 pt-6 pb-12 outline-none sm:px-6 lg:px-10 lg:pt-8 lg:pb-16"
         >
           {children}
         </main>

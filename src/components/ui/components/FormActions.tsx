@@ -26,8 +26,8 @@ export function FormActions({
         variant === 'panel' && [
           'rounded-xl border border-secondary bg-primary px-4 py-3 sm:px-5',
           sticky
-            ? 'ui-form-actions-sticky shadow-[var(--dashboard-shell-shadow-lg)]'
-            : 'shadow-[var(--dashboard-shell-shadow)]',
+            ? 'ui-form-actions-sticky shadow-(--dashboard-shell-shadow-lg)'
+            : 'shadow-(--dashboard-shell-shadow)',
         ],
       )}
     >

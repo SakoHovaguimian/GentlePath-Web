@@ -48,7 +48,7 @@ export function ButtonsShowcase() {
         tabIndex={0}
         className="overflow-x-auto rounded-lg focus-visible:outline-2 focus-visible:outline-brand"
       >
-        <div className="grid min-w-[48rem] grid-cols-[4.5rem_repeat(5,minmax(max-content,1fr))] items-center gap-x-3 gap-y-3 pb-2">
+        <div className="grid min-w-3xl grid-cols-[4.5rem_repeat(5,minmax(max-content,1fr))] items-center gap-x-3 gap-y-3 pb-2">
           <span />
           {variants.map((variant) => (
             <h4

@@ -21,7 +21,7 @@ export function InfoPopover({
       <AriaButton className={buttonClassName('secondary')}>{label}</AriaButton>
       <Popover
         offset={8}
-        className="ui-popover z-[100] max-w-[min(90vw,22rem)] rounded-xl border border-secondary bg-primary p-4 shadow-[var(--dashboard-shell-shadow-lg)]"
+        className="ui-popover z-100 max-w-[min(90vw,22rem)] rounded-xl border border-secondary bg-primary p-4 shadow-(--dashboard-shell-shadow-lg)"
       >
         <Dialog
           aria-label={label}

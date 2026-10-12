@@ -1,5 +1,3 @@
-'use client';
-
 import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
 import { strings } from '@/strings';
@@ -31,10 +29,10 @@ export function FloatingAssistantDialog({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="ui-backdrop fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm" />
+        <Dialog.Overlay className="ui-backdrop fixed inset-0 z-80 bg-(--dashboard-shell-overlay) backdrop-blur-sm" />
         <Dialog.Content
           data-side="right"
-          className="ui-sheet fixed inset-x-0 bottom-0 z-[90] flex max-h-[92dvh] flex-col overflow-hidden rounded-t-2xl border border-secondary bg-primary shadow-[var(--dashboard-shell-shadow-lg)] outline-none sm:inset-x-auto sm:inset-y-0 sm:end-0 sm:w-[min(92vw,40rem)] sm:max-h-dvh sm:rounded-none sm:rounded-s-2xl"
+          className="ui-sheet fixed inset-x-0 bottom-0 z-90 flex max-h-[92dvh] flex-col overflow-hidden rounded-t-2xl border border-secondary bg-primary shadow-(--dashboard-shell-shadow-lg) outline-none sm:inset-x-auto sm:inset-y-0 sm:inset-e-0 sm:w-[min(92vw,40rem)] sm:max-h-dvh sm:rounded-none sm:rounded-s-2xl"
           onEscapeKeyDown={(event) => {
             if (busy) event.preventDefault();
           }}

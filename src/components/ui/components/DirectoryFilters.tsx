@@ -13,17 +13,7 @@ import {
 
 const anyStatus = '';
 
-// A compact toolbar row: search grows, status keeps an inline label.
-export function DirectoryFilters<Status extends string>({
-  id,
-  value,
-  onChange,
-  statuses,
-  copy,
-  additionalFilters,
-  showStatus = true,
-  layout = 'inline',
-}: {
+interface DirectoryFiltersProps<Status extends string> {
   id: string;
   value: DirectoryFiltersValue<Status>;
   onChange: (value: DirectoryFiltersValue<Status>) => void;
@@ -38,7 +28,19 @@ export function DirectoryFilters<Status extends string>({
     status: string;
     allStatuses: string;
   };
-}) {
+}
+
+// A compact toolbar row: search grows, status keeps an inline label.
+export function DirectoryFilters<Status extends string>({
+  id,
+  value,
+  onChange,
+  statuses,
+  copy,
+  additionalFilters,
+  showStatus = true,
+  layout = 'inline',
+}: DirectoryFiltersProps<Status>) {
   const filters = useDirectoryFilters(value, onChange);
   const inputRef = useRef<HTMLInputElement>(null);
   return (

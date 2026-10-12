@@ -33,7 +33,7 @@ export function Tooltip({
         offset={8}
         className={
           className ??
-          'ui-tooltip z-[100] max-w-64 rounded-lg border border-secondary bg-primary px-4 py-3 text-xs text-secondary shadow-[var(--dashboard-shell-shadow-lg)]'
+          'ui-tooltip z-100 max-w-64 rounded-lg border border-secondary bg-primary px-4 py-3 text-xs text-secondary shadow-(--dashboard-shell-shadow-lg)'
         }
       >
         {content}

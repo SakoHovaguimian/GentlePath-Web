@@ -3,13 +3,12 @@
 import type { AppSidebarItem } from '../models/sidebarItem';
 import { cn } from '../lib/cn';
 
-export function SidebarLinks({
-  items,
-  onNavigate,
-}: {
+interface SidebarLinksProps {
   items: AppSidebarItem[];
   onNavigate?: (href: string) => void;
-}) {
+}
+
+export function SidebarLinks({ items, onNavigate }: SidebarLinksProps) {
   return items.map((item) => (
     <a
       key={item.href}

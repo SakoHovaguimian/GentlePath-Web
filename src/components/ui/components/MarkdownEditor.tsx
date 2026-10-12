@@ -11,6 +11,16 @@ import { TextArea } from './TextArea';
 
 const views = { write: 'write', preview: 'preview', split: 'split' } as const;
 
+interface MarkdownEditorProps {
+  id?: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  disabled?: boolean;
+  required?: boolean;
+  maxLength?: number;
+  'aria-labelledby'?: string;
+}
+
 export function MarkdownEditor({
   id,
   value,
@@ -19,15 +29,7 @@ export function MarkdownEditor({
   required = false,
   maxLength = 100000,
   'aria-labelledby': labelledBy,
-}: {
-  id?: string;
-  value: string;
-  onValueChange: (value: string) => void;
-  disabled?: boolean;
-  required?: boolean;
-  maxLength?: number;
-  'aria-labelledby'?: string;
-}) {
+}: MarkdownEditorProps) {
   const generated = useId();
   const inputId = id ?? generated;
   const [mode, setMode] = useState<'write' | 'preview' | 'split'>('write');

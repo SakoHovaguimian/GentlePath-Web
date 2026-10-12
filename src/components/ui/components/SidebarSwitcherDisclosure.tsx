@@ -5,6 +5,15 @@ import { Button } from './Button';
 import { UiIcon } from './UiIcon';
 import { cn } from '../lib/cn';
 
+interface SidebarSwitcherDisclosureProps {
+  title: string;
+  subtitle: string;
+  ariaLabel: string;
+  leading: ReactNode;
+  disabled?: boolean;
+  children: (close: () => void) => ReactNode;
+}
+
 export function SidebarSwitcherDisclosure({
   title,
   subtitle,
@@ -12,14 +21,7 @@ export function SidebarSwitcherDisclosure({
   leading,
   disabled,
   children,
-}: {
-  title: string;
-  subtitle: string;
-  ariaLabel: string;
-  leading: ReactNode;
-  disabled?: boolean;
-  children: (close: () => void) => ReactNode;
-}) {
+}: SidebarSwitcherDisclosureProps) {
   const [open, setOpen] = useState(false);
   const contentId = useId();
   const trigger = useRef<HTMLButtonElement>(null);

@@ -16,17 +16,7 @@ import { TextArea } from './TextArea';
 import { Message } from './Message';
 import { InlineLoading } from './QueryBoundary';
 
-export function ReviewedDraftChat({
-  open,
-  fields,
-  contextKey,
-  disabled,
-  generate,
-  onApply,
-  onBusyChange,
-  onClose,
-  onReturnFocus,
-}: {
+interface ReviewedDraftChatProps {
   open: boolean;
   fields: ReviewedDraftAssistantField[];
   contextKey: string;
@@ -39,7 +29,19 @@ export function ReviewedDraftChat({
   onBusyChange: (busy: boolean) => boolean;
   onClose: () => void;
   onReturnFocus: () => void;
-}) {
+}
+
+export function ReviewedDraftChat({
+  open,
+  fields,
+  contextKey,
+  disabled,
+  generate,
+  onApply,
+  onBusyChange,
+  onClose,
+  onReturnFocus,
+}: ReviewedDraftChatProps) {
   const copy = strings.assistantMessages;
   const [introduced, setIntroduced] = useState(false);
   const [messages, setMessages] = useState<

@@ -4,19 +4,21 @@ import { useId } from 'react';
 import type { SegmentedPanel } from '../models/segmentedPanel';
 import { ResponsiveSectionNavigation } from './ResponsiveSectionNavigation';
 
+interface SegmentedPanelsProps<T extends string> {
+  panels: Array<SegmentedPanel<T>>;
+  value: T;
+  onValueChange: (value: T) => void;
+  label: string;
+  disabled?: boolean;
+}
+
 export function SegmentedPanels<T extends string>({
   panels,
   value,
   onValueChange,
   label,
   disabled = false,
-}: {
-  panels: Array<SegmentedPanel<T>>;
-  value: T;
-  onValueChange: (value: T) => void;
-  label: string;
-  disabled?: boolean;
-}) {
+}: SegmentedPanelsProps<T>) {
   const id = useId();
   return (
     <div className="grid min-w-0 gap-8">

@@ -7,17 +7,7 @@ import { IconButton } from './IconButton';
 import { UiIcon } from './UiIcon';
 import { useListMotion } from '../lib/useListMotion';
 
-// Pointer handles support mouse, pen, and touch; arrows provide a keyboard alternative.
-export function ReorderableList<T extends { id: string }>({
-  items,
-  disabled,
-  label,
-  handleLabel,
-  upLabel,
-  downLabel,
-  onMove,
-  renderItem,
-}: {
+interface ReorderableListProps<T extends { id: string }> {
   items: T[];
   disabled: boolean;
   label: string;
@@ -31,7 +21,19 @@ export function ReorderableList<T extends { id: string }>({
     controls: ReactNode,
     handle: ReactNode,
   ) => ReactNode;
-}) {
+}
+
+// Pointer handles support mouse, pen, and touch; arrows provide a keyboard alternative.
+export function ReorderableList<T extends { id: string }>({
+  items,
+  disabled,
+  label,
+  handleLabel,
+  upLabel,
+  downLabel,
+  onMove,
+  renderItem,
+}: ReorderableListProps<T>) {
   const skipMotion = useRef(false);
   const listRef = useListMotion(skipMotion);
   const reorder = useReorderDrag(listRef, (id, targetId) => {

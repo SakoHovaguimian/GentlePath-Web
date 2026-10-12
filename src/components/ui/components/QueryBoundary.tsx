@@ -83,7 +83,7 @@ function getErrorMessage(error: unknown): string {
   return strings.ui.queryBoundary.anUnexpectedErrorOccurred;
 }
 
-type QueryBoundaryProps<T> = {
+interface QueryBoundaryProps<T> {
   /** The React Query result object */
   query: UseQueryResult<T, Error>;
   /** Render function called with the data when query succeeds */
@@ -96,7 +96,7 @@ type QueryBoundaryProps<T> = {
   showError?: boolean;
   /** Pads the error state when rendered inside a DataPanel or other surface */
   inset?: boolean;
-};
+}
 
 /**
  * QueryBoundary provides consistent loading, error, and success states

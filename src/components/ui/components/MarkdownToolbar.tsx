@@ -1,5 +1,3 @@
-'use client';
-
 import { strings } from '@/strings';
 import type { MarkdownAction } from '../models/markdownAction';
 import type { IconName } from '../models/iconName';

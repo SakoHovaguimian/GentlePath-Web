@@ -5,19 +5,21 @@ import { Button } from './Button';
 import { Checkbox } from './Checkbox';
 import { strings } from '@/strings';
 
+interface ScheduleCopyDaysProps {
+  source: number;
+  days: readonly string[];
+  disabled: boolean;
+  canApply: (targets: number[]) => boolean;
+  onApply: (targets: number[]) => void;
+}
+
 export function ScheduleCopyDays({
   source,
   days,
   disabled,
   canApply,
   onApply,
-}: {
-  source: number;
-  days: readonly string[];
-  disabled: boolean;
-  canApply: (targets: number[]) => boolean;
-  onApply: (targets: number[]) => void;
-}) {
+}: ScheduleCopyDaysProps) {
   const id = useId();
   const trigger = useRef<HTMLButtonElement>(null);
   const [expanded, setExpanded] = useState(false);

@@ -3,15 +3,13 @@
 import { useState, type ReactNode } from 'react';
 import { cn } from '../lib/cn';
 
-export function DropZone({
-  children,
-  disabled,
-  onFiles,
-}: {
+interface DropZoneProps {
   children: ReactNode;
   disabled?: boolean;
   onFiles: (files: FileList) => void;
-}) {
+}
+
+export function DropZone({ children, disabled, onFiles }: DropZoneProps) {
   const [dragging, setDragging] = useState(false);
   return (
     <div

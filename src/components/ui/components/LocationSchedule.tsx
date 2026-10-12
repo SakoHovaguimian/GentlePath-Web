@@ -36,7 +36,7 @@ export function LocationSchedule({
           copy.labelValue(copy.ends, copy.noEnd)
         )}
       </span>
-      <span className="text-secondary break-words">
+      <span className="text-secondary wrap-break-word">
         {copy.labelValue(copy.timezone, timezone)}
       </span>
     </div>

@@ -27,7 +27,7 @@ export function AppSidebarContent({
           className={cn(
             'flex items-center justify-between gap-3 px-8',
             headerAction &&
-              'sticky top-0 z-10 bg-[var(--dashboard-shell-panel-solid)]',
+              'sticky top-0 z-10 bg-(--dashboard-shell-panel-solid)',
           )}
         >
           <a

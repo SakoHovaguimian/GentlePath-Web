@@ -49,7 +49,9 @@ NavigationGuardProvider and useUnsavedFormGuard are available to forms. The shel
 
 ## Verification and extension
 
-`npm run check` runs ESLint, route-aware TypeScript, centralized-copy checks, semantic-color checks, and the shared-control guard. Native button/input/select/textarea/table authoring belongs inside the library. Literal colors/fixed palettes outside theme.css are rejected. Run `DEMO_MODE=true npm run build`, `git diff --check`, and focused demo workflows. Do not write tests.
+`npm run check` runs ESLint with zero warnings allowed, route-aware TypeScript, the Next.js editor plugin diagnostics, centralized-copy checks, semantic-color checks, the shared-control guard, and Tailwind canonical-class checks. Native button/input/select/textarea/table authoring belongs inside the library.
+
+Server Components import `@/components/ui` (for example `not-found.tsx`), so every interactive file the barrel exports keeps `'use client'`; removing it pulls hooks into the server graph and fails the build. Next's plugin warns when a `'use client'` export declares function props in an inline object type, so those components declare a named props `interface`. Files imported only by client modules, such as providers, internal hooks, and sub-parts, do not need the directive. Literal colors/fixed palettes outside theme.css are rejected. Run `DEMO_MODE=true npm run build`, `git diff --check`, and focused demo workflows. Do not write tests.
 
 Add preview states for new reusable controls here. Verify desktop/narrow layout, keyboard, light/dark accents, disabled/busy/error states, popups, and reduced motion. Keep domain integration evidence distinct from component previews. See [verification](VERIFICATION.md), [design context](../DESIGN.md), and [UX contract](../UX-CONTRACT.md).
 

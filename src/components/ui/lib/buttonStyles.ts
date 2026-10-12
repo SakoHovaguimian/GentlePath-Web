@@ -3,7 +3,7 @@ import type { ButtonVariant } from '../models/buttonVariant';
 
 const buttonVariants = {
   primary:
-    'bg-brand-solid ui-button-primary text-[var(--color-text-primary_on-brand)] shadow-xs ring-1 ring-transparent ring-inset hover:bg-brand-solid_hover disabled:bg-disabled disabled:text-disabled disabled:ring-disabled_subtle',
+    'bg-brand-solid ui-button-primary text-(--color-text-primary_on-brand) shadow-xs ring-1 ring-transparent ring-inset hover:bg-brand-solid_hover disabled:bg-disabled disabled:text-disabled disabled:ring-disabled_subtle',
   secondary:
     'bg-primary text-secondary shadow-none ring-1 ring-secondary ring-inset hover:bg-primary_hover hover:text-secondary_hover disabled:bg-disabled_subtle disabled:text-fg-disabled disabled:ring-disabled',
   destructive:

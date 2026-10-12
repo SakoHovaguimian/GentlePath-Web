@@ -1,7 +1,8 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Card, buttonClassName } from '@/components/ui';
 import { strings } from '@/strings';
-export const metadata = { title: strings.errors.notFound };
+export const metadata: Metadata = { title: strings.errors.notFound };
 export default function NotFound() {
   return (
     <main className="mx-auto max-w-xl p-6">

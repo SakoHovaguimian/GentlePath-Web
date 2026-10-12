@@ -1,5 +1,6 @@
+import type { Metadata } from 'next';
 import { strings } from '@/strings';
-export const metadata = { title: strings.ui.appShell.featureRequests };
+export const metadata: Metadata = { title: strings.ui.appShell.featureRequests };
 import { FeatureRequestsScreen } from '@/modules/feature-requests/FeatureRequestsScreen';
 export default async function Page({
   searchParams,

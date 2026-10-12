@@ -32,7 +32,7 @@ function MosaicTile({
     >
       <button
         type="button"
-        className="ui-image-mosaic-tile group relative block w-full cursor-pointer overflow-hidden rounded-2xl border border-secondary bg-secondary_subtle outline-none transition duration-200 hover:border-brand hover:shadow-[var(--dashboard-shell-shadow-lg)] focus-visible:ring-4 focus-visible:ring-brand active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none"
+        className="ui-image-mosaic-tile group relative block w-full cursor-pointer overflow-hidden rounded-2xl border border-secondary bg-secondary_subtle outline-none transition duration-200 hover:border-brand hover:shadow-(--dashboard-shell-shadow-lg) focus-visible:ring-4 focus-visible:ring-brand active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none"
         disabled={disabled}
         aria-label={strings.mediaEditor.preview(item.title)}
         onClick={onPreview}
@@ -57,19 +57,21 @@ function MosaicTile({
   );
 }
 
+interface ImageMosaicProps<T extends ImageMosaicItem> {
+  items: T[];
+  label: string;
+  disabled?: boolean;
+  renderDetails?: (item: T, index: number) => ReactNode;
+  renderActions?: (item: T, index: number) => ReactNode;
+}
+
 export function ImageMosaic<T extends ImageMosaicItem>({
   items,
   label,
   disabled,
   renderDetails,
   renderActions,
-}: {
-  items: T[];
-  label: string;
-  disabled?: boolean;
-  renderDetails?: (item: T, index: number) => ReactNode;
-  renderActions?: (item: T, index: number) => ReactNode;
-}) {
+}: ImageMosaicProps<T>) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const list = useRef<HTMLOListElement>(null);

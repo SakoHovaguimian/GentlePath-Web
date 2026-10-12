@@ -52,6 +52,23 @@ const sizeClasses: Record<SheetSide, Record<SheetSize, string>> = {
   },
 };
 
+interface SheetPanelProps {
+  open: boolean;
+  title: string;
+  description?: string;
+  tone?: SheetTone;
+  side?: SheetSide;
+  size?: SheetSize;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onCancel: () => void;
+  onConfirm: () => void;
+  details?: ReactNode;
+  content?: ReactNode;
+  motionEnabled?: boolean;
+  motionDurationMs?: number;
+}
+
 export function SheetPanel({
   open,
   title,
@@ -67,22 +84,7 @@ export function SheetPanel({
   content,
   motionEnabled = true,
   motionDurationMs = 260,
-}: {
-  open: boolean;
-  title: string;
-  description?: string;
-  tone?: SheetTone;
-  side?: SheetSide;
-  size?: SheetSize;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  onCancel: () => void;
-  onConfirm: () => void;
-  details?: ReactNode;
-  content?: ReactNode;
-  motionEnabled?: boolean;
-  motionDurationMs?: number;
-}) {
+}: SheetPanelProps) {
   const returnFocusRef = useRef<HTMLElement | null>(null);
   return (
     <Dialog.Root
@@ -93,7 +95,7 @@ export function SheetPanel({
         <Dialog.Overlay
           data-motion={motionEnabled ? undefined : 'off'}
           className={cn(
-            'ui-backdrop fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm',
+            'ui-backdrop fixed inset-0 z-80 bg-(--dashboard-shell-overlay) backdrop-blur-sm',
           )}
           style={
             motionEnabled
@@ -120,7 +122,7 @@ export function SheetPanel({
             }
           }}
           className={cn(
-            'ui-sheet fixed z-[90] flex max-h-dvh overflow-y-auto border bg-primary shadow-[var(--dashboard-shell-shadow-lg)] outline-none',
+            'ui-sheet fixed z-90 flex max-h-dvh overflow-y-auto border bg-primary shadow-(--dashboard-shell-shadow-lg) outline-none',
             toneClasses[tone],
             sideClasses[side],
             sizeClasses[side][size],

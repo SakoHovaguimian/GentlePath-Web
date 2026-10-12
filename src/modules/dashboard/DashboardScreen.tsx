@@ -246,7 +246,7 @@ function ComparisonBars() {
           {strings.ui.dashboardScreen.direct}
         </span>
         <span className="inline-flex items-center gap-2 text-primary">
-          <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-secondary)]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-(--color-chart-secondary)" />
           <strong>{strings.ui.dashboardScreen.value24k}</strong>{' '}
           {strings.ui.dashboardScreen.indirect}
         </span>
@@ -265,7 +265,7 @@ function ComparisonBars() {
                 }}
               />
               <span
-                className="w-4 rounded-t-md bg-[var(--color-chart-secondary)]"
+                className="w-4 rounded-t-md bg-(--color-chart-secondary)"
                 style={{
                   height: `${(indirectRevenue[index] / maxValue) * 100}%`,
                 }}
@@ -334,7 +334,7 @@ function TopChannelsTable() {
             <span>{channel.visitors}</span>
             <span className="text-success-primary">{channel.revenue}</span>
             <span>{channel.sales}</span>
-            <span className="text-[var(--color-chart-secondary)]">
+            <span className="text-(--color-chart-secondary)">
               {channel.conversion}
             </span>
           </div>
@@ -368,7 +368,7 @@ function SalesVsRefundsBars() {
             </div>
             <div className="flex h-20 items-start">
               <span
-                className="w-6 rounded-b-md bg-[var(--color-chart-refunds)]"
+                className="w-6 rounded-b-md bg-(--color-chart-refunds)"
                 style={{
                   height: `${(Math.abs(salesVsRefundsRefunds[index]) / maxValue) * 100}%`,
                 }}
@@ -582,7 +582,7 @@ export function DashboardScreen() {
                     {strings.ui.dashboardScreen.current}
                   </span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-neutral)]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-(--color-chart-neutral)" />
                     {strings.ui.dashboardScreen.previous}
                   </span>
                 </div>
@@ -623,11 +623,11 @@ export function DashboardScreen() {
                     {strings.ui.dashboardScreen.current}
                   </span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-neutral)]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-(--color-chart-neutral)" />
                     {strings.ui.dashboardScreen.previous}
                   </span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-chart-forecast)]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-(--color-chart-forecast)" />
                     {strings.ui.dashboardScreen.forecast}
                   </span>
                 </div>

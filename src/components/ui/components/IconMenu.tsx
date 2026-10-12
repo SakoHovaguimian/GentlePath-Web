@@ -40,7 +40,7 @@ export function IconMenu<T extends string>({
       <Popover
         placement="bottom start"
         offset={6}
-        className="ui-popover z-[100] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border border-secondary bg-primary p-1 shadow-[var(--dashboard-shell-shadow-lg)]"
+        className="ui-popover z-100 max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border border-secondary bg-primary p-1 shadow-(--dashboard-shell-shadow-lg)"
       >
         <Menu
           aria-label={label}
@@ -52,7 +52,7 @@ export function IconMenu<T extends string>({
               id={item.id}
               textValue={item.label}
               onAction={() => onAction(item.id)}
-              className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-primary outline-none hover:bg-secondary_subtle focus:bg-secondary_subtle focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand pressed:bg-secondary"
+              className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-primary outline-none hover:bg-secondary_subtle focus:bg-secondary_subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand pressed:bg-secondary"
             >
               <UiIcon name={item.icon} />
               <span>{item.label}</span>

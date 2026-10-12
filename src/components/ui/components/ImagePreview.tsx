@@ -8,6 +8,15 @@ import type { ImageMosaicItem } from '../models/imageMosaicItem';
 import { IconButton } from './IconButton';
 import { UiIcon } from './UiIcon';
 
+interface ImagePreviewProps {
+  image: ImageMosaicItem | null;
+  open?: boolean;
+  onClose: () => void;
+  details?: ReactNode;
+  actions?: ReactNode;
+  fallbackFocus?: RefObject<HTMLElement | null>;
+}
+
 export function ImagePreview({
   image,
   open = Boolean(image),
@@ -15,14 +24,7 @@ export function ImagePreview({
   details,
   actions,
   fallbackFocus,
-}: {
-  image: ImageMosaicItem | null;
-  open?: boolean;
-  onClose: () => void;
-  details?: ReactNode;
-  actions?: ReactNode;
-  fallbackFocus?: RefObject<HTMLElement | null>;
-}) {
+}: ImagePreviewProps) {
   const returnFocus = useRef<HTMLElement | null>(null);
   const [failedSrc, setFailedSrc] = useState<string>();
   return (
@@ -33,7 +35,7 @@ export function ImagePreview({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="ui-backdrop fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm" />
+        <Dialog.Overlay className="ui-backdrop fixed inset-0 z-80 bg-(--dashboard-shell-overlay) backdrop-blur-sm" />
         <Dialog.Content
           data-side="right"
           onOpenAutoFocus={() => {
@@ -49,7 +51,7 @@ export function ImagePreview({
               : fallbackFocus?.current;
             target?.focus();
           }}
-          className="ui-sheet fixed inset-y-0 right-0 z-[90] flex w-full max-w-6xl flex-col overflow-y-auto border-l border-secondary bg-primary shadow-[var(--dashboard-shell-shadow-lg)] outline-none sm:w-[94vw] sm:rounded-l-3xl"
+          className="ui-sheet fixed inset-y-0 right-0 z-90 flex w-full max-w-6xl flex-col overflow-y-auto border-l border-secondary bg-primary shadow-(--dashboard-shell-shadow-lg) outline-none sm:w-[94vw] sm:rounded-l-3xl"
         >
           <div className="flex items-start gap-4 border-b border-secondary p-5 sm:p-6">
             <div className="min-w-0 flex-1">

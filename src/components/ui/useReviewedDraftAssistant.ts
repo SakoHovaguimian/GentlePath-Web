@@ -1,5 +1,3 @@
-'use client';
-
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useBrowserSpeechRecognition } from '@/providers/useBrowserSpeechRecognition';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';

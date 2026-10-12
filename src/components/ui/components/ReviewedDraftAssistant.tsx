@@ -13,21 +13,7 @@ import { Message } from './Message';
 import { FloatingAssistant } from './FloatingAssistant';
 import { TextArea } from './TextArea';
 
-export function ReviewedDraftAssistant({
-  id,
-  title,
-  description,
-  fields,
-  contextKey,
-  disabled,
-  generate,
-  onApply,
-  onBusyChange,
-  questionsLabel,
-  warningsLabel,
-  rateLimited,
-  transcriptPlaceholder,
-}: {
+interface ReviewedDraftAssistantProps {
   id: string;
   title: string;
   description: string;
@@ -44,7 +30,23 @@ export function ReviewedDraftAssistant({
   warningsLabel: string;
   rateLimited: string;
   transcriptPlaceholder?: string;
-}) {
+}
+
+export function ReviewedDraftAssistant({
+  id,
+  title,
+  description,
+  fields,
+  contextKey,
+  disabled,
+  generate,
+  onApply,
+  onBusyChange,
+  questionsLabel,
+  warningsLabel,
+  rateLimited,
+  transcriptPlaceholder,
+}: ReviewedDraftAssistantProps) {
   const {
     transcript,
     transcriptRef,

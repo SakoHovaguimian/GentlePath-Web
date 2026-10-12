@@ -61,6 +61,13 @@ The Frontend Design Premium strict text audit reports 17 findings in this compon
 
 The supplemental DESIGN.md linter reports no errors and three unused-color warnings for the documented text, muted, and border roles. Runtime CSS remains canonical; these entries record the accepted palette rather than generate utilities.
 
+## Editor warning cleanup — October 12, 2026
+
+- `npm run check` now fails on any ESLint warning, Next.js editor plugin diagnostic, or non-canonical Tailwind class. It passes with zero warnings. `DEMO_MODE=true npm run build` and `git diff --check` pass.
+- Tailwind classes were rewritten only to the canonical form reported by the project's own design system. A comparison against `HEAD` confirms each file's class lists are unchanged apart from those rewrites. Replacements that resolve through theme variables use equal values: `--radius-3xl` is 1.75rem, `--spacing` is 0.25rem, and `--container-3xl` is 48rem.
+- Route `metadata` exports are typed as `Metadata`. Barrel-exported interactive components keep `'use client'` and declare named props interfaces. Two preference providers, `useReviewedDraftAssistant`, and three client-only sub-parts dropped the unneeded directive.
+- A demo production server returned 200 for sign-in, signup, and all protected routes after demo sign-in, and 404 for the server-rendered not-found page, with no server errors. Interactive overlay and selection behavior was not re-exercised in a browser; these changes are type-level, directive, and CSS-equivalent class edits.
+
 ## Live integration limits
 
 Firebase REST authentication/refresh, backend provisioning and authorization, Socket.IO ticket issuance/broadcasts, browser permission/device registration, FCM foreground/background delivery, and Amplitude event delivery require real configuration and backend endpoints. Those external flows were not exercised. No production analytics events or push permission prompts were triggered.

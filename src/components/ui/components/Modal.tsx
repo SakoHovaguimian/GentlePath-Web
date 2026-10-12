@@ -7,6 +7,15 @@ import { strings } from '@/strings';
 import { IconButton } from './IconButton';
 import { UiIcon } from './UiIcon';
 
+interface ModalProps {
+  open: boolean;
+  title: string;
+  description?: string;
+  icon?: ReactNode;
+  onDismiss: () => void;
+  children: ReactNode;
+}
+
 // Workflow dialogs sit below presentation confirmations so an existing guarded
 // form can request confirmation without losing its draft or focus scope.
 export function Modal({
@@ -16,14 +25,7 @@ export function Modal({
   icon,
   onDismiss,
   children,
-}: {
-  open: boolean;
-  title: string;
-  description?: string;
-  icon?: ReactNode;
-  onDismiss: () => void;
-  children: ReactNode;
-}) {
+}: ModalProps) {
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const overlaysRef = useRef<HTMLDivElement>(null);
@@ -35,9 +37,9 @@ export function Modal({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="ui-backdrop fixed inset-0 z-[60] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm" />
+        <Dialog.Overlay className="ui-backdrop fixed inset-0 z-60 bg-(--dashboard-shell-overlay) backdrop-blur-sm" />
         <Dialog.Content
-          className="ui-dialog fixed top-1/2 left-1/2 z-[70] flex max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-2rem)] w-[min(calc(100vw-2rem),44rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl border border-secondary bg-primary shadow-[var(--dashboard-shell-shadow-lg)] outline-none"
+          className="ui-dialog fixed top-1/2 left-1/2 z-70 flex max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-2rem)] w-[min(calc(100vw-2rem),44rem)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl border border-secondary bg-primary shadow-(--dashboard-shell-shadow-lg) outline-none"
           {...(!description ? { 'aria-describedby': undefined } : {})}
           onOpenAutoFocus={(event) => {
             event.preventDefault();

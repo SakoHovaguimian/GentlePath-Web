@@ -10,13 +10,7 @@ import { IconButton } from './IconButton';
 import { MultiSelect } from './MultiSelect';
 import { UiIcon } from './UiIcon';
 
-export function DirectoryMultiFilters<Status extends string>({
-  id,
-  value,
-  onChange,
-  statuses,
-  copy,
-}: {
+interface DirectoryMultiFiltersProps<Status extends string> {
   id: string;
   value: DirectoryFiltersValue<Status[]>;
   onChange: (value: { query: string; status: Status[] }) => void;
@@ -30,7 +24,15 @@ export function DirectoryMultiFilters<Status extends string>({
     selected: (count: number) => string;
     clearStatuses: string;
   };
-}) {
+}
+
+export function DirectoryMultiFilters<Status extends string>({
+  id,
+  value,
+  onChange,
+  statuses,
+  copy,
+}: DirectoryMultiFiltersProps<Status>) {
   const apply = useCallback(
     (next: DirectoryFiltersValue<Status[]>) =>
       onChange({ ...next, status: next.status ?? [] }),

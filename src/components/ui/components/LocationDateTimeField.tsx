@@ -7,6 +7,18 @@ import { Field } from './Field';
 import { Input } from './Input';
 import { Select } from './Select';
 
+interface LocationDateTimeFieldProps {
+  label: string;
+  value: string;
+  timezone: string;
+  preferredInstant?: string;
+  disabled: boolean;
+  error?: string;
+  describedBy?: string;
+  inputRef: Ref<HTMLInputElement>;
+  onChange: (value: string, instant?: string) => void;
+}
+
 export function LocationDateTimeField({
   label,
   value,
@@ -17,17 +29,7 @@ export function LocationDateTimeField({
   describedBy,
   inputRef,
   onChange,
-}: {
-  label: string;
-  value: string;
-  timezone: string;
-  preferredInstant?: string;
-  disabled: boolean;
-  error?: string;
-  describedBy?: string;
-  inputRef: Ref<HTMLInputElement>;
-  onChange: (value: string, instant?: string) => void;
-}) {
+}: LocationDateTimeFieldProps) {
   const id = useId();
   const copy = strings.scheduleEditor;
   const instants = localDateTimeInstants(value, timezone);

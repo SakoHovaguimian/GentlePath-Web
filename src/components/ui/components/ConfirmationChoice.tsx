@@ -16,7 +16,7 @@ export function ConfirmationChoice({
     <Checkbox
       {...props}
       className={cn(
-        'rounded-lg border border-brand/30 bg-brand-primary px-5 py-4 hover:border-brand has-[:checked]:border-brand has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand',
+        'rounded-lg border border-brand/30 bg-brand-primary px-5 py-4 hover:border-brand has-checked:border-brand has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand',
         className,
       )}
       label={

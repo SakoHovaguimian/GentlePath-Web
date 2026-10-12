@@ -32,6 +32,21 @@ const layoutClasses: Record<AlertAlignment, string> = {
   right: 'right-0 top-0 h-dvh w-[min(94vw,34rem)] rounded-none rounded-l-2xl',
 };
 
+interface AlertModalProps {
+  open: boolean;
+  title: string;
+  description: string;
+  tone?: AlertTone;
+  alignment?: AlertAlignment;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onCancel: () => void;
+  onConfirm: () => void;
+  details?: ReactNode;
+  motionEnabled?: boolean;
+  motionDurationMs?: number;
+}
+
 export function AlertModal({
   open,
   title,
@@ -45,20 +60,7 @@ export function AlertModal({
   details,
   motionEnabled = true,
   motionDurationMs = 240,
-}: {
-  open: boolean;
-  title: string;
-  description: string;
-  tone?: AlertTone;
-  alignment?: AlertAlignment;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  onCancel: () => void;
-  onConfirm: () => void;
-  details?: ReactNode;
-  motionEnabled?: boolean;
-  motionDurationMs?: number;
-}) {
+}: AlertModalProps) {
   const returnFocusRef = useRef<HTMLElement | null>(null);
   return (
     <Dialog.Root
@@ -69,7 +71,7 @@ export function AlertModal({
         <Dialog.Overlay
           data-motion={motionEnabled ? undefined : 'off'}
           className={cn(
-            'ui-backdrop fixed inset-0 z-[80] bg-[var(--dashboard-shell-overlay)] backdrop-blur-sm',
+            'ui-backdrop fixed inset-0 z-80 bg-(--dashboard-shell-overlay) backdrop-blur-sm',
           )}
           style={
             motionEnabled
@@ -104,7 +106,7 @@ export function AlertModal({
             }
           }}
           className={cn(
-            'ui-dialog fixed z-[90] max-h-[calc(100dvh-2rem)] overflow-y-auto border bg-primary p-6 shadow-[var(--dashboard-shell-shadow-lg)] outline-none',
+            'ui-dialog fixed z-90 max-h-[calc(100dvh-2rem)] overflow-y-auto border bg-primary p-6 shadow-(--dashboard-shell-shadow-lg) outline-none',
             toneClasses[tone],
             layoutClasses[alignment],
           )}

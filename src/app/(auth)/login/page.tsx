@@ -1,5 +1,6 @@
+import type { Metadata } from 'next';
 import { strings } from '@/strings';
-export const metadata = { title: strings.ui.loginScreen.signIn };
+export const metadata: Metadata = { title: strings.ui.loginScreen.signIn };
 import { LoginScreen } from '@/modules/auth/LoginScreen';
 export default async function AuthPage({
   searchParams,

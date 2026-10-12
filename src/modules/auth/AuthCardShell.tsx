@@ -24,7 +24,7 @@ export function AuthCardShell({
   mockHint,
 }: AuthCardShellProps) {
   return (
-    <Card className="auth-card-enter overflow-hidden p-0 shadow-[var(--dashboard-shell-shadow-lg)]">
+    <Card className="auth-card-enter overflow-hidden p-0 shadow-(--dashboard-shell-shadow-lg)">
       <div className="border-b border-secondary bg-secondary_subtle px-6 py-6 sm:px-8">
         <div className="auth-reveal mb-4 inline-flex rounded-full border border-brand/40 bg-brand-primary px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
           {badge}
@@ -46,7 +46,7 @@ export function AuthCardShell({
         <div className="auth-reveal auth-reveal-delay-3 flex flex-wrap items-center justify-between gap-3 border-t border-secondary pt-5 text-sm text-tertiary">
           <span>{footerPrompt}</span>
           <Link
-            className={buttonClassName('secondary', 'min-w-[9rem]')}
+            className={buttonClassName('secondary', 'min-w-36')}
             href={footerHref as never}
           >
             {footerAction}
