@@ -30,7 +30,7 @@ export function titleCase(value) {
 function copyStyle(property, source, inherited) {
   const comments = source.slice(property.getFullStart(), property.getStart());
   const annotation = comments.match(
-    /@(sentence|preserve|title)-case:\s*\S[^\r\n]*/,
+    /@(sentence|preserve|title)-case:[ \t]+\S[^\r\n]*/,
   );
   if (annotation) return annotation[1];
   if (inherited !== 'title') return inherited;
