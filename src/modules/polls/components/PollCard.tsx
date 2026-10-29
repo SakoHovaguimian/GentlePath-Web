@@ -3,6 +3,7 @@ import { NavigationLink } from '@/components/ui/components/NavigationLink';
 import { gentlePathPollStrings as copy } from '@/strings';
 import type { Poll } from '../models/poll';
 import { PollIdentity } from './PollIdentity';
+import { PollPreview } from './PollPreview';
 
 export function PollCard({
   poll,
@@ -40,6 +41,7 @@ export function PollCard({
         </NavigationLink>
       </h2>
       <p className="gp-poll-body line-clamp-3">{poll.message}</p>
+      <PollPreview poll={poll} />
       {poll.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {poll.tags.map((tag) => (

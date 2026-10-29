@@ -8,14 +8,11 @@ import {
   DirectoryFilters,
   EmptyState,
   NavigationLink,
-  Page,
-  PageHeader,
   QueryBoundary,
   UiIcon,
 } from '@/components/ui';
 import { useSessionState } from '@/providers/AppProviders';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
-import { PortalBanner } from '@/modules/portal/components/PortalBanner';
 import { MutationError } from '@/modules/portal/components/MutationError';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import { useCommunityPosts, useCommunityStatus } from './hooks';
@@ -27,6 +24,7 @@ import { CommunityPostCard } from './components/CommunityPostCard';
 import { CommunityPostEditor } from './components/CommunityPostEditor';
 import { CommunityReportDialog } from './components/CommunityReportDialog';
 import { CommunityPagination } from './components/CommunityPagination';
+import { CommunityHub } from './components/CommunityHub';
 import '@/modules/portal/styles/portal.css';
 import './styles/community.css';
 
@@ -60,12 +58,9 @@ export function CommunityScreen() {
     });
   }
   return (
-    <Page className="gp-portal-page gp-community">
-      <PageHeader
-        title={copy.title}
-        description={copy.description}
-        eyebrow={copy.eyebrow}
-        action={
+    <CommunityHub
+      activeView="posts"
+      action={
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="secondary">
               <NavigationLink
@@ -80,15 +75,8 @@ export function CommunityScreen() {
               {copy.newPost}
             </Button>
           </div>
-        }
-      />
-      <PortalBanner
-        title={copy.bannerTitle}
-        description={copy.bannerDescription}
-        image="/gentlepath/community-garden-v2.png"
-        tone="lilac"
-        landscape
-      />
+      }
+    >
       {status.data?.enabled === false && (
         <Card className="grid gap-2 bg-secondary_subtle p-5" role="status">
           <h2 className="m-0 text-base font-semibold">{copy.pausedTitle}</h2>
@@ -199,6 +187,6 @@ export function CommunityScreen() {
           onClose={() => setReport(null)}
         />
       )}
-    </Page>
+    </CommunityHub>
   );
 }

@@ -73,7 +73,7 @@ export function MultiSelect<Value extends string>({
       </AriaButton>
       <Popover
         offset={6}
-        className="ui-popover ui-select-popover z-100 flex w-(--trigger-width) max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-lg border border-brand bg-primary p-1 shadow-(--dashboard-shell-shadow-lg)"
+        className="ui-popover ui-select-popover z-100 flex w-max min-w-(--trigger-width) max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-lg border border-brand bg-primary p-1 shadow-(--dashboard-shell-shadow-lg)"
       >
         <ListBox
           items={options}

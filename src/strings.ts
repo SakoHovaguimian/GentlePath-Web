@@ -8638,6 +8638,9 @@ export const gentlePathDocumentStrings = {
 
 export const gentlePathCommunityStrings = {
   title: 'Community',
+  contentViewLabel: 'Community Content',
+  postsTitle: 'Posts',
+  pollsTitle: 'Polls',
   description:
     'Share everyday experiences, ask questions, and connect with other parents.',
   eyebrow: 'Growing Together',
@@ -8854,6 +8857,9 @@ export const gentlePathPollStrings = {
   tagsHint: 'Separate tags with commas. Add up to 30 tags, each up to 100 characters.',
   formDescription: 'Give your question enough context and arrange the choices in the order you want people to see them.',
   optionsTitle: 'Answer Options',
+  leadingOptionsTitle: 'Most Voted',
+  optionVotes: (count: number) => `${count.toLocaleString('en-US')} ${count === 1 ? 'Vote' : 'Votes'}`,
+  moreOptions: (count: number) => `+${count.toLocaleString('en-US')} More ${count === 1 ? 'Option' : 'Options'}`,
   optionsHint: 'Add 2–100 choices. Drag a handle or use the arrow controls to change their order.',
   addOption: 'Add Option',
   optionLabel: (number: number) => `Option ${number}`,

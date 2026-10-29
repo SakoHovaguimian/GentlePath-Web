@@ -108,7 +108,7 @@ export function UiIcon({
       strokeLinejoin="round"
       aria-hidden="true"
       focusable="false"
-      className={cn('size-5 shrink-0', className)}
+      className={cn('inline-block size-5 shrink-0 align-middle', className)}
       {...props}
     >
       <path d={paths[name]} />

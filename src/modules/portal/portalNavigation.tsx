@@ -60,11 +60,7 @@ export function portalNavigation(
       href: '/community',
       label: navigationCopy.community,
       icon: <UiIcon name="chat" />,
-    },
-    {
-      href: '/polls',
-      label: navigationCopy.polls,
-      icon: <UiIcon name="chart" />,
+      activePaths: ['/community', '/polls'],
     },
     {
       href: '/tips',

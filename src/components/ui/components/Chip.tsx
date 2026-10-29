@@ -23,7 +23,7 @@ export function Chip({
       {icon}
       <span
         key={typeof children === 'string' ? children : undefined}
-        className="ui-token-value"
+        className="ui-token-value inline-flex min-w-0 items-center gap-1.5"
       >
         {children}
       </span>

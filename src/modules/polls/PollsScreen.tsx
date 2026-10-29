@@ -8,14 +8,12 @@ import {
   DirectoryPagination,
   EmptyState,
   Field,
-  Page,
-  PageHeader,
   QueryBoundary,
   Select,
   UiIcon,
 } from '@/components/ui';
 import { useSessionState } from '@/providers/AppProviders';
-import { PortalBanner } from '@/modules/portal/components/PortalBanner';
+import { CommunityHub } from '@/modules/community/components/CommunityHub';
 import { MutationError } from '@/modules/portal/components/MutationError';
 import { gentlePathPollStrings as copy } from '@/strings';
 import type { Poll } from './models/poll';
@@ -64,25 +62,15 @@ export function PollsScreen() {
     });
   }
   return (
-    <Page className="gp-portal-page gp-polls">
-      <PageHeader
-        title={copy.title}
-        description={copy.description}
-        eyebrow={copy.eyebrow}
-        action={
+    <CommunityHub
+      activeView="polls"
+      action={
           <Button disabled={!writable} onClick={() => setEditor('new')}>
             <UiIcon name="plus" />
             {copy.newPoll}
           </Button>
-        }
-      />
-      <PortalBanner
-        title={copy.bannerTitle}
-        description={copy.bannerDescription}
-        image="/gentlepath/community-garden-v2.png"
-        tone="sage"
-        landscape
-      />
+      }
+    >
       <QueryBoundary query={status}>
         {(value) =>
           value.enabled ? null : (
@@ -214,6 +202,6 @@ export function PollsScreen() {
           onSaved={editor === 'new' ? () => directory.setOffset(0) : undefined}
         />
       )}
-    </Page>
+    </CommunityHub>
   );
 }
