@@ -122,6 +122,10 @@
   outline-color: var(--dashboard-sidebar-focus);
 }
 
+.ui-sidebar-content .ui-sidebar-link[aria-current='page']:focus-visible {
+  outline-color: var(--dashboard-sidebar-selected-foreground);
+}
+
 .ui-sidebar-account {
   border-top: 1px solid var(--dashboard-sidebar-divider);
 }
