@@ -19,7 +19,7 @@ export function LandingFamily() {
           <Button
             asChild
             variant="secondary"
-            className="gp-button gp-button-outline"
+            className="gp-button gp-button-soft"
           >
             <Link href="/signup">
               {copy.family.primaryAction}

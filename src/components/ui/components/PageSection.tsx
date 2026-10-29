@@ -40,7 +40,7 @@ export function PageSection({
             ref={headingRef}
             tabIndex={headingRef ? -1 : undefined}
             id={`${id}-title`}
-            className="m-0 text-lg font-semibold text-primary wrap-anywhere focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="m-0 font-display text-xl font-normal tracking-tight text-primary wrap-anywhere focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:text-2xl"
           >
             {title}
           </h2>

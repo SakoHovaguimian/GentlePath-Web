@@ -27,7 +27,7 @@ export function WeeklyActivity({
                 {value}
               </span>
               <div
-                className="w-full max-w-10 rounded-t-lg bg-brand-solid/65"
+                className="gp-weekly-activity__bar w-full max-w-10 rounded-t-lg bg-brand-solid/65"
                 style={{ height: `${Math.max(4, (value / maximum) * 72)}%` }}
               />
               <span className="text-xs text-tertiary">

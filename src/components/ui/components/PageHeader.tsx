@@ -46,7 +46,7 @@ export function PageHeader({
             <Heading
               ref={headingRef}
               tabIndex={headingRef ? -1 : undefined}
-              className="m-0 text-2xl font-semibold tracking-tight text-primary wrap-anywhere focus:outline-none"
+              className="m-0 font-display text-3xl font-normal tracking-tight text-primary wrap-anywhere focus:outline-none sm:text-4xl"
             >
               {title}
             </Heading>

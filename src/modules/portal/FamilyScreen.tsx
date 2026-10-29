@@ -3,11 +3,13 @@
 import { useState } from 'react';
 const numericYear = 'numeric';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Button,
   Card,
   EmptyState,
   InitialsAvatar,
+  Page,
   PageHeader,
   QueryBoundary,
   UiIcon,
@@ -18,6 +20,8 @@ import { useChildren, useDeleteChild } from './hooks';
 import type { ChildProfile } from './models/childProfile';
 import { ChildProfileEditor } from './components/ChildProfileEditor';
 import { MutationError } from './components/MutationError';
+import { PortalBanner } from './components/PortalBanner';
+import './styles/portal.css';
 
 export function FamilyScreen() {
   const query = useChildren();
@@ -43,7 +47,7 @@ export function FamilyScreen() {
     }
   }
   return (
-    <div className="grid gap-7">
+    <Page className="gp-portal-page gp-family">
       <PageHeader
         title={copy.family.title}
         description={copy.family.description}
@@ -55,17 +59,31 @@ export function FamilyScreen() {
           </Button>
         }
       />
+      <PortalBanner
+        title={copy.family.bannerTitle}
+        description={copy.family.bannerDescription}
+        image="/gentlepath/community-garden-v2.png"
+        tone="lilac"
+        landscape
+      />
       <MutationError error={remove.error} />
       <QueryBoundary query={query}>
         {(children) =>
           children.length ? (
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <div className="gp-family-grid">
               {children.map((child) => (
-                <Card key={child.id} className="flex flex-col gap-5 p-6">
-                  <div className="flex items-center gap-4">
+                <Card key={child.id} className="gp-family-card">
+                  <div className="gp-family-card__header">
+                    <Image
+                      src="/gentlepath/brand-mark.svg"
+                      alt={copy.common.decorativeAlt}
+                      width={100}
+                      height={130}
+                      className="gp-family-card__leaf"
+                    />
                     <InitialsAvatar name={child.name} />
                     <div>
-                      <h2 className="m-0 font-display text-xl">{child.name}</h2>
+                      <h2>{child.name}</h2>
                       <p className="mt-1 text-xs text-tertiary">
                         {copy.family.birthDate(
                           new Date(
@@ -79,9 +97,7 @@ export function FamilyScreen() {
                       </p>
                     </div>
                   </div>
-                  <p className="m-0 flex-1 text-sm leading-7 whitespace-pre-line text-secondary">
-                    {child.supportNotes}
-                  </p>
+                  <p className="gp-family-card__notes">{child.supportNotes}</p>
                   <Button asChild variant="secondary">
                     <Link href={`/milestones?child=${child.id}`}>
                       {copy.navigation.milestones}
@@ -127,6 +143,6 @@ export function FamilyScreen() {
           onClose={() => setEditor(null)}
         />
       )}
-    </div>
+    </Page>
   );
 }

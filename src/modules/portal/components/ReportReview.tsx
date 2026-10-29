@@ -9,6 +9,7 @@ import {
 } from '../models/moderationReport';
 import { useResolveReport } from '../adminHooks';
 import { MutationError } from './MutationError';
+import styles from '../Admin.module.css';
 
 export function ReportReview({
   report,
@@ -59,7 +60,7 @@ export function ReportReview({
           }
         }}
       >
-        <div className="rounded-xl bg-secondary_subtle p-4">
+        <div className={styles.reviewReason}>
           <p className="m-0 text-xs font-medium text-tertiary">
             {copy.moderation.reason}
           </p>
@@ -95,7 +96,13 @@ export function ReportReview({
               }))
             }
           >
-            {ReportResolutionSchema.shape.status.options.map(status => <option key={status} value={status}>{status === 'resolved' ? copy.moderation.resolve : copy.moderation.dismiss}</option>)}
+            {ReportResolutionSchema.shape.status.options.map((status) => (
+              <option key={status} value={status}>
+                {status === 'resolved'
+                  ? copy.moderation.resolve
+                  : copy.moderation.dismiss}
+              </option>
+            ))}
           </Select>
         </Field>
         {validation && (

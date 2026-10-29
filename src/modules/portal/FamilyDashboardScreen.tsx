@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   EmptyState,
+  Page,
   PageHeader,
   QueryBoundary,
   UiIcon,
@@ -16,6 +17,7 @@ import { gentlePathPortalStrings as copy } from '@/strings';
 import { useJournals, usePortalOverview, useResources } from './hooks';
 import { WeeklyActivity } from './components/WeeklyActivity';
 import { ResourceCard } from './components/ResourceCard';
+import './styles/portal.css';
 
 export function FamilyDashboardScreen() {
   const { session } = useSessionState();
@@ -23,7 +25,7 @@ export function FamilyDashboardScreen() {
   const journals = useJournals();
   const resources = useResources();
   return (
-    <div className="grid gap-8">
+    <Page className="gp-portal-page gp-home">
       <PageHeader
         eyebrow={copy.home.eyebrow}
         title={copy.home.title(session?.user.firstName ?? '')}
@@ -37,94 +39,93 @@ export function FamilyDashboardScreen() {
           </Button>
         }
       />
-      <section className="relative grid overflow-hidden rounded-3xl border border-secondary bg-brand-primary md:grid-cols-[1.2fr_1fr]">
-        <div className="relative z-10 flex flex-col items-start justify-center gap-4 p-7 lg:p-10">
-          <span className="text-xs font-semibold tracking-widest text-brand-secondary">
+      <section className="gp-home-hero">
+        <div className="gp-home-hero__copy">
+          <span className="gp-home-hero__eyebrow">
+            <UiIcon name="leaf" className="size-4" />
             {copy.navigation.workspace}
           </span>
-          <h2 className="m-0 max-w-md font-display text-3xl leading-tight text-primary lg:text-4xl">
-            {copy.home.heroTitle}
-          </h2>
-          <p className="m-0 max-w-md text-sm leading-7 text-secondary">
-            {copy.home.heroDescription}
-          </p>
-          <Button asChild variant="secondary" className="mt-1">
+          <h2>{copy.home.heroTitle}</h2>
+          <p>{copy.home.heroDescription}</p>
+          <Button asChild>
             <Link href="/resources">
               {copy.home.heroAction}
               <UiIcon name="arrowRight" />
             </Link>
           </Button>
         </div>
-        <div className="flex h-64 items-center justify-center md:h-auto">
+        <div className="gp-home-hero__art">
           <Image
-            src="/gentlepath/winding-path.png"
+            src="/gentlepath/path-landscape-v2.png"
             alt={copy.home.heroAlt}
-            width={360}
-            height={360}
+            fill
+            sizes="(max-width: 767px) 100vw, 55vw"
             priority
-            className="h-full max-h-80 w-full object-contain"
           />
         </div>
       </section>
       <QueryBoundary query={overview}>
         {(data) => (
           <>
-            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {[
-                {
-                  label: copy.home.journals,
-                  value: data.journalCount,
-                  hint: copy.home.journalHint,
-                  href: '/journal',
-                  icon: 'file' as const,
-                },
-                {
-                  label: copy.home.saved,
-                  value: data.savedCount,
-                  hint: copy.home.savedHint,
-                  href: '/saved',
-                  icon: 'layers' as const,
-                },
-                {
-                  label: copy.home.observations,
-                  value: data.observationCount,
-                  hint: copy.home.observationHint,
-                  href: '/milestones',
-                  icon: 'leaf' as const,
-                },
-                {
-                  label: copy.home.children,
-                  value: data.childCount,
-                  hint: copy.home.childHint,
-                  href: '/family',
-                  icon: 'user' as const,
-                },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href as Route}
-                  className="grid gap-3 rounded-2xl border border-secondary bg-primary p-5 transition-colors hover:bg-secondary_subtle focus-visible:outline-2 focus-visible:outline-brand"
-                >
-                  <div className="flex items-center justify-between gap-3 text-sm text-secondary">
-                    {item.label}
-                    <UiIcon
-                      name={item.icon}
-                      className="size-4 text-brand-secondary"
-                    />
-                  </div>
-                  <span className="font-display text-3xl text-primary tabular-nums">
-                    {item.value}
-                  </span>
-                  <span className="text-xs text-tertiary">{item.hint}</span>
-                </Link>
-              ))}
+            <section className="gp-home-tools">
+              <div className="gp-portal-section-heading">
+                <h2>{copy.home.toolsTitle}</h2>
+              </div>
+              <div className="gp-home-tools__grid">
+                {[
+                  {
+                    label: copy.home.journals,
+                    value: data.journalCount,
+                    hint: copy.home.journalHint,
+                    href: '/journal',
+                    icon: 'file' as const,
+                    tone: 'sage',
+                  },
+                  {
+                    label: copy.home.saved,
+                    value: data.savedCount,
+                    hint: copy.home.savedHint,
+                    href: '/saved',
+                    icon: 'layers' as const,
+                    tone: 'sunlight',
+                  },
+                  {
+                    label: copy.home.observations,
+                    value: data.observationCount,
+                    hint: copy.home.observationHint,
+                    href: '/milestones',
+                    icon: 'leaf' as const,
+                    tone: 'lilac',
+                  },
+                  {
+                    label: copy.home.children,
+                    value: data.childCount,
+                    hint: copy.home.childHint,
+                    href: '/family',
+                    icon: 'user' as const,
+                    tone: 'clay',
+                  },
+                ].map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href as Route}
+                    className="gp-home-tool"
+                    data-tone={item.tone}
+                  >
+                    <span className="gp-home-tool__icon" aria-hidden="true">
+                      <UiIcon name={item.icon} />
+                    </span>
+                    <span className="gp-home-tool__count">{item.value}</span>
+                    <span className="gp-home-tool__label">{item.label}</span>
+                    <span className="gp-home-tool__hint">{item.hint}</span>
+                  </Link>
+                ))}
+              </div>
             </section>
-            <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
+            <div className="gp-home-middle">
               <section className="grid content-start gap-5">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="m-0 font-display text-xl">
-                    {copy.home.recent}
-                  </h2>
+                <div className="gp-portal-section-heading">
+                  <h2>{copy.home.recent}</h2>
                   <Button asChild variant="ghost">
                     <Link href="/journal">
                       {copy.common.viewAll}
@@ -135,12 +136,12 @@ export function FamilyDashboardScreen() {
                 <QueryBoundary query={journals}>
                   {(entries) =>
                     entries.length ? (
-                      <div className="divide-y divide-secondary rounded-2xl border border-secondary bg-primary">
+                      <div className="gp-journal-preview-list">
                         {entries.slice(0, 3).map((entry) => (
                           <Link
                             href={`/journal?entry=${entry.id}`}
                             key={entry.id}
-                            className="flex items-start justify-between gap-4 px-5 py-5 hover:bg-secondary_subtle focus-visible:outline-2 focus-visible:outline-brand"
+                            className="gp-journal-preview"
                           >
                             <div className="grid min-w-0 gap-2">
                               <span className="text-xs text-tertiary">
@@ -156,7 +157,10 @@ export function FamilyDashboardScreen() {
                                 {entry.body}
                               </p>
                             </div>
-                            <span className="shrink-0 rounded-full bg-brand-primary px-3 py-1 text-xs text-brand-secondary">
+                            <span
+                              className="gp-emotion"
+                              data-emotion={entry.emotion}
+                            >
                               {copy.journal.emotions[entry.emotion]}
                             </span>
                           </Link>
@@ -178,7 +182,7 @@ export function FamilyDashboardScreen() {
                   }
                 </QueryBoundary>
               </section>
-              <Card className="p-6">
+              <Card className="gp-week-card">
                 <WeeklyActivity
                   values={data.weeklyActivity}
                   title={copy.home.week}
@@ -190,8 +194,8 @@ export function FamilyDashboardScreen() {
         )}
       </QueryBoundary>
       <section className="grid gap-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="m-0 font-display text-xl">{copy.home.recommended}</h2>
+        <div className="gp-portal-section-heading">
+          <h2>{copy.home.recommended}</h2>
           <Button asChild variant="ghost">
             <Link href="/resources">
               {copy.common.viewAll}
@@ -202,7 +206,7 @@ export function FamilyDashboardScreen() {
         <QueryBoundary query={resources}>
           {(items) =>
             items.length ? (
-              <div className="grid gap-5 md:grid-cols-3">
+              <div className="gp-resource-grid">
                 {items.slice(0, 3).map((resource) => (
                   <ResourceCard
                     key={resource.id}
@@ -220,9 +224,10 @@ export function FamilyDashboardScreen() {
           }
         </QueryBoundary>
       </section>
-      <p className="m-0 py-2 text-center font-display text-sm italic text-tertiary">
-        {copy.home.quoteDescription}
-      </p>
-    </div>
+      <blockquote className="gp-home-quote">
+        <UiIcon name="leaf" />
+        <p>{copy.home.quoteDescription}</p>
+      </blockquote>
+    </Page>
   );
 }

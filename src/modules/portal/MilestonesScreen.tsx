@@ -1,101 +1,29 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
-  Badge,
   Button,
-  Card,
   EmptyState,
   Field,
+  Page,
   PageHeader,
   QueryBoundary,
   Select,
   UiIcon,
 } from '@/components/ui';
-import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
-import { useChildren, useMilestones, useObserveMilestone } from './hooks';
-import { ObservationResponseSchema, type Milestone } from './models/milestone';
-import { MutationError } from './components/MutationError';
-
-function MilestoneCard({
-  milestone,
-  childId,
-}: {
-  milestone: Milestone;
-  childId: string;
-}) {
-  const [response, setResponse] = useState(milestone.response ?? 'emerging');
-  const mutation = useObserveMilestone();
-  const { showToast } = usePresentationService();
-  return (
-    <Card className="flex flex-col gap-4 p-6">
-      <div className="flex items-center justify-between gap-3">
-        <Badge>{milestone.category}</Badge>
-        <UiIcon name="leaf" className="text-brand-secondary" />
-      </div>
-      <h2 className="m-0 font-display text-xl">{milestone.title}</h2>
-      <p className="m-0 flex-1 text-sm leading-7 text-secondary">
-        {milestone.description}
-      </p>
-      <Field labelText={copy.milestones.responseLabel}>
-        <Select
-          value={response}
-          disabled={mutation.isPending}
-          onValueChange={(value) =>
-            setResponse(ObservationResponseSchema.parse(value))
-          }
-        >
-          {Object.entries(copy.milestones.responses).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </Select>
-      </Field>
-      <MutationError error={mutation.error} />
-      <Button
-        variant="secondary"
-        loading={mutation.isPending}
-        onClick={async () => {
-          try {
-            await mutation.mutateAsync({
-              id: milestone.id,
-              input: { childId, response },
-            });
-            void showToast({
-              title: copy.milestones.updated,
-              intent: 'success',
-            });
-          } catch {
-            /* Inline recovery. */
-          }
-        }}
-      >
-        {copy.milestones.record}
-      </Button>
-      <p className="m-0 text-xs text-tertiary">
-        {milestone.observedAt
-          ? copy.milestones.lastObserved(
-              new Date(milestone.observedAt).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-              }),
-            )
-          : copy.milestones.notObserved}
-      </p>
-    </Card>
-  );
-}
+import { useChildren, useMilestones } from './hooks';
+import { MilestoneCard } from './components/MilestoneCard';
+import { PortalBanner } from './components/PortalBanner';
+import './styles/portal.css';
 function MilestoneList({ childId }: { childId: string }) {
   const query = useMilestones(childId);
   return (
     <QueryBoundary query={query}>
       {(milestones) =>
         milestones.length ? (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="gp-milestone-grid">
             {milestones.map((milestone) => (
               <MilestoneCard
                 key={`${childId}:${milestone.id}`}
@@ -119,11 +47,17 @@ export function MilestonesScreen() {
   const params = useSearchParams();
   const router = useRouter();
   return (
-    <div className="grid gap-7">
+    <Page className="gp-portal-page gp-milestones">
       <PageHeader
         title={copy.milestones.title}
         description={copy.milestones.description}
         eyebrow={copy.navigation.milestones}
+      />
+      <PortalBanner
+        title={copy.milestones.bannerTitle}
+        description={copy.milestones.bannerDescription}
+        image="/gentlepath/path-landscape-v2.png"
+        landscape
       />
       <QueryBoundary query={children}>
         {(profiles) => {
@@ -132,30 +66,33 @@ export function MilestonesScreen() {
             profiles[0]?.id;
           return childId ? (
             <>
-              <Field
-                labelText={copy.milestones.childLabel}
-                className="max-w-sm"
-              >
-                <Select
-                  value={childId}
-                  onValueChange={(value) =>
-                    router.replace(
-                      `/milestones?child=${encodeURIComponent(value)}`,
-                      { scroll: false },
-                    )
-                  }
+              <div className="gp-milestone-context">
+                <Field
+                  labelText={copy.milestones.childLabel}
+                  className="w-full max-w-sm"
                 >
-                  {profiles.map((child) => (
-                    <option key={child.id} value={child.id}>
-                      {child.name}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
+                  <Select
+                    value={childId}
+                    onValueChange={(value) =>
+                      router.replace(
+                        `/milestones?child=${encodeURIComponent(value)}`,
+                        { scroll: false },
+                      )
+                    }
+                  >
+                    {profiles.map((child) => (
+                      <option key={child.id} value={child.id}>
+                        {child.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+                <p className="gp-portal-footnote">
+                  <UiIcon name="lock" className="size-5" />
+                  {copy.milestones.privacyHint}
+                </p>
+              </div>
               <MilestoneList key={childId} childId={childId} />
-              <p className="text-sm text-tertiary">
-                {copy.milestones.privacyHint}
-              </p>
             </>
           ) : (
             <EmptyState
@@ -171,6 +108,6 @@ export function MilestonesScreen() {
           );
         }}
       </QueryBoundary>
-    </div>
+    </Page>
   );
 }

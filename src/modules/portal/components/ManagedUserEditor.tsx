@@ -1,11 +1,19 @@
 import { useState } from 'react';
-import { Button, Field, Modal, Select, Switch } from '@/components/ui';
+import {
+  Button,
+  Field,
+  InitialsAvatar,
+  Modal,
+  Select,
+  Switch,
+} from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { UserRoleSchema } from '@/models/userRole';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import type { ManagedUser } from '../models/managedUser';
 import { useUpdateManagedUser } from '../adminHooks';
 import { MutationError } from './MutationError';
+import styles from '../Admin.module.css';
 
 export function ManagedUserEditor({
   user,
@@ -55,11 +63,16 @@ export function ManagedUserEditor({
           }
         }}
       >
-        <p className="m-0 text-sm text-secondary">
-          {user.firstName} {user.lastName}
-          <br />
-          {user.email}
-        </p>
+        <div className={styles.editorIdentity}>
+          <InitialsAvatar
+            name={copy.common.personName(user.firstName, user.lastName)}
+          />
+          <p>
+            {copy.common.personName(user.firstName, user.lastName)}
+            <br />
+            {user.email}
+          </p>
+        </div>
         <Field labelText={copy.people.role}>
           <Select
             value={role}

@@ -54,7 +54,7 @@ Destructive actions use the shared modal, focus the safe action first, and resto
 
 Segmented choices use native radio semantics; more than two choices become the shared Select below 600px. SegmentedPanels preserves mounted drafts and marks inactive content hidden/inert. Stepper progression and eligibility remain caller-owned; changing orientation never changes state. Reordering offers pointer handles plus keyboard and up/down alternatives. Saved reduced motion and device preferences suppress movement in CSS and JavaScript.
 
-Shared selection fills use 8% accent in light mode and 14% in dark mode; hover uses 5%/8%. Focus remains separately visible. Every palette uses the selected accent as its tint source. Busy buttons preserve layout and accessible names.
+Shared selection fills use 8% accent in light mode and 14% in dark mode; hover uses 5%/8%. Focus remains separately visible. Every palette uses the selected accent as its tint source. The inverse forest navigation uses its dedicated theme-owned active/foreground and focus pairs. Busy buttons preserve layout and accessible names.
 
 The shell uses the shared navigation guard. Forms opt into dirty/busy refs through useUnsavedFormGuard and pass guarded navigation to relevant links. The component library and optional assistants do not send backend writes or microphone permission requests automatically.
 

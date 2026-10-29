@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Badge,
   Button,
   Card,
   EmptyState,
   MarkdownContent,
+  Page,
   PageHeader,
   QueryBoundary,
   UiIcon,
@@ -16,6 +18,8 @@ import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { useResources, useSaveResource } from './hooks';
 import { MutationError } from './components/MutationError';
+import { getResourceArtwork } from './components/resourceArtwork';
+import './styles/portal.css';
 
 export function ResourceDetailScreen({ id }: { id: string }) {
   const query = useResources();
@@ -38,8 +42,9 @@ export function ResourceDetailScreen({ id }: { id: string }) {
               }
             />
           );
+        const illustration = getResourceArtwork(resource);
         return (
-          <div className="mx-auto grid w-full max-w-4xl gap-7">
+          <Page className="gp-portal-page gp-resource-detail">
             <PageHeader
               title={resource.title}
               description={resource.description}
@@ -76,9 +81,25 @@ export function ResourceDetailScreen({ id }: { id: string }) {
               }
             />
             <MutationError error={mutation.error} />
-            <div className="flex flex-wrap items-center gap-3">
+            <div
+              className={`gp-resource-detail__hero${illustration.landscape ? '' : ' gp-resource-detail__hero--cutout'}`}
+            >
+              <Image
+                src={illustration.src}
+                alt={
+                  resource.format === 'guide'
+                    ? copy.resources.guideIllustration
+                    : copy.resources.illustrations[resource.category]
+                }
+                fill
+                sizes="(max-width: 767px) 100vw, 70vw"
+                priority
+              />
+            </div>
+            <div className="gp-resource-detail__meta">
               <Badge>{copy.resources.formats[resource.format]}</Badge>
-              <span className="text-sm text-tertiary">
+              <span className="inline-flex items-center gap-2">
+                <UiIcon name="clock" className="size-4" />
                 {copy.common.minutes(resource.readMinutes)}
               </span>
               {demoMode && (
@@ -87,7 +108,7 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                 </span>
               )}
             </div>
-            <Card className="p-6 sm:p-9">
+            <Card className="gp-resource-detail__body">
               <MarkdownContent value={resource.body} />
             </Card>
             <Button asChild variant="secondary" className="justify-self-start">
@@ -96,7 +117,7 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                 {copy.resources.explore}
               </Link>
             </Button>
-          </div>
+          </Page>
         );
       }}
     </QueryBoundary>

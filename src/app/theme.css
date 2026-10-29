@@ -86,6 +86,7 @@
   --radius-2xl: 1.25rem;
   --radius-3xl: 1.75rem;
   --radius-full: 9999px;
+  --radius-action: var(--radius-full);
 
   /* SHADOW */
   --shadow-xs: 0px 1px 2px rgba(10, 13, 18, 0.05);
@@ -2113,7 +2114,7 @@
     color-mix(in srgb, var(--color-primary) 6%, var(--color-transparent));
   --control-selected-border-width: 2px;
   --control-focus-outline-width: 3px;
-  --dashboard-sidebar-width: 17rem;
+  --dashboard-sidebar-width: 17.5rem;
   --dashboard-sidebar-radius: 2.25rem;
   --dashboard-sidebar-item-radius: var(--radius-2xl);
   --dashboard-sidebar-item-border: color-mix(
@@ -2286,24 +2287,38 @@
   --selection-border-opacity: 55%;
 }
 
-/* GentlePath brand roles: the supplied field guide owns the public identity. */
+/* GentlePath brand roles: the supplied iOS references own the visual identity. */
 :root {
-  --gp-forest: #294e45;
-  --gp-forest-hover: #1f4139;
-  --gp-on-forest: #fffefa;
-  --gp-sage: #dde8dc;
-  --gp-oat: #f7f6f0;
-  --gp-paper: #fffefa;
-  --gp-lilac: #e8e1f1;
-  --gp-plum: #655376;
-  --gp-sunlight: #f3d98e;
-  --gp-clay: #ead4c7;
-  --gp-ink: #253d36;
-  --gp-muted: #65716b;
-  --gp-border: #dce0d6;
-  --gp-leaf: #8fa78b;
+  --gp-forest: #174e46;
+  --gp-forest-hover: #103e37;
+  --gp-on-forest: #fffdf7;
+  --gp-sage: #e0ecd9;
+  --gp-oat: #faf8f2;
+  --gp-paper: #fffdf8;
+  --gp-lilac: #ece2f6;
+  --gp-plum: #67517d;
+  --gp-sunlight: #f8dc94;
+  --gp-clay: #f1ddcf;
+  --gp-ink: #123e39;
+  --gp-muted: #53625b;
+  --gp-border: #d9dfd5;
+  --gp-leaf: #78a18a;
   --gp-shadow: 0 6px 24px rgb(37 61 54 / 3.5%);
   --gp-menu-shadow: 0 14px 28px rgb(37 61 54 / 8%);
+  --dashboard-sidebar-bg: #174e46;
+  --dashboard-sidebar-foreground: #fffdf7;
+  --dashboard-sidebar-muted: #c4dcd0;
+  --dashboard-sidebar-divider: #3d6b5f;
+  --dashboard-sidebar-hover: #2b5e52;
+  --dashboard-sidebar-selected: #ece2f6;
+  --dashboard-sidebar-selected-foreground: #22483d;
+  --dashboard-sidebar-focus: #f8dc94;
+  --dashboard-sidebar-icon-sage: #d9e8d2;
+  --dashboard-sidebar-icon-lilac: #e8dcf4;
+  --dashboard-sidebar-icon-sunlight: #f8dc94;
+  --dashboard-sidebar-icon-clay: #efd9ce;
+  --dashboard-sidebar-icon-foreground: #285449;
+  --dashboard-sidebar-care-background: #285e51;
 }
 
 :root.dark-mode {
@@ -2323,4 +2338,7 @@
   --gp-leaf: #a4b69c;
   --gp-shadow: 0 6px 24px rgb(0 0 0 / 8%);
   --gp-menu-shadow: 0 14px 28px rgb(0 0 0 / 22%);
+  --dashboard-sidebar-bg: #113b33;
+  --dashboard-sidebar-hover: #204e42;
+  --dashboard-sidebar-care-background: #204e42;
 }

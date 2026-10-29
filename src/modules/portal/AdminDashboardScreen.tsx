@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Badge,
   Button,
@@ -15,74 +16,99 @@ import { canManagePlatform } from '@/services/auth/permissions';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { useAdminOverview } from './adminHooks';
 import { WeeklyActivity } from './components/WeeklyActivity';
+import styles from './Admin.module.css';
 
 export function AdminDashboardScreen() {
   const { session } = useSessionState();
   const superadmin = session && canManagePlatform(session.user.role);
   const query = useAdminOverview();
   return (
-    <div className="grid gap-7">
-      <PageHeader
-        title={superadmin ? copy.admin.superTitle : copy.admin.title}
-        description={copy.admin.description}
-        eyebrow={
-          superadmin
-            ? copy.navigation.role.superadmin
-            : copy.navigation.role.admin
-        }
-        action={
-          <Button asChild>
-            <Link href="/admin/blog/new">
-              <UiIcon name="plus" />
-              {copy.admin.create}
-            </Link>
-          </Button>
-        }
-      />
+    <div className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.heroBody}>
+          <PageHeader
+            title={superadmin ? copy.admin.superTitle : copy.admin.title}
+            description={copy.admin.description}
+            eyebrow={
+              superadmin
+                ? copy.navigation.role.superadmin
+                : copy.navigation.role.admin
+            }
+            action={
+              <Button asChild>
+                <Link href="/admin/blog/new">
+                  <UiIcon name="plus" />
+                  {copy.admin.create}
+                </Link>
+              </Button>
+            }
+          />
+        </div>
+        <div className={styles.heroArtwork} aria-hidden="true">
+          <Image
+            src="/gentlepath/path-landscape-v2.png"
+            alt={copy.common.decorativeAlt}
+            fill
+            sizes="(max-width: 540px) 100vw, (max-width: 1024px) 42vw, 34vw"
+            preload
+          />
+        </div>
+      </section>
       <QueryBoundary query={query}>
         {(data) => (
           <>
-            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <MetricCard
-                eyebrow={copy.admin.users}
-                value={String(data.userCount)}
-                caption={copy.admin.usersHint}
-                icon={<UiIcon name="user" />}
-              />
-              <MetricCard
-                eyebrow={copy.admin.active}
-                value={String(data.activeUserCount)}
-                caption={copy.admin.activeHint}
-                icon={<UiIcon name="check" />}
-              />
-              <MetricCard
-                eyebrow={copy.admin.published}
-                value={String(data.publishedBlogCount)}
-                caption={copy.admin.publishedHint}
-                icon={<UiIcon name="file" />}
-              />
-              <MetricCard
-                eyebrow={copy.admin.reports}
-                value={String(data.openReportCount)}
-                caption={copy.admin.reportsHint}
-                icon={<UiIcon name="warning" />}
-              />
+            <section className={styles.metrics}>
+              <div className={styles.metric} data-tone="sage">
+                <MetricCard
+                  eyebrow={copy.admin.users}
+                  value={String(data.userCount)}
+                  caption={copy.admin.usersHint}
+                  icon={<UiIcon name="user" />}
+                />
+              </div>
+              <div className={styles.metric} data-tone="lilac">
+                <MetricCard
+                  eyebrow={copy.admin.active}
+                  value={String(data.activeUserCount)}
+                  caption={copy.admin.activeHint}
+                  icon={<UiIcon name="check" />}
+                />
+              </div>
+              <div className={styles.metric} data-tone="sunlight">
+                <MetricCard
+                  eyebrow={copy.admin.published}
+                  value={String(data.publishedBlogCount)}
+                  caption={copy.admin.publishedHint}
+                  icon={<UiIcon name="file" />}
+                />
+              </div>
+              <div className={styles.metric} data-tone="clay">
+                <MetricCard
+                  eyebrow={copy.admin.reports}
+                  value={String(data.openReportCount)}
+                  caption={copy.admin.reportsHint}
+                  icon={<UiIcon name="warning" />}
+                />
+              </div>
             </section>
-            <div className="grid gap-5 xl:grid-cols-[1.3fr_1fr]">
-              <Card className="p-6">
+            <div className={styles.insights}>
+              <Card className={styles.chartPanel}>
                 <WeeklyActivity
                   values={data.weeklyRegistrations}
                   title={copy.admin.growth}
                   hint={copy.admin.growthHint}
                 />
               </Card>
-              <Card className="grid content-start gap-5 p-6">
-                <h2 className="m-0 font-display text-xl">
-                  {copy.admin.roleBreakdown}
-                </h2>
+              <Card className={styles.rolesPanel}>
+                <div className={styles.panelHeading}>
+                  <span className={styles.roundIcon} data-tone="lilac">
+                    <UiIcon name="user" />
+                  </span>
+                  <h2>{copy.admin.roleBreakdown}</h2>
+                </div>
                 {Object.entries(data.roleCounts).map(([role, count]) => (
-                  <div key={role} className="grid gap-2">
-                    <div className="flex items-center justify-between gap-3 text-sm">
+                  <div key={role} className={styles.role} data-role={role}>
+                    <div className={styles.roleLabel}>
                       <span>
                         {
                           copy.navigation.role[
@@ -94,9 +120,9 @@ export function AdminDashboardScreen() {
                         {count}
                       </strong>
                     </div>
-                    <div className="h-2 rounded-full bg-secondary">
+                    <div className={styles.roleTrack}>
                       <div
-                        className="h-full rounded-full bg-brand-solid/70"
+                        className={styles.roleFill}
                         style={{
                           width: `${(count / Math.max(1, data.userCount)) * 100}%`,
                         }}
@@ -106,42 +132,30 @@ export function AdminDashboardScreen() {
                 ))}
               </Card>
             </div>
-            <section className="grid gap-5 md:grid-cols-2">
-              <Card className="grid content-start gap-4 p-6">
-                <UiIcon name="file" className="size-7 text-brand-secondary" />
-                <h2 className="m-0 font-display text-2xl">
-                  {copy.admin.content}
-                </h2>
-                <p className="m-0 text-sm leading-7 text-secondary">
-                  {copy.admin.contentHint}
-                </p>
-                <Badge className="justify-self-start">
-                  {copy.admin.drafts(data.draftBlogCount)}
-                </Badge>
-                <Button
-                  asChild
-                  variant="secondary"
-                  className="mt-2 justify-self-start"
-                >
+            <section className={styles.workAreas}>
+              <Card className={styles.workCard}>
+                <div className={styles.workCardTop}>
+                  <span className={styles.roundIcon} data-tone="lilac">
+                    <UiIcon name="file" />
+                  </span>
+                  <Badge>{copy.admin.drafts(data.draftBlogCount)}</Badge>
+                </div>
+                <h2>{copy.admin.content}</h2>
+                <p>{copy.admin.contentHint}</p>
+                <Button asChild variant="secondary">
                   <Link href="/admin/blog">
                     {copy.navigation.publishing}
                     <UiIcon name="arrowRight" />
                   </Link>
                 </Button>
               </Card>
-              <Card className="grid content-start gap-4 p-6">
-                <UiIcon name="lock" className="size-7 text-brand-secondary" />
-                <h2 className="m-0 font-display text-2xl">
-                  {copy.admin.moderation}
-                </h2>
-                <p className="m-0 text-sm leading-7 text-secondary">
-                  {copy.admin.moderationHint}
-                </p>
-                <Button
-                  asChild
-                  variant="secondary"
-                  className="mt-2 justify-self-start"
-                >
+              <Card className={styles.workCard} data-tone="sage">
+                <span className={styles.roundIcon}>
+                  <UiIcon name="lock" />
+                </span>
+                <h2>{copy.admin.moderation}</h2>
+                <p>{copy.admin.moderationHint}</p>
+                <Button asChild variant="secondary">
                   <Link href="/admin/moderation">
                     {copy.admin.review}
                     <UiIcon name="arrowRight" />
@@ -150,14 +164,10 @@ export function AdminDashboardScreen() {
               </Card>
             </section>
             {superadmin && (
-              <Card className="flex flex-wrap items-center justify-between gap-5 bg-brand-primary p-6">
-                <div className="grid gap-2">
-                  <h2 className="m-0 font-display text-xl">
-                    {copy.admin.settings}
-                  </h2>
-                  <p className="m-0 text-sm text-secondary">
-                    {copy.admin.settingsHint}
-                  </p>
+              <Card className={styles.platformStrip}>
+                <div>
+                  <h2>{copy.admin.settings}</h2>
+                  <p>{copy.admin.settingsHint}</p>
                 </div>
                 <Button asChild>
                   <Link href="/admin/settings">
@@ -170,13 +180,13 @@ export function AdminDashboardScreen() {
           </>
         )}
       </QueryBoundary>
-      <aside className="flex items-start gap-3 rounded-2xl border border-secondary p-5">
-        <UiIcon name="lock" className="mt-0.5 shrink-0 text-brand-secondary" />
+      <aside className={styles.privacyNote}>
+        <span className={styles.roundIcon} data-tone="clay">
+          <UiIcon name="lock" />
+        </span>
         <div>
-          <h2 className="m-0 text-sm font-medium">{copy.admin.privacyTitle}</h2>
-          <p className="mt-1 mb-0 text-sm leading-6 text-secondary">
-            {copy.admin.privacyHint}
-          </p>
+          <h2>{copy.admin.privacyTitle}</h2>
+          <p>{copy.admin.privacyHint}</p>
         </div>
       </aside>
     </div>

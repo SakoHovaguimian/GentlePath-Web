@@ -33,7 +33,7 @@ export function AuthCardShell({
   variant = 'login',
 }: AuthCardShellProps) {
   return (
-    <main className="gp-auth">
+    <main className="gp-auth" data-variant={variant}>
       <aside className="gp-auth-story">
         <Link
           href="/"
@@ -43,6 +43,16 @@ export function AuthCardShell({
           <GentlePathBrand />
         </Link>
         <div className="gp-auth-story-content">
+          <div className="gp-auth-story-art">
+            <Image
+              src="/gentlepath/path-landscape-v2.png"
+              width={1536}
+              height={1024}
+              alt={gentlePathLandingStrings.hero.artAlt}
+              sizes="(max-width: 900px) 1px, 48vw"
+              preload
+            />
+          </div>
           <p className="gp-eyebrow">{gentlePathPortalStrings.auth.eyebrow}</p>
           <h2>
             {variant === 'signup'
@@ -54,14 +64,6 @@ export function AuthCardShell({
               ? gentlePathAuthStrings.signupStoryDescription
               : gentlePathAuthStrings.loginStoryDescription}
           </p>
-          <Image
-            src="/gentlepath/parent-and-child.png"
-            width={1280}
-            height={1280}
-            alt={gentlePathAuthStrings.storyArtAlt}
-            sizes="(max-width: 900px) 1px, 42vw"
-            priority
-          />
         </div>
         <p className="gp-auth-story-trust">
           {gentlePathPortalStrings.auth.trust}
@@ -82,6 +84,15 @@ export function AuthCardShell({
         >
           <GentlePathBrand />
         </Link>
+        <div className="gp-auth-mobile-art" aria-hidden="true">
+          <Image
+            src="/gentlepath/path-landscape-v2.png"
+            width={1536}
+            height={1024}
+            alt={gentlePathLandingStrings.hero.artAlt}
+            sizes="(max-width: 900px) 90vw, 1px"
+          />
+        </div>
         <div className="gp-auth-card">
           <div className="gp-auth-heading">
             <p className="gp-eyebrow">{badge}</p>

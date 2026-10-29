@@ -32,6 +32,7 @@ import { useBlogMutations } from '../hooks';
 import { BlogArticleFields } from './BlogArticleFields';
 import { BlogArticleReader } from './BlogArticleReader';
 import styles from '../Blog.module.css';
+import adminStyles from '../../portal/Admin.module.css';
 
 const empty = '';
 const articleInput = (article: BlogArticle): BlogMutationInput => ({
@@ -234,34 +235,41 @@ export function BlogEditor({
     revision: article?.revision || 1,
   };
   return (
-    <Page aria-busy={busy}>
-      <PageHeader
-        title={article ? copy.editTitle : copy.newTitle}
-        description={copy.formDescription}
-        onNavigate={(href) => void navigate(href)}
-        breadcrumbs={[
-          { label: copy.adminTitle, href: '/admin/blog' },
-          { label: article ? copy.editTitle : copy.newTitle },
-        ]}
-        meta={
-          <Badge
-            intent={article?.status === 'published' ? 'success' : 'neutral'}
-            dot
-          >
-            {copy.statuses[article?.status || 'draft']}
-          </Badge>
-        }
-        action={
-          <Button
-            variant="secondary"
-            disabled={busy}
-            onClick={() => setPreviewOpen(true)}
-          >
-            <UiIcon name="file" />
-            {copy.preview}
-          </Button>
-        }
-      />
+    <Page aria-busy={busy} className={adminStyles.editor}>
+      <div className={adminStyles.intro} data-tone="lilac">
+        <PageHeader
+          title={article ? copy.editTitle : copy.newTitle}
+          description={copy.formDescription}
+          icon={
+            <span className={adminStyles.roundIcon} data-tone="lilac">
+              <UiIcon name="file" />
+            </span>
+          }
+          onNavigate={(href) => void navigate(href)}
+          breadcrumbs={[
+            { label: copy.adminTitle, href: '/admin/blog' },
+            { label: article ? copy.editTitle : copy.newTitle },
+          ]}
+          meta={
+            <Badge
+              intent={article?.status === 'published' ? 'success' : 'neutral'}
+              dot
+            >
+              {copy.statuses[article?.status || 'draft']}
+            </Badge>
+          }
+          action={
+            <Button
+              variant="secondary"
+              disabled={busy}
+              onClick={() => setPreviewOpen(true)}
+            >
+              <UiIcon name="file" />
+              {copy.preview}
+            </Button>
+          }
+        />
+      </div>
       <form
         noValidate
         className="grid min-w-0 gap-8"

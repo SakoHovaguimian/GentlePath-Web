@@ -7539,7 +7539,7 @@ export const gentlePathDemoStrings = {
 
 export const gentlePathBlogStrings = {
   decorativeAlt: '',
-  publicTitle: 'A Little Clarity, A Lot Of Care',
+  publicTitle: 'Articles & Stories',
   publicEyebrow: 'The GentlePath Journal',
   publicDescription:
     'Thoughtful reads, lived experiences, and practical ideas for your family’s own path.',
@@ -7794,12 +7794,20 @@ export const gentlePathPortalStrings = {
     public: 'Visit GentlePath',
     workspace: 'Your Family Space',
     adminWorkspace: 'Platform Workspace',
+    sidebarTitle: 'A Little Space For You',
+    sidebarDescription: 'At your family’s pace. Every step of the way.',
+    familyGroup: 'Your Family',
+    adminGroup: 'Your Workspace',
+    exploreGroup: 'Explore',
     demo: 'Demo Workspace',
     demoHint: 'Sample data. Changes stay in this demo.',
     role: { user: 'User', admin: 'Admin', superadmin: 'SuperAdmin' },
   },
   common: {
     decorativeAlt: '',
+    // @preserve-case: External account names retain the person's spelling.
+    personName: (firstName: string, lastName: string) =>
+      `${firstName} ${lastName}`,
     cancel: 'Cancel',
     save: 'Save Changes',
     edit: 'Edit',
@@ -7840,6 +7848,7 @@ export const gentlePathPortalStrings = {
     description:
       'A little space for your family, your reflections, and the next small step.',
     newEntry: 'Write A Reflection',
+    toolsTitle: 'For Your Family',
     heroTitle: 'Your Path Is Your Own.',
     heroDescription:
       'Some days are for moving forward. Others are for taking a breath. Both belong here.',
@@ -7871,6 +7880,9 @@ export const gentlePathPortalStrings = {
   },
   journal: {
     title: 'My Journal',
+    bannerTitle: 'Small Moments Matter',
+    bannerDescription: 'Write what feels worth keeping.',
+    quoteDescription: 'There’s no right way to reflect.',
     description:
       'A private place for the everyday moments, big feelings, and little things worth remembering.',
     create: 'New Reflection',
@@ -7907,6 +7919,13 @@ export const gentlePathPortalStrings = {
   },
   resources: {
     title: 'A Little Clarity, Close By',
+    collectionsTitle: 'Browse Collections',
+    collectionAction: 'Explore Collection',
+    // @sentence-case: Supporting descriptions for resource collection cards.
+    collectionHints: {
+      everyday: 'Ideas for familiar moments.',
+      communication: 'Different ways to connect.',
+    },
     description:
       'Practical reads and thoughtful tools for the questions that come with family life.',
     savedTitle: 'Your Saved Resources',
@@ -7924,6 +7943,9 @@ export const gentlePathPortalStrings = {
     detailHint:
       'A practical starting point for your family. Adapt these ideas to your own needs.',
     sampleHint: 'Demo resource · illustrative reading material',
+    // @sentence-case: Descriptive alternative text for the book artwork.
+    guideIllustration:
+      'An open book and notebook among leafy plants, lavender flowers, and sunlight',
     categories: {
       everyday: 'Everyday Life',
       education: 'School And Learning',
@@ -7933,14 +7955,19 @@ export const gentlePathPortalStrings = {
     formats: { guide: 'Guide', article: 'Article', toolkit: 'Toolkit' },
     // @sentence-case: Descriptive alternative text for resource illustrations.
     illustrations: {
-      everyday: 'A small sprout growing beside stepping stones',
-      education: 'A folder holding helpful papers and leaves',
-      communication: 'A parent listening to their child',
+      everyday:
+        'A winding path through green hills and leafy plants toward sunlight',
+      education: 'An open book and notebook among leafy plants and sunlight',
+      communication:
+        'Sage and lavender conversation bubbles beside a leafy branch',
       wellbeing: 'Caregivers sharing a conversation',
     },
   },
   family: {
     title: 'Your Family, Your Way',
+    bannerTitle: 'Keep Their Story Close',
+    bannerDescription:
+      'The small details that make your child who they are, together in one private place.',
     description:
       'A space for each child and the details that help you care in your own way.',
     create: 'Add A Child',
@@ -7966,6 +7993,9 @@ export const gentlePathPortalStrings = {
   },
   milestones: {
     title: 'Every Small Step Matters',
+    bannerTitle: 'Growth Has Its Own Rhythm',
+    bannerDescription:
+      'Make room for the things you notice, in the moments that feel right.',
     description:
       'Notice moments of connection and growth. These observations are personal reflections, never a checklist or assessment.',
     childLabel: 'Notice Steps For',

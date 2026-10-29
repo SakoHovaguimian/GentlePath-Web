@@ -11,7 +11,7 @@ export function LandingHero() {
     >
       <div className="gp-hero-copy">
         <p className="gp-eyebrow">
-          <span className="gp-eyebrow-line" aria-hidden="true" />
+          <UiIcon name="leaf" />
           {copy.hero.eyebrowLabel}
         </p>
         <h1 id="gentlepath-hero-title">
@@ -39,22 +39,24 @@ export function LandingHero() {
         </div>
       </div>
       <figure className="gp-hero-art">
-        <div className="gp-hero-art-backdrop" aria-hidden="true" />
         <Image
-          src="/gentlepath/winding-path.png"
-          width={1280}
-          height={1280}
+          src="/gentlepath/path-landscape-v2.png"
+          width={1536}
+          height={1024}
           alt={copy.hero.artAlt}
           sizes="(max-width: 760px) 94vw, 49vw"
-          priority
+          preload
         />
         <figcaption>
-          <span aria-hidden="true" />
+          <UiIcon name="sparkles" />
           {copy.hero.artCaption}
         </figcaption>
       </figure>
       <div className="gp-hero-bottom">
-        <p>{copy.hero.bottomLabel}</p>
+        <div>
+          <UiIcon name="leaf" />
+          <p>{copy.hero.bottomLabel}</p>
+        </div>
         <span>{copy.hero.bottomDescription}</span>
       </div>
     </section>

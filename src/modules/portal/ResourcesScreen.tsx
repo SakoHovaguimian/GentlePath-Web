@@ -5,8 +5,10 @@ import {
   Button,
   DirectoryFilters,
   EmptyState,
+  Page,
   PageHeader,
   QueryBoundary,
+  UiIcon,
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
@@ -19,6 +21,9 @@ import {
   collectionOffset,
 } from './components/CollectionPagination';
 import type { Resource } from './models/resource';
+import { PortalBanner } from './components/PortalBanner';
+import { resourceArtwork } from './components/resourceArtwork';
+import './styles/portal.css';
 
 export function ResourcesScreen({
   savedOnly = false,
@@ -43,7 +48,7 @@ export function ResourcesScreen({
     }
   }
   return (
-    <div className="grid gap-7">
+    <Page className="gp-portal-page gp-resources">
       <PageHeader
         title={savedOnly ? copy.resources.savedTitle : copy.resources.title}
         description={
@@ -84,6 +89,39 @@ export function ResourcesScreen({
           allStatuses: copy.common.allCategories,
         }}
       />
+      {!savedOnly && !directory.query && !directory.status && (
+        <section className="gp-resource-collections">
+          <div className="gp-portal-section-heading">
+            <h2>{copy.resources.collectionsTitle}</h2>
+          </div>
+          <div className="gp-resource-collections__grid">
+            {(['everyday', 'communication'] as const).map((category) => (
+              <PortalBanner
+                key={category}
+                title={copy.resources.categories[category]}
+                headingLevel="h3"
+                description={copy.resources.collectionHints[category]}
+                image={resourceArtwork[category].src}
+                tone={category === 'communication' ? 'lilac' : 'sage'}
+                landscape={resourceArtwork[category].landscape}
+                action={
+                  <Button
+                    onClick={() =>
+                      directory.update({
+                        status: category,
+                        offset: undefined,
+                      })
+                    }
+                  >
+                    {copy.resources.collectionAction}
+                    <UiIcon name="arrowRight" className="size-4" />
+                  </Button>
+                }
+              />
+            ))}
+          </div>
+        </section>
+      )}
       <MutationError error={mutation.error} />
       <QueryBoundary query={query}>
         {(resources) => {
@@ -98,7 +136,7 @@ export function ResourcesScreen({
           const offset = collectionOffset(directory.offset, filtered.length);
           return filtered.length ? (
             <>
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <div className="gp-resource-grid">
                 {filtered.slice(offset, offset + 9).map((resource) => (
                   <ResourceCard
                     key={resource.id}
@@ -143,6 +181,6 @@ export function ResourcesScreen({
           );
         }}
       </QueryBoundary>
-    </div>
+    </Page>
   );
 }

@@ -38,6 +38,8 @@ DEMO_MODE=true npm start
 npm run check:strings
 ```
 
+Use `npm run dev` for local HTTP browsing. `npm start` enables production `Secure` cookies; Safari requires HTTPS to retain them, including demo sessions. See [demo sign-in troubleshooting](docs/DEMO_MODE.md).
+
 The repository contains no tests by instruction. `check` runs ESLint with zero warnings allowed, route-aware TypeScript, Next.js editor plugin diagnostics, display-string checks, semantic-color checks, shared-control checks, and Tailwind canonical-class checks. Keep the npm lockfile committed.
 
 ## Find your way around

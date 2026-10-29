@@ -4,9 +4,11 @@ import { useRef, useState } from 'react';
 import {
   Button,
   Card,
+  FormActions,
   PageHeader,
   QueryBoundary,
   Switch,
+  UiIcon,
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
@@ -14,6 +16,7 @@ import { gentlePathPortalStrings as copy } from '@/strings';
 import type { PlatformSettings } from './models/platformSettings';
 import { usePlatformSettings, useSavePlatformSettings } from './adminHooks';
 import { MutationError } from './components/MutationError';
+import styles from './Admin.module.css';
 
 function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
   const [settings, setSettings] = useState(initial);
@@ -27,27 +30,35 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
       key: 'communityEnabled' as const,
       label: copy.system.community,
       description: copy.system.communityDescription,
+      icon: 'mail' as const,
+      tone: 'sage',
     },
     {
       key: 'registrationsEnabled' as const,
       label: copy.system.registrations,
       description: copy.system.registrationsDescription,
+      icon: 'user' as const,
+      tone: 'lilac',
     },
     {
       key: 'maintenanceMode' as const,
       label: copy.system.maintenance,
       description: copy.system.maintenanceDescription,
+      icon: 'settings' as const,
+      tone: 'sunlight',
     },
     {
       key: 'resourceReviewRequired' as const,
       label: copy.system.review,
       description: copy.system.reviewDescription,
+      icon: 'lock' as const,
+      tone: 'clay',
     },
   ];
   return (
     <form
       noValidate
-      className="grid gap-5"
+      className={styles.settingsForm}
       onSubmit={async (event) => {
         event.preventDefault();
         if (
@@ -73,11 +84,21 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
         }
       }}
     >
-      <Card className="grid gap-5 p-6 sm:p-8">
-        <h2 className="m-0 font-display text-xl">{copy.system.general}</h2>
-        <div className="divide-y divide-secondary">
+      <Card className={`${styles.settingsPanel} p-0 sm:p-0`}>
+        <div
+          className={`${styles.settingsPanelHeading} ${styles.panelHeading}`}
+        >
+          <span className={styles.roundIcon} data-tone="sunlight">
+            <UiIcon name="settings" />
+          </span>
+          <h2>{copy.system.general}</h2>
+        </div>
+        <div className={styles.settingsRows}>
           {fields.map((field) => (
-            <div key={field.key} className="py-5">
+            <div key={field.key} className={styles.settingRow}>
+              <span className={styles.roundIcon} data-tone={field.tone}>
+                <UiIcon name={field.icon} />
+              </span>
               <Switch
                 label={field.label}
                 description={field.description}
@@ -98,7 +119,7 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
         </div>
       </Card>
       <MutationError error={mutation.error} />
-      <div className="flex justify-end">
+      <FormActions sticky={false}>
         <Button
           type="submit"
           loading={mutation.isPending}
@@ -106,19 +127,26 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
         >
           {copy.common.save}
         </Button>
-      </div>
+      </FormActions>
     </form>
   );
 }
 export function PlatformSettingsScreen() {
   const query = usePlatformSettings();
   return (
-    <div className="grid max-w-4xl gap-7">
-      <PageHeader
-        title={copy.system.title}
-        description={copy.system.description}
-        eyebrow={copy.navigation.role.superadmin}
-      />
+    <div className={`${styles.page} max-w-5xl`}>
+      <div className={styles.intro} data-tone="sunlight">
+        <PageHeader
+          title={copy.system.title}
+          description={copy.system.description}
+          eyebrow={copy.navigation.role.superadmin}
+          icon={
+            <span className={styles.roundIcon}>
+              <UiIcon name="settings" />
+            </span>
+          }
+        />
+      </div>
       <QueryBoundary query={query}>
         {(settings) => <PlatformSettingsForm initial={settings} />}
       </QueryBoundary>

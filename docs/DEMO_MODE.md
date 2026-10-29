@@ -2,6 +2,8 @@
 
 Start with `DEMO_MODE=true npm run dev`, or set `DEMO_MODE=true` in `.env.local` and restart. The server environment supplies the default. An unavailable live integration never silently falls back to demo data.
 
+For local HTTP browsing, use `npm run dev`. `npm start` runs in production mode and sets `Secure` session and demo preference cookies, even with `DEMO_MODE=true`. Safari rejects those cookies on `http://localhost`, so a successful sign-in can return immediately to the login screen without showing an error. Stop the production server, start `DEMO_MODE=true npm run dev`, and reload the page. To verify the production server in Safari, serve it over trusted HTTPS; keep production cookies secure.
+
 ## Server Runtime And Developer Settings
 
 Open `/dev-settings` after signing in. Controls are available in development or on a server explicitly started with `DEMO_MODE=true`. They are unavailable on a production live server, regardless of request cookies. The existing `/dev-settings/components` route remains the shared component reference.

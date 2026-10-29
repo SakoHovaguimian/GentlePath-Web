@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 const numericYear = 'numeric';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
@@ -9,7 +9,9 @@ import {
   Button,
   Card,
   EmptyState,
+  IconButton,
   Input,
+  Page,
   PageHeader,
   QueryBoundary,
   UiIcon,
@@ -20,10 +22,12 @@ import { useChildren, useDeleteJournal, useJournals } from './hooks';
 import type { JournalEntry } from './models/journalEntry';
 import { JournalEditor } from './components/JournalEditor';
 import { MutationError } from './components/MutationError';
+import { PortalBanner } from './components/PortalBanner';
 import {
   CollectionPagination,
   collectionOffset,
 } from './components/CollectionPagination';
+import './styles/portal.css';
 
 export function JournalScreen() {
   const query = useJournals();
@@ -32,6 +36,7 @@ export function JournalScreen() {
   const params = useSearchParams();
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const searchRef = useRef<HTMLInputElement>(null);
   const [offset, setOffset] = useState(0);
   const [editor, setEditor] = useState<JournalEntry | 'new' | null>(() =>
     params.get('new') === 'true' ? 'new' : null,
@@ -64,7 +69,7 @@ export function JournalScreen() {
     }
   }
   return (
-    <div className="grid gap-7">
+    <Page className="gp-portal-page gp-journal">
       <PageHeader
         title={copy.journal.title}
         description={copy.journal.description}
@@ -76,9 +81,17 @@ export function JournalScreen() {
           </Button>
         }
       />
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="min-w-0 flex-1 md:max-w-lg">
+      <PortalBanner
+        title={copy.journal.bannerTitle}
+        description={copy.journal.bannerDescription}
+        image="/gentlepath/reading-garden-v2.png"
+        tone="lilac"
+        landscape
+      />
+      <div className="gp-journal-toolbar">
+        <div className="gp-journal-search">
           <Input
+            ref={searchRef}
             type="search"
             aria-label={copy.common.search}
             value={search}
@@ -89,8 +102,22 @@ export function JournalScreen() {
             placeholder={copy.journal.searchPlaceholder}
             leadingIcon={<UiIcon name="search" />}
           />
+          {search && (
+            <IconButton
+              className="gp-journal-search__clear"
+              variant="ghost"
+              label={copy.common.clear}
+              onClick={() => {
+                setSearch('');
+                setOffset(0);
+                searchRef.current?.focus();
+              }}
+            >
+              <UiIcon name="close" className="size-4" />
+            </IconButton>
+          )}
         </div>
-        <Badge>
+        <Badge intent="brand">
           <UiIcon name="lock" className="size-3.5" />
           {copy.common.private}
         </Badge>
@@ -106,9 +133,13 @@ export function JournalScreen() {
           const start = collectionOffset(offset, filtered.length);
           return filtered.length ? (
             <>
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <div className="gp-journal-grid">
                 {filtered.slice(start, start + 9).map((entry) => (
-                  <Card key={entry.id} className="flex flex-col gap-4 p-6">
+                  <Card
+                    key={entry.id}
+                    className="gp-journal-card"
+                    data-emotion={entry.emotion}
+                  >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="text-xs text-tertiary">
                         {new Date(entry.createdAt).toLocaleDateString('en-US', {
@@ -117,21 +148,27 @@ export function JournalScreen() {
                           year: numericYear,
                         })}
                       </span>
-                      <Badge>{copy.journal.emotions[entry.emotion]}</Badge>
+                      <UiIcon name="lock" className="size-4 text-tertiary" />
                     </div>
-                    <h2 className="m-0 font-display text-xl">{entry.title}</h2>
+                    <div className="gp-journal-card__tags">
+                      {entry.childId && (
+                        <span className="gp-child-tag">
+                          <UiIcon name="user" className="size-3.5" />
+                          {
+                            children.data?.find(
+                              (child) => child.id === entry.childId,
+                            )?.name
+                          }
+                        </span>
+                      )}
+                      <span className="gp-emotion" data-emotion={entry.emotion}>
+                        {copy.journal.emotions[entry.emotion]}
+                      </span>
+                    </div>
+                    <h2>{entry.title}</h2>
                     <p className="m-0 line-clamp-4 flex-1 text-sm leading-7 whitespace-pre-line text-secondary">
                       {entry.body}
                     </p>
-                    {entry.childId && (
-                      <span className="text-xs text-tertiary">
-                        {
-                          children.data?.find(
-                            (child) => child.id === entry.childId,
-                          )?.name
-                        }
-                      </span>
-                    )}
                     <div className="mt-2 flex justify-between gap-2 border-t border-secondary pt-3">
                       <Button variant="ghost" onClick={() => setEditor(entry)}>
                         {copy.common.edit}
@@ -185,6 +222,10 @@ export function JournalScreen() {
           );
         }}
       </QueryBoundary>
+      <p className="gp-portal-footnote">
+        <UiIcon name="leaf" className="size-5" />
+        {copy.journal.quoteDescription}
+      </p>
       {selected && (
         <JournalEditor
           key={selected === 'new' ? 'new' : selected.id}
@@ -193,6 +234,6 @@ export function JournalScreen() {
           onClose={close}
         />
       )}
-    </div>
+    </Page>
   );
 }

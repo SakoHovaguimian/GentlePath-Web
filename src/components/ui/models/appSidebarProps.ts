@@ -10,4 +10,6 @@ export interface AppSidebarProps {
   activePath?: string;
   contextSlot?: ReactNode;
   brandSlot?: ReactNode;
+  navigationLabel?: string;
+  supportSlot?: ReactNode;
 }

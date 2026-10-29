@@ -82,6 +82,7 @@ export function portalNavigation(
       href: '/blog',
       label: copy.navigation.blog,
       icon: <UiIcon name="globe" />,
+      sectionLabel: copy.navigation.exploreGroup,
     },
     {
       href: '/settings/appearance',

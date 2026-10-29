@@ -36,7 +36,7 @@ export function MobileNavigationMenu(props: AppSidebarProps) {
         <Dialog.Content
           aria-describedby={undefined}
           data-side="left"
-          className="ui-sheet ui-mobile-navigation fixed inset-0 z-70 h-dvh w-full overflow-y-auto overscroll-y-contain bg-(--dashboard-shell-panel-solid) outline-none lg:hidden"
+          className="ui-sheet ui-mobile-navigation fixed inset-0 z-70 h-dvh w-full overflow-hidden overscroll-y-contain bg-(--dashboard-sidebar-bg) outline-none lg:hidden"
           onCloseAutoFocus={(event) => {
             if (window.matchMedia('(min-width: 64rem)').matches) {
               event.preventDefault();

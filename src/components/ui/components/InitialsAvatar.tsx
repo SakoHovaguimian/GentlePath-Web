@@ -7,7 +7,7 @@ export function InitialsAvatar({ name }: { name: string }) {
   return (
     <span
       aria-hidden="true"
-      className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-sm font-semibold text-brand-secondary"
+      className="ui-avatar inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-sm font-semibold text-brand-secondary"
     >
       {initials}
     </span>

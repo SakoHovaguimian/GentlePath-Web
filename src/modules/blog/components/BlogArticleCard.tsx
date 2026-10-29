@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { UiIcon } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
 import type { BlogArticle } from '../models/blogArticle';
 import { blogCoverAssets } from '../models/blogCover';
@@ -15,7 +16,7 @@ export function BlogArticleCard({
 }) {
   const Heading = headingLevel;
   return (
-    <article className={styles.articleCard}>
+    <article className={styles.articleCard} data-cover={article.cover}>
       <Link
         href={`/blog/${article.slug}`}
         className={styles.cardImage}
@@ -28,7 +29,7 @@ export function BlogArticleCard({
           alt={copy.decorativeAlt}
           width={640}
           height={480}
-          sizes="(max-width: 700px) 90vw, (max-width: 1000px) 45vw, 30vw"
+          sizes="(max-width: 600px) 32vw, (max-width: 1000px) 28vw, 19vw"
         />
       </Link>
       <div className={styles.cardCopy}>
@@ -42,6 +43,10 @@ export function BlogArticleCard({
           <BlogDate value={article.publishedAt || article.updatedAt} />
         </div>
       </div>
+      <Link href={`/blog/${article.slug}`} className={styles.readLink}>
+        {copy.readArticle}
+        <UiIcon name="arrowRight" />
+      </Link>
     </article>
   );
 }

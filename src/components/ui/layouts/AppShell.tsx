@@ -56,6 +56,8 @@ export function AppShell({
   navigationItems,
   workspaceLabel,
   brandSlot,
+  navigationLabel,
+  supportSlot,
 }: PropsWithChildren<{
   session: AppSession;
   utilitySlot?: ReactNode;
@@ -67,6 +69,8 @@ export function AppShell({
   navigationItems?: AppSidebarItem[];
   workspaceLabel?: string;
   brandSlot?: ReactNode;
+  navigationLabel?: string;
+  supportSlot?: ReactNode;
 }>) {
   const items = (navigationItems ?? navigation).map((item) => ({
     ...item,
@@ -84,6 +88,8 @@ export function AppShell({
     activePath,
     contextSlot,
     brandSlot,
+    navigationLabel,
+    supportSlot,
   };
   return (
     <div className="ui-app-shell min-h-dvh bg-(--dashboard-shell-bg) lg:ps-(--dashboard-sidebar-width)">
@@ -95,7 +101,7 @@ export function AppShell({
       </a>
       <AppSidebar {...sidebar} />
       <div className="min-w-0">
-        <header className="top-0 z-30 border-b border-(--dashboard-shell-border) bg-(--dashboard-shell-topbar) backdrop-blur lg:sticky">
+        <header className="ui-shell-topbar top-0 z-30 border-b border-(--dashboard-shell-border) bg-(--dashboard-shell-topbar) backdrop-blur lg:sticky">
           <div className="mx-auto flex min-h-16 max-w-352 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-10">
             <div className="flex min-w-0 items-center gap-3">
               <MobileNavigationMenu

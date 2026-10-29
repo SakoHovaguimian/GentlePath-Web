@@ -17,18 +17,19 @@ export function AppSidebarContent({
   contextSlot,
   headerAction,
   brandSlot,
+  navigationLabel,
+  supportSlot,
 }: AppSidebarProps & { headerAction?: ReactNode }) {
   const homeHref = '/dashboard';
   const displayName =
     `${session.user.firstName} ${session.user.lastName}`.trim();
   return (
-    <div className="flex min-h-full flex-col">
-      <div className="flex flex-1 flex-col items-stretch gap-8 pt-10 pb-6">
+    <div className="ui-sidebar-content flex h-full min-h-0 flex-col">
+      <div className="flex min-h-0 flex-1 flex-col items-stretch gap-6 pt-8 pb-4">
         <div
           className={cn(
-            'flex items-center justify-between gap-3 px-8',
-            headerAction &&
-              'sticky top-0 z-10 bg-(--dashboard-shell-panel-solid)',
+            'ui-sidebar-brand flex shrink-0 items-center justify-between gap-3 px-6',
+            headerAction && 'sticky top-0 z-10',
           )}
         >
           <a
@@ -57,16 +58,22 @@ export function AppSidebarContent({
         </div>
         <nav
           aria-label={strings.ui.appShell.navigation}
-          className="mx-4 flex flex-1 flex-col gap-2"
+          className="ui-sidebar-navigation mx-3 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-1 pb-1"
         >
+          {navigationLabel && (
+            <p className="ui-sidebar-section-label">{navigationLabel}</p>
+          )}
           <SidebarLinks items={items} onNavigate={onNavigate} />
           {contextSlot && <div className="w-full min-w-0">{contextSlot}</div>}
         </nav>
+        {supportSlot && (
+          <div className="ui-sidebar-support mx-4 shrink-0">{supportSlot}</div>
+        )}
       </div>
-      <div className="mt-auto border-t border-secondary px-8 pt-3 pb-6">
+      <div className="ui-sidebar-account mt-auto shrink-0 px-5 pt-3 pb-5">
         <Button
           variant="ghost"
-          className="-mx-4 h-auto w-[calc(100%+2rem)] min-w-0 justify-start px-4 py-3 text-left whitespace-nowrap"
+          className="ui-sidebar-profile -mx-2 h-auto w-[calc(100%+1rem)] min-w-0 justify-start px-2 py-2 text-left whitespace-nowrap"
           aria-label={strings.designSystem.profileLink}
           aria-current={activePath === '/profile' ? 'page' : undefined}
           onClick={() =>

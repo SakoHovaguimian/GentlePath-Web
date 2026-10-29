@@ -74,6 +74,12 @@ Firebase REST authentication/refresh, backend provisioning and authorization, So
 
 The live backend must implement [BACKEND_CONTRACT.md](BACKEND_CONTRACT.md) and [REALTIME.md](REALTIME.md). Demo state is process-local and resets on restart; it is not durable or shared across replicas. Production rollout should verify these integrations in a configured staging environment, including multi-instance refresh behavior and notification cleanup.
 
+## Safari Local Demo Sign-In — October 28, 2026
+
+- Reproduced Safari returning to `/login?redirectTo=%2Fdashboard` without an error when the local HTTP server was running via `npm start`. The demo login endpoint returned 200 with a `Secure` session cookie; Chromium accepted the local session while Safari did not retain it.
+- Restarted the local server with `DEMO_MODE=true npm run dev`. Safari sign-in reached `/dashboard`, loaded seeded journals, resources, and overview data, and returned 200 for session reads. Production cookie settings remain unchanged.
+- Added the local HTTP versus production HTTPS requirement to README and the demo guide. `git diff --check` passes. Source code did not change, so static checks and the production build were not rerun. No tests, Xcode builds, or live integration requests were used.
+
 ## GentlePath implementation — October 28, 2026
 
 Implemented in the existing checkout using dedicated GPT 6.1 Sol Max agents for landing/design, blog publishing, and demo systems. No worktree, test files, Xcode builds, live backend writes, external notifications, or analytics were used.

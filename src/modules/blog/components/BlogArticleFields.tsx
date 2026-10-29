@@ -1,11 +1,13 @@
 'use client';
 
+import Image from 'next/image';
 import { Field, Input, Select, SplitSection, TextArea } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
 import type { BlogMutationInput } from '../models/blogArticle';
 import { BlogCategorySchema } from '../models/blogCategory';
-import { BlogCoverSchema } from '../models/blogCover';
+import { BlogCoverSchema, blogCoverAssets } from '../models/blogCover';
 import type { BlogFormErrors } from '../models/blogFormErrors';
+import styles from '../../portal/Admin.module.css';
 
 export function BlogArticleFields({
   form,
@@ -164,6 +166,19 @@ export function BlogArticleFields({
             ))}
           </Select>
         </Field>
+      </div>
+      <div className={styles.editorCover} data-cover={form.cover}>
+        <Image
+          src={blogCoverAssets[form.cover]}
+          alt={copy.decorativeAlt}
+          width={180}
+          height={140}
+          sizes="120px"
+        />
+        <p>
+          <span>{copy.coverLabel}</span>
+          {copy.coverOptions[form.cover]}
+        </p>
       </div>
     </SplitSection>
   );

@@ -9,6 +9,7 @@ import {
   EmptyState,
   PageHeader,
   QueryBoundary,
+  UiIcon,
 } from '@/components/ui';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { useModerationReports } from './adminHooks';
@@ -22,6 +23,7 @@ import {
   CollectionPagination,
   collectionOffset,
 } from './components/CollectionPagination';
+import styles from './Admin.module.css';
 
 export function ModerationScreen() {
   const query = useModerationReports();
@@ -31,34 +33,43 @@ export function ModerationScreen() {
     (status) => ({ value: status, label: copy.moderation[status] }),
   );
   return (
-    <div className="grid gap-7">
-      <PageHeader
-        title={copy.moderation.title}
-        description={copy.moderation.description}
-        eyebrow={copy.navigation.admin}
-      />
-      <DirectoryFilters
-        id="report-search"
-        value={{
-          query: directory.query,
-          status: directory.status || undefined,
-        }}
-        onChange={(value) =>
-          directory.update({
-            query: value.query,
-            status: value.status,
-            offset: undefined,
-          })
-        }
-        statuses={statuses}
-        copy={{
-          search: copy.common.search,
-          placeholder: copy.moderation.searchPlaceholder,
-          clear: copy.common.clear,
-          status: copy.common.status,
-          allStatuses: copy.common.allStatuses,
-        }}
-      />
+    <div className={styles.page}>
+      <div className={styles.intro} data-tone="lilac">
+        <PageHeader
+          title={copy.moderation.title}
+          description={copy.moderation.description}
+          eyebrow={copy.navigation.admin}
+          icon={
+            <span className={styles.roundIcon} data-tone="lilac">
+              <UiIcon name="lock" />
+            </span>
+          }
+        />
+      </div>
+      <Card className="p-4 sm:p-5">
+        <DirectoryFilters
+          id="report-search"
+          value={{
+            query: directory.query,
+            status: directory.status || undefined,
+          }}
+          onChange={(value) =>
+            directory.update({
+              query: value.query,
+              status: value.status,
+              offset: undefined,
+            })
+          }
+          statuses={statuses}
+          copy={{
+            search: copy.common.search,
+            placeholder: copy.moderation.searchPlaceholder,
+            clear: copy.common.clear,
+            status: copy.common.status,
+            allStatuses: copy.common.allStatuses,
+          }}
+        />
+      </Card>
       <QueryBoundary query={query}>
         {(reports) => {
           const filtered = reports.filter(
@@ -71,35 +82,60 @@ export function ModerationScreen() {
           const offset = collectionOffset(directory.offset, filtered.length);
           return filtered.length ? (
             <>
-              <div className="grid gap-4">
+              <div className={styles.reports}>
                 {filtered.slice(offset, offset + 9).map((report) => (
-                  <Card key={report.id} className="grid gap-4 p-6">
-                    <div className="flex flex-wrap items-start justify-between gap-4">
-                      <div className="grid gap-2">
-                        <Badge
-                          className="justify-self-start"
-                          intent={
-                            report.status === 'open' ? 'warning' : 'neutral'
+                  <Card
+                    key={report.id}
+                    className={styles.report}
+                    data-status={report.status}
+                  >
+                    <div className={styles.reportHeader}>
+                      <div className={styles.reportIdentity}>
+                        <span
+                          className={styles.roundIcon}
+                          data-tone={
+                            report.status === 'open'
+                              ? 'sunlight'
+                              : report.status === 'dismissed'
+                                ? 'lilac'
+                                : 'sage'
                           }
                         >
-                          {
-                            statuses.find(
-                              (status) => status.value === report.status,
-                            )?.label
-                          }
-                        </Badge>
-                        <h2 className="m-0 font-display text-xl">
-                          {report.contentTitle}
-                        </h2>
+                          <UiIcon
+                            name={
+                              report.status === 'open'
+                                ? 'warning'
+                                : report.status === 'dismissed'
+                                  ? 'close'
+                                  : 'check'
+                            }
+                          />
+                        </span>
+                        <div>
+                          <Badge
+                            className="justify-self-start"
+                            intent={
+                              report.status === 'open' ? 'warning' : 'neutral'
+                            }
+                          >
+                            {
+                              statuses.find(
+                                (status) => status.value === report.status,
+                              )?.label
+                            }
+                          </Badge>
+                          <h2>{report.contentTitle}</h2>
+                        </div>
                       </div>
-                      <span className="text-xs text-tertiary">
+                      <time
+                        dateTime={report.createdAt}
+                        className="text-xs text-tertiary"
+                      >
                         {new Date(report.createdAt).toLocaleDateString('en-US')}
-                      </span>
+                      </time>
                     </div>
-                    <p className="m-0 text-sm text-secondary">
-                      {report.reason}
-                    </p>
-                    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-secondary pt-3">
+                    <p className={styles.reportReason}>{report.reason}</p>
+                    <div className={styles.reportFooter}>
                       <span className="text-xs text-tertiary">
                         {copy.moderation.reportedBy(report.reporterName)}
                       </span>
@@ -109,6 +145,7 @@ export function ModerationScreen() {
                           onClick={() => setSelected(report)}
                         >
                           {copy.moderation.review}
+                          <UiIcon name="arrowRight" className="size-4" />
                         </Button>
                       ) : (
                         <p className="m-0 text-sm text-secondary">

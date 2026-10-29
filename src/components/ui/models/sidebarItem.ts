@@ -7,4 +7,5 @@ export type AppSidebarItem = {
   active?: boolean;
   activePaths?: string[];
   placement?: 'bottom';
+  sectionLabel?: string;
 };
