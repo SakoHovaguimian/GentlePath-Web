@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Button } from '@/components/ui';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
 import { resolveBlogEmbed } from '../content/resolveBlogEmbed';
@@ -13,15 +13,17 @@ export function BlogEmbeddedMedia({
   metaData: BlogEmbedContent['metaData'];
 }) {
   const player = resolveBlogEmbed(metaData.url);
+  const titleId = useId();
+  const playerId = `${titleId}-player`;
   const [activeSource, setActiveSource] = useState<string | null>(null);
   const loaded = Boolean(player && activeSource === player.src);
   return (
-    <figure className={styles.contentEmbed}>
+    <figure className={styles.contentEmbed} aria-labelledby={titleId}>
       <div className={styles.contentEmbedCard}>
         <span className={styles.contentEmbedHost}>
           {new URL(metaData.url).hostname}
         </span>
-        <strong>{metaData.title}</strong>
+        <strong id={titleId}>{metaData.title}</strong>
         {player && (
           <p className={styles.contentEmbedHint}>
             {copy.embedConnectionHint(copy.embedProviders[player.provider])}
@@ -32,6 +34,8 @@ export function BlogEmbeddedMedia({
             <Button
               variant="secondary"
               aria-expanded={loaded}
+              aria-controls={loaded ? playerId : undefined}
+              aria-describedby={titleId}
               onClick={() => setActiveSource(loaded ? null : player.src)}
             >
               {loaded ? copy.unloadEmbed : copy.loadEmbed}
@@ -49,6 +53,7 @@ export function BlogEmbeddedMedia({
         </div>
         {loaded && player && (
           <iframe
+            id={playerId}
             className={styles.contentEmbedFrame}
             data-provider={player.provider}
             src={player.src}
