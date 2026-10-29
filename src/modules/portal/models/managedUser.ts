@@ -1,12 +1,13 @@
 import { z } from 'zod';
 import { UserRoleSchema } from '@/models/userRole';
+import { ManagedUserRoleSchema } from './managedUserRole';
 
 export const ManagedUserSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),
-  role: UserRoleSchema,
+  role: ManagedUserRoleSchema,
   createdAt: z.string().datetime(),
   disabled: z.boolean(),
 });

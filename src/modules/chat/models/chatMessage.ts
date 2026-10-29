@@ -6,6 +6,8 @@ export const ChatMessageSchema = z.object({
   author: z.string(),
   message: z.string(),
   createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime().optional(),
+  deleted: z.boolean().optional(),
 });
 export const ChatMessageInputSchema = z.object({
   message: z

@@ -67,10 +67,14 @@ export class DemoApiClient {
     if (
       settings.maintenanceMode &&
       trustedSession.user.role === 'user' &&
-      ['portal', 'feature-requests', 'chat'].includes(resource)
+      ['portal', 'feature-requests', 'chat', 'chat-messages'].includes(resource)
     )
       throw new ApiError(gentlePathDemoStrings.maintenanceActive, 503);
-    if (!settings.communityEnabled && resource === 'chat' && method !== 'GET')
+    if (
+      !settings.communityEnabled &&
+      ['chat', 'chat-messages'].includes(resource) &&
+      method !== 'GET'
+    )
       throw new OwnershipError(gentlePathDemoStrings.communityPaused);
     if (resource === 'admin' && trustedSession.user.role === 'user')
       throw new OwnershipError();
@@ -346,6 +350,110 @@ export class DemoApiClient {
             ),
           ),
         );
+      }
+    }
+    if (resource === 'chat-messages') {
+      const transport = (message: (typeof state.messages)[number]) => {
+        const author = state.users.find((user) => user.id === message.userId);
+        return {
+          id: message.id,
+          user_id: message.userId,
+          message: message.message,
+          author: {
+            id: message.userId,
+            first_name: author?.first_name ?? '',
+            last_name: author?.last_name ?? '',
+            role:
+              author?.role === 'superadmin'
+                ? 'SUPER_ADMIN'
+                : author?.role === 'admin'
+                  ? 'ADMIN'
+                  : 'USER',
+          },
+          created_at: message.createdAt,
+          updated_at: message.updatedAt ?? message.createdAt,
+        };
+      };
+      if (method === 'GET' && !id) {
+        const paging = PageQuerySchema.parse({
+          limit: url.searchParams.get('limit') ?? undefined,
+          offset: url.searchParams.get('offset') ?? undefined,
+        });
+        const authorId = z
+          .string()
+          .uuid()
+          .optional()
+          .parse(url.searchParams.get('user_id') ?? undefined);
+        const search = z
+          .string()
+          .trim()
+          .max(500)
+          .parse(url.searchParams.get('query') ?? '')
+          .toLowerCase();
+        const visible = (context.scenario === 'empty' ? [] : state.messages)
+          .filter(
+            (message) =>
+              !message.deleted &&
+              (!authorId || message.userId === authorId) &&
+              (!search || message.message.toLowerCase().includes(search)) &&
+              state.users.some(
+                (author) =>
+                  author.id === message.userId &&
+                  !author.disabled &&
+                  !author.deleted,
+              ),
+          )
+          .toSorted(
+            (a, b) =>
+              b.createdAt.localeCompare(a.createdAt) ||
+              b.id.localeCompare(a.id),
+          );
+        const pageRows = visible.slice(
+          paging.offset,
+          paging.offset + paging.limit,
+        );
+        const hasMore = visible.length > paging.offset + paging.limit;
+        return json({
+          data: pageRows.map(transport),
+          page: {
+            ...paging,
+            hasMore,
+            nextOffset: hasMore ? paging.offset + paging.limit : null,
+          },
+        });
+      }
+      if (method === 'POST' && !id) {
+        const body = ChatMessageInputSchema.parse(await input());
+        const message = {
+          id: crypto.randomUUID(),
+          userId: current.id,
+          author: `${current.first_name} ${current.last_name}`,
+          message: body.message,
+          createdAt: new Date().toISOString(),
+        };
+        state.messages.push(message);
+        return json(transport(message), 201);
+      }
+      const message = state.messages.find((message) => message.id === id);
+      const author = state.users.find((user) => user.id === message?.userId);
+      if (
+        !message ||
+        !author ||
+        author.deleted ||
+        author.disabled ||
+        (message.deleted && method !== 'DELETE')
+      )
+        throw new NotFoundError();
+      if (method === 'GET') return json(transport(message));
+      if (message.userId !== current.id) throw new OwnershipError();
+      if (method === 'PUT') {
+        message.message = ChatMessageInputSchema.parse(await input()).message;
+        message.updatedAt = new Date().toISOString();
+        return json(transport(message));
+      }
+      if (method === 'DELETE') {
+        message.deleted = true;
+        return json({ message: strings.chat.removed });
       }
     }
     if (resource === 'chat' && id === 'messages') {

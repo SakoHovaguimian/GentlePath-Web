@@ -19,6 +19,7 @@ import { MutationError } from '@/modules/portal/components/MutationError';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
 import { gentlePathPollStrings as copy } from '@/strings';
 import type { Poll } from './models/poll';
+import { usePollExpired } from './usePollExpired';
 import { usePoll, usePollStatus } from './hooks';
 import { pollReturnPath } from './usePollDirectory';
 import { usePollActions } from './usePollActions';
@@ -39,6 +40,7 @@ function PollDetail({ poll, returnTo }: { poll: Poll; returnTo: string }) {
   const [editor, setEditor] = useState(false);
   const remove = usePollActions(() => router.replace(returnTo as Route));
   const own = poll.userId === session?.user.id;
+  const expired = usePollExpired(poll);
   return (
     <>
       <PageHeader
@@ -52,6 +54,7 @@ function PollDetail({ poll, returnTo }: { poll: Poll; returnTo: string }) {
         meta={
           <>
             <Badge intent="brand">{copy.modes[poll.selectionMode]}</Badge>
+            {expired && <Badge intent="warning">{copy.expired}</Badge>}
             <PollIdentity author={poll.author} createdAt={poll.createdAt} />
           </>
         }

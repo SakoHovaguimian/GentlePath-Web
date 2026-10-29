@@ -8,4 +8,5 @@ export interface DemoPoll extends Omit<PollInput, 'options'> {
   updatedAt: string;
   deleted: boolean;
   hidden: boolean;
+  votingLocked?: boolean;
 }

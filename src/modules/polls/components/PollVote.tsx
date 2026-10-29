@@ -17,6 +17,7 @@ import type { Poll } from '../models/poll';
 import type { PollBallot } from '../models/pollBallot';
 import { useClearPollVote, usePollBallot, useVotePoll } from '../hooks';
 import { PollResults } from './PollResults';
+import { usePollExpired } from '../usePollExpired';
 
 function PollVoteForm({
   poll,
@@ -36,10 +37,18 @@ function PollVoteForm({
   useUnsavedFormGuard(dirty, busy);
   const { showAlert, showToast } = usePresentationService();
   const pending = vote.isPending || clear.isPending;
-  const disabled = !writable || pending;
+  const expired = usePollExpired(poll);
+  const disabled = !writable || pending || expired;
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy.current || !writable) return;
+    if (
+      expired ||
+      (poll.expiresAt && Date.parse(poll.expiresAt) <= Date.now())
+    ) {
+      setValidation(copy.expiredDescription);
+      return;
+    }
     if (!selected.length) {
       setValidation(copy.validation.ballotDescription);
       event.currentTarget.querySelector<HTMLElement>('input')?.focus();
@@ -98,6 +107,22 @@ function PollVoteForm({
           }
         >
           <form noValidate onSubmit={submit} className="grid gap-5">
+            {expired && (
+              <p role="status" className="m-0 text-sm text-secondary">
+                {copy.expiredDescription}
+              </p>
+            )}
+            {poll.expiresAt && (
+              <p className="m-0 text-sm text-tertiary">
+                {copy.expires}{' '}
+                <time dateTime={poll.expiresAt}>
+                  {new Date(poll.expiresAt).toLocaleString('en-US', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short',
+                  })}
+                </time>
+              </p>
+            )}
             <fieldset
               disabled={disabled}
               aria-describedby={validation ? 'poll-vote-validation' : undefined}
@@ -147,7 +172,7 @@ function PollVoteForm({
               <Button
                 type="submit"
                 loading={vote.isPending}
-                disabled={!writable || clear.isPending}
+                disabled={!writable || clear.isPending || expired}
               >
                 {ballot ? copy.updateVote : copy.vote}
               </Button>

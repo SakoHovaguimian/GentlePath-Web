@@ -16,6 +16,9 @@ import { usePresentationService } from '@/presentation/PresentationProvider';
 import { WebNotificationService } from '@/services/notifications/webNotificationService';
 import type { NotificationStatus } from '@/services/notifications/models/notificationStatus';
 import { RealtimeEventSchema } from './models/realtimeEvent';
+import { RealtimeMessageSchema } from './models/realtimeMessage';
+import { communityQueryKeys } from '@/modules/community/queryKeys';
+import { pollQueryKeys } from '@/modules/polls/queryKeys';
 import { RealtimeTicketSchema } from './models/realtimeTicket';
 import type { RealtimeContextValue } from './models/realtimeContext';
 import { strings } from '@/strings';
@@ -54,6 +57,27 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
   );
   const receive = useCallback(
     (input: unknown) => {
+      const socketMessage = RealtimeMessageSchema.safeParse(input);
+      if (socketMessage.success) {
+        const event = socketMessage.data;
+        if (seen.current.has(event.event_id)) return;
+        seen.current.add(event.event_id);
+        if (seen.current.size > 200)
+          seen.current.delete(seen.current.values().next().value!);
+        if (event.channel === 'notifications') {
+          void queryClient.invalidateQueries({
+            queryKey: notificationInboxQueryKeys.all,
+          });
+        } else if (event.channel === 'chat') {
+          void queryClient.invalidateQueries({ queryKey: ['chat'] });
+        } else {
+          void queryClient.invalidateQueries({
+            queryKey: communityQueryKeys.all,
+          });
+          void queryClient.invalidateQueries({ queryKey: pollQueryKeys.all });
+        }
+        return;
+      }
       const parsed = RealtimeEventSchema.safeParse(input);
       if (!parsed.success || seen.current.has(parsed.data.event_id)) return;
       const event = parsed.data;
@@ -88,7 +112,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
   }, [notifications, receive]);
   useEffect(() => {
     const socketUrl = config.socketUrl;
-    if (config.demoMode || !socketUrl) return;
+    if (config.demoMode || !socketUrl || !session?.user.id) return;
     let stopped = false;
     let disconnect = () => {};
     void import('socket.io-client')
@@ -115,6 +139,13 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
         let retry: ReturnType<typeof setTimeout> | undefined;
         socket.on('connect', () => {
           setStatus('connected');
+          for (const channel of ['community', 'chat']) {
+            socket.emit('rt:command', {
+              event_id: crypto.randomUUID(),
+              type: 'SUBSCRIBE',
+              channel,
+            });
+          }
           void queryClient.invalidateQueries({ queryKey: ['chat'] });
         });
         socket.on('disconnect', () => setStatus('offline'));
@@ -125,7 +156,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
             retry = setTimeout(() => socket.connect(), 10000);
           }
         });
-        socket.on('portal.event', receive);
+        socket.on('rt:message', receive);
         socket.connect();
         const stop = () => {
           stopped = true;
@@ -143,7 +174,14 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       stopped = true;
       disconnect();
     };
-  }, [config.demoMode, config.socketUrl, container, queryClient, receive]);
+  }, [
+    config.demoMode,
+    config.socketUrl,
+    container,
+    queryClient,
+    receive,
+    session?.user.id,
+  ]);
   useEffect(() => {
     if (!notifications) return;
     let disposed = false;

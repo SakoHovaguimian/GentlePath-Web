@@ -143,6 +143,11 @@ export async function handlePollRequest(
           ballot.optionIds.includes(option.id),
         ).length,
       })),
+      expiresAt: null,
+      isExpired: false,
+      votingLocked:
+        poll.votingLocked === true ||
+        state.ballots.some((ballot) => ballot.pollId === poll.id),
       participantsCount: ballots.length,
       commentsCount: state.comments.filter(
         (comment) => comment.pollId === poll.id && visibleComment(comment),
@@ -268,7 +273,7 @@ export async function handlePollRequest(
         (ballot) => ballot.pollId === poll.id,
       );
       if (
-        hasBallots &&
+        (poll.votingLocked || hasBallots) &&
         (input.title !== poll.title ||
           input.message !== poll.message ||
           input.selectionMode !== poll.selectionMode ||
@@ -337,6 +342,7 @@ export async function handlePollRequest(
       )
         throw new ValidationError(copy.validation.ballotDescription);
       const now = new Date().toISOString();
+      poll.votingLocked = true;
       if (own) {
         own.optionIds = optionIds;
         own.updatedAt = now;

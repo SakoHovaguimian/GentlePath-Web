@@ -103,7 +103,7 @@ export function ManagedUsersScreen() {
                 offset: undefined,
               })
             }
-            statuses={Object.entries(copy.navigation.role).map(
+            statuses={Object.entries(copy.people.roles).map(
               ([value, label]) => ({ value, label }),
             )}
             copy={{
@@ -160,7 +160,7 @@ export function ManagedUsersScreen() {
                     footer={
                       <>
                         <div className="flex flex-wrap items-center gap-2">
-                          <Badge>{copy.navigation.role[user.role]}</Badge>
+                          <Badge>{copy.people.roles[user.role]}</Badge>
                           {status(user)}
                         </div>
                         {edit(user)}
@@ -193,7 +193,7 @@ export function ManagedUsersScreen() {
                     key: 'role',
                     header: copy.people.role,
                     render: (user) => (
-                      <Badge>{copy.navigation.role[user.role]}</Badge>
+                      <Badge>{copy.people.roles[user.role]}</Badge>
                     ),
                   },
                   {

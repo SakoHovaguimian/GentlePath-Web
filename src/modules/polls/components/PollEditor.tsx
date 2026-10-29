@@ -57,7 +57,9 @@ export function PollEditor({
   const formRef = useRef<HTMLFormElement>(null);
   const confirmLeave = useUnsavedFormGuard(dirty, busy);
   const { showToast } = usePresentationService();
-  const locked = Boolean(poll && poll.participantsCount > 0);
+  const locked = Boolean(
+    poll && (poll.votingLocked || poll.participantsCount > 0),
+  );
   const disabled = mutation.isPending || !writable;
   function change<Key extends keyof typeof input>(
     key: Key,

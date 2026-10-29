@@ -2,7 +2,8 @@ import 'server-only';
 import { z } from 'zod';
 import { environment } from '@/config/environment';
 import { AuthError, ApiError } from '@/errors/domainErrors';
-import { strings } from '@/strings';
+import { strings, gentlePathPortalStrings as portalCopy } from '@/strings';
+import { PlatformAvailabilityTransportSchema } from '@/modules/portal/models/platformAvailabilityTransport';
 import type { SignupInput } from '@/models/auth';
 import type { FirebaseAuthSession } from './models/firebaseAuthSession';
 import type { FirebaseAuthServiceInterface } from './firebaseAuthServiceInterface';
@@ -17,6 +18,22 @@ export class FirebaseAuthService implements FirebaseAuthServiceInterface {
     });
   }
   async signUp(input: SignupInput) {
+    const availability = await fetch(`${environment.apiUrl}/platform/status`, {
+      headers: {
+        'app-version': environment.appVersion,
+        accept: 'application/json',
+      },
+      cache: 'no-store',
+      redirect: 'error',
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!availability.ok)
+      throw new ApiError(strings.errors.unavailable, availability.status);
+    const settings = PlatformAvailabilityTransportSchema.parse(
+      await availability.json(),
+    );
+    if (!settings.registrations_enabled)
+      throw new AuthError(portalCopy.system.registrationPaused, 403);
     return this.authenticate('accounts:signUp', {
       email: input.email,
       password: input.password,

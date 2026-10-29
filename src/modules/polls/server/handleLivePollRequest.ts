@@ -1,4 +1,5 @@
 import 'server-only';
+import { PlatformAvailabilityTransportSchema } from '@/modules/portal/models/platformAvailabilityTransport';
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '@/errors/domainErrors';
 import type { BackendForward } from '@/services/api/models/backendForward';
@@ -82,8 +83,13 @@ export async function handleLivePollRequest(
     return mapPollComment(value, await liked(value.id));
   }
   try {
-    if (id === 'status' && !action && method === 'GET')
-      return json({ enabled: true });
+    if (id === 'status' && !action && method === 'GET') {
+      const settings = await read(
+        PlatformAvailabilityTransportSchema,
+        '/platform/status',
+      );
+      return json({ enabled: settings.community_enabled });
+    }
     if (id === 'comments' && action) {
       const commentId = z.string().uuid().parse(action);
       if (!detail && method === 'PATCH') {

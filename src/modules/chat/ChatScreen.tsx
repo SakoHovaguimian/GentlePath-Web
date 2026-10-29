@@ -20,15 +20,19 @@ export function ChatScreen() {
   const realtime = useRealtime();
   const { demoMode } = useRuntimeConfig();
   const [message, setMessage] = useState('');
+  const [offset, setOffset] = useState(0);
+  const limit = 25;
   const query = useQuery({
-    queryKey: ['chat', 'messages'],
-    queryFn: () => container.chatService.listMessages(),
+    queryKey: ['chat', 'messages', { limit, offset }],
+    queryFn: ({ signal }) =>
+      container.chatService.listMessages({ limit, offset }, signal),
     refetchInterval: demoMode || realtime.status === 'offline' ? 5000 : false,
   });
   const mutation = useMutation({
     mutationFn: (value: string) => container.chatService.sendMessage(value),
     onSuccess: async () => {
       setMessage('');
+      setOffset(0);
       await queryClient.invalidateQueries({ queryKey: ['chat'] });
     },
   });
@@ -45,16 +49,16 @@ export function ChatScreen() {
           </p>
         </div>
         <QueryBoundary query={query}>
-          {(messages) => (
+          {(messagePage) => (
             <div
               role="log"
               aria-label={strings.chat.title}
               className="grid max-h-[50vh] gap-3 overflow-y-auto"
             >
-              {messages.length === 0 && (
+              {messagePage.data.length === 0 && (
                 <p className="text-secondary">{strings.chat.empty}</p>
               )}
-              {messages.map((item) => (
+              {messagePage.data.toReversed().map((item) => (
                 <article
                   key={item.id}
                   className="rounded-xl border border-secondary p-4"
@@ -74,6 +78,31 @@ export function ChatScreen() {
             </div>
           )}
         </QueryBoundary>
+        <nav
+          aria-label={strings.chat.pagination}
+          className="flex flex-wrap items-center gap-3"
+        >
+          <Button
+            variant="secondary"
+            disabled={offset === 0 || query.isFetching}
+            onClick={() => setOffset(Math.max(0, offset - limit))}
+          >
+            {strings.chat.newer}
+          </Button>
+          <Button
+            variant="secondary"
+            disabled={!query.data?.page.hasMore || query.isFetching}
+            onClick={() => {
+              const next = query.data?.page.nextOffset;
+              if (next !== null && next !== undefined) setOffset(next);
+            }}
+          >
+            {strings.chat.older}
+          </Button>
+          <p className="text-xs text-tertiary" role="status">
+            {strings.chat.pageStatus(Math.floor(offset / limit) + 1)}
+          </p>
+        </nav>
         <form
           noValidate
           onSubmit={(event) => {

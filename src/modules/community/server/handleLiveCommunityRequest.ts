@@ -1,4 +1,5 @@
 import 'server-only';
+import { PlatformAvailabilityTransportSchema } from '@/modules/portal/models/platformAvailabilityTransport';
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '@/errors/domainErrors';
 import { CommunityPostInputSchema } from '../models/communityPost';
@@ -124,10 +125,13 @@ export async function handleLiveCommunityRequest(
       }
       throw new NotFoundError();
     }
-    // The current backend has no platform-settings route. Its own authorization
-    // remains authoritative; the demo's platform switches are not a live policy.
-    if (resource === 'status' && !id && method === 'GET')
-      return json({ enabled: true });
+    if (resource === 'status' && !id && method === 'GET') {
+      const settings = await read(
+        PlatformAvailabilityTransportSchema,
+        '/platform/status',
+      );
+      return json({ enabled: settings.community_enabled });
+    }
     if (resource === 'posts') {
       if (!id && method === 'GET') {
         const query = CommunityPostQuerySchema.parse(rawQuery);

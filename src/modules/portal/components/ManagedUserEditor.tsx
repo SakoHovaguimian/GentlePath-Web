@@ -9,6 +9,7 @@ import {
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { UserRoleSchema } from '@/models/userRole';
+import { ManagedUserRoleSchema } from '../models/managedUserRole';
 import {
   canManageContent,
   canManagePlatform,
@@ -30,8 +31,10 @@ export function ManagedUserEditor({
   const [enabled, setEnabled] = useState(!user.disabled);
   const restrictsAccess =
     (!enabled && !user.disabled) ||
-    (canManageContent(user.role) && !canManageContent(role)) ||
-    (canManagePlatform(user.role) && !canManagePlatform(role));
+    (canManageContent(UserRoleSchema.safeParse(user.role).data ?? 'user') &&
+      !canManageContent(UserRoleSchema.safeParse(role).data ?? 'user')) ||
+    (canManagePlatform(UserRoleSchema.safeParse(user.role).data ?? 'user') &&
+      !canManagePlatform(UserRoleSchema.safeParse(role).data ?? 'user'));
   const mutation = useUpdateManagedUser();
   const { showAlert, showToast } = usePresentationService();
   return (
@@ -62,7 +65,12 @@ export function ManagedUserEditor({
           try {
             await mutation.mutateAsync({
               id: user.id,
-              input: { role, disabled: !enabled },
+              input: {
+                ...(UserRoleSchema.safeParse(role).success
+                  ? { role: UserRoleSchema.parse(role) }
+                  : {}),
+                disabled: !enabled,
+              },
             });
             void showToast({ title: copy.people.updated, intent: 'success' });
             onClose();
@@ -84,9 +92,16 @@ export function ManagedUserEditor({
         <Field labelText={copy.people.role}>
           <Select
             value={role}
-            onValueChange={(value) => setRole(UserRoleSchema.parse(value))}
+            onValueChange={(value) =>
+              setRole(ManagedUserRoleSchema.parse(value))
+            }
             disabled={mutation.isPending}
           >
+            {!UserRoleSchema.safeParse(user.role).success && (
+              <option value={user.role} disabled>
+                {copy.people.roles[user.role]}
+              </option>
+            )}
             {Object.entries(copy.navigation.role).map(([value, label]) => (
               <option key={value} value={value}>
                 {label}

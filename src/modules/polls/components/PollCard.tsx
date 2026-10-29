@@ -30,6 +30,7 @@ export function PollCard({
         <Badge intent={poll.selectionMode === 'MULTIPLE' ? 'purple' : 'brand'}>
           {copy.modes[poll.selectionMode]}
         </Badge>
+        {poll.isExpired && <Badge intent="warning">{copy.expired}</Badge>}
         <PollIdentity author={poll.author} createdAt={poll.createdAt} />
       </div>
       <h2 className="m-0 font-display text-xl font-normal text-primary wrap-anywhere sm:text-2xl">

@@ -41,6 +41,7 @@ export function getDemoPollState(): DemoPollState {
       title: item.title,
       message: item.message,
       selectionMode: item.selectionMode,
+      votingLocked: index === 0,
       tags: [],
       options: item.choices.map((text, position) => ({
         id: crypto.randomUUID(),

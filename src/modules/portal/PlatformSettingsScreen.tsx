@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import {
   Button,
   Card,
@@ -20,6 +21,7 @@ import styles from './Admin.module.css';
 
 function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
   const [settings, setSettings] = useState(initial);
+  const { demoMode } = useRuntimeConfig();
   const mutation = useSavePlatformSettings();
   const { showAlert, showToast } = usePresentationService();
   const dirty = useRef(false);
@@ -99,28 +101,32 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
           <h2>{copy.system.general}</h2>
         </div>
         <div className={styles.settingsRows}>
-          {fields.map((field) => (
-            <div key={field.key} className={styles.settingRow}>
-              <span className={styles.roundIcon} data-tone={field.tone}>
-                <UiIcon name={field.icon} />
-              </span>
-              <Switch
-                label={field.label}
-                description={field.description}
-                checked={settings[field.key]}
-                disabled={mutation.isPending}
-                onChange={(event) => {
-                  const next = {
-                    ...settings,
-                    [field.key]: event.target.checked,
-                  };
-                  dirty.current =
-                    JSON.stringify(next) !== JSON.stringify(initial);
-                  setSettings(next);
-                }}
-              />
-            </div>
-          ))}
+          {fields
+            .filter(
+              (field) => demoMode || field.key !== 'resourceReviewRequired',
+            )
+            .map((field) => (
+              <div key={field.key} className={styles.settingRow}>
+                <span className={styles.roundIcon} data-tone={field.tone}>
+                  <UiIcon name={field.icon} />
+                </span>
+                <Switch
+                  label={field.label}
+                  description={field.description}
+                  checked={settings[field.key]}
+                  disabled={mutation.isPending}
+                  onChange={(event) => {
+                    const next = {
+                      ...settings,
+                      [field.key]: event.target.checked,
+                    };
+                    dirty.current =
+                      JSON.stringify(next) !== JSON.stringify(initial);
+                    setSettings(next);
+                  }}
+                />
+              </div>
+            ))}
         </div>
       </Card>
       <MutationError error={mutation.error} />

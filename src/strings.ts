@@ -6007,6 +6007,11 @@ export const strings = {
   },
   chat: {
     title: 'Chat',
+    pagination: 'Chat Message Pages',
+    removed: 'Message Deleted',
+    newer: 'Newer Messages',
+    older: 'Older Messages',
+    pageStatus: (page: number) => `Page ${page}`,
     description: 'A shared workspace conversation.',
     placeholder: 'Write a message…',
     send: 'Send Message',
@@ -8058,6 +8063,15 @@ export const gentlePathPortalStrings = {
     email: 'Email',
     role: 'Platform Role',
     allRoles: 'All Roles',
+    roles: {
+      user: 'Member',
+      admin: 'Administrator',
+      superadmin: 'SuperAdmin',
+      owner: 'Owner (Legacy)',
+      manager: 'Manager (Legacy)',
+      employee: 'Employee (Legacy)',
+      receptionist: 'Receptionist (Legacy)',
+    },
     joined: 'Joined',
     active: 'Active',
     disabled: 'Disabled',
@@ -8104,7 +8118,8 @@ export const gentlePathPortalStrings = {
       'System-wide controls for GentlePath. Changes apply to everyone on the platform.',
     general: 'Availability And Safeguards',
     community: 'Community Conversations',
-    communityDescription: 'Allow access to shared community conversations.',
+    communityDescription:
+      'Allow new community posts, replies, polls, and chat messages. Reading and removing your own content remains available.',
     registrations: 'New Registrations',
     registrationsDescription: 'Allow new families to create an account.',
     maintenance: 'Maintenance Mode',
@@ -8113,6 +8128,11 @@ export const gentlePathPortalStrings = {
     review: 'Require Resource Review',
     reviewDescription:
       'Require administrative review before new resources are made available.',
+    // @sentence-case: Backend policy cannot be disabled without a review lifecycle.
+    reviewPolicy:
+      'Resources record an editorial review when saved. A separate approval workflow is not available.',
+    // @sentence-case: New registrations are paused by platform operations.
+    registrationPaused: 'New account registration is temporarily paused.',
     saved: 'Platform Settings Updated',
     confirmTitle: 'Apply Platform Changes?',
     confirmDescription:
@@ -8849,6 +8869,11 @@ export const gentlePathCommunityStrings = {
 export const gentlePathPollStrings = {
   title: 'Polls',
   detailTitle: 'Community Poll',
+  expired: 'Voting Closed',
+  expires: 'Voting Ends',
+  // @sentence-case: Expired polls remain readable and allow removing an existing ballot.
+  expiredDescription:
+    'Voting has closed. You can still read the results and remove your own vote.',
   eyebrow: 'Community Voices',
   description:
     'Ask a question, share your experience, and learn from other families.',
