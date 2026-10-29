@@ -32,7 +32,7 @@ Read only the relevant section, then inspect the listed source. Directories belo
 | Copy, validation, accessibility names                  | [Strings](docs/STRINGS.md)                                    | [catalog](src/strings.ts), [checker](scripts/check-strings.mjs)                                                                                 |
 | Verify or prepare live deployment                      | [Verification](docs/VERIFICATION.md)                          | affected flow, actual scripts, configured backend contracts                                                                                     |
 
-For feature work, [GENTLEPATH.md](docs/GENTLEPATH.md) identifies each module, facade, permissions, and non-obvious lifecycle rules. The sibling `../GentlePath-API` owns persistence and canonical backend contracts. Read its own AGENTS.md before editing it; do not copy its repository architecture into this app.
+For feature work, [GENTLEPATH.md](docs/GENTLEPATH.md) identifies each module, facade, permissions, and non-obvious lifecycle rules. The sibling API owns persistence and canonical backend contracts. Read its [AGENTS.md](../GentlePath-API/AGENTS.md) before editing it; do not copy its repository architecture into this app.
 
 ## Carry A Change Through
 

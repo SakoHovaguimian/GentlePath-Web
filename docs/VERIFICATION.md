@@ -39,3 +39,12 @@ Before claiming live readiness, verify configured staging for Firebase provision
 Deploy/check the API's structured-blog and tag-normalization migrations against the intended database through its normal release process. A TypeScript/Prisma validation command does not apply or execute migration SQL. Do not run database deploy/reset/seed as generic verification. [Integrations](INTEGRATIONS.md) records the retained portal/platform wiring gaps.
 
 Keep this guide and the compact current evidence below up to date; do not append an implementation diary or historical build transcript.
+
+## Current Evidence — October 29, 2026
+
+- Web `npm run check` and `DEMO_MODE=true npm run build` passed after the UI changes, including conditional destructive styling for platform availability changes. API `npm run check` and `npm run build` passed after tag normalization. No tests were written.
+- Local demo browser checks covered FAQ open/close, primary reading/article-preview actions, sidebar card removal, inline badge icons, Community Posts/Polls and Back/Forward, poll leaders/remaining options, filled red hearts, gold list/header ratings, keyboard rating changes with focus retained while saving, milestone actions, and equal administration CTA positions.
+- The milestone popup measured 338px on desktop with every option on one line; it stayed within a 390px viewport. Typeahead and Escape focus restoration worked. The redesigned inbox passed read/unread restoration, bulk-action scope, archive Cancel focus, mobile layout, and light/dark checks. Staff discount shortcuts opened the creation form and its approval/verification guidance. No browser errors were recorded in that review tab.
+- Demo HTTP round trips confirmed normalized post/poll tags, normalized tag filters, case-insensitive duplicate rejection, voting aggregates, and resource rating projection. Synthetic records were removed; changed ratings/reactions/read state and theme were restored. The owned preview was stopped.
+- Documentation targets/anchors and formatting were checked across both repositories. DESIGN.md lint reported zero errors and three existing unused-color warnings. Scoped supplemental UI audits completed with known composed-control findings; the broad regex scan did not complete, so it is not a clean repository-wide audit.
+- The structured-blog and tag migrations were prepared but not applied by this work. Live backend/provider behavior and the integration gaps in [Integrations](INTEGRATIONS.md) remain outside local demo verification.
