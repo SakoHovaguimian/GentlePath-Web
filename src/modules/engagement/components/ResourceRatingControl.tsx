@@ -71,7 +71,6 @@ export function ResourceRatingControl({ resourceId }: { resourceId: string }) {
                       : copy.ratingOption(selected)
                   }
                   getOptionLabel={copy.ratingOption}
-                  disabled={mutation.isPending}
                   busy={mutation.isPending}
                   describedBy={hintId}
                   onValueChange={(value) => {

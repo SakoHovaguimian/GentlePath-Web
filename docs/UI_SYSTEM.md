@@ -1,65 +1,63 @@
-# Reusable UI foundation
+# UI System And Interaction Contract
 
-Portal navigation uses the shared `NavigationLink`: clean forms retain Next.js Link's synchronous history and prefetch behavior, while an optional before-navigation callback can deny or await a shared confirmation. Modifier-click and native link semantics remain available. The profile action uses the same link primitive.
+[DESIGN.md](../DESIGN.md) owns visual intent; [theme.css](../src/app/theme.css) owns runtime tokens. This guide owns shared controls, observable behavior, accessibility, and layout. [Product rules](GENTLEPATH.md) and [integration boundaries](INTEGRATIONS.md) remain authoritative for permissions and lifecycle.
 
-`Modal` accepts `initialFocusRef` for workflows that should focus a safe action instead of the title. Shared presentation confirmations are marked as a higher overlay layer; workflow dialogs ignore those layers' interactions and Escape events. Unsaved-form guards share one pending discard decision, preventing duplicate confirmation queues while preserving form state.
+Import from `@/components/ui`; inspect `/dev-settings/components` before adding an equivalent control. Feature services own retrieval, persistence, authorization, and invalidation. Generic UI receives data and callbacks. All labels, errors, previews, and accessible names come from [the strings catalog](STRINGS.md).
 
-GentlePath uses the LeafLaunch Web component foundation in `src/components/ui`. Open the authenticated `/dev-settings/components` route to inspect foundations, motion, page patterns, controls, states, tables, reordering, Markdown, and media. Examples use local state only. Appearance and the library share the same theme/motion controls. The component page has one scroll legend and no duplicate section dropdown.
+## Canonical UI Map
 
-## Ownership and inventory
+| Capability | Canonical Owner | Allowed Behavior | Verify |
+| --- | --- | --- | --- |
+| Select/Listbox | shared Select/MultiSelect, AddressSelect/TimezoneSelect | authored trigger; content-sized collision-aware popup | long options, viewport clamp, keyboard, modal Escape |
+| Date | Field/Input and shared schedule fields | native date/time/datetime-local, OS popup geometry/locale accepted | date-only versus instant, keyboard/browser |
+| Form | Field/Input, module Zod schema, FormActions | create/edit/read-only; associated validation | first invalid focus, success/failure, retained draft |
+| Scrollbar | globals.css and theme tokens | document/table/chat/overlay, engine fallbacks | visible/usable, forced colors, narrow layout |
+| Toast | PresentationProvider | success/info/warning/error | live region; critical errors also inline |
+| CRUD | domain services, query hooks, guarded navigation | lifecycle from owning product contract | full demo flow and recovery |
+| Rating | StarRating/RatingSummary | native 1–5 radios and aggregate summary | hover/focus, keyboard, pending/rollback, gold contrast |
+| Reactions | ReactionButton | pressed/count, outlined/filled heart | confirmed animation, errors, reduced motion |
+| Disclosure | Accordion | accessible multi-open FAQ, retained answers | open/close motion, keyboard, reduced motion |
+| Reordering | ReorderableList | pointer, handle arrows, explicit move controls | stable IDs/content, focus, narrow layout |
 
-Import components from `@/components/ui`. Search this library before creating another control. Keep independent models under `src/components/ui/models`; feature models and server orchestration remain in their domains. All labels, previews, accessibility text, and formatters belong in `src/strings.ts`.
+## Compose A Screen
 
-| Family                 | Shared building blocks                                                                                                                                                                                                 |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Foundations            | UiIcon, IconTile, InitialsAvatar, Button/IconButton, Spinner, semantic color/type/radius/motion tokens                                                                                                                 |
-| Forms                  | Field, Input/PasswordInput, TextArea, Select/MultiSelect, ColorInput, MoneyInput, AddressSelect, TimezoneSelect, Checkbox/Radio/Switch, RadioCard, SelectionTile/SelectionChip, ConfirmationChoice, FileInput/DropZone |
-| Page composition       | Page, PageHeader, Breadcrumbs, PageSection, SectionStack/SplitSection, FormSection/SectionCard/SectionCardView, FormActions, DescriptionList, Card/CardView, DataPanel                                                 |
-| Records and navigation | DataTable, MobileRecordRow, TableRowLink, DirectoryFilters/DirectoryMultiFilters, DirectoryPagination, ListGroup/ListRow, ReorderableList, Stepper, responsive segmented navigation and persistent panels              |
-| Feedback and layers    | Message, Badge/Chip, QueryBoundary/InlineLoading, EmptyState/ErrorState/RecoveryButton, Tooltip, InfoPopover, IconMenu, Modal, AlertModal, SheetPanel, ToastStack                                                      |
-| Media and editing      | ImageMosaic/ImagePreview, RecordThumbnail, MarkdownEditor/MarkdownContent, location/timezone schedule summaries and local-time fields                                                                                  |
-| Reviewed assistance    | FloatingAssistantProvider, FloatingAssistant, ReviewedDraftAssistant/ReviewedDraftChat, typed suggestion review, optional browser dictation                                                                            |
-| App shell              | AppSidebar, SidebarLinks, SidebarSwitcherDisclosure, MobileNavigationMenu, AppShell                                                                                                                                    |
+Use Page → one PageHeader → work surfaces. Directories use DirectoryFilters/DirectoryMultiFilters, DataPanel/DataTable where appropriate, and DirectoryPagination. Supply stable keys and visible record links. Use MobileRecordRow for compact summaries; a wide table without one owns a labeled focusable horizontal scroller. Do not put long forms in table-sized frames.
 
-LeafLaunch's product upload, product image generation, marketing persistence, business roles, and backend-specific widgets are not coupled into this base library. Generic controls receive data and callbacks. A consuming module owns authorized file retrieval, generation, validation, persistence, and query invalidation. The reviewed-assistant callback must use the existing domain service → API client → authenticated proxy architecture.
+Settings/forms use SplitSection, SectionStack, Field, and FormActions. Other canonical owners include Button/IconButton, UiIcon/IconTile, badges/chips, QueryBoundary/EmptyState, Modal/AlertModal/SheetPanel, Markdown/media controls, Stepper, and persistent segmented panels. Optional reviewed assistance stays callback-driven; no generation, microphone request, or save occurs automatically.
 
-## Start a screen
+## Navigation And Async State
 
-Use Page → one PageHeader → work surfaces. The shell header supplies workspace context, not a duplicate page title. PageHeader's lower heading level is reserved for component specimens.
+Use shared NavigationLink with the navigation guard for guarded links. Clean forms retain synchronous Next Link history/prefetch and modifier-click semantics. Committed client filters/pages use the supported History API; server-prop filters use router pushes. Back/Forward restores the previous page and filters. Private journal search stays local.
 
-Directories use DataPanel, DirectoryFilters, embedded DataTable, and DirectoryPagination. Supply stable row keys, a visible record link, and optionally MobileRecordRow for narrow browsers. Rows preserve modifier-click and keyboard link behavior. A wide table without a mobile renderer has its own labeled, focusable horizontal scroller. DirectoryFilters owns 300ms debounce, IME-safe submission, immediate clearing, and input focus restoration; domains own committed URL state and stale-request handling.
+Guard registration alone does not intercept every arbitrary link or browser-history action. Register dirty/busy refs through useUnsavedFormGuard, pass guarded navigation to relevant actions, and clear dirty state only after successful save/discard. Never persist private drafts in browser storage.
 
-Forms/settings use SplitSection and FormActions. Do not constrain a long form to a table's viewport frame. Button loading retains geometry and accessible copy. Field associates native and authored controls explicitly. Date/time controls intentionally retain their platform popup; Select/MultiSelect own popup geometry, typeahead, keyboard selection, and collision through React Aria.
+Show initial loading, background refresh, empty/no-results, and recoverable errors distinctly. Cancel/ignore superseded searches; debounce composition-safe remote search, clear immediately, and restore input focus. Keep safe mounted forms during transient refresh failures. Do not retain inaccessible content after 401/403/404. Mutations prevent duplicate submissions and retain inputs on failure; success feedback follows server confirmation.
 
-## Theme and state
+## Controls, Icons, And Destruction
 
-`src/app/theme.css` is the only runtime color source. The old secondary token overrides are removed. The supplied GentlePath forest palette (`brand`) is the default, with ivory surfaces, expressive sage/lavender/sunlight panels, DM Sans/Lora typography, 12px fields, pill actions, and 20px cards. PageHeader and PageSection use regular-weight Lora; round IconTile surfaces and the inverse forest sidebar extend the iOS reference style. Existing alternate accent presets, including Leaf green, remain supported. ThemeScript validates stored values before hydration. The container constructs preference services; providers apply saved preferences and synchronize browser tabs. Blocked storage produces an inline failure without pretending the choice was saved.
+Button loading preserves dimensions and accessible name. Badge/Chip content and UiIcon keep icons inline with text; do not add block wrappers that stack a leading icon over its label. Every icon-only action needs an accessible name.
 
-Selection uses `--color-selection-fill`, `--color-selection-hover`, and `--color-selection-border`. Their opacity changes with light/dark mode and their hue follows the selected accent. Tiles, chips, listboxes, and section-card hover/selected states share these roles. The forest sidebar uses its own inverse `--dashboard-sidebar-*` foreground, active lavender, hover, divider, and gold focus roles. Its desktop and full-screen mobile versions share one AppSidebarContent; navigation scrolls independently above the account block. Optional navigation labels, item section labels, and a support slot come from the caller. Checkbox and focus semantics retain stronger strokes. Keep state opacity in theme.css, not in per-component constants.
+Use `variant="destructive"` for delete, remove, archive, unpublish, discard, and disabling/reducing access. Conditional save/unlike controls use destructive colors only in the removal state. Confirm consequential actions through PresentationProvider with danger tone, object/scope/consequence, and the safe action initially focused. Do not style ordinary filter clearing or cancellation as destructive.
 
-## Motion, panels, and steppers
+Select/MultiSelect keep the trigger's authored width. The popup uses the longest option's intrinsic width, at least the trigger width, capped inside the viewport; wrap only when the viewport requires it. Preserve selected/disabled/highlight/focus states, visible scrolling, typeahead, and keyboard selection. Address/timezone/compact-segmented choices use this same owner.
 
-`styles/motion.css` and theme timing tokens own presses, switches, checkbox marks, segmented movement, list transitions, popups, and overlays. JavaScript animation uses `motionPreferences.ts` and `useListMotion`. Both device reduced motion and the saved Reduced preference win. Positioning, visibility, state, and focus still update immediately.
+Date of birth is date-only and serialized at UTC midnight; observations/schedules are instants displayed in the browser timezone with en-US formatting. Native picker geometry/language remains platform-owned. Use noValidate and schema messages, label/error associations, masked passwords with proper autocomplete, and first-invalid-field focus. Textareas stay within layout with sufficient writing space.
 
-SegmentedTabs is a native radio choice group. Two choices stay as a capsule on mobile; longer groups use the authored Select below 600px. The indicator measures actual labels and responds to resizing and font changes. SegmentedPanels keeps inactive drafts mounted with hidden/inert semantics.
+## Layers, Focus, And Motion
 
-Stepper uses the LeafLaunch horizontal bars by default. Pass `orientation="vertical"` for connected stacked stages or `orientation="responsive"` for container-driven switching at 34rem. The library shows horizontal and vertical examples together. Completed/current/upcoming state and disabled eligibility come from the caller. Stages are real buttons with `aria-current="step"`, numbered/check markers, full descriptions, visible focus, and 44px targets.
+Use Modal for composed forms and PresentationProvider for queued confirmations, sheets, and toasts. Honor Escape, focus trap/restoration, safe areas, and reachable actions in long content. Modal supports initialFocusRef. React Aria popups portal inside the modal's focus scope; Escape closes the popup before its parent. Higher confirmation layers must not dismiss/reopen the underlying dialog. Dirty guards share one pending discard decision.
 
-## Overlays and guarded drafts
+Segmented choices use native radio semantics; more than two choices become Select below 600px. Persistent SegmentedPanels keep inactive drafts mounted/hidden/inert. Stepper eligibility and current/completed state belong to the caller; orientation does not change state. Reordering preserves handle focus after moves, including Safari.
 
-Use PresentationProvider for queued alerts, sheets, and toasts; use Modal for composed forms. Preserve focus restoration, Escape, safe actions first, dynamic viewport bounds, and safe-area spacing. The direct react-aria dependency is pinned to the exact version used by react-aria-components so they share PortalProvider context. Keep these versions aligned during upgrades. React Aria popup portals in Modal stay inside its focus scope; closing a popup with Escape does not close the parent modal. Toasts sit above the overlay stack.
+Shared motion CSS/helpers read theme timing and device/saved reduced-motion preferences. React Aria DisclosurePanel owns measured open/close height and exit timing. Rating/reaction feedback uses their shared owners. Do not introduce per-screen timing constants or animate when reduced motion is active.
 
-NavigationGuardProvider and useUnsavedFormGuard are available to forms. The shell navigates through useGuardedNavigate. Register dirty/busy refs, pass guarded navigation to breadcrumbs/links, and clear dirty state only after successful save/discard. Guard registration does not automatically intercept every arbitrary Next Link or browser history action. Never store private drafts or credentials in browser storage. Optional dictation starts only after an explicit user action; generated suggestions require review and a separate save.
+## Extending Shared UI
 
-## Verification and extension
+Interactive components exported from the UI barrel retain `'use client'` and named props interfaces; server consumers import that barrel too. Internal client-only subparts need no redundant boundary. Keep react-aria and react-aria-components on compatible shared PortalProvider versions.
 
-`npm run check` runs ESLint with zero warnings allowed, route-aware TypeScript, the Next.js editor plugin diagnostics, centralized-copy checks, semantic-color checks, the shared-control guard, and Tailwind canonical-class checks. Native button/input/select/textarea/table authoring belongs inside the library.
+Extend the canonical owner before adding a local equivalent. Add component reference states where relevant and verify a sibling workflow. [Verification](VERIFICATION.md) covers checks, keyboard, popups, narrow layouts, themes, and recovery; static audits supplement browser evidence.
 
-Server Components import `@/components/ui` (for example `not-found.tsx`), so every interactive file the barrel exports keeps `'use client'`; removing it pulls hooks into the server graph and fails the build. Next's plugin warns when a `'use client'` export declares function props in an inline object type, so those components declare a named props `interface`. Files imported only by client modules, such as providers, internal hooks, and sub-parts, do not need the directive. Literal colors/fixed palettes outside theme.css are rejected. Run `DEMO_MODE=true npm run build`, `git diff --check`, and focused demo workflows. Do not write tests.
-
-Add preview states for new reusable controls here. Verify desktop/narrow layout, keyboard, light/dark accents, disabled/busy/error states, popups, and reduced motion. Keep domain integration evidence distinct from component previews. See [verification](VERIFICATION.md), [design context](../DESIGN.md), and [UX contract](../UX-CONTRACT.md).
-
-## Address data attribution
+## Address Data Attribution
 
 Country/region labels in `src/strings.ts` retain the country-region-data notice:
 

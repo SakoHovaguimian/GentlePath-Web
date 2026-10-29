@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { Button, Card, SegmentedTabs, UiIcon } from '@/components/ui';
 import { gentlePathNotificationInboxStrings as copy } from '@/strings';

@@ -1,66 +1,110 @@
-# GentlePath product and API
+# Product And Feature Map
 
-The supplied GentlePath HTML is the visual source for colors, fonts, illustrations, tone, and product concepts. The web workspace now implements the product modules below through authenticated domain services, a complete server-side demo, and adapters to the sibling GentlePath API. Proposed AI inference and family-sharing concepts remain separate from the operational tools implemented here.
+GentlePath combines a private family workspace, shared community/editorial content, and staff operations. The table identifies the code owner; the sections below retain the rules that are easy to miss. Schemas and registered adapters are authoritative for exact fields and commands. Shared transport/auth rules live in [integrations](INTEGRATIONS.md), not separate per-feature copies.
 
-## Routes and permissions
+## Routes And Owners
 
-| Surface                  | Routes                                                                                        | Access                                               |
-| ------------------------ | --------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| Landing and public reads | `/`, `/blog`, `/blog/[slug]`                                                                  | Public; published articles only                      |
-| Family workspace         | `/dashboard`, `/family`, `/journal`, `/milestones`, `/resources`, `/resources/[id]`, `/saved` | Signed-in account; personal records are owner-scoped |
-| Account and appearance   | `/profile`, `/settings/appearance`                                                            | Signed-in account                                    |
-| Administration           | `/admin`, `/admin/users`, `/admin/moderation`, `/admin/blog/*`                                | Admin or SuperAdmin                                  |
-| System configuration     | `/admin/settings`, `/superadmin`                                                              | SuperAdmin                                           |
-| Developer controls       | `/dev-settings`, `/dev-settings/components`                                                   | Signed-in development/demo runtime only              |
+| Surface | Routes | Source Owner |
+| --- | --- | --- |
+| Public site and journal | `/`, `/blog`, `/blog/[slug]` | `modules/landing`, `modules/blog` |
+| Family and reflections | `/dashboard`, `/family`, `/journal` | `modules/portal` |
+| Private documents | `/documents` | `modules/documents` |
+| Resources and guides | `/resources/*`, `/guides/*`, `/admin/resources/*`, `/admin/guides/*` | `modules/portal`, `modules/editorial` |
+| Ratings, likes, saves | Reader actions, `/saved`, `/saved/[id]` | `modules/engagement` |
+| Community Posts/Polls | `/community`, `/community/[id]`, `/community/reports`, `/polls`, `/polls/[id]` | `modules/community`, `modules/polls` |
+| Milestones and tips | `/milestones`, `/tips`, `/admin/milestones`, `/admin/tips` | `modules/milestone-admin`, portal milestone components |
+| Family discounts and commercial tools | `/discounts/*`, `/admin/commercial/*` | `modules/commercial` |
+| Inbox and preferences | `/notifications`, `/settings/notifications` | `modules/notification-inbox` |
+| Account and operations | `/profile`, `/settings/account`, `/settings/devices`, `/settings/delivery-history`, `/admin/ai-usage`, `/help` | `modules/users`, `modules/account-tools` |
+| Platform administration | `/admin`, `/admin/users`, `/admin/moderation`, `/admin/settings`, `/superadmin` | `modules/portal` |
+| Existing utility/specimen flows | `/feature-requests/*`, `/chat`, `/users/*`, `/experience`, `/dev-settings/*` | matching modules; developer routes are runtime-gated |
 
-## Expanded Workspace
+All paths above are under `src/`. Navigation is composed in [portalNavigation](../src/modules/portal/portalNavigation.tsx). Community has one sidebar entry and a shared Posts/Polls segmented switch; `/polls` remains the stable poll route and return destination.
 
-| Capability                       | Routes                                                                                             | Contract And Ownership                                                                                                                                                            |
-| -------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Document Vault                   | `/documents`                                                                                       | [Uploads, metadata, private downloads, filtering, removal](DOCUMENT_VAULT.md); current account and owned children only                                                            |
-| Guided Steps And Editorial Tools | `/guides/*`, `/admin/guides/*`, `/admin/resources/*`                                               | [Ordered guides, resource sources, and collections](EDITORIAL.md); staff authoring, member reading                                                                                |
-| Ratings, Likes, And Favorites    | Resource/article actions, `/saved`, `/saved/[id]`                                                  | [Ratings, blog likes, typed saved content](ENGAGEMENT.md); owner pivots and visible public targets only                                                                           |
-| Community                        | `/community`, `/community/[id]`, `/community/reports`                                              | [Posts, comments, reactions, reports, snapshots](COMMUNITY.md); author-only edits and private report history                                                                      |
-| Polls                            | `/polls`, `/polls/[id]`                                                                            | [Choices, ballots, results, discussion](POLLS.md); author controls and immutable ballot history rules                                                                             |
-| Milestones And Tips              | `/milestones`, `/tips`, `/admin/milestones`, `/admin/tips`                                         | [Dynamic guidance/options, private observation history, reviewed tips](MILESTONE_ADMIN.md)                                                                                        |
-| Commercial Features              | `/discounts/*`, `/admin/commercial/*`                                                              | [Sponsors, verified offers, campaigns, creatives, placements, serving, aggregate metrics](COMMERCIAL.md)                                                                          |
-| Notifications                    | `/notifications`, `/settings/notifications`                                                        | [Inbox, read/archive, preferences, and timezone](NOTIFICATIONS.md); current account only                                                                                          |
-| Account And Operations           | `/settings/account`, `/settings/devices`, `/settings/delivery-history`, `/admin/ai-usage`, `/help` | [Account deletion, devices, delivery history, AI usage, API legal/FAQ](ACCOUNT_TOOLS.md); delivery and AI tools also require SuperAdmin and the live backend's operator allowlist |
+## Permissions And Privacy
 
-Staff access never grants access to another family's vault or observations. Account deletion removes access and hides records; it does not promise permanent database or uploaded-file erasure. Public article rendering remains independent of authentication, while likes and saves require an account.
+- Public users read landing/published articles. Account actions require authentication without blocking public article reading.
+- Every signed-in role owns its own children, journals, documents, observations, preferences, devices, and saved pivots. Admin/SuperAdmin do not gain access to another family's private records.
+- Staff author reviewed resources/guides/blogs, administer milestones/commercial content, and review public reports/tips. Author-only post/comment/poll/tip edits remain author-only for staff too.
+- SuperAdmin additionally controls platform/account permissions. Delivery and AI ledgers also require the live backend's external-ID allowlist; role alone is insufficient. Self/final-active-SuperAdmin safeguards apply.
+- No AI inference, clinical assessment, family-sharing, payments, billing, or data-erasure workflow is implied by the existing screens.
 
-Users manage their own family profiles, journal entries, resource favorites, and milestone observations. Admins publish blogs, review public-content reports, and inspect nonprivate user-directory records. SuperAdmins also change account roles/access and platform settings. Role permissions never grant access to other families' journals, notes, or observations. A SuperAdmin cannot demote/disable themself or remove the final active SuperAdmin.
+## Family Records And Documents
 
-The server checks protected layouts and proxy operations independently. Public session props contain only user information and expiry. The live backend must enforce role and ownership rules itself; frontend restrictions do not replace backend authorization.
+Private journal search/drafts stay out of URLs and browser storage. Child references must belong to the current account. Demo child removal deletes related observations and detaches journal links while retaining journal text. Check the actual backend family contract before changing lifecycle behavior.
 
-## Portal API
+Document facade `/portal/documents` maps to `/care-documents` in [the family API](../../GentlePath-API/docs/FAMILY_RECORDS_API.md). Models, service, and live adapter live in `modules/documents`; metadata editing changes title/type/owned child, not the uploaded file or owner.
 
-Authenticated browser paths prepend `/api/backend`. Domain JSON is camelCase and is validated with the independent schemas in `src/modules/portal/models`. The client container owns `PortalService` and `AdminService`; TanStack Query owns business records and mutation invalidation.
+Uploads accept PDF/JPEG/PNG/WebP up to 10 MiB, with server-side body/signature checks. Never render private uploads as active content. Live downloads use validated HTTPS signed attachment URLs without API credentials/referrer; issued URLs may remain valid until expiry. Demo serves validated stored bytes through its private facade. Upload progress is indeterminate; cancellation can race a completed server write, so refresh/check before retrying. Demo upload idempotency is not a live guarantee. Metadata uses last-write-wins semantics; deletion does not promise permanent object erasure.
 
-| Upstream path                    | Methods            | Contract                                                                                           |
-| -------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------- |
-| `/portal/overview`               | GET                | Owner counts: journals, saved resources, observations, child profiles, seven daily activity counts |
-| `/portal/children`               | GET, POST          | Owner profiles; create `{name,dateOfBirth,supportNotes}`                                           |
-| `/portal/children/:id`           | GET, PATCH, DELETE | Owner only; removing a child clears journal links and removes its observations                     |
-| `/portal/journals`               | GET, POST          | Owner reflections; `{title,body,emotion,childId}`                                                  |
-| `/portal/journals/:id`           | GET, PATCH, DELETE | Owner only; child links must belong to the same account                                            |
-| `/portal/resources`              | GET                | Library resources with per-account `saved` state                                                   |
-| `/portal/resources/:id/favorite` | POST               | Idempotent `{saved:boolean}`; returns updated resource                                             |
-| `/portal/milestones?childId=...` | GET                | Milestone topics plus selected child's latest observation                                          |
-| `/portal/milestones/:id`         | PATCH              | `{childId,response}`; response is `not_yet`, `emerging`, or `often`                                |
-| `/admin/overview`                | GET                | User/active/content/report/resource counts, role breakdown, seven daily registrations              |
-| `/admin/users`                   | GET                | Nonprivate directory records including role/access status                                          |
-| `/admin/users/:id`               | PATCH              | SuperAdmin only: `{role?,disabled?}`                                                               |
-| `/admin/reports`                 | GET                | Public-content reports and review state                                                            |
-| `/admin/reports/:id`             | PATCH              | `{status:resolved                                                                                  | dismissed,resolutionNote}`; retain reviewer attribution |
-| `/admin/settings`                | GET, PATCH         | SuperAdmin flags: community, registration, maintenance, resource-review requirement                |
+## Resources And Guided Steps
 
-Directory arrays are displayed with bounded UI pages; committed filters and offset are URL state. Journal search remains component state. Domain APIs do not currently provide a large-scale server-paging contract for these small demo datasets; adopt one before using large production directories. Blog lists have full server paging/filter contracts in [BLOG.md](BLOG.md).
+`EditorialService` and its server adapters map `/portal/editorial/*` and `/admin/editorial/*` to `/resources` and `/guided-steps`. [Reviewed content API](../../GentlePath-API/docs/REVIEWED_CONTENT_API.md) owns canonical types, formats, provenance, collections, and replacement semantics.
 
-Platform demo gates reject signup when registration is disabled, community writes when community is disabled, and member domain access during maintenance. Admin operations remain available to restore service. Resource authoring requires staff and stamps server-owned editorial review attribution. Live platform switches require corresponding backend policy support; the demo flags do not claim to configure a live system.
+Guides retain item IDs and derive order from the complete array; a dedicated reorder includes every active item exactly once. Current step is local reading state, not completion/assessment. Optional source attribution belongs in step metadata because guides have no parent provenance field.
 
-## Demo and live boundary
+Noncollection resources require source name/URL. Publication dates cannot be future dates; review attribution comes from staff identity/server time and does not mean clinical review. Collections may omit sources; reject self/descendant cycles and retain collection type while children exist. Removing a collection hides descendants through ancestry visibility. Preserve unrelated metadata during replacement. No revision-precondition contract exists for these writes.
 
-Fixtures, credentials, mutation state, ownership checks, and scenario simulation live on the server. Reloads preserve demo mutations; process restarts or the explicit reset restore fixtures. Roles and scenarios are exercised through the same domain services and proxy as live requests. See [DEMO_MODE.md](DEMO_MODE.md) for settings schema, controls, and recovery.
+The live adapter also bridges the existing family `/portal/resources` library and resource-save facade. Keep canonical type/format separate from family category/read-time metadata. Follow all required pages with nonadvancing/upper-bound protection, never silent truncation. Resource aggregates flow through the same list mapping, so gold rating summaries on cards/header require no per-card queries.
 
-The frontend implements these contracts and the complete demo. Live authentication, persistence, file storage, moderation, serving, notification delivery, and aggregation require the configured backend and its external integrations. Structured blog publication and JSONB content storage require the new API migration described in [BLOG.md](BLOG.md). New domain adapters translate actual GentlePath endpoints, DTOs, and pages; remaining legacy template contracts are listed in [BACKEND_CONTRACT.md](BACKEND_CONTRACT.md). Demo verification does not establish live integration correctness. No new AI inference or family-sharing workflow is implied by AI usage administration.
+## Ratings, Likes, And Saved Content
+
+`/portal/engagement/*` maps to resource-rating, blog-like, and typed favorite endpoints in the reviewed-content API. Resource ratings are one integer 1–5 per account; changes replace that rating. Shared StarRating owns accessible radio interaction; RatingSummary owns compact aggregates. These APIs rate resources, including guide-format resources, not Guided Steps.
+
+Favorites support visible public content kinds, excluding private journals/documents. Validate the target before paging/creation, including ancestor/author visibility, published blogs, and approved tips. Removing an existing pivot remains idempotent after its target disappears. Resource saves share the same authoritative backend pivot/demo resource set with legacy controls and overview counts.
+
+Saved previews use safe typed summaries (bounded text) and known internal reader paths. Published article slugs enable direct reading; older summaries without a slug use Saved Preview. Public article controls use the focused optional-account container; editor previews do not mount engagement controls.
+
+## Community Posts And Polls
+
+Post facade `/portal/community/*` maps to `/posts`, `/post-comments`, post/comment likes, and `/reports`. See [posts](../../GentlePath-API/docs/COMMUNITY_POSTS_API.md) and [moderation](../../GentlePath-API/docs/CONTENT_MODERATION_API.md). Lists, scope, tags, and pages are URL state; validated list return paths preserve filters. Only authors edit/delete; deleted parents hide their discussion. Reports retain original evidence and owner-scoped history/review details after source changes/removal.
+
+Post detail preserves open forms during transient background errors and offers retry; 401/403/404 still remove inaccessible content. Shared ReactionButton owns red filled-heart state, confirmation-based animation, accessible counts/pressed state, and reduced motion. Comment actions use a chat bubble.
+
+Current live viewer-like enrichment is bounded parallel per-row reads because the API has no batch viewer-state endpoint: feed 1 list + up to 9 like reads, detail 2 reads, comments 1 list + up to 10 like reads. An arbitrary page of all account likes is not a correct substitute. Staff moderation currently exposes only the newest 100 reports and cannot hide targets; [integration limits](INTEGRATIONS.md#api-proxy-and-mapping) explain the bridge.
+
+Poll facade `/portal/polls/*` maps to the [poll API](../../GentlePath-API/docs/POLLS_API.md). Options have stable IDs; ballots select distinct active options from that poll. Single choice means exactly one, multiple means one or more. Ballot reads are private; results expose aggregate participants/selections. Multiple-choice percentages may exceed 100% in total.
+
+Any retained ballot, including one from an inactive account, freezes question/message/mode/option labels and membership. Tags and reordering unchanged choices remain editable; preserve drafts on conflicts. The API has no close/reopen/expiry lifecycle. Poll cards preview the two most-voted choices (stable option-order tie break) and remaining-option count; unvoted polls show ordinary answer options. Poll discussion has author-only edits and shared heart reactions.
+
+Content tag words are capitalized throughout web/API inputs, outputs, and filters; acronyms and existing mixed-case names are preserved. Duplicate case variants are rejected. Retained demo state upgrades without reset; existing database rows require the tag backfill migration.
+
+## Milestones And Reviewed Tips
+
+The family UI uses `MilestoneAdminService`, `/portal/milestone-tools`, `/portal/milestone-observations`, and `/portal/tips`; staff writes use their matching admin facades. [Milestone API](../../GentlePath-API/docs/MILESTONES_API.md) owns historical option and review rules.
+
+Response IDs/values stay stable. Save the active options in full order; retiring an option preserves history, reserves its value, and does not restore it later. Referenced labels cannot change; the server can reject a change even when the UI cannot know references exist. Observation edits retain child/milestone identity and may keep an unchanged retired choice when correcting date/notes. New selections use active options belonging to that milestone. Dates are past/current instants; history stays private to the owned child.
+
+New/edited tips become Pending; author edits clear prior review details. Rejection needs a note; reviewer/time are server-owned. Staff review never grants author-edit rights. The API exposes the current decision, not a chronological review audit. Hidden milestones/removed children/accounts are excluded from private overview counts. Dynamic demo state, rather than the old fixed-response array, is authoritative.
+
+## Commercial And Family Discounts
+
+Staff can create/manage offers directly from Family Discounts or `/admin/commercial/offers/new`. Select an eligible approved sponsor, save content, approve review, verify against a source with valid dates, then enable the offer. A new/editable record is not automatically eligible for family serving.
+
+`CommercialService` maps reader `/portal/commercial/*` and staff `/admin/commercial/*` to sponsors, discount offers, campaigns, creatives, placements, and aggregate metrics. [Commercial API](../../GentlePath-API/docs/COMMERCIAL_API.md) defines the commands.
+
+Content edits reset review and serving enablement; offer edits clear verification. Sponsors have review/suspension rather than an enable flag. Immutable attribution/relationship fields require new records to change. Offer verification must remain valid and within expiry; affiliate content needs its disclosure. Placement replacement preserves association identity/history, complete order, and retired metrics. The two reserved placement keys remain reserved after deletion.
+
+Serving checks eligible parents/offers, dates, review, enablement, verification, locale/platform, and disclosure before limiting results. Carousels respect pause, hover/focus/background/reduced motion. Authored colors stay within creative artwork; disclosure/action regions retain the readable theme. Approved app destinations resolve known web routes; blog UUIDs resolve published slugs. Framed partner pages retain an external-link fallback.
+
+Metrics are daily submitted aggregate impressions/clicks/code copies, not unique people. No private family/device/health data becomes targeting. Browsing and staff preview do not automatically ingest metrics or call Amplitude; explicit demo impression simulation only changes local state.
+
+## Notifications
+
+`NotificationInboxService` maps `/portal/notification-inbox/*` to `/notifications` and `/user-settings`. Only the account's published, in-app-enabled, non-archived/non-expired records are visible. Opening/following an update never implicitly marks read. All/Unread/Read, search, category, order, and page state remain explicit and shareable.
+
+Counts ignore the selected read-status filter; the shell bell counts the entire account. Bulk actions state whether they affect all or filtered records across pages. Archive has no promised restore/Undo and uses destructive confirmation/styling. Only supported same-origin destinations become actions.
+
+Category/channel preferences apply to future notifications and are separate from FCM/browser authorization. Effective scheduling timezone is explicit override → last detected browser zone → UTC. Nonblocking detection records only the last zone and cannot replace an override. Displayed dates still use browser timezone. Appearance remains the owner of browser push opt-in.
+
+## Account And Operational Tools
+
+`AccountToolsService` maps account/devices/Help to existing users/devices/system endpoints; operator delivery/attempt and AI ledger tools map to their dedicated APIs. Pass trusted current identity and role through the proxy. Never return device tokens, provider identifiers, delivery destinations, or leases to the browser.
+
+Account deletion verifies typed current email plus acknowledgement. It soft-deletes access; it does not erase uploaded objects, database history, or Firebase identity. Clear the encrypted cookie, queries/session, sockets, and local push state on success without another authenticated request. Device removal deactivates that notification registration and does not revoke a sign-in session.
+
+AI usage is an operational ledger, not AI generation; deletion is soft and Deleted Records permits inspection, not invented restoration. Delivery/AI tools require SuperAdmin and the backend allowlist. Production legal/FAQ text comes from the API; demo samples remain clearly illustrative and do not establish policy/retention commitments.
+
+## Demo And Live Boundary
+
+All modules use the same domain services and authenticated proxy in both modes. Demo validation, ownership, counts, visibility, and mutations are server-owned; reset must clear every module store. [Demo mode](DEMO_MODE.md) explains lifecycle and simulation. [Integrations](INTEGRATIONS.md) records retained live gaps; complete demo behavior and a successful build never prove configured live authorization, storage, delivery, serving, or persistence.

@@ -172,6 +172,7 @@ export function TipReviewEditor({
           </Button>
           <Button
             type="submit"
+            variant={decision === 'REJECTED' ? 'destructive' : 'primary'}
             loading={mutation.isPending}
             disabled={confirming && !mutation.isPending}
           >

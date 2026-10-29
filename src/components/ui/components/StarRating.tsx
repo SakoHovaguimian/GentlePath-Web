@@ -58,6 +58,23 @@ export function StarRating({
                 checked={value === option}
                 aria-label={getOptionLabel(option)}
                 aria-describedby={describedBy}
+                aria-disabled={busy || undefined}
+                onClick={(event) => {
+                  if (busy) event.preventDefault();
+                }}
+                onKeyDown={(event) => {
+                  if (
+                    busy &&
+                    [
+                      'ArrowUp',
+                      'ArrowDown',
+                      'ArrowLeft',
+                      'ArrowRight',
+                      ' ',
+                    ].includes(event.key)
+                  )
+                    event.preventDefault();
+                }}
                 onFocus={() => setFocused(option)}
                 onChange={() => {
                   if (!disabled && !busy) onValueChange(option);
