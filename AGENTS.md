@@ -20,17 +20,17 @@ GentlePath is one Node 22 / npm application: Next.js 16, React 19, TypeScript, T
 
 Read only the relevant section, then inspect the listed source. Directories below are search scopes, not instructions to load everything.
 
-| Task | Guide | Start In |
-| --- | --- | --- |
-| Run/configure the app | [README](README.md), [.env.example](.env.example) | [package.json](package.json) |
-| Add a feature, model, service, or query | [Architecture](docs/ARCHITECTURE.md) | [client container](src/clientContainer.ts), [server container](src/container.ts), [feature-request example](src/modules/feature-requests/) |
-| Routes, roles, and feature behavior | [Product map](docs/GENTLEPATH.md) | [route tree](src/app/), [navigation](src/modules/portal/portalNavigation.tsx), owning module |
-| API mapping, auth, sessions, realtime, push, analytics | [Integrations](docs/INTEGRATIONS.md) | [backend route](src/app/api/backend/[...path]/route.ts), [feature adapters](src/services/api/featureBackendProxy.ts), [services](src/services/) |
-| Demo fixtures, scenarios, ownership, reset | [Demo mode](docs/DEMO_MODE.md) | [dispatcher](src/services/demo/demoApiClient.ts), [reset route](src/app/api/dev-settings/reset/route.ts), module demo state |
-| Blog builder, public SSR, uploads, JSONB | [Blog](docs/BLOG.md) | [blog module](src/modules/blog/) |
-| UI, layout, controls, interaction | [UI system](docs/UI_SYSTEM.md), [visual direction](DESIGN.md) | [shared UI](src/components/ui/), [theme](src/app/theme.css), [presentation](src/presentation/) |
-| Copy, validation, accessibility names | [Strings](docs/STRINGS.md) | [catalog](src/strings.ts), [checker](scripts/check-strings.mjs) |
-| Verify or prepare live deployment | [Verification](docs/VERIFICATION.md) | affected flow, actual scripts, configured backend contracts |
+| Task                                                   | Guide                                                         | Start In                                                                                                                                        |
+| ------------------------------------------------------ | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Run/configure the app                                  | [README](README.md), [.env.example](.env.example)             | [package.json](package.json)                                                                                                                    |
+| Add a feature, model, service, or query                | [Architecture](docs/ARCHITECTURE.md)                          | [client container](src/clientContainer.ts), [server container](src/container.ts), [feature-request example](src/modules/feature-requests/)      |
+| Routes, roles, and feature behavior                    | [Product map](docs/GENTLEPATH.md)                             | [route tree](src/app/), [navigation](src/modules/portal/portalNavigation.tsx), owning module                                                    |
+| API mapping, auth, sessions, realtime, push, analytics | [Integrations](docs/INTEGRATIONS.md)                          | [backend route](src/app/api/backend/[...path]/route.ts), [feature adapters](src/services/api/featureBackendProxy.ts), [services](src/services/) |
+| Demo fixtures, scenarios, ownership, reset             | [Demo mode](docs/DEMO_MODE.md)                                | [dispatcher](src/services/demo/demoApiClient.ts), [reset route](src/app/api/dev-settings/reset/route.ts), module demo state                     |
+| Blog builder, public SSR, uploads, JSONB               | [Blog](docs/BLOG.md)                                          | [blog module](src/modules/blog/)                                                                                                                |
+| UI, layout, controls, interaction                      | [UI system](docs/UI_SYSTEM.md), [visual direction](DESIGN.md) | [shared UI](src/components/ui/), [theme](src/app/theme.css), [presentation](src/presentation/)                                                  |
+| Copy, validation, accessibility names                  | [Strings](docs/STRINGS.md)                                    | [catalog](src/strings.ts), [checker](scripts/check-strings.mjs)                                                                                 |
+| Verify or prepare live deployment                      | [Verification](docs/VERIFICATION.md)                          | affected flow, actual scripts, configured backend contracts                                                                                     |
 
 For feature work, [GENTLEPATH.md](docs/GENTLEPATH.md) identifies each module, facade, permissions, and non-obvious lifecycle rules. The sibling `../GentlePath-API` owns persistence and canonical backend contracts. Read its own AGENTS.md before editing it; do not copy its repository architecture into this app.
 

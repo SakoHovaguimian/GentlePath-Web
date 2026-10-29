@@ -4,20 +4,20 @@ GentlePath combines a private family workspace, shared community/editorial conte
 
 ## Routes And Owners
 
-| Surface | Routes | Source Owner |
-| --- | --- | --- |
-| Public site and journal | `/`, `/blog`, `/blog/[slug]` | `modules/landing`, `modules/blog` |
-| Family and reflections | `/dashboard`, `/family`, `/journal` | `modules/portal` |
-| Private documents | `/documents` | `modules/documents` |
-| Resources and guides | `/resources/*`, `/guides/*`, `/admin/resources/*`, `/admin/guides/*` | `modules/portal`, `modules/editorial` |
-| Ratings, likes, saves | Reader actions, `/saved`, `/saved/[id]` | `modules/engagement` |
-| Community Posts/Polls | `/community`, `/community/[id]`, `/community/reports`, `/polls`, `/polls/[id]` | `modules/community`, `modules/polls` |
-| Milestones and tips | `/milestones`, `/tips`, `/admin/milestones`, `/admin/tips` | `modules/milestone-admin`, portal milestone components |
-| Family discounts and commercial tools | `/discounts/*`, `/admin/commercial/*` | `modules/commercial` |
-| Inbox and preferences | `/notifications`, `/settings/notifications` | `modules/notification-inbox` |
-| Account and operations | `/profile`, `/settings/account`, `/settings/devices`, `/settings/delivery-history`, `/admin/ai-usage`, `/help` | `modules/users`, `modules/account-tools` |
-| Platform administration | `/admin`, `/admin/users`, `/admin/moderation`, `/admin/settings`, `/superadmin` | `modules/portal` |
-| Existing utility/specimen flows | `/feature-requests/*`, `/chat`, `/users/*`, `/experience`, `/dev-settings/*` | matching modules; developer routes are runtime-gated |
+| Surface                               | Routes                                                                                                         | Source Owner                                           |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Public site and journal               | `/`, `/blog`, `/blog/[slug]`                                                                                   | `modules/landing`, `modules/blog`                      |
+| Family and reflections                | `/dashboard`, `/family`, `/journal`                                                                            | `modules/portal`                                       |
+| Private documents                     | `/documents`                                                                                                   | `modules/documents`                                    |
+| Resources and guides                  | `/resources/*`, `/guides/*`, `/admin/resources/*`, `/admin/guides/*`                                           | `modules/portal`, `modules/editorial`                  |
+| Ratings, likes, saves                 | Reader actions, `/saved`, `/saved/[id]`                                                                        | `modules/engagement`                                   |
+| Community Posts/Polls                 | `/community`, `/community/[id]`, `/community/reports`, `/polls`, `/polls/[id]`                                 | `modules/community`, `modules/polls`                   |
+| Milestones and tips                   | `/milestones`, `/tips`, `/admin/milestones`, `/admin/tips`                                                     | `modules/milestone-admin`, portal milestone components |
+| Family discounts and commercial tools | `/discounts/*`, `/admin/commercial/*`                                                                          | `modules/commercial`                                   |
+| Inbox and preferences                 | `/notifications`, `/settings/notifications`                                                                    | `modules/notification-inbox`                           |
+| Account and operations                | `/profile`, `/settings/account`, `/settings/devices`, `/settings/delivery-history`, `/admin/ai-usage`, `/help` | `modules/users`, `modules/account-tools`               |
+| Platform administration               | `/admin`, `/admin/users`, `/admin/moderation`, `/admin/settings`, `/superadmin`                                | `modules/portal`                                       |
+| Existing utility/specimen flows       | `/feature-requests/*`, `/chat`, `/users/*`, `/experience`, `/dev-settings/*`                                   | matching modules; developer routes are runtime-gated   |
 
 All paths above are under `src/`. Navigation is composed in [portalNavigation](../src/modules/portal/portalNavigation.tsx). Community has one sidebar entry and a shared Posts/Polls segmented switch; `/polls` remains the stable poll route and return destination.
 

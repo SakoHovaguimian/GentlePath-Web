@@ -6,15 +6,15 @@ The browser talks to same-origin Next.js routes. The server owns authentication,
 
 [.env.example](../.env.example) is the complete configuration reference.
 
-| Setting | Purpose |
-| --- | --- |
-| `DEMO_MODE` | Server default for isolated demo versus live services |
-| `PORTAL_API_URL`, `APP_VERSION` | Backend base URL including its prefix, plus forwarded version |
-| `SESSION_SECRET`, `FIREBASE_WEB_API_KEY` | Required live encrypted-session secret and Firebase REST configuration |
-| `PORTAL_APP_ORIGIN` | Canonical public origin when an ingress changes request origin |
-| `PORTAL_SOCKET_URL` | Optional browser-reachable Socket.IO origin |
-| Firebase web configuration / VAPID values | Optional Messaging public identifiers, never Admin credentials |
-| `AMPLITUDE_API_KEY` | Optional public analytics project key; explicit consent still required |
+| Setting                                   | Purpose                                                                |
+| ----------------------------------------- | ---------------------------------------------------------------------- |
+| `DEMO_MODE`                               | Server default for isolated demo versus live services                  |
+| `PORTAL_API_URL`, `APP_VERSION`           | Backend base URL including its prefix, plus forwarded version          |
+| `SESSION_SECRET`, `FIREBASE_WEB_API_KEY`  | Required live encrypted-session secret and Firebase REST configuration |
+| `PORTAL_APP_ORIGIN`                       | Canonical public origin when an ingress changes request origin         |
+| `PORTAL_SOCKET_URL`                       | Optional browser-reachable Socket.IO origin                            |
+| Firebase web configuration / VAPID values | Optional Messaging public identifiers, never Admin credentials         |
+| `AMPLITUDE_API_KEY`                       | Optional public analytics project key; explicit consent still required |
 
 Live sessions require a random secret of at least 32 characters. Rotating it signs users out. Never expose backend URLs, private keys, refresh tokens, or backend storage credentials through public config. S3 and provider management credentials belong to the backend.
 

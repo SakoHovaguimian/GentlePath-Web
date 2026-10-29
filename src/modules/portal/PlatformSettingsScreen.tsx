@@ -25,6 +25,11 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
   const dirty = useRef(false);
   const busy = useRef(false);
   useUnsavedFormGuard(dirty, busy);
+  const destructive =
+    (initial.communityEnabled && !settings.communityEnabled) ||
+    (initial.registrationsEnabled && !settings.registrationsEnabled) ||
+    (!initial.maintenanceMode && settings.maintenanceMode) ||
+    (initial.resourceReviewRequired && !settings.resourceReviewRequired);
   const fields = [
     {
       key: 'communityEnabled' as const,
@@ -66,7 +71,7 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
           !(await showAlert({
             title: copy.system.confirmTitle,
             description: copy.system.confirmDescription,
-            tone: 'warning',
+            tone: destructive ? 'danger' : 'warning',
             confirmLabel: copy.system.confirmAction,
             cancelLabel: copy.common.cancel,
           }))
@@ -122,6 +127,7 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
       <FormActions sticky={false}>
         <Button
           type="submit"
+          variant={destructive ? 'destructive' : 'primary'}
           loading={mutation.isPending}
           disabled={JSON.stringify(settings) === JSON.stringify(initial)}
         >

@@ -18,13 +18,13 @@ Development uses Webpack; optimized production builds use Turbopack. `/dev-setti
 
 ## Commands
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Local development on port 3001 |
-| `npm run check` | Lint, types, Next diagnostics, strings, semantic colors, shared controls, and Tailwind checks |
-| `DEMO_MODE=true npm run build` | Optimized application build |
-| `DEMO_MODE=true npm start` | Production demo preview on port 3001 |
-| `git diff --check` | Whitespace/diff verification |
+| Command                        | Purpose                                                                                       |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| `npm run dev`                  | Local development on port 3001                                                                |
+| `npm run check`                | Lint, types, Next diagnostics, strings, semantic colors, shared controls, and Tailwind checks |
+| `DEMO_MODE=true npm run build` | Optimized application build                                                                   |
+| `DEMO_MODE=true npm start`     | Production demo preview on port 3001                                                          |
+| `git diff --check`             | Whitespace/diff verification                                                                  |
 
 Use the development server for local HTTP browsing. Production cookies are Secure, including demo cookies; Safari needs trusted HTTPS for a production preview. Do not weaken cookie security to work around local sign-in.
 

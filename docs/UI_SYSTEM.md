@@ -6,18 +6,18 @@ Import from `@/components/ui`; inspect `/dev-settings/components` before adding 
 
 ## Canonical UI Map
 
-| Capability | Canonical Owner | Allowed Behavior | Verify |
-| --- | --- | --- | --- |
-| Select/Listbox | shared Select/MultiSelect, AddressSelect/TimezoneSelect | authored trigger; content-sized collision-aware popup | long options, viewport clamp, keyboard, modal Escape |
-| Date | Field/Input and shared schedule fields | native date/time/datetime-local, OS popup geometry/locale accepted | date-only versus instant, keyboard/browser |
-| Form | Field/Input, module Zod schema, FormActions | create/edit/read-only; associated validation | first invalid focus, success/failure, retained draft |
-| Scrollbar | globals.css and theme tokens | document/table/chat/overlay, engine fallbacks | visible/usable, forced colors, narrow layout |
-| Toast | PresentationProvider | success/info/warning/error | live region; critical errors also inline |
-| CRUD | domain services, query hooks, guarded navigation | lifecycle from owning product contract | full demo flow and recovery |
-| Rating | StarRating/RatingSummary | native 1–5 radios and aggregate summary | hover/focus, keyboard, pending/rollback, gold contrast |
-| Reactions | ReactionButton | pressed/count, outlined/filled heart | confirmed animation, errors, reduced motion |
-| Disclosure | Accordion | accessible multi-open FAQ, retained answers | open/close motion, keyboard, reduced motion |
-| Reordering | ReorderableList | pointer, handle arrows, explicit move controls | stable IDs/content, focus, narrow layout |
+| Capability     | Canonical Owner                                         | Source Of Truth     | Allowed Variants                                                   | Verification                                           |
+| -------------- | ------------------------------------------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
+| Select/Listbox | shared Select/MultiSelect, AddressSelect/TimezoneSelect | This Guide + DESIGN | authored trigger; content-sized collision-aware popup              | long options, viewport clamp, keyboard, modal Escape   |
+| Date           | Field/Input and shared schedule fields                  | This Guide + DESIGN | native date/time/datetime-local, OS popup geometry/locale accepted | date-only versus instant, keyboard/browser             |
+| Form           | Field/Input, module Zod schema, FormActions             | This Guide + DESIGN | create/edit/read-only; associated validation                       | first invalid focus, success/failure, retained draft   |
+| Scrollbar      | globals.css and theme tokens                            | This Guide + DESIGN | document/table/chat/overlay, engine fallbacks                      | visible/usable, forced colors, narrow layout           |
+| Toast          | PresentationProvider                                    | This Guide + DESIGN | success/info/warning/error                                         | live region; critical errors also inline               |
+| CRUD           | domain services, query hooks, guarded navigation        | This Guide + DESIGN | lifecycle from owning product contract                             | full demo flow and recovery                            |
+| Rating         | StarRating/RatingSummary                                | This Guide + DESIGN | native 1–5 radios and aggregate summary                            | hover/focus, keyboard, pending/rollback, gold contrast |
+| Reactions      | ReactionButton                                          | This Guide + DESIGN | pressed/count, outlined/filled heart                               | confirmed animation, errors, reduced motion            |
+| Disclosure     | Accordion                                               | This Guide + DESIGN | accessible multi-open FAQ, retained answers                        | open/close motion, keyboard, reduced motion            |
+| Reordering     | ReorderableList                                         | This Guide + DESIGN | pointer, handle arrows, explicit move controls                     | stable IDs/content, focus, narrow layout               |
 
 ## Compose A Screen
 

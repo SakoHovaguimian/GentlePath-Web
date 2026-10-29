@@ -82,14 +82,14 @@ Motion uses shared 90/140/200/240ms press/feedback/selection/entrance tokens. De
 
 Original PNG illustrations and bundled fonts came from the supplied product reference. The three `*-v2.png` botanical scenes were generated for GentlePath. Keep the files as maintained assets; generation transcripts and interface screenshots are not runtime dependencies.
 
-| Asset Group | Use |
-| --- | --- |
-| `public/gentlepath/brand-mark.svg` | Shared brand identity |
-| `winding-path`, `care-notes`, `care-folder`, `caregiver-community`, `growing-together`, `parent-and-child` PNGs | Existing product illustrations |
-| `path-landscape-v2.png` | Sunlit landscape for public/auth/family/admin regions |
-| `reading-garden-v2.png` | Journal, reading, and resource regions |
-| `community-garden-v2.png` | Community/communication regions |
-| `public/gentlepath/fonts/` | Local DM Sans and Lora; no font network dependency |
+| Asset Group                                                                                                     | Use                                                   |
+| --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `public/gentlepath/brand-mark.svg`                                                                              | Shared brand identity                                 |
+| `winding-path`, `care-notes`, `care-folder`, `caregiver-community`, `growing-together`, `parent-and-child` PNGs | Existing product illustrations                        |
+| `path-landscape-v2.png`                                                                                         | Sunlit landscape for public/auth/family/admin regions |
+| `reading-garden-v2.png`                                                                                         | Journal, reading, and resource regions                |
+| `community-garden-v2.png`                                                                                       | Community/communication regions                       |
+| `public/gentlepath/fonts/`                                                                                      | Local DM Sans and Lora; no font network dependency    |
 
 All PNG names above are under `public/gentlepath/`. Use responsive images and catalog alt text. Never embed phone/UI reference mockups as the product interface.
 

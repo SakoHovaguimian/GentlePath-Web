@@ -2,7 +2,7 @@
   "profile": "product-admin",
   "sourceRoots": ["src"],
   "locale": "en-US",
-  "canonicalMap": "UX-CONTRACT.md",
+  "canonicalMap": "docs/UI_SYSTEM.md",
   "requiredCapabilities": [
     "Select/Listbox",
     "Date",

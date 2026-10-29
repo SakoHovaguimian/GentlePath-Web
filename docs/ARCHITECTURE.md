@@ -4,18 +4,18 @@ GentlePath is one npm application. Domain services orchestrate requests; API cli
 
 ## Source Map
 
-| Owner | Responsibility |
-| --- | --- |
-| `src/app/` | Routes, layouts, metadata, auth handlers, public reads, authenticated proxy |
-| `src/modules/<domain>/` | Screens/components, hooks, domain services, feature models, demo/live adapters |
-| `src/services/` | API/auth/session/runtime, shared demo dispatch, realtime, Messaging, analytics, privacy |
-| `src/models/` | Shared schemas and types; transport-only models stay with their transport owner |
-| `src/clientContainer.ts` | Browser service construction |
-| `src/publicClientContainer.ts` | Optional-account article actions without protected-shell dependencies |
-| `src/container.ts` | Server construction and effective demo/live service selection |
-| `src/components/ui/` | Shared controls, layouts, interaction primitives |
-| `src/presentation/` | Queued alerts, sheets, and toasts |
-| `src/strings.ts` | Every authored display string |
+| Owner                          | Responsibility                                                                          |
+| ------------------------------ | --------------------------------------------------------------------------------------- |
+| `src/app/`                     | Routes, layouts, metadata, auth handlers, public reads, authenticated proxy             |
+| `src/modules/<domain>/`        | Screens/components, hooks, domain services, feature models, demo/live adapters          |
+| `src/services/`                | API/auth/session/runtime, shared demo dispatch, realtime, Messaging, analytics, privacy |
+| `src/models/`                  | Shared schemas and types; transport-only models stay with their transport owner         |
+| `src/clientContainer.ts`       | Browser service construction                                                            |
+| `src/publicClientContainer.ts` | Optional-account article actions without protected-shell dependencies                   |
+| `src/container.ts`             | Server construction and effective demo/live service selection                           |
+| `src/components/ui/`           | Shared controls, layouts, interaction primitives                                        |
+| `src/presentation/`            | Queued alerts, sheets, and toasts                                                       |
+| `src/strings.ts`               | Every authored display string                                                           |
 
 ## Request And Trust Boundaries
 
@@ -31,14 +31,14 @@ Public landing/blog routes stay outside the protected layout. Blog SSR uses publ
 
 ## State Ownership
 
-| State | Owner |
-| --- | --- |
-| Backend records, status, cache, invalidation | TanStack Query |
-| Committed nonprivate filters, selection, paging | URL |
-| Private journal search, forms, disclosure, pending UI | Component state |
-| Existing dashboard density/chrome | Zustand |
+| State                                                         | Owner                               |
+| ------------------------------------------------------------- | ----------------------------------- |
+| Backend records, status, cache, invalidation                  | TanStack Query                      |
+| Committed nonprivate filters, selection, paging               | URL                                 |
+| Private journal search, forms, disclosure, pending UI         | Component state                     |
+| Existing dashboard density/chrome                             | Zustand                             |
 | Appearance/motion, consent, per-user push opt-in/registration | Preference services/browser storage |
-| Demo records and credentials | Server-process stores |
+| Demo records and credentials                                  | Server-process stores               |
 
 Never put auth tokens or private drafts in browser storage. Use stable query keys containing every filter/page/identity that changes results. Pass AbortSignal through reads. Mutations invalidate authoritative detail/list keys and affected summaries; realtime invalidates those same keys. Logout clears account query data. Current defaults retain fresh reads for 30 seconds and inactive results for five minutes.
 

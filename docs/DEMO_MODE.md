@@ -1,70 +1,56 @@
 # Demo Mode
 
-Start with `DEMO_MODE=true npm run dev`, or set `DEMO_MODE=true` in `.env.local` and restart. The server environment supplies the default. An unavailable live integration never silently falls back to demo data.
+Run `DEMO_MODE=true npm run dev`, or use the sample `.env.local`. Demo mode provides server-owned fictional data through the same services/proxy as live mode. It requires no backend, Firebase, Socket.IO, Messaging, or Amplitude. Missing live configuration never silently selects fixtures.
 
-For local HTTP browsing, use `npm run dev`. `npm start` runs in production mode and sets `Secure` session and demo preference cookies, even with `DEMO_MODE=true`. Safari rejects those cookies on `http://localhost`, so a successful sign-in can return immediately to the login screen without showing an error. Stop the production server, start `DEMO_MODE=true npm run dev`, and reload the page. To verify the production server in Safari, serve it over trusted HTTPS; keep production cookies secure.
+## Accounts And Controls
 
-## Server Runtime And Developer Settings
+All sample accounts use `password123`:
 
-Open `/dev-settings` after signing in. Controls are available in development or on a server explicitly started with `DEMO_MODE=true`. They are unavailable on a production live server, regardless of request cookies. The existing `/dev-settings/components` route remains the shared component reference.
+| Account                      | Role          |
+| ---------------------------- | ------------- |
+| `user@gentlepath.demo`       | Family Member |
+| `admin@gentlepath.demo`      | Admin         |
+| `superadmin@gentlepath.demo` | SuperAdmin    |
 
-`src/services/demo/demoRuntime.ts` owns the runtime decision:
+Signup creates an ordinary demo account. Roles and disabled/deleted status are rechecked against current server records; browser fields cannot grant permissions. Developer role switching signs in a trusted seed identity and clears the previous account's client state.
 
-- `getEffectiveRuntime(cookieStore?)` reads the validated, HTTP-only `gentlepath_demo_preferences` cookie and selects actual server services. Without a valid permitted override, it uses the environment default. Demo runtime configuration disables Firebase Messaging, Socket.IO, and Amplitude.
-- `getDemoContext(cookieStore?)` returns the request's response scenario and bounded delay. Both helpers accept a cookie reader for request handlers, or await Next.js `cookies()` themselves.
-- `getContainer()` chooses separately cached demo or live services from the effective runtime. Authentication, sessions, the backend proxy, and public article reads use the same decision. React receives only the public runtime configuration and public session.
-- Changing modes through `PUT /api/dev-settings` clears the existing session. The browser returns to sign-in and obtains a session for the selected service. Live mode still requires its real backend, Firebase configuration, and a valid `SESSION_SECRET`.
+`/dev-settings` and `/dev-settings/components` are available in development or an explicitly enabled demo server. Production live mode hides them and ignores demo preference cookies. Developer mutations require an authenticated session and same-origin checks; role switching/reset additionally require effective demo mode.
 
-If live services are not configured, the sign-in recovery action calls `POST /api/dev-settings/demo` to select demo services again. This endpoint is available only in development or on an explicitly configured demo server, rejects cross-origin browser mutations, resets simulation to Populated with no artificial delay, and clears the previous session. It accepts no identity or role and creates no authenticated session; the user must still sign in. Production live returns 404 and ignores demo preference cookies.
+Use the development server for local HTTP. Production previews set Secure cookies even in demo mode; Safari needs trusted HTTPS. A successful login that immediately returns to sign-in on local production HTTP can be a cookie-retention issue. Keep production cookie security intact.
 
-Normal demo requests default to zero artificial latency. Developer Settings can explicitly select a slower latency or the Loading scenario; saved simulation choices remain effective until changed or reset. Browser queries retain fresh results for 30 seconds and cache inactive pages for five minutes; domain mutations and realtime events still invalidate their authoritative query keys.
+## Runtime Selection
 
-The preference cookie is a permitted simulation setting, never a claim about identity or production permissions. Production live ignores it. Session cookies remain encrypted and include the mode; sessions for another mode are rejected. The known local demo secret is accepted only for demo sessions. A live session requires a configured secret of at least 32 characters.
+[demoRuntime](../src/services/demo/demoRuntime.ts) owns the effective runtime and request simulation. A validated HTTP-only preferences cookie may override the environment only in an allowed developer/demo server. Containers, auth, sessions, public article reads, proxying, and Messaging configuration use the same decision; React receives only public config/session data.
 
-## Demo Identities
+Changing mode through developer settings clears the old mode's session and requires sign-in. The gated `POST /api/dev-settings/demo` recovery action returns to demo/Populated with zero latency and clears the session; it accepts no identity/role and does not authenticate anyone. Production live returns 404.
 
-All three sample accounts use `password123`:
+Normal requests have no artificial delay. Explicit saved latency remains effective until changed; a development route's first compilation is separate from simulated delay and production performance.
 
-| Account                      | Role       | Access                                                                                   |
-| ---------------------------- | ---------- | ---------------------------------------------------------------------------------------- |
-| `user@gentlepath.demo`       | User       | Their own family profiles, journals, observations, and saved resources                   |
-| `admin@gentlepath.demo`      | Admin      | Their private workspace plus article management, basic account directory, and moderation |
-| `superadmin@gentlepath.demo` | Superadmin | Admin access plus platform settings and account permissions                              |
+## State, Ownership, And Reset
 
-Signup creates a user account. In developer settings, account switching calls `POST /api/dev-settings/role`; the server authenticates a trusted seed identity and replaces the encrypted session. Changing a browser role field cannot grant live privileges. Account role and disabled status are checked against current demo state when reading sessions and handling requests, so permission changes take effect without waiting for token expiry.
+Demo stores live in the server process and survive navigation/reloads. Multiple processes do not share them; restart restores fixtures. Never enter real private information or treat this as durable storage.
 
-Only a superadmin can change platform settings, roles, or disabled status. Their own account and the final active superadmin cannot be disabled or demoted. Admin views never expose personal journals, child support notes, observations, or favorites. The legacy user directory and dashboard inspection endpoints are denied to user accounts; profile reads and edits are self-only.
+The [DemoApiClient dispatcher](../src/services/demo/demoApiClient.ts) applies request-level simulation and calls module handlers before legacy fallbacks. Core account/portal/blog stores live in `services/demo`; other domains own state under their module's demo/server directories. [The reset route](../src/app/api/dev-settings/reset/route.ts) must register every store.
 
-## State And Ownership
+All active identities, including staff, own only their private records. Child links must be owned. Server handlers validate mutation inputs, roles, visibility, and current account status independently of the UI. Resource favorite membership is authoritative in the portal favorite set; generalized engagement metadata uses that same membership. Dynamic milestone state owns observation history/counts; legacy fixed responses remain compatibility data. Tag capitalization upgrades retained state without clearing edits.
 
-All browser domain calls still follow domain service → API client → authenticated `/api/backend/*` proxy. `DemoApiClient` delegates `/portal/*` and `/admin/*` to `demoPortalApi.ts`, and `/blog/*` to the separate article handler. Public article reads use only the published public article path.
+`POST /api/dev-settings/reset` requires confirmation and restores **all server users'** fixtures, removing synthetic accounts/records and uploaded bytes. It reissues a trusted seed session and selects Populated; configured latency is retained. Custom accounts removed by reset must sign in again. Mode changes/recovery do not implicitly reset shared records.
 
-State is process-local and survives browser reloads. A process restart resets it; multiple server processes do not share data. Do not use demo memory as production persistence or enter real personal information.
+## Response Scenarios
 
-- `getDemoState()` owns accounts, hashed demo passwords, refresh sessions, legacy requests, and chat.
-- `getDemoPortalState()` owns family profiles, journals, a shared resource catalog, per-account resource favorites, per-child observations, moderation reports, and platform configuration.
-- `getDemoBlogState()` owns article drafts, published articles, and revision checks.
+| Scenario  | Behavior                                                            |
+| --------- | ------------------------------------------------------------------- |
+| Populated | Current process-owned data                                          |
+| Loading   | Finite delay of at least 2.5 seconds, then real demo response       |
+| Empty     | Empty lists/counts without deleting records; settings remain usable |
+| Error     | Recoverable HTTP 503; developer controls stay available             |
 
-Every personal record is scoped to the authenticated user, including records created by admin and superadmin identities. Child references must belong to that user. Removing a child clears their observation records and detaches their journal references while retaining the journal text. Resource favorite changes and observations update the overview counts; administration counts are derived from current records.
+Explicit latency is bounded to 0–5,000ms and applies to reads/writes. Apply simulation once at the shared dispatcher; domain handlers implement meaningful empty responses without corrupting stored state. Pending work must finish or fail, not spin forever.
 
-## Response Simulation And Reset
+Demo platform flags can block registration/community writes/member maintenance access while staff retain recovery access. Those switches do not establish a live policy endpoint; [integration limits](INTEGRATIONS.md) are explicit.
 
-Settings are applied on the server before domain responses:
+## Extend And Verify
 
-- **Populated** uses current persisted demo records.
-- **Loading** adds a finite delay of at least 2.5 seconds, then returns actual records.
-- **Empty** returns empty directories and zero overview counts without deleting records. Return to Populated to see saved records again.
-- **Error** returns a recoverable 503 response. Developer settings stay available so this state can be turned off.
-- Response delay ranges from zero to 5,000 milliseconds and applies to reads and writes. Loading simulation never leaves an indefinite request running.
+Implement demo operations with the same models, statuses, paging, ownership, and lifecycle as the actual API. Register reset and shared count/invalidation behavior. Keep fixtures/copy server-owned and in the single strings catalog; no client business fixture flag. Do not initialize external SDKs or emit live provider writes during demo verification.
 
-`POST /api/dev-settings/reset` restores original account, portal, and blog fixtures, switches the current browser back to Populated, and issues a new trusted seed session. This is shared server state: edits and new demo accounts from every browser on that server are removed. The UI requires confirmation. Existing seed browsers keep access to restored seed records; removed custom accounts must sign in again.
-
-Developer settings, role switching, and reset require an authenticated session and reject cross-origin browser mutations. Role switching and reset also require effective demo mode. The narrowly scoped demo recovery endpoint only changes runtime preferences and clears a session. These routes never call live backend mutations as part of simulation.
-
-## External Integrations And Verification
-
-In demo mode, Firebase REST authentication is replaced with `DemoFirebaseAuthService`; the Firebase browser SDK remains Messaging-only and is disabled. Realtime transport, browser push registration, and Amplitude initialization are disabled. Legacy chat uses local state and polling; notification previews exercise shared local feedback only.
-
-Verify with `npm run check`, `DEMO_MODE=true npm run build`, `git diff --check`, and focused browser or HTTP workflows. Exercise all three roles, private-record boundaries, create/edit/delete flows, favorite and observation counts, error recovery, reset, and rejection of cross-origin mutations. Demo verification does not establish live backend integration behavior. Do not write tests or run Xcode builds.
-
-When extending a domain, use independent model files, authored copy in the single `src/strings.ts` catalog, shared UI primitives, and the existing backend proxy pipeline. Match live route shapes, validation, ownership, statuses, and mutations. Do not add client-only business fixtures or another runtime flag.
+Use [verification](VERIFICATION.md) for checks and manual flows. Exercise multiple accounts, foreign/private denial, mutation recovery, finite loading, empty state, and reset without deleting another developer's work on a shared preview.
