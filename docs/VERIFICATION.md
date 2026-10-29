@@ -137,3 +137,49 @@ Reviewed all 15 supplied iOS reference images and used three GPT-6.1 Sol agents 
 | Theme                | Light and dark family views inspected. Shared solid-action text resolves to dark ink on the dark theme's pale mint action surface. Sidebar active, hover, and keyboard-focus roles use explicit contrasting pairs.                                                                                                            |
 
 Browser mutations used a separate local demo production preview on port 3002, with its canonical origin explicitly configured. The synthetic journal record was removed; process restart cleared remaining temporary preview state. The existing development server was not restarted. Live backend, analytics, messaging, and production authorization integrations were not exercised. Alternate accent presets and device-level reduced-motion combinations were not exhaustively rechecked in this visual pass; their existing providers and shared token/motion contracts remain in place.
+
+## Portal Expansion And Structured Publishing — October 29, 2026
+
+Implemented the nine requested feature groups in the existing checkout with dedicated GPT-6.1 Sol agents at Max effort. This entry supersedes the earlier implementation entry's feature exclusions. [GENTLEPATH.md](GENTLEPATH.md) links the focused ownership, route, and live API guides. The sibling GentlePath API also contains the structured publishing contract and migration. No worktree, test files, Xcode build, database migration, live backend write, notification delivery, or analytics transmission was used for verification.
+
+### Final Checks
+
+- `npm run check` passes with zero warnings, including ESLint, route-aware TypeScript, Next editor diagnostics, display strings, semantic colors, shared controls, and canonical Tailwind classes.
+- `DEMO_MODE=true npm run build` passes, including all new family, editorial, community, publishing, commercial, notification, and operator routes.
+- In the sibling API, `npm run build` and `npm run validate` pass with the structured blog, content visibility, favorite projection, and operator permission changes.
+- The supplemental full premium regex audit was stopped after its scanner remained in regular-expression parsing for more than three minutes; a bounded rerun identified the same scanner location. Module-scoped reports were reviewed against shared controls. Notifications has zero scoped findings; other reports include the known authored Select, composed Button, and inherited TextArea false positives. This is not a clean full supplemental-audit result. The repository's TypeScript-based shared-control check passes.
+
+### Browser Verification
+
+| Area | Observed Result |
+| --- | --- |
+| Portal history | Dashboard → Document Vault → Guided Steps, then Back and Forward, restores the previous portal page. Guide search adds history; Back restores the empty search and full list, and Forward restores the search and filtered result. |
+| Navigation responsiveness | Clean navigation keeps Next Link semantics without awaiting a resolved guard promise. Normal demo requests no longer add the previous 350 ms delay. Fresh query results are retained for 30 seconds, inactive results for five minutes, and live Socket.IO/Firebase Messaging imports are deferred until needed. These are verified implementation changes, not a live performance benchmark. |
+| Structured builder | Admin adds heading and section blocks through the plus palette, edits their fields, reorders with move buttons, physical pointer drag, and repeated Arrow Up/Down, opens private preview, and saves the draft. Stable block IDs and content survive each reorder. Safari keyboard focus remains on the moved handle. |
+| Notifications | Read/unread mutations update the item and unread count. Archive confirmation initially focuses Cancel and returns focus on cancellation. An unsaved timezone change prompts once; Keep Editing retains the draft and explicit discard restores saved values. Browser timezone synchronization and the disabled automatic-timezone field display the same detected zone. |
+| Overlays and narrow layout | At 390×844, notification settings and the blog builder have no horizontal document overflow. Builder actions wrap, and the timezone popup fits its trigger. Escape closes the popup and restores focus. The mobile navigation fills the viewport, focuses Close, and returns focus to its opener. Nested discard confirmation no longer reopens itself. |
+| Themes | Notification settings inspected in light and dark themes; the existing forest/ivory visual system and shared surfaces are retained. The preview was restored to light, its viewport override reset, and the verification account signed out. |
+
+The browser-created structured draft was removed and verified missing. The owned development and production preview processes were stopped after verification. Demo state is process-local and disposable; no seeded account was deleted.
+
+### Focused Demo HTTP Verification
+
+| Feature | Observed Result |
+| --- | --- |
+| Document Vault | Actual local image bytes upload, owned metadata editing, filtering, private download, and removal succeed. Foreign document access is rejected. |
+| Editorial | Guide authoring and item ordering, resource types/formats, collections, and source attribution round-trip through the domain API. Family and administrative pages return 200 for their authorized roles. |
+| Engagement | Ratings validate their range; likes and saves are idempotent. General saved content uses its typed target and ownership checks, and private or unavailable targets are rejected. Dashboard saved counts follow the authoritative state. |
+| Community | Post/comment/reaction flows, author ownership, report snapshots, member report history, and staff queue/review were exercised. Administrative access does not grant author-edit rights. |
+| Polls | Creation, option validation, single/multiple voting, results, discussion, and reaction flows pass. Historical ballots prevent invalid option changes. |
+| Milestones and tips | Guidance/options administration, owned private observation history and correction, tip submission, review, and return-to-review after edits pass. Retired choices remain readable in historical observations. |
+| Commercial | Sponsor/discount/campaign/creative/placement lifecycle, verification/review and enablement gates, placement history, serving, and aggregate metric reads pass. Demo metric simulation is explicit and does not send live analytics. |
+| Notifications | Inbox/counts, single/bulk read state, archive scopes, category/channel preferences, timezone validation, ownership, and demo error/loading behavior pass. |
+| Account and operations | Device paging omits tokens and rejects foreign removal. Operator reads/writes enforce role boundaries. AI ledger lifecycle, delivery attempts, and API-backed legal/FAQ reads pass. A temporary signup account rejects mismatched deletion confirmation, then deletes successfully, clears its session cookie, and cannot authenticate again. |
+| Structured publication | A production demo preview accepts a real local image upload and an article containing all 13 block types. Draft public reads return 404; publish exposes all 13 blocks and their text/media in server-rendered HTML. Authored JSON block text is searchable. Stale revision returns 409, unsafe URL returns 400, and unpublish restores public 404. The synthetic article was removed. |
+| Production route access | Fourteen family routes, nine staff authoring/administration routes, and both operator routes return 200 for the appropriate demo identities. An ordinary member requesting commercial administration is redirected to access denied. |
+
+### Live Integration Limits
+
+The authored API migration `20261029110000_structured_blog_content` remains unapplied. It adds ordered typed metadata as PostgreSQL JSONB with a GIN containment index and preserves legacy content. JSONB containment is queryable; the current index is not a claim of optimized arbitrary substring search. See [BLOG.md](BLOG.md) and the API's [structured publishing guide](../../GentlePath-API/docs/STRUCTURED_BLOG_API.md).
+
+These checks establish local demo behavior, static compatibility, and build success. Configured PostgreSQL migration/data reads, Firebase authentication/authorization, S3 private/public object access, Socket.IO, push/email delivery, provider retention, and the backend operator allowlist still require staging integration verification. Account deletion follows the API's soft-delete behavior and does not claim permanent data, object, or Firebase identity erasure. No live deployment or migration was performed.

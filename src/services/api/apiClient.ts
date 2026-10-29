@@ -9,13 +9,21 @@ export class ApiClient {
     accessToken: string,
     options: ApiRequestOptions = {},
   ): Promise<T> {
-    const headers = new Headers({ 'content-type': 'application/json' });
+    const headers = new Headers(options.headers);
+    const multipart = options.body instanceof FormData;
+    if (options.body !== undefined && !multipart)
+      headers.set('content-type', 'application/json');
     const response = await this.proxy(
       new Request('http://portal.internal', {
         method: options.method || 'GET',
+        signal: options.signal,
         headers,
         body:
-          options.body === undefined ? undefined : JSON.stringify(options.body),
+          options.body === undefined
+            ? undefined
+            : multipart
+              ? (options.body as FormData)
+              : JSON.stringify(options.body),
       }),
       path,
       accessToken,
@@ -50,7 +58,7 @@ export class ApiClient {
       headers,
       cache: 'no-store',
       redirect: 'manual',
-      signal: AbortSignal.timeout(30000),
+      signal: AbortSignal.any([request.signal, AbortSignal.timeout(30000)]),
       body: ['GET', 'HEAD'].includes(request.method)
         ? undefined
         : await request.arrayBuffer(),

@@ -9,12 +9,11 @@ import {
   type ReactNode,
 } from 'react';
 import { strings } from '@/strings';
-
-type NavigationGuard = () => Promise<boolean>;
-type NavigationGuardService = {
-  register: (guard: NavigationGuard) => () => void;
-  confirmNavigation: NavigationGuard;
-};
+import { confirmNavigationGuards } from './confirmNavigationGuards';
+import type {
+  NavigationGuard,
+  NavigationGuardService,
+} from './models/navigationGuard';
 
 const NavigationGuardContext = createContext<NavigationGuardService | null>(
   null,
@@ -30,19 +29,24 @@ export function NavigationGuardProvider({ children }: { children: ReactNode }) {
       guards.current.delete(key);
     };
   }, []);
-  const confirmNavigation = useCallback(async () => {
+  const confirmNavigation = useCallback(() => {
     if (checkingRef.current) return false;
     checkingRef.current = true;
     // Awaited confirmations can re-render forms and replace registrations.
     // Only check the guards present when this navigation was requested.
     const navigationGuards = Array.from(guards.current.values());
     try {
-      for (const guard of navigationGuards) {
-        if (!(await guard())) return false;
+      const allowed = confirmNavigationGuards(navigationGuards);
+      if (typeof allowed !== 'boolean') {
+        return allowed.finally(() => {
+          checkingRef.current = false;
+        });
       }
-      return true;
-    } finally {
       checkingRef.current = false;
+      return allowed;
+    } catch (error) {
+      checkingRef.current = false;
+      throw error;
     }
   }, []);
   const value = useMemo(

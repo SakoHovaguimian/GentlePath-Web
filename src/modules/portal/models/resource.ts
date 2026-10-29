@@ -15,6 +15,15 @@ export const ResourceSchema = z.object({
   readMinutes: z.number().nonnegative(),
   body: z.string(),
   saved: z.boolean(),
+  sourceName: z.string().nullable().optional(),
+  sourceUrl: z.string().nullable().optional(),
+  sourcePublishedAt: z.string().nullable().optional(),
+  reviewedAt: z.string().optional(),
+  reviewedByUserId: z.string().optional(),
+  parentId: z.string().nullable().optional(),
+  resourceType: z.string().optional(),
+  childrenCount: z.number().optional(),
+  url: z.string().nullable().optional(),
 });
 export type Resource = z.infer<typeof ResourceSchema>;
 export type ResourceCategory = z.infer<typeof ResourceCategorySchema>;

@@ -1,4 +1,5 @@
 export * from './components/AlertModal';
+export * from './components/NavigationLink';
 export * from './components/Button';
 export * from './components/Card';
 export * from './components/DataTable';

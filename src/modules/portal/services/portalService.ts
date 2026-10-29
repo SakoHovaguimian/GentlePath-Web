@@ -74,12 +74,13 @@ export class PortalService {
       .parse(await this.api.request('/portal/resources', { signal }));
   }
   async saveResource(id: string, saved: boolean) {
-    return ResourceSchema.parse(
-      await this.api.request(
-        `/portal/resources/${encodeURIComponent(id)}/favorite`,
-        { method: 'POST', body: { saved } },
-      ),
+    const response = await this.api.request(
+      `/portal/resources/${encodeURIComponent(id)}/favorite`,
+      { method: 'POST', body: { saved } },
     );
+    // Removal remains valid if a collection or resource became unavailable.
+    if (!saved && response == null) return null;
+    return ResourceSchema.parse(response);
   }
   async milestones(childId: string, signal?: AbortSignal) {
     return z

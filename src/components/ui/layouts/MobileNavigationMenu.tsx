@@ -61,11 +61,14 @@ export function MobileNavigationMenu(props: AppSidebarProps) {
           <Dialog.Title className="sr-only">{copy.navigation}</Dialog.Title>
           <AppSidebarContent
             {...props}
-            onNavigate={(href) => {
-              setOpen(false);
-              if (props.onNavigate) props.onNavigate(href);
-              else window.location.assign(href);
-            }}
+            onNavigate={
+              props.onNavigate
+                ? (href) => {
+                    setOpen(false);
+                    props.onNavigate?.(href);
+                  }
+                : undefined
+            }
             headerAction={
               <Dialog.Close asChild>
                 <IconButton label={copy.closeNavigation} variant="ghost">

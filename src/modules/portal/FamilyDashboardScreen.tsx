@@ -15,6 +15,7 @@ import {
 import { useSessionState } from '@/providers/AppProviders';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { useJournals, usePortalOverview, useResources } from './hooks';
+import { CommercialServing } from '@/modules/commercial/components/CommercialServing';
 import { WeeklyActivity } from './components/WeeklyActivity';
 import { ResourceCard } from './components/ResourceCard';
 import './styles/portal.css';
@@ -224,6 +225,7 @@ export function FamilyDashboardScreen() {
           }
         </QueryBoundary>
       </section>
+      <CommercialServing placementKey="HOME_CAROUSEL" />
       <blockquote className="gp-home-quote">
         <UiIcon name="leaf" />
         <p>{copy.home.quoteDescription}</p>

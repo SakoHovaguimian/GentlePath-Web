@@ -1,4 +1,4 @@
-import type { UserRole } from '@/models/userRole';
+import type { UserRoleTransport } from './userRoleTransport';
 
 export type UserTransport = {
   id: string;
@@ -6,7 +6,7 @@ export type UserTransport = {
   first_name: string;
   last_name: string;
   email: string;
-  role?: UserRole;
+  role?: UserRoleTransport;
   disabled?: boolean;
   phone_number?: string | null;
   date_of_birth?: string | null;

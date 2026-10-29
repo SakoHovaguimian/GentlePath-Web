@@ -1,7 +1,16 @@
 import type { ApiClientInterface } from '@/services/api/apiClientInterface';
 import { validateInput } from '@/utils/validateInput';
 import { ApiError, NotFoundError } from '@/errors/domainErrors';
-import { gentlePathBlogStrings as copy } from '@/strings';
+import {
+  gentlePathBlogStrings as copy,
+  gentlePathBlogBuilderStrings as builderCopy,
+} from '@/strings';
+import { ValidationError } from '@/errors/domainErrors';
+import {
+  BlogMediaSchema,
+  blogImageMaxBytes,
+  blogImageMimeTypes,
+} from '../models/blogMedia';
 import {
   BlogArticleSchema,
   BlogMutationInputSchema,
@@ -55,6 +64,23 @@ export class BlogService {
           body: validateInput(BlogRevisionInputSchema, { revision }),
         },
       ),
+    );
+  }
+  async uploadImage(file: File, signal?: AbortSignal) {
+    if (!blogImageMimeTypes.some((type) => type === file.type))
+      throw new ValidationError(builderCopy.uploadTypeError);
+    if (!file.size || file.size > blogImageMaxBytes)
+      throw new ValidationError(builderCopy.uploadSizeError);
+    const body = new FormData();
+    body.set('file', file);
+    body.set('mediaType', 'IMAGE');
+    body.set('visibility', 'public');
+    return BlogMediaSchema.parse(
+      await this.api.request<unknown>('/blog/media/upload', {
+        method: 'POST',
+        body,
+        signal,
+      }),
     );
   }
   async delete(id: string, revision: number) {

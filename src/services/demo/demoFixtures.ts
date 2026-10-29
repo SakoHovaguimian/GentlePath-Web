@@ -2,14 +2,14 @@ import { strings, gentlePathDemoStrings as copy } from '@/strings';
 import type {
   DashboardModelMetaTransport,
   FeatureRequestTransport,
-  UserTransport,
 } from '../api/models';
+import type { DemoUser } from './models/demoUser';
 
 const now = new Date();
 const daysAgo = (days: number) =>
   new Date(now.getTime() - days * 86400000).toISOString();
 
-export const users: UserTransport[] = [
+export const users: DemoUser[] = [
   {
     id: '11111111-1111-4111-8111-111111111111',
     external_id: 'firebase-demo-user-1',

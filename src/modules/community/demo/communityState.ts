@@ -1,0 +1,68 @@
+import 'server-only';
+import { getDemoState } from '@/services/demo/demoState';
+import { gentlePathCommunityStrings as copy } from '@/strings';
+import type { DemoCommunityState } from './models/demoCommunityState';
+
+const globalCommunity = globalThis as typeof globalThis & {
+  gentlePathCommunityState?: DemoCommunityState;
+};
+
+function createCommunityState(): DemoCommunityState {
+  const users = getDemoState().users.filter((user) => !user.deleted);
+  const daysAgo = (days: number) =>
+    new Date(Date.now() - days * 86400000).toISOString();
+  const posts = copy.demo.posts.map((seed, index) => ({
+    ...seed,
+    tags: [...seed.tags],
+    id: `community-post-${index + 1}`,
+    userId: users[index % users.length].id,
+    imageUrl: null,
+    createdAt: daysAgo(index + 1),
+    updatedAt: daysAgo(index + 1),
+    deleted: false,
+    hidden: false,
+  }));
+  const comments = posts.flatMap((post, postIndex) =>
+    copy.demo.comments.slice(0, postIndex % 2 ? 1 : 3).map((body, index) => ({
+      id: `community-comment-${postIndex + 1}-${index + 1}`,
+      postId: post.id,
+      userId: users[(postIndex + index + 1) % users.length].id,
+      body,
+      createdAt: daysAgo(postIndex + 0.25 + index / 10),
+      updatedAt: daysAgo(postIndex + 0.25 + index / 10),
+      deleted: false,
+      hidden: false,
+    })),
+  );
+  return {
+    posts,
+    comments,
+    postLikes: new Map(
+      posts.map((post, index) => [
+        post.id,
+        new Set([users[(index + 1) % users.length].id]),
+      ]),
+    ),
+    commentLikes: new Map(),
+    reports: [],
+  };
+}
+
+export function getDemoCommunityState(): DemoCommunityState {
+  return (globalCommunity.gentlePathCommunityState ??= createCommunityState());
+}
+
+export function resetDemoCommunityState() {
+  globalCommunity.gentlePathCommunityState = createCommunityState();
+}
+
+export function hideDemoCommunityTarget(
+  targetType: 'post' | 'post_comment',
+  id: string,
+) {
+  const state = getDemoCommunityState();
+  const target = (targetType === 'post' ? state.posts : state.comments).find(
+    (item) => item.id === id,
+  );
+  if (target) target.hidden = true;
+}

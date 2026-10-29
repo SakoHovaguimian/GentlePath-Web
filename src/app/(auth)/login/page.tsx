@@ -10,6 +10,7 @@ export default async function AuthPage({
   const query = await searchParams;
   return (
     <LoginScreen
+      accountDeleted={query.accountDeleted === '1'}
       redirectTo={
         typeof query.redirectTo === 'string' ? query.redirectTo : undefined
       }

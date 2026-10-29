@@ -8,6 +8,7 @@ src/modules/<domain>      screens, hooks, domain services, domain-specific model
 src/services              API, auth, session, demo, realtime, notifications, analytics, privacy
 src/models                shared, independent domain schemas and types
 src/clientContainer.ts    browser service construction
+src/publicClientContainer.ts optional-account public article service construction
 src/container.ts          server service construction and demo/live selection
 src/components/ui         shared components and shell
 src/presentation          canonical toast, alert, sheet service
@@ -29,6 +30,8 @@ Root layout passes only a public runtime configuration to `RuntimeProvider`. Pro
 `getContainer()` in `container.ts` selects separate cached live/demo service containers from the request’s effective server runtime. `DEMO_MODE` is the default; an HTTP-only preference can override it only in development or an explicitly enabled demo server. The root layout, encrypted session codec, auth routes, backend proxy, public blog adapter, and Messaging worker use that same decision. No browser fixture flag selects business behavior. Mode switches invalidate the old session. See [demo mode](DEMO_MODE.md).
 
 Public `/` and `/blog` sit outside the authenticated layout. The public blog service uses the server API client and published-only endpoints without session tokens; authenticated editorial changes use the normal domain service → BrowserApiClient → backend proxy path. Developer configuration has a separate authenticated `/api/dev-settings` boundary, gated off in production live mode; recovery only enables demo routing and never grants identity or a role.
+
+Public article likes and saves use a focused client container and query provider without mounting the protected shell. Its canonical API client disables automatic navigation on HTTP 401, allowing anonymous readers to receive a sign-in action while the article remains readable. Account writes still go through the authenticated proxy and never grant anonymous access. Public SSR remains independent of authentication.
 
 ## State ownership
 

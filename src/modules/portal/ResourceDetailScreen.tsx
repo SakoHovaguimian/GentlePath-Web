@@ -19,6 +19,8 @@ import { gentlePathPortalStrings as copy } from '@/strings';
 import { useResources, useSaveResource } from './hooks';
 import { MutationError } from './components/MutationError';
 import { getResourceArtwork } from './components/resourceArtwork';
+import { ResourceRatingControl } from '@/modules/engagement/components/ResourceRatingControl';
+import { ResourceProvenance } from '@/modules/editorial/components/ResourceProvenance';
 import './styles/portal.css';
 
 export function ResourceDetailScreen({ id }: { id: string }) {
@@ -108,9 +110,11 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                 </span>
               )}
             </div>
+            <ResourceProvenance resource={resource} resources={resources} />
             <Card className="gp-resource-detail__body">
               <MarkdownContent value={resource.body} />
             </Card>
+            <ResourceRatingControl resourceId={resource.id} />
             <Button asChild variant="secondary" className="justify-self-start">
               <Link href="/resources">
                 <UiIcon name="chevronLeft" />

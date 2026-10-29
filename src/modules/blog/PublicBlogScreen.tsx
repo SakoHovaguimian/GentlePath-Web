@@ -26,10 +26,9 @@ export function PublicBlogScreen({
   const [isPending, startTransition] = useTransition();
   const navigate = (next: BlogQuery) =>
     startTransition(() =>
-      router.replace(
-        `/blog?${blogQueryParams({ ...next, status: undefined })}`,
-        { scroll: false },
-      ),
+      router.push(`/blog?${blogQueryParams({ ...next, status: undefined })}`, {
+        scroll: false,
+      }),
     );
   const filtered = Boolean(query.query || query.category);
   return (

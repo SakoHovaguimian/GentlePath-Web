@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     await writeDemoSettings({
       demoMode: true,
       scenario: 'populated',
-      latencyMs: 350,
+      latencyMs: 0,
     });
     (await cookies()).delete(sessionCookieName);
     return Response.json(

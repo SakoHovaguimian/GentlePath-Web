@@ -5,6 +5,7 @@ import type { Route } from 'next';
 import { AppSessionSchema } from '@/models/appSession';
 
 const allowedRedirectPrefixes = [
+  '/blog',
   '/dashboard',
   '/users',
   '/feature-requests',
@@ -18,6 +19,14 @@ const allowedRedirectPrefixes = [
   '/resources',
   '/milestones',
   '/saved',
+  '/documents',
+  '/guides',
+  '/community',
+  '/polls',
+  '/tips',
+  '/discounts',
+  '/notifications',
+  '/help',
   '/admin',
   '/superadmin',
 ] as const;

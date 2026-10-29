@@ -457,3 +457,250 @@
 :global(html[data-motion='reduced']) .readLink:hover svg {
   transform: none;
 }
+
+.structuredContent {
+  display: grid;
+  gap: 1.75rem;
+  overflow-wrap: anywhere;
+}
+
+.structuredContent :is(h2, h3, p, ul, blockquote, figure) {
+  margin-block: 0;
+}
+
+.contentSection {
+  display: grid;
+  gap: 1rem;
+}
+
+.contentText {
+  white-space: pre-line;
+}
+
+.contentFooter,
+.contentDivider {
+  border: 0;
+  border-top: 1px solid var(--gp-border);
+  padding-top: 1.5rem;
+}
+
+.contentFooter {
+  color: var(--gp-muted);
+  font-style: italic;
+}
+
+.contentQuote {
+  border-left: 3px solid var(--gp-forest);
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  color: var(--gp-forest);
+}
+
+.contentQuote p {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.5rem;
+}
+
+.contentQuote cite {
+  display: block;
+  padding-top: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.contentFigure {
+  min-width: 0;
+  margin: 0;
+}
+
+.contentImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-2xl);
+  object-fit: cover;
+  background: var(--gp-sage);
+}
+
+.contentFigure figcaption,
+.contentEmbed figcaption {
+  padding-top: 0.7rem;
+  color: var(--gp-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.contentGallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contentGallery[data-count='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.contentCallout {
+  display: grid;
+  gap: 0.5rem;
+  border-radius: var(--radius-2xl);
+  padding: 1.5rem;
+  background: var(--gp-sage);
+}
+
+.contentLink {
+  color: var(--gp-forest);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.contentLink:hover {
+  text-decoration-thickness: 2px;
+}
+
+.contentLink:focus-visible {
+  outline: 3px solid var(--gp-forest);
+  outline-offset: 5px;
+}
+
+.contentEmbed {
+  min-width: 0;
+  margin: 0;
+}
+
+.contentEmbedCard {
+  display: grid;
+  gap: 0.6rem;
+  border: 1px solid var(--gp-border);
+  border-radius: var(--radius-2xl);
+  padding: 1.5rem;
+}
+
+.contentEmbedHost,
+.contentEmbedHint {
+  font-size: 0.875rem;
+  color: var(--gp-muted);
+}
+
+.contentEmbedHint {
+  margin: 0;
+}
+
+.contentEmbedActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contentEmbedFrame {
+  display: block;
+  width: 100%;
+  min-height: 200px;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--bg-secondary);
+}
+
+.contentEmbedFrame[data-provider='spotify'] {
+  height: 352px;
+  aspect-ratio: auto;
+}
+
+.builder {
+  display: grid;
+  min-width: 0;
+  gap: 1.25rem;
+}
+
+.builderBlock {
+  display: grid;
+  min-width: 0;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+.builderBlockHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.builderBlockHeader h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.builderEmpty {
+  display: grid;
+  justify-items: center;
+  gap: 0.8rem;
+  border: 1px dashed var(--color-border-secondary);
+  border-radius: var(--radius-2xl);
+  padding: 2rem 1.25rem;
+  text-align: center;
+}
+
+.builderEmpty h3,
+.builderEmpty p {
+  margin: 0;
+}
+
+.builderEmpty p {
+  max-width: 28rem;
+  color: var(--color-text-tertiary);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.builderPalette {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  border-top: 1px solid var(--color-border-secondary);
+  padding-top: 1rem;
+}
+
+.builderPaletteButton {
+  display: grid;
+  min-width: 0;
+  justify-items: start;
+  height: auto;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-2xl);
+  text-align: left;
+  white-space: normal;
+}
+
+.builderPaletteButton span + span {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--color-text-tertiary);
+}
+
+.builderImagePreview {
+  width: 100%;
+  max-height: 15rem;
+  object-fit: contain;
+  border-radius: var(--radius-2xl);
+  background: var(--color-bg-secondary_subtle);
+}
+
+@media (max-width: 600px) {
+  .contentGallery[data-count='3'] {
+    grid-template-columns: 1fr;
+  }
+
+  .builderBlock {
+    padding: 1rem;
+  }
+
+  .builderPalette {
+    grid-template-columns: 1fr;
+  }
+}

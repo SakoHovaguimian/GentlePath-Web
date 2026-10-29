@@ -6,6 +6,7 @@ import type { ChildProfileInput } from './models/childProfile';
 import type { JournalInput } from './models/journalEntry';
 import type { ObservationInput } from './models/milestone';
 import { portalQueryKeys as keys } from './queryKeys';
+import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
 
 export function usePortalOverview() {
   const { portalService: service } = useServiceContainer();
@@ -49,7 +50,11 @@ function usePortalMutation<TInput, TResult>(
   const cache = useQueryClient();
   return useMutation({
     mutationFn,
-    onSuccess: () => cache.invalidateQueries({ queryKey: keys.all }),
+    onSuccess: () =>
+      Promise.all([
+        cache.invalidateQueries({ queryKey: keys.all }),
+        cache.invalidateQueries({ queryKey: engagementQueryKeys.all }),
+      ]),
   });
 }
 export function useSaveChild() {

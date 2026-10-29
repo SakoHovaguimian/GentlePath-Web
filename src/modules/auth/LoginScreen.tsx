@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Button,
+  Card,
   Field,
   Input,
   PasswordInput,
@@ -16,6 +17,7 @@ import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import {
   gentlePathAuthStrings as authCopy,
   gentlePathPortalStrings,
+  gentlePathAccountToolsStrings as accountCopy,
   strings,
 } from '@/strings';
 import { AuthCardShell } from './AuthCardShell';
@@ -23,7 +25,13 @@ import { authDestination } from './authDestination';
 import { LockIcon, MailIcon } from './authIcons';
 import { createSession, enableDemoMode } from './sessionClient';
 
-export function LoginScreen({ redirectTo }: { redirectTo?: string }) {
+export function LoginScreen({
+  redirectTo,
+  accountDeleted = false,
+}: {
+  redirectTo?: string;
+  accountDeleted?: boolean;
+}) {
   const router = useRouter();
   const { demoMode, devSettingsEnabled } = useRuntimeConfig();
   const [demoRole, setDemoRole] = useState<UserRole>('user');
@@ -104,6 +112,16 @@ export function LoginScreen({ redirectTo }: { redirectTo?: string }) {
       footerAction={strings.ui.loginScreen.createAccount}
       mockHint={demoMode ? gentlePathPortalStrings.auth.demoHint : undefined}
     >
+      {accountDeleted && (
+        <Card role="status" className="grid gap-2 bg-secondary_subtle">
+          <h2 className="m-0 text-base font-semibold text-primary">
+            {accountCopy.account.completedTitle}
+          </h2>
+          <p className="m-0 text-sm text-secondary">
+            {accountCopy.account.completedDescription}
+          </p>
+        </Card>
+      )}
       <form noValidate onSubmit={handleSubmit} className="gp-auth-form">
         {demoMode ? (
           <div className="gp-auth-demo-role">

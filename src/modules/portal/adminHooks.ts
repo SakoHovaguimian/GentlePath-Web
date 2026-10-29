@@ -41,7 +41,9 @@ function useAdminMutation<TInput, TResult>(
   const cache = useQueryClient();
   return useMutation({
     mutationFn,
-    onSuccess: () => cache.invalidateQueries({ queryKey: keys.all }),
+    // Permissions, platform gates, and review decisions can affect every
+    // domain's visibility and the current account's report history.
+    onSuccess: () => cache.invalidateQueries(),
   });
 }
 export function useUpdateManagedUser() {

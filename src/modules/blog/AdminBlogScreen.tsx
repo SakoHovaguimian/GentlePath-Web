@@ -32,7 +32,7 @@ export function AdminBlogScreen({ query }: { query: BlogQuery }) {
   const router = useRouter();
   const articles = useBlogArticles(query);
   const navigate = (next: BlogQuery) =>
-    router.replace(`/admin/blog?${blogQueryParams(next)}`, { scroll: false });
+    router.push(`/admin/blog?${blogQueryParams(next)}`, { scroll: false });
   const filtered = Boolean(query.query || query.category || query.status);
   const badge = (status: 'published' | 'draft') => (
     <Badge intent={status === 'published' ? 'success' : 'neutral'} dot>

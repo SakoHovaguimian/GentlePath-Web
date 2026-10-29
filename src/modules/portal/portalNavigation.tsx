@@ -5,6 +5,9 @@ import {
   canManagePlatform,
 } from '@/services/auth/permissions';
 import { gentlePathPortalStrings as copy } from '@/strings';
+import { gentlePathWorkspaceStrings } from '@/strings';
+
+const navigationCopy = gentlePathWorkspaceStrings.navigation;
 
 export function portalNavigation(
   role: UserRole,
@@ -38,9 +41,40 @@ export function portalNavigation(
       icon: <UiIcon name="layers" />,
     },
     {
+      href: '/documents',
+      label: navigationCopy.documents,
+      icon: <UiIcon name="folder" />,
+    },
+    {
       href: '/saved',
-      label: copy.navigation.saved,
+      label: navigationCopy.saved,
       icon: <UiIcon name="checklist" />,
+    },
+    {
+      href: '/guides',
+      label: navigationCopy.guides,
+      icon: <UiIcon name="leaf" />,
+      sectionLabel: copy.navigation.exploreGroup,
+    },
+    {
+      href: '/community',
+      label: navigationCopy.community,
+      icon: <UiIcon name="chat" />,
+    },
+    {
+      href: '/polls',
+      label: navigationCopy.polls,
+      icon: <UiIcon name="chart" />,
+    },
+    {
+      href: '/tips',
+      label: navigationCopy.tips,
+      icon: <UiIcon name="sun" />,
+    },
+    {
+      href: '/discounts',
+      label: navigationCopy.discounts,
+      icon: <UiIcon name="tag" />,
     },
   ];
   const administration: AppSidebarItem[] = [
@@ -64,12 +98,32 @@ export function portalNavigation(
       label: copy.navigation.moderation,
       icon: <UiIcon name="lock" />,
     },
+    {
+      href: '/admin/guides',
+      label: navigationCopy.editorial,
+      icon: <UiIcon name="layers" />,
+    },
+    {
+      href: '/admin/milestones',
+      label: navigationCopy.milestoneAdmin,
+      icon: <UiIcon name="leaf" />,
+    },
+    {
+      href: '/admin/commercial',
+      label: navigationCopy.commercial,
+      icon: <UiIcon name="globe" />,
+    },
     ...(canManagePlatform(role)
       ? [
           {
             href: '/admin/settings',
             label: copy.navigation.system,
             icon: <UiIcon name="settings" />,
+          },
+          {
+            href: '/admin/ai-usage',
+            label: navigationCopy.aiUsage,
+            icon: <UiIcon name="code" />,
           },
         ]
       : []),
@@ -82,7 +136,22 @@ export function portalNavigation(
       href: '/blog',
       label: copy.navigation.blog,
       icon: <UiIcon name="globe" />,
-      sectionLabel: copy.navigation.exploreGroup,
+      sectionLabel: adminArea ? copy.navigation.exploreGroup : undefined,
+    },
+    {
+      href: '/notifications',
+      label: navigationCopy.notifications,
+      icon: <UiIcon name="bell" />,
+    },
+    {
+      href: '/settings/account',
+      label: navigationCopy.account,
+      icon: <UiIcon name="user" />,
+    },
+    {
+      href: '/help',
+      label: navigationCopy.help,
+      icon: <UiIcon name="file" />,
     },
     {
       href: '/settings/appearance',

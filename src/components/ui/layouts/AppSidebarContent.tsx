@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { NavigationLink } from '../components/NavigationLink';
 import { strings } from '@/strings';
 import { Button } from '../components/Button';
 import { InitialsAvatar } from '../components/InitialsAvatar';
@@ -12,6 +13,7 @@ export function AppSidebarContent({
   session,
   items,
   onNavigate,
+  onBeforeNavigate,
   accountSlot,
   activePath,
   contextSlot,
@@ -32,28 +34,14 @@ export function AppSidebarContent({
             headerAction && 'sticky top-0 z-10',
           )}
         >
-          <a
+          <NavigationLink
             href={homeHref}
             className="inline-flex min-h-11 cursor-pointer items-center font-display text-2xl font-semibold tracking-tight text-brand-secondary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand"
-            onClick={
-              onNavigate
-                ? (event) => {
-                    if (
-                      event.button !== 0 ||
-                      event.metaKey ||
-                      event.ctrlKey ||
-                      event.shiftKey ||
-                      event.altKey
-                    )
-                      return;
-                    event.preventDefault();
-                    onNavigate(homeHref);
-                  }
-                : undefined
-            }
+            beforeNavigate={onBeforeNavigate}
+            navigate={onNavigate}
           >
             {brandSlot ?? strings.app.name}
-          </a>
+          </NavigationLink>
           {headerAction}
         </div>
         <nav
@@ -63,7 +51,11 @@ export function AppSidebarContent({
           {navigationLabel && (
             <p className="ui-sidebar-section-label">{navigationLabel}</p>
           )}
-          <SidebarLinks items={items} onNavigate={onNavigate} />
+          <SidebarLinks
+            items={items}
+            onNavigate={onNavigate}
+            onBeforeNavigate={onBeforeNavigate}
+          />
           {contextSlot && <div className="w-full min-w-0">{contextSlot}</div>}
         </nav>
         {supportSlot && (
@@ -72,31 +64,33 @@ export function AppSidebarContent({
       </div>
       <div className="ui-sidebar-account mt-auto shrink-0 px-5 pt-3 pb-5">
         <Button
+          asChild
           variant="ghost"
           className="ui-sidebar-profile -mx-2 h-auto w-[calc(100%+1rem)] min-w-0 justify-start px-2 py-2 text-left whitespace-nowrap"
           aria-label={strings.designSystem.profileLink}
           aria-current={activePath === '/profile' ? 'page' : undefined}
-          onClick={() =>
-            onNavigate
-              ? onNavigate('/profile')
-              : window.location.assign('/profile')
-          }
         >
-          <InitialsAvatar name={displayName} />
-          <span className="grid min-w-0 flex-1 gap-0.5">
-            <span
-              className="block min-w-0 truncate text-sm font-semibold text-primary"
-              title={displayName}
-            >
-              {displayName}
+          <NavigationLink
+            href="/profile"
+            beforeNavigate={onBeforeNavigate}
+            navigate={onNavigate}
+          >
+            <InitialsAvatar name={displayName} />
+            <span className="grid min-w-0 flex-1 gap-0.5">
+              <span
+                className="block min-w-0 truncate text-sm font-semibold text-primary"
+                title={displayName}
+              >
+                {displayName}
+              </span>
+              <span
+                className="block min-w-0 truncate text-xs text-secondary"
+                title={session.user.email}
+              >
+                {session.user.email}
+              </span>
             </span>
-            <span
-              className="block min-w-0 truncate text-xs text-secondary"
-              title={session.user.email}
-            >
-              {session.user.email}
-            </span>
-          </span>
+          </NavigationLink>
         </Button>
         {accountSlot && <div className="mt-3">{accountSlot}</div>}
       </div>

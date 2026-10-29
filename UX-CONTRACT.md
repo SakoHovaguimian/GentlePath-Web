@@ -42,6 +42,8 @@ English-language family workspace for private profiles, journals, resources, and
 
 Lists use server paging contracts (default 25), URL query filters, and stable domain query keys. Empty, loading, and failure states are visible; failure offers retry. Profile forms load only after their query succeeds. Protected routes independently require a session on the server and API. Route metadata uses the single `src/strings.ts` catalog.
 
+Sidebar links use Next.js Link prefetching and create ordinary browser history entries. Clean forms navigate synchronously; pending or dirty forms use the shared guard. Committed portal filters, paging, and milestone child choices create history entries through Next's native History API integration, so Back and Forward restore those selections without an unnecessary server render. SSR blog filters use router pushes. Route loading preserves the interactive shell, and recent query data is reused during return navigation.
+
 Tables preserve horizontal access on narrow screens. Mobile navigation opens a full-screen modal with the same links and account controls, safe areas, Escape, focus trap, and restoration. Desktop uses the fixed sidebar. Screens own their PageHeader h1. The library has one scroll legend and no second section dropdown. Query and mutation errors preserve safe input. Do not persist passwords/tokens or private form drafts in browser storage.
 
 ## Forms, overlays, and feedback

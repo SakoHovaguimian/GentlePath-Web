@@ -28,7 +28,11 @@ Portal preserves its existing snake_case user/feature/dashboard transports and m
 
 A page is `{ data, total, limit, offset }`. Domain schemas enforce the required fields after mapping. Error responses use `{ message }` and a meaningful HTTP status. No token, stack trace, or private upstream payload should appear in errors.
 
-Socket/push event contracts are in [REALTIME.md](REALTIME.md). This is a template integration boundary; the exact JobLens construction-project and Obelisk business endpoints differ. Adapt the domain services and matching demo handlers together when targeting those APIs. Do not silently call an endpoint that only resembles the contract.
+Socket/push event contracts are in [REALTIME.md](REALTIME.md). Existing template endpoints and GentlePath's concrete API do not all use the same names or page shape. Server-only feature adapters in `src/services/api/featureBackendProxy.ts` translate documented portal contracts to the sibling GentlePath API. Adapt domain services, adapters, and matching demo handlers together; do not silently call an endpoint that only resembles the contract.
+
+`BrowserApiClient` and the server API client pass `FormData` through with its browser/runtime-generated multipart boundary; JSON requests retain JSON serialization. Adapters receive a server-only forwarding callback that adds credentials and performs a single refresh/retry on upstream HTTP 401. Browser ownership and bearer headers are never accepted. Backend `ADMIN` and `SUPER_ADMIN` roles map to `admin` and `superadmin`; unrelated legacy roles receive ordinary family access.
+
+Forwarded requests combine the incoming cancellation signal with the existing 30-second upstream timeout. A successful `DELETE /portal/account-tools/account` clears the encrypted session cookie in both demo and live mode. Subsequent client cleanup removes local push registration state without another authenticated backend request. Operator allowlist denials use HTTP 403; they do not indicate an expired session.
 
 ## GentlePath domains
 

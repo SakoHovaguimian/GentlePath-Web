@@ -5,6 +5,9 @@ import type { BlogArticle } from '../models/blogArticle';
 import { blogCoverAssets } from '../models/blogCover';
 import styles from '../Blog.module.css';
 import { BlogDate } from './BlogDate';
+import { BlogContentReader } from './BlogContentReader';
+import { blogContentText } from '../content/blogContentText';
+import { BlogEngagementControls } from '@/modules/engagement/components/BlogEngagementControls';
 
 export function BlogArticleReader({
   article,
@@ -27,11 +30,22 @@ export function BlogArticleReader({
           <BlogDate value={date} long />
           <span>
             {copy.readingTime(
-              Math.max(1, Math.ceil(article.body.split(/\s+/).length / 200)),
+              Math.max(
+                1,
+                Math.ceil(
+                  (article.content.length
+                    ? blogContentText(article.content)
+                    : article.body
+                  ).split(/\s+/).length / 200,
+                ),
+              ),
             )}
           </span>
         </div>
       </header>
+      {!preview && (
+        <BlogEngagementControls articleId={article.id} slug={article.slug} />
+      )}
       <div className={styles.readerCover} data-cover={article.cover}>
         <Image
           priority
@@ -43,7 +57,9 @@ export function BlogArticleReader({
         />
       </div>
       <div className={styles.readerBody}>
-        {article.body.trim() ? (
+        {article.content.length ? (
+          <BlogContentReader content={article.content} />
+        ) : article.body.trim() ? (
           <MarkdownContent value={article.body} headingContext="article" />
         ) : (
           <p>{copy.previewEmpty}</p>

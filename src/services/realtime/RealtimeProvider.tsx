@@ -9,7 +9,6 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { io } from 'socket.io-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import { useServiceContainer, useSessionState } from '@/providers/AppProviders';
@@ -20,6 +19,7 @@ import { RealtimeEventSchema } from './models/realtimeEvent';
 import { RealtimeTicketSchema } from './models/realtimeTicket';
 import type { RealtimeContextValue } from './models/realtimeContext';
 import { strings } from '@/strings';
+import { notificationInboxQueryKeys } from '@/modules/notification-inbox/queryKeys';
 const RealtimeContext = createContext<RealtimeContextValue | null>(null);
 export function RealtimeProvider({ children }: { children: ReactNode }) {
   const config = useRuntimeConfig();
@@ -60,14 +60,17 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       seen.current.add(event.event_id);
       if (seen.current.size > 200)
         seen.current.delete(seen.current.values().next().value!);
-      if (event.event_type === 'notification')
+      if (event.event_type === 'notification') {
+        void queryClient.invalidateQueries({
+          queryKey: notificationInboxQueryKeys.all,
+        });
         void presentation.showToast({
           title: event.data.title,
           description: event.data.body,
           intent: 'info',
           position: 'top-right',
         });
-      else void queryClient.invalidateQueries({ queryKey: ['chat'] });
+      } else void queryClient.invalidateQueries({ queryKey: ['chat'] });
     },
     [presentation, queryClient],
   );
@@ -84,49 +87,62 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       })) || null;
   }, [notifications, receive]);
   useEffect(() => {
-    if (config.demoMode || !config.socketUrl) return;
+    const socketUrl = config.socketUrl;
+    if (config.demoMode || !socketUrl) return;
     let stopped = false;
-    const socket = io(config.socketUrl, {
-      autoConnect: false,
-      transports: ['websocket'],
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 15000,
-      auth: async (callback) => {
-        try {
-          const ticket = RealtimeTicketSchema.parse(
-            await container.apiClient.request('/realtime/tickets', {
-              method: 'POST',
-            }),
-          );
-          if (!stopped) callback({ ticket: ticket.ticket });
-        } catch {
-          if (!stopped) callback({});
-        }
-      },
-    });
-    let retry: ReturnType<typeof setTimeout> | undefined;
-    socket.on('connect', () => {
-      setStatus('connected');
-      void queryClient.invalidateQueries({ queryKey: ['chat'] });
-    });
-    socket.on('disconnect', () => setStatus('offline'));
-    socket.on('connect_error', () => {
-      setStatus('offline');
-      if (!socket.active && !stopped) {
-        clearTimeout(retry);
-        retry = setTimeout(() => socket.connect(), 10000);
-      }
-    });
-    socket.on('portal.event', receive);
-    socket.connect();
-    const stop = () => {
+    let disconnect = () => {};
+    void import('socket.io-client')
+      .then(({ io }) => {
+        if (stopped) return;
+        const socket = io(socketUrl, {
+          autoConnect: false,
+          transports: ['websocket'],
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 15000,
+          auth: async (callback) => {
+            try {
+              const ticket = RealtimeTicketSchema.parse(
+                await container.apiClient.request('/realtime/tickets', {
+                  method: 'POST',
+                }),
+              );
+              if (!stopped) callback({ ticket: ticket.ticket });
+            } catch {
+              if (!stopped) callback({});
+            }
+          },
+        });
+        let retry: ReturnType<typeof setTimeout> | undefined;
+        socket.on('connect', () => {
+          setStatus('connected');
+          void queryClient.invalidateQueries({ queryKey: ['chat'] });
+        });
+        socket.on('disconnect', () => setStatus('offline'));
+        socket.on('connect_error', () => {
+          setStatus('offline');
+          if (!socket.active && !stopped) {
+            clearTimeout(retry);
+            retry = setTimeout(() => socket.connect(), 10000);
+          }
+        });
+        socket.on('portal.event', receive);
+        socket.connect();
+        const stop = () => {
+          stopped = true;
+          clearTimeout(retry);
+          socket.removeAllListeners();
+          socket.disconnect();
+        };
+        stopSocket.current = stop;
+        disconnect = stop;
+      })
+      .catch(() => {
+        if (!stopped) setStatus('offline');
+      });
+    return () => {
       stopped = true;
-      clearTimeout(retry);
-      socket.removeAllListeners();
-      socket.disconnect();
+      disconnect();
     };
-    stopSocket.current = stop;
-    return stop;
   }, [config.demoMode, config.socketUrl, container, queryClient, receive]);
   useEffect(() => {
     if (!notifications) return;
@@ -161,10 +177,10 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       await notifications?.disable();
       setNotificationStatus('available');
     },
-    prepareForLogout: async () => {
+    prepareForLogout: async (options = {}) => {
       stopSocket.current?.();
       stopNotifications.current?.();
-      await notifications?.disable();
+      await notifications?.disable({ skipBackend: options.accountDeleted });
     },
     simulateAlert: () => {
       if (config.demoMode)

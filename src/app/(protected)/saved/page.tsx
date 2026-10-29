@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { gentlePathPortalStrings as copy } from '@/strings';
-import { ResourcesScreen } from '@/modules/portal/ResourcesScreen';
-export const metadata: Metadata = { title: copy.resources.savedTitle };
+import { gentlePathEngagementStrings as copy } from '@/strings';
+import { SavedContentScreen } from '@/modules/engagement/SavedContentScreen';
+export const metadata: Metadata = { title: copy.title };
 export default function SavedPage() {
-  return <ResourcesScreen savedOnly />;
+  return <SavedContentScreen />;
 }

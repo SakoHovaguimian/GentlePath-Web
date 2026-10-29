@@ -25,6 +25,9 @@ Choose the matching rows below. Read the guide and nearest implementation, then 
 | Setup or adapting the template     | [Overview](README.md), [new project checklist](docs/NEW_PROJECT_CHECKLIST.md), [.env.example](.env.example)                                                              |
 | Architecture and state ownership   | [Architecture](docs/ARCHITECTURE.md), [client container](src/clientContainer.ts), [server container](src/container.ts)                                                   |
 | GentlePath features, roles, blog   | [Product/API/RBAC](docs/GENTLEPATH.md), [blog workflow](docs/BLOG.md), [portal](src/modules/portal/), [blog](src/modules/blog/)                                          |
+| Vault, guided steps, saved content | [Document Vault](docs/DOCUMENT_VAULT.md), [editorial tools](docs/EDITORIAL.md), [ratings/likes/favorites](docs/ENGAGEMENT.md)                                            |
+| Community, polls, milestones/tips  | [Community](docs/COMMUNITY.md), [polls](docs/POLLS.md), [milestone administration and history](docs/MILESTONE_ADMIN.md)                                                  |
+| Commercial, inbox, operations      | [Commercial](docs/COMMERCIAL.md), [notifications](docs/NOTIFICATIONS.md), [account and operational tools](docs/ACCOUNT_TOOLS.md)                                         |
 | New domain module                  | [Module guide](docs/prompts/NEW_MODULE_PROMPT.md), [feature requests](src/modules/feature-requests/)                                                                     |
 | Foundational services              | [Service guide](docs/prompts/NEW_SERVICE_PROMPT.md), [services](src/services/)                                                                                           |
 | Models, validation, API mapping    | [Conventions](docs/CONVENTIONS.md), [models](src/models/), [transport models](src/services/api/models/), [mappers](src/services/api/domainMappers.ts)                    |

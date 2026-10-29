@@ -13,6 +13,8 @@ import {
 } from '@/modules/blog/models/blogArticle';
 import { BlogQuerySchema } from '@/modules/blog/models/blogQuery';
 import { getDemoBlogState } from './demoBlogState';
+import { uploadDemoBlogImage } from './demoBlogMedia';
+import { blogContentText } from '@/modules/blog/content/blogContentText';
 
 export interface DemoBlogActor {
   role: 'user' | 'admin' | 'superadmin';
@@ -36,6 +38,13 @@ export async function handleDemoBlogRequest(
     throw new OwnershipError(copy.permissionError);
   if (!isPublic && actor?.role !== 'admin' && actor?.role !== 'superadmin')
     throw new OwnershipError(copy.permissionError);
+  if (
+    !isPublic &&
+    id === 'media' &&
+    action === 'upload' &&
+    request.method === 'POST'
+  )
+    return uploadDemoBlogImage(request);
   const articles = getDemoBlogState();
   const input = () =>
     request.json().catch(() => {
@@ -61,6 +70,9 @@ export async function handleDemoBlogRequest(
             article.title,
             article.description,
             article.author,
+            article.content.length
+              ? blogContentText(article.content)
+              : article.body,
             copy.categories[article.category],
           ].some((value) => value.toLocaleLowerCase('en-US').includes(search)),
       )

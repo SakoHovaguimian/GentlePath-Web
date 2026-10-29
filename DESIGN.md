@@ -110,3 +110,9 @@ Reuse shared components, semantic tokens, motion helpers, and presentation owner
 All other shared control geometry, focus, motion, and feedback contracts remain applicable. Original reference source is a product field guide: schema inventories and proposed AI/additions are planning evidence, not instructions or claims that external integrations exist.
 
 The later iOS references approve stronger color, larger serif hierarchy, pill actions, and lush imagery across the existing web routes. They do not add community posting, polls, documents, offers, or new permission/data contracts. The shared runtime tokens and components above implement that visual change.
+
+## Workspace Expansion — October 29, 2026
+
+The subsequent product request adds the vault, editorial tools, generalized saves, community, polls, milestones/tips, commercial operations, notifications, and account tools. Those capabilities follow the focused contracts linked in [GENTLEPATH.md](docs/GENTLEPATH.md); they extend product scope while keeping the accepted forest/ivory palette, Lora/DM Sans hierarchy, shared controls, natural form scrolling, and role-based shell. New icons extend the existing stroke-based `UiIcon` family. Promotional colors stay inside authored creative regions; sponsor disclosures and actions retain readable themed surfaces.
+
+The structured blog builder reuses shared reordering handles plus keyboard arrows, authored fields, private preview, and confirmation/dirty-state behavior. Sidebar links preserve native browser history and Next prefetching. Notification counts use a stable topbar affordance; timezone synchronization runs without blocking page navigation.

@@ -69,6 +69,7 @@ export function AlertModal({
     >
       <Dialog.Portal>
         <Dialog.Overlay
+          data-ui-presentation-layer="true"
           data-motion={motionEnabled ? undefined : 'off'}
           className={cn(
             'ui-backdrop fixed inset-0 z-80 bg-(--dashboard-shell-overlay) backdrop-blur-sm',
@@ -82,6 +83,8 @@ export function AlertModal({
           }
         />
         <Dialog.Content
+          data-ui-presentation-layer="true"
+          role="alertdialog"
           data-motion={motionEnabled ? undefined : 'off'}
           onOpenAutoFocus={() => {
             returnFocusRef.current =

@@ -16,7 +16,11 @@ import {
   SplitSection,
   UiIcon,
 } from '@/components/ui';
-import { gentlePathBlogStrings as copy } from '@/strings';
+import {
+  gentlePathBlogStrings as copy,
+  gentlePathBlogBuilderStrings as builderCopy,
+} from '@/strings';
+import { BlogContentBuilder } from './builder/BlogContentBuilder';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useSessionState } from '@/providers/AppProviders';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
@@ -40,6 +44,7 @@ const articleInput = (article: BlogArticle): BlogMutationInput => ({
   slug: article.slug,
   description: article.description,
   body: article.body,
+  content: article.content,
   category: article.category,
   cover: article.cover,
   author: article.author,
@@ -64,6 +69,7 @@ export function BlogEditor({
           slug: '',
           description: empty,
           body: '',
+          content: [],
           author: session?.user.firstName
             ? `${session.user.firstName} ${session.user.lastName}`.trim()
             : copy.defaultAuthor,
@@ -77,10 +83,11 @@ export function BlogEditor({
   const [notice, setNotice] = useState('');
   const [previewOpen, setPreviewOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const dirty = JSON.stringify(form) !== baseline;
   const dirtyRef = useRef(dirty);
   const busyRef = useRef(false);
-  const busy = mutations.isPending || confirming;
+  const busy = mutations.isPending || confirming || uploading;
   useEffect(() => {
     dirtyRef.current = dirty;
     busyRef.current = busy;
@@ -88,6 +95,7 @@ export function BlogEditor({
   useUnsavedFormGuard(dirtyRef, busyRef, copy.discardDescription);
 
   const updateForm = (next: BlogMutationInput) => {
+    dirtyRef.current = JSON.stringify(next) !== baseline;
     setForm(next);
     setNotice('');
   };
@@ -113,9 +121,21 @@ export function BlogEditor({
     }
     setErrors(next);
     setFailure('');
-    queueMicrotask(() =>
-      document.getElementById(`blog-${Object.keys(next)[0]}`)?.focus(),
-    );
+    queueMicrotask(() => {
+      const first = result.error.issues[0];
+      const block =
+        first?.path[0] === 'content' && typeof first.path[1] === 'number'
+          ? form.content[first.path[1]]
+          : undefined;
+      const target = document.getElementById(
+        block ? `blog-block-${block.id}` : `blog-${Object.keys(next)[0]}`,
+      );
+      (
+        (target?.querySelector(
+          'input, textarea, button',
+        ) as HTMLElement | null) || target
+      )?.focus();
+    });
     return null;
   };
   const displayError = (error: unknown) =>
@@ -287,31 +307,67 @@ export function BlogEditor({
           />
           <SplitSection
             id="blog-story"
-            title={copy.bodyTitle}
-            description={copy.bodyDescription}
+            title={builderCopy.title}
+            description={builderCopy.description}
           >
-            <div className="grid gap-2">
-              <Field labelText={copy.contentLabel}>
-                <MarkdownEditor
-                  id="blog-body"
-                  value={form.body}
-                  aria-invalid={Boolean(errors.body)}
-                  aria-describedby={errors.body ? 'blog-body-error' : undefined}
-                  maxLength={50000}
-                  disabled={busy}
-                  onValueChange={(body) => updateForm({ ...form, body })}
+            {form.content.length === 0 && form.body.trim() ? (
+              <div className="grid gap-4">
+                <Message
+                  title={builderCopy.legacyTitle}
+                  description={builderCopy.legacyDescription}
                 />
-              </Field>
-              {errors.body && (
-                <p
-                  id="blog-body-error"
-                  role="alert"
-                  className="m-0 text-sm text-error-primary"
+                <Field labelText={copy.contentLabel}>
+                  <MarkdownEditor
+                    id="blog-body"
+                    value={form.body}
+                    maxLength={50000}
+                    disabled={busy}
+                    onValueChange={(body) => updateForm({ ...form, body })}
+                  />
+                </Field>
+                <Button
+                  variant="secondary"
+                  disabled={busy}
+                  onClick={() =>
+                    updateForm({
+                      ...form,
+                      body: '',
+                      content: [
+                        {
+                          id: crypto.randomUUID(),
+                          contentType: 'section',
+                          metaData: {
+                            title: empty,
+                            body: form.body,
+                            format: 'markdown',
+                          },
+                        },
+                      ],
+                    })
+                  }
                 >
-                  {errors.body}
-                </p>
-              )}
-            </div>
+                  <UiIcon name="layers" />
+                  {builderCopy.convert}
+                </Button>
+              </div>
+            ) : (
+              <BlogContentBuilder
+                content={form.content}
+                disabled={busy}
+                showErrors={Boolean(errors.content)}
+                onUploadStateChangeAction={setUploading}
+                onChangeAction={(content) => updateForm({ ...form, content })}
+              />
+            )}
+            {errors.content && (
+              <p
+                id="blog-content-error"
+                role="alert"
+                className="m-0 text-sm text-error-primary"
+              >
+                {errors.content}
+              </p>
+            )}
           </SplitSection>
         </SectionStack>
         {Object.keys(errors).length > 0 && (

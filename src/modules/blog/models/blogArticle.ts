@@ -3,8 +3,10 @@ import { gentlePathBlogStrings as copy } from '@/strings';
 import { BlogCategorySchema } from './blogCategory';
 import { BlogCoverSchema } from './blogCover';
 import { BlogStatusSchema } from './blogStatus';
+import { BlogContentsSchema } from './blogContent';
+import { gentlePathBlogBuilderStrings as builderCopy } from '@/strings';
 
-export const BlogArticleSchema = z.object({
+const BlogArticleFieldsSchema = z.object({
   id: z.string().uuid(),
   slug: z
     .string()
@@ -27,11 +29,8 @@ export const BlogArticleSchema = z.object({
     .trim()
     .min(2, copy.invalidAuthor)
     .max(100, copy.invalidAuthor),
-  body: z
-    .string()
-    .trim()
-    .min(40, copy.invalidBody)
-    .max(50000, copy.invalidBody),
+  body: z.string().trim().max(50000, copy.invalidBody).default(''),
+  content: BlogContentsSchema.default([]),
   category: BlogCategorySchema,
   cover: BlogCoverSchema,
   status: BlogStatusSchema,
@@ -40,15 +39,27 @@ export const BlogArticleSchema = z.object({
   publishedAt: z.string().datetime().nullable(),
   revision: z.number().int().min(1),
 });
-export const BlogMutationInputSchema = BlogArticleSchema.pick({
+const hasArticleContent = (article: { body: string; content: unknown[] }) =>
+  article.content.length > 0 || article.body.trim().length >= 40;
+export const BlogArticleSchema = BlogArticleFieldsSchema.refine(
+  hasArticleContent,
+  { message: builderCopy.invalidContent, path: ['content'] },
+);
+export const BlogMutationInputSchema = BlogArticleFieldsSchema.pick({
   slug: true,
   title: true,
   description: true,
   author: true,
   body: true,
+  content: true,
   category: true,
   cover: true,
-}).extend({ revision: z.number().int().min(1).optional() });
+})
+  .extend({ revision: z.number().int().min(1).optional() })
+  .refine(hasArticleContent, {
+    message: builderCopy.invalidContent,
+    path: ['content'],
+  });
 export const BlogRevisionInputSchema = z.object({
   revision: z.number().int().min(1),
 });

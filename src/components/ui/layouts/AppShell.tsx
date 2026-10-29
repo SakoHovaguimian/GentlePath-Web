@@ -4,6 +4,7 @@ import { strings } from '@/strings';
 import { AppSidebar, type AppSidebarItem } from './AppSidebar';
 import { MobileNavigationMenu } from './MobileNavigationMenu';
 import { UiIcon } from '../components/UiIcon';
+import type { NavigationPermission } from '../models/navigationPermission';
 
 const navigation: AppSidebarItem[] = [
   {
@@ -53,6 +54,7 @@ export function AppShell({
   contextSlot,
   activePath,
   onNavigate,
+  onBeforeNavigate,
   navigationItems,
   workspaceLabel,
   brandSlot,
@@ -66,6 +68,7 @@ export function AppShell({
   contextSlot?: ReactNode;
   activePath?: string;
   onNavigate?: (href: string) => void;
+  onBeforeNavigate?: NavigationPermission;
   navigationItems?: AppSidebarItem[];
   workspaceLabel?: string;
   brandSlot?: ReactNode;
@@ -84,6 +87,7 @@ export function AppShell({
     session,
     items,
     onNavigate,
+    onBeforeNavigate,
     accountSlot,
     activePath,
     contextSlot,

@@ -1,4 +1,13 @@
 export type IconName =
+  | 'folder'
+  | 'chat'
+  | 'bell'
+  | 'sun'
+  | 'heart'
+  | 'star'
+  | 'image'
+  | 'upload'
+  | 'download'
   | 'grip'
   | 'leaf'
   | 'gift'

@@ -1,4 +1,6 @@
 import 'server-only';
+import { getDemoSavedCount } from '@/modules/engagement/demo/engagementState';
+import { getDemoMilestoneObservationDates } from '@/modules/milestone-admin/server/demoMilestoneAdminState';
 import { z } from 'zod';
 import {
   AuthError,
@@ -85,9 +87,7 @@ export async function handleDemoPortalRequest(
     if (state.settings.maintenanceMode && role === 'user')
       throw new ApiError(copy.maintenanceActive, 503);
     if (resource === 'overview' && method === 'GET' && !id) {
-      const observations = state.observations.filter(
-        (observation) => observation.userId === current.id,
-      );
+      const observationDates = getDemoMilestoneObservationDates(current.id);
       const weeklyActivity = Array.from({ length: 7 }, (_, index) => {
         const day = new Date(Date.now() - (6 - index) * 86400000)
           .toISOString()
@@ -95,16 +95,15 @@ export async function handleDemoPortalRequest(
         return (
           ownJournals.filter((entry) => entry.createdAt.startsWith(day))
             .length +
-          observations.filter((observation) =>
-            observation.observedAt.startsWith(day),
-          ).length
+          observationDates.filter((observedAt) => observedAt.startsWith(day))
+            .length
         );
       });
       return json({
         journalCount: empty ? 0 : ownJournals.length,
         childCount: empty ? 0 : ownChildren.length,
-        savedCount: empty ? 0 : favorites.size,
-        observationCount: empty ? 0 : observations.length,
+        savedCount: empty ? 0 : getDemoSavedCount(current.id),
+        observationCount: empty ? 0 : observationDates.length,
         weeklyActivity: empty ? Array(7).fill(0) : weeklyActivity,
       });
     }

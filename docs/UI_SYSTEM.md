@@ -1,5 +1,9 @@
 # Reusable UI foundation
 
+Portal navigation uses the shared `NavigationLink`: clean forms retain Next.js Link's synchronous history and prefetch behavior, while an optional before-navigation callback can deny or await a shared confirmation. Modifier-click and native link semantics remain available. The profile action uses the same link primitive.
+
+`Modal` accepts `initialFocusRef` for workflows that should focus a safe action instead of the title. Shared presentation confirmations are marked as a higher overlay layer; workflow dialogs ignore those layers' interactions and Escape events. Unsaved-form guards share one pending discard decision, preventing duplicate confirmation queues while preserving form state.
+
 GentlePath uses the LeafLaunch Web component foundation in `src/components/ui`. Open the authenticated `/dev-settings/components` route to inspect foundations, motion, page patterns, controls, states, tables, reordering, Markdown, and media. Examples use local state only. Appearance and the library share the same theme/motion controls. The component page has one scroll legend and no duplicate section dropdown.
 
 ## Ownership and inventory

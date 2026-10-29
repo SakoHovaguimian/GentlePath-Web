@@ -40,6 +40,18 @@ export function ReorderableList<T extends { id: string }>({
     skipMotion.current = true;
     onMove(id, targetId);
   });
+  function moveAndFocus(id: string, targetId: string, trigger: HTMLElement) {
+    const row = trigger.closest<HTMLElement>('[data-motion-key]');
+    onMove(id, targetId);
+    // Moving a keyed row can blur its active control in Safari. Keep keyboard
+    // focus on its handle, including when an arrow becomes disabled at an edge.
+    requestAnimationFrame(() => {
+      if (!row?.isConnected) return;
+      const handle = row.querySelector<HTMLElement>('[data-reorder-handle]');
+      if (handle && !handle.hasAttribute('disabled'))
+        handle.focus({ preventScroll: true });
+    });
+  }
   return (
     <ListGroup ordered label={label} listRef={listRef}>
       {items.map((item, index) => (
@@ -59,7 +71,13 @@ export function ReorderableList<T extends { id: string }>({
                 variant="ghost"
                 label={upLabel(item)}
                 disabled={disabled || index === 0}
-                onClick={() => onMove(item.id, items[index - 1].id)}
+                onClick={(event) =>
+                  moveAndFocus(
+                    item.id,
+                    items[index - 1].id,
+                    event.currentTarget,
+                  )
+                }
               >
                 <UiIcon name="arrowUp" />
               </IconButton>
@@ -67,7 +85,13 @@ export function ReorderableList<T extends { id: string }>({
                 variant="ghost"
                 label={downLabel(item)}
                 disabled={disabled || index === items.length - 1}
-                onClick={() => onMove(item.id, items[index + 1].id)}
+                onClick={(event) =>
+                  moveAndFocus(
+                    item.id,
+                    items[index + 1].id,
+                    event.currentTarget,
+                  )
+                }
               >
                 <UiIcon name="arrowUp" className="rotate-180" />
               </IconButton>
@@ -75,6 +99,7 @@ export function ReorderableList<T extends { id: string }>({
             <IconButton
               variant="ghost"
               label={handleLabel(item)}
+              data-reorder-handle
               disabled={disabled || items.length < 2}
               className="touch-none cursor-grab active:cursor-grabbing"
               onPointerDown={(event) => {
@@ -97,7 +122,8 @@ export function ReorderableList<T extends { id: string }>({
                   return;
                 event.preventDefault();
                 const next = items[index + (event.key === 'ArrowUp' ? -1 : 1)];
-                if (!disabled && next) onMove(item.id, next.id);
+                if (!disabled && next)
+                  moveAndFocus(item.id, next.id, event.currentTarget);
               }}
             >
               <UiIcon name="grip" />

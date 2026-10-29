@@ -11,8 +11,15 @@ export function useGuardedNavigate() {
   const router = useRouter();
   const { confirmNavigation } = useNavigationGuard();
   return useCallback(
-    async (href: string) => {
-      if (await confirmNavigation()) router.push(href as Route);
+    (href: string) => {
+      const allowed = confirmNavigation();
+      if (typeof allowed === 'boolean') {
+        if (allowed) router.push(href as Route);
+        return;
+      }
+      return allowed.then((confirmed) => {
+        if (confirmed) router.push(href as Route);
+      });
     },
     [confirmNavigation, router],
   );

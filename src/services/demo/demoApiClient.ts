@@ -21,6 +21,15 @@ import { simulateDemoRequest } from './demoSimulation';
 import { handleDemoPortalRequest } from './demoPortalApi';
 import { handleDemoBlogRequest } from './demoBlogApi';
 import { getDemoPortalState } from './demoPortalState';
+import { handleDocumentVaultRequest } from '@/modules/documents/demo/handleDocumentVaultRequest';
+import { handleCommunityRequest } from '@/modules/community/demo/handleCommunityRequest';
+import { handlePollRequest } from '@/modules/polls/demo/handlePollRequest';
+import { handleEditorialRequest } from '@/modules/editorial/server/handleDemoEditorialRequest';
+import { handleEngagementRequest } from '@/modules/engagement/demo/handleEngagementRequest';
+import { handleMilestoneAdminRequest } from '@/modules/milestone-admin/server/handleMilestoneAdminRequest';
+import { handleDemoAccountToolsRequest } from '@/modules/account-tools/demo/handleDemoAccountToolsRequest';
+import { handleCommercialRequest } from '@/modules/commercial/server/demoCommercialApi';
+import { handleNotificationInboxRequest } from '@/modules/notification-inbox/demo/handleNotificationInboxRequest';
 const PageQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(25),
   offset: z.coerce.number().int().min(0).default(0),
@@ -72,6 +81,69 @@ export class DemoApiClient {
     )
       throw new OwnershipError();
     await simulateDemoRequest(context);
+    const documents = await handleDocumentVaultRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (documents) return documents;
+    const community = await handleCommunityRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (community) return community;
+    const polls = await handlePollRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (polls) return polls;
+    const editorial = await handleEditorialRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (editorial) return editorial;
+    const engagement = await handleEngagementRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (engagement) return engagement;
+    const milestoneTools = await handleMilestoneAdminRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (milestoneTools) return milestoneTools;
+    const accountTools = await handleDemoAccountToolsRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (accountTools) return accountTools;
+    const commercial = await handleCommercialRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (commercial) return commercial;
+    const notifications = await handleNotificationInboxRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (notifications) return notifications;
     if (resource === 'portal' || resource === 'admin')
       return handleDemoPortalRequest(request, path, trustedSession, context);
     if (resource === 'blog') {
