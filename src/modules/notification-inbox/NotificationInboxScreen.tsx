@@ -1,17 +1,16 @@
 'use client';
 import { useEffect } from 'react';
 import {
-  Badge,
   Button,
-  buttonClassName,
-  DataPanel,
-  DataPanelState,
+  Card,
   DirectoryPagination,
   EmptyState,
   InlineLoading,
   Page,
   PageHeader,
   QueryBoundary,
+  UiIcon,
+  buttonClassName,
 } from '@/components/ui';
 import { NavigationLink } from '@/components/ui/components/NavigationLink';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
@@ -22,7 +21,8 @@ import { notificationInboxFilters } from './notificationInboxQueryParams';
 import { useNotificationDirectory } from './useNotificationDirectory';
 import { useNotificationActions } from './useNotificationActions';
 import { NotificationRecord } from './components/NotificationRecord';
-import { NotificationDirectoryFilters } from './components/NotificationDirectoryFilters';
+import { NotificationInboxToolbar } from './components/NotificationInboxToolbar';
+import { NotificationInboxSummary } from './components/NotificationInboxSummary';
 
 export function NotificationInboxScreen() {
   const directory = useNotificationDirectory();
@@ -33,6 +33,7 @@ export function NotificationInboxScreen() {
     category: filters.category,
   });
   const filtered = Object.values(filters).some((value) => value !== undefined);
+  const searched = Boolean(filters.query || filters.category);
   const actions = useNotificationActions(filters);
   const { confirmNavigation } = useNavigationGuard();
   useEffect(() => {
@@ -49,18 +50,12 @@ export function NotificationInboxScreen() {
       <PageHeader
         title={copy.title}
         description={copy.description}
-        eyebrow={copy.eyebrow}
         meta={
-          counts.data ? (
-            <>
-              <Badge intent="brand">
-                {copy.unreadCount(counts.data.unreadCount)}
-              </Badge>
-              <span>{copy.totalCount(counts.data.totalCount)}</span>
-            </>
-          ) : counts.isError ? (
-            <span role="status">{copy.countUnavailable}</span>
-          ) : undefined
+          <NotificationInboxSummary
+            counts={counts.data}
+            unavailable={counts.isError}
+            filtered={searched}
+          />
         }
         action={
           <NavigationLink
@@ -68,60 +63,85 @@ export function NotificationInboxScreen() {
             beforeNavigate={confirmNavigation}
             className={buttonClassName('secondary')}
           >
+            <UiIcon name="settings" />
             {copy.settingsAction}
           </NavigationLink>
         }
       />
-      <MutationError error={actions.error} />
-      <DataPanel
-        busy={query.isFetching || actions.busy}
-        busyLabel={copy.loadingTitle}
-        toolbar={
-          <div className="grid gap-4">
-            <NotificationDirectoryFilters
-              query={directory.query}
-              update={directory.update}
-            />
-            <div className="flex flex-wrap items-center gap-2">
-              <Button
-                variant="secondary"
-                disabled={
-                  actions.busy || query.isFetching || !query.data?.data.length
-                }
-                onClick={() => actions.readAll(true)}
-              >
-                {filtered
-                  ? copy.markMatchingReadAction
-                  : copy.markAllReadAction}
-              </Button>
-              <Button
-                variant="secondary"
-                disabled={
-                  actions.busy || query.isFetching || !query.data?.data.length
-                }
-                onClick={() => actions.readAll(false)}
-              >
-                {filtered
-                  ? copy.markMatchingUnreadAction
-                  : copy.markAllUnreadAction}
-              </Button>
-              <Button
-                variant="ghost"
-                disabled={
-                  actions.busy || query.isFetching || !query.data?.data.length
-                }
-                onClick={actions.archiveAll}
-              >
-                {filtered ? copy.archiveMatchingAction : copy.archiveAllAction}
-              </Button>
-            </div>
-            <p className="m-0 text-xs text-tertiary">
-              {filtered ? copy.scopeFilteredHint : copy.scopeAllHint}
-            </p>
-          </div>
-        }
-        footer={
-          query.data && (
+      <div className="grid min-w-0 gap-6">
+        <NotificationInboxToolbar
+          query={directory.query}
+          counts={counts.isError ? undefined : counts.data}
+          filtered={filtered}
+          busy={actions.busy}
+          hasNotifications={
+            !query.isFetching && Boolean(query.data?.data.length)
+          }
+          update={directory.update}
+          onReadAll={actions.readAll}
+          onArchiveAll={actions.archiveAll}
+        />
+        <MutationError error={actions.error} />
+        <section
+          id="notification-results"
+          aria-label={copy.resultsLabel}
+          aria-busy={query.isFetching || actions.busy}
+          className="relative grid min-w-0 gap-4"
+        >
+          <span
+            aria-hidden="true"
+            data-active={query.isFetching || actions.busy || undefined}
+            className="ui-progress-line"
+          />
+          <span role="status" aria-live="polite" className="sr-only">
+            {query.isFetching || actions.busy ? copy.loadingTitle : ''}
+          </span>
+          <QueryBoundary
+            query={query}
+            loadingFallback={
+              <Card className="grid min-h-64 place-items-center">
+                <InlineLoading message={copy.loadingTitle} />
+              </Card>
+            }
+          >
+            {(result) =>
+              result.data.length ? (
+                <ul className="m-0 grid min-w-0 list-none gap-4 p-0">
+                  {result.data.map((item) => (
+                    <li key={item.id} className="min-w-0">
+                      <NotificationRecord
+                        item={item}
+                        busy={actions.busy}
+                        onRead={actions.readItem}
+                        onArchive={actions.archiveItem}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Card>
+                  <EmptyState
+                    variant="plain"
+                    title={filtered ? copy.noResultsTitle : copy.emptyTitle}
+                    description={filtered ? copy.noResultsHint : copy.emptyHint}
+                    action={
+                      filtered && (
+                        <Button
+                          variant="secondary"
+                          onClick={directory.clearFilters}
+                        >
+                          {copy.clearFiltersAction}
+                        </Button>
+                      )
+                    }
+                  />
+                </Card>
+              )
+            }
+          </QueryBoundary>
+        </section>
+        {query.data && (
+          <div className="min-w-0 border-t border-secondary pt-4">
             <DirectoryPagination
               page={query.data.page}
               count={query.data.data.length}
@@ -130,51 +150,9 @@ export function NotificationInboxScreen() {
               range={copy.rangeLabel}
               onNavigate={directory.setOffset}
             />
-          )
-        }
-      >
-        <QueryBoundary
-          query={query}
-          loadingFallback={
-            <DataPanelState>
-              <InlineLoading message={copy.loadingTitle} />
-            </DataPanelState>
-          }
-          inset
-        >
-          {(result) =>
-            result.data.length ? (
-              <div className="divide-y divide-secondary">
-                {result.data.map((item) => (
-                  <NotificationRecord
-                    key={item.id}
-                    item={item}
-                    busy={actions.busy}
-                    onRead={actions.readItem}
-                    onArchive={actions.archiveItem}
-                  />
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                variant="plain"
-                title={filtered ? copy.noResultsTitle : copy.emptyTitle}
-                description={filtered ? copy.noResultsHint : copy.emptyHint}
-                action={
-                  filtered && (
-                    <Button
-                      variant="secondary"
-                      onClick={directory.clearFilters}
-                    >
-                      {copy.clearFiltersAction}
-                    </Button>
-                  )
-                }
-              />
-            )
-          }
-        </QueryBoundary>
-      </DataPanel>
+          </div>
+        )}
+      </div>
     </Page>
   );
 }

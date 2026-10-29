@@ -81,7 +81,7 @@ export function ScheduleWindowFields({
         })}
         {onRemove && (
           <Button
-            variant="secondary"
+            variant="destructive"
             className="sm:mt-7"
             aria-label={removeLabel}
             onClick={onRemove}

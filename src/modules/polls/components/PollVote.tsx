@@ -65,7 +65,7 @@ function PollVoteForm({
         !(await showAlert({
           title: copy.removeVoteTitle,
           description: copy.removeVoteDescription,
-          tone: 'warning',
+          tone: 'danger',
           confirmLabel: copy.removeVote,
           cancelLabel: copy.cancel,
         }))
@@ -153,7 +153,7 @@ function PollVoteForm({
               </Button>
               {ballot && (
                 <Button
-                  variant="secondary"
+                  variant="destructive"
                   loading={clear.isPending}
                   disabled={!writable || vote.isPending}
                   onClick={() => {

@@ -1,0 +1,39 @@
+.summary {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  color: var(--color-utility-warning-700);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+}
+
+.star {
+  position: relative;
+  display: inline-grid;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.outline,
+.filled {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 1.5;
+}
+
+.outline {
+  stroke: var(--color-utility-warning-600);
+}
+
+.fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+}
+
+.filled {
+  fill: var(--color-warning-400);
+  stroke: var(--color-utility-warning-700);
+}

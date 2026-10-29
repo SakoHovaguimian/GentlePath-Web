@@ -9,13 +9,20 @@ import {
   Page,
   PageHeader,
   QueryBoundary,
+  NavigationLink,
 } from '@/components/ui';
+import { useSessionState } from '@/providers/AppProviders';
+import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
+import { canManageContent } from '@/services/auth/permissions';
 import { gentlePathCommercialStrings as copy } from '@/strings';
 import { usePortalDirectory } from '@/modules/portal/usePortalDirectory';
 import { useDiscountOffers } from './hooks';
 import { OfferCard } from './components/OfferCard';
 import { CommercialServing } from './components/CommercialServing';
 export function DiscountsScreen() {
+  const { session } = useSessionState();
+  const { confirmNavigation } = useNavigationGuard();
+  const staff = canManageContent(session?.user.role ?? 'user');
   const directory = usePortalDirectory();
   const query = useDiscountOffers({
     query: directory.query,
@@ -38,6 +45,28 @@ export function DiscountsScreen() {
       <PageHeader
         title={copy.discountsTitle}
         description={copy.discountsDescription}
+        action={
+          staff ? (
+            <div className="flex flex-wrap gap-3">
+              <Button asChild variant="secondary">
+                <NavigationLink
+                  href="/admin/commercial?tab=offers"
+                  beforeNavigate={() => confirmNavigation()}
+                >
+                  {copy.manageOffers}
+                </NavigationLink>
+              </Button>
+              <Button asChild>
+                <NavigationLink
+                  href="/admin/commercial/offers/new"
+                  beforeNavigate={() => confirmNavigation()}
+                >
+                  {copy.createOffer}
+                </NavigationLink>
+              </Button>
+            </div>
+          ) : undefined
+        }
       />
       <Message
         title={copy.sponsored}

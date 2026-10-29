@@ -18,19 +18,15 @@ export function NotificationDirectoryFilters({
       id="notification-search"
       value={{
         query: query.query ?? '',
-        status: query.read === undefined ? undefined : String(query.read),
       }}
       onChange={(value) =>
         update({
           query: value.query.trim().slice(0, 200) || undefined,
-          read: value.status,
           offset: undefined,
         })
       }
-      statuses={[
-        { value: String(false), label: copy.readStatuses.unread },
-        { value: String(true), label: copy.readStatuses.read },
-      ]}
+      statuses={[]}
+      showStatus={false}
       copy={{
         search: copy.searchLabel,
         placeholder: copy.searchPlaceholder,
@@ -38,9 +34,9 @@ export function NotificationDirectoryFilters({
         status: copy.readLabel,
         allStatuses: copy.allReadStatuses,
       }}
-      layout="stackedSearch"
+      layout="inline"
       additionalFilters={
-        <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+        <>
           <Field labelText={copy.categoryLabel}>
             <Select
               value={query.category ?? ''}
@@ -70,7 +66,7 @@ export function NotificationDirectoryFilters({
               <option value={ascendingOrder}>{copy.oldestOption}</option>
             </Select>
           </Field>
-        </div>
+        </>
       }
     />
   );

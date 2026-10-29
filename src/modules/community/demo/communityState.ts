@@ -1,3 +1,4 @@
+import { normalizeContentTags } from '@/utils/normalizeContentTag';
 import 'server-only';
 import { getDemoState } from '@/services/demo/demoState';
 import { gentlePathCommunityStrings as copy } from '@/strings';
@@ -49,7 +50,11 @@ function createCommunityState(): DemoCommunityState {
 }
 
 export function getDemoCommunityState(): DemoCommunityState {
-  return (globalCommunity.gentlePathCommunityState ??= createCommunityState());
+  const state = (globalCommunity.gentlePathCommunityState ??=
+    createCommunityState());
+  for (const record of state.posts)
+    record.tags = normalizeContentTags(record.tags);
+  return state;
 }
 
 export function resetDemoCommunityState() {

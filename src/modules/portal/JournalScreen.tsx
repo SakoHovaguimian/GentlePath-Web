@@ -175,7 +175,7 @@ export function JournalScreen() {
                         <UiIcon name="arrowRight" className="size-4" />
                       </Button>
                       <Button
-                        variant="ghost"
+                        variant="destructive"
                         disabled={remove.isPending}
                         onClick={() => {
                           void deleteEntry(entry);

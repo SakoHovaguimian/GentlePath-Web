@@ -11,10 +11,18 @@ interface CommunityHubProps {
   children: ReactNode;
 }
 
-export function CommunityHub({ activeView, action, children }: CommunityHubProps) {
+const communityViews = { posts: 'posts', polls: 'polls' } as const;
+
+export function CommunityHub({
+  activeView,
+  action,
+  children,
+}: CommunityHubProps) {
   const navigate = useGuardedNavigate();
   return (
-    <Page className={`gp-portal-page ${activeView === 'polls' ? 'gp-polls' : 'gp-community'}`}>
+    <Page
+      className={`gp-portal-page ${activeView === 'polls' ? 'gp-polls' : 'gp-community'}`}
+    >
       <PageHeader
         title={copy.title}
         description={copy.description}
@@ -32,8 +40,8 @@ export function CommunityHub({ activeView, action, children }: CommunityHubProps
         label={copy.contentViewLabel}
         value={activeView}
         tabs={[
-          { value: 'posts', label: copy.postsTitle },
-          { value: 'polls', label: copy.pollsTitle },
+          { value: communityViews.posts, label: copy.postsTitle },
+          { value: communityViews.polls, label: copy.pollsTitle },
         ]}
         onValueChange={(view) => {
           if (view !== activeView)

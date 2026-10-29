@@ -61,7 +61,7 @@ export function CommunityPostCard({
           />
           <Button asChild variant="ghost">
             <NavigationLink href={href} beforeNavigate={confirmNavigation}>
-              <UiIcon name="quote" className="size-4" />
+              <UiIcon name="chat" className="size-4" />
               {copy.commentsCount(post.commentCount)}
             </NavigationLink>
           </Button>
@@ -77,7 +77,7 @@ export function CommunityPostCard({
                 {copy.edit}
               </Button>
               <Button
-                variant="ghost"
+                variant="destructive"
                 disabled={!writable || busy}
                 onClick={onDelete}
                 aria-label={copy.deletePost}

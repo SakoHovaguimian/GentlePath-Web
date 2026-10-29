@@ -187,7 +187,7 @@ export function BlogEditor({
           : copy.unpublishConfirmDescription(form.title),
         confirmLabel: publishing ? copy.publish : copy.unpublish,
         cancelLabel: copy.keepWriting,
-        tone: publishing ? 'info' : 'warning',
+        tone: publishing ? 'info' : 'danger',
       });
       if (!confirmed) return;
       const saved = dirty || !article ? await persist() : article;
@@ -279,11 +279,7 @@ export function BlogEditor({
             </Badge>
           }
           action={
-            <Button
-              variant="secondary"
-              disabled={busy}
-              onClick={() => setPreviewOpen(true)}
-            >
+            <Button disabled={busy} onClick={() => setPreviewOpen(true)}>
               <UiIcon name="file" />
               {copy.preview}
             </Button>
@@ -415,11 +411,18 @@ export function BlogEditor({
               : copy.saveDraft}
           </Button>
           <Button
+            variant={
+              article?.status === 'published' ? 'destructive' : 'secondary'
+            }
             loading={mutations.publication.isPending}
             disabled={busy}
             onClick={() => void changePublication()}
           >
             {article?.status === 'published' ? copy.unpublish : copy.publish}
+          </Button>
+          <Button disabled={busy} onClick={() => setPreviewOpen(true)}>
+            <UiIcon name="file" />
+            {copy.preview}
           </Button>
         </FormActions>
         {article && (

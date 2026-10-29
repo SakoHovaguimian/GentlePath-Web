@@ -241,7 +241,7 @@ export function PollEditor({
                   {controls}
                   {!locked && (
                     <IconButton
-                      variant="ghost"
+                      variant="destructive"
                       label={copy.removeOption(index + 1)}
                       disabled={disabled || options.length <= 2}
                       onClick={() =>

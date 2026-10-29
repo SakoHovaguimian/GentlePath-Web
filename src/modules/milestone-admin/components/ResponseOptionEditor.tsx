@@ -30,7 +30,7 @@ export function ResponseOptionEditor({
       !(await showAlert({
         title: copy.removeOptionTitle,
         description: copy.removeOptionDescription(option.label),
-        tone: 'warning',
+        tone: 'danger',
         confirmLabel: copy.removeOption,
         cancelLabel: copy.cancel,
       }))

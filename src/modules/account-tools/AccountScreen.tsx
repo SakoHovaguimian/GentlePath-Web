@@ -87,7 +87,7 @@ export function AccountScreen() {
             </p>
           )}
           <div>
-            <Button variant="secondary" onClick={() => setDeleting(true)}>
+            <Button variant="destructive" onClick={() => setDeleting(true)}>
               {copy.account.deleteAction}
             </Button>
           </div>

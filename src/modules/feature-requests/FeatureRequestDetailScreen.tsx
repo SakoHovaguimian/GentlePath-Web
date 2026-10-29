@@ -114,7 +114,7 @@ export function FeatureRequestDetailScreen({
           </Button>
           <Button
             type="button"
-            variant="secondary"
+            variant="destructive"
             disabled={deleteMutation.isPending || updateMutation.isPending}
             onClick={async () => {
               const confirmed = await presentation.showAlert({

@@ -1,3 +1,4 @@
+import { normalizeContentTags } from '@/utils/normalizeContentTag';
 import 'server-only';
 import { getDemoState } from '@/services/demo/demoState';
 import { gentlePathPollStrings as copy } from '@/strings';
@@ -80,6 +81,8 @@ export function getDemoPollState(): DemoPollState {
       commentLikes: new Map(),
     };
   }
+  for (const record of globalPolls.gentlePathPollState.polls)
+    record.tags = normalizeContentTags(record.tags);
   return globalPolls.gentlePathPollState;
 }
 export function resetDemoPollState() {

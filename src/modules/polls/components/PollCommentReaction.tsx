@@ -1,6 +1,6 @@
 'use client';
 import { useRef } from 'react';
-import { Button, UiIcon } from '@/components/ui';
+import { ReactionButton } from '@/components/ui';
 import { MutationError } from '@/modules/portal/components/MutationError';
 import { gentlePathPollStrings as copy } from '@/strings';
 import type { PollComment } from '../models/pollComment';
@@ -17,10 +17,11 @@ export function PollCommentReaction({
   const busy = useRef(false);
   return (
     <div className="grid gap-2">
-      <Button
-        variant={comment.liked ? 'secondary' : 'ghost'}
-        aria-pressed={comment.liked}
-        aria-label={comment.liked ? copy.unlike : copy.like}
+      <ReactionButton
+        liked={comment.liked}
+        label={comment.liked ? copy.unlike : copy.like}
+        count={comment.likesCount}
+        countLabel={copy.likes(comment.likesCount)}
         loading={mutation.isPending}
         disabled={!writable}
         onClick={async () => {
@@ -37,10 +38,7 @@ export function PollCommentReaction({
             busy.current = false;
           }
         }}
-      >
-        <UiIcon name={comment.liked ? 'check' : 'plus'} className="size-4" />
-        {copy.likes(comment.likesCount)}
-      </Button>
+      />
       <MutationError error={mutation.error} />
     </div>
   );

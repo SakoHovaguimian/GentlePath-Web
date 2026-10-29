@@ -14,7 +14,7 @@ export function NotificationControls() {
       <p className="text-sm text-secondary">{strings.notifications[state]}</p>
       {(state === 'available' || state === 'enabled') && (
         <Button
-          variant="secondary"
+          variant={state === 'enabled' ? 'destructive' : 'secondary'}
           disabled={pending}
           onClick={async () => {
             setPending(true);

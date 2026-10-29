@@ -1,3 +1,4 @@
+import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { gentlePathPollStrings as copy } from '@/strings';
 import { PollAuthorSchema } from './pollAuthor';
@@ -23,11 +24,15 @@ export const PollInputSchema = z
           .string()
           .trim()
           .min(1, copy.validation.tagsDescription)
-          .max(100, copy.validation.tagsDescription),
+          .max(100, copy.validation.tagsDescription)
+          .transform(normalizeContentTag)
+          .refine((tag) => tag.length <= 100, copy.validation.tagsDescription),
       )
       .max(30, copy.validation.tagsDescription)
       .refine(
-        (tags) => new Set(tags).size === tags.length,
+        (tags) =>
+          new Set(tags.map((tag) => tag.toLocaleLowerCase('en-US'))).size ===
+          tags.length,
         copy.validation.tagsDescription,
       ),
     options: z
@@ -46,7 +51,7 @@ export const PollSchema = z.object({
   title: z.string(),
   message: z.string(),
   selectionMode: PollSelectionModeSchema,
-  tags: z.array(z.string()),
+  tags: z.array(z.string().transform(normalizeContentTag)),
   author: PollAuthorSchema.nullable(),
   options: z.array(PollOptionSchema),
   participantsCount: z.number().int().nonnegative(),

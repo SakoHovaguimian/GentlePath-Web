@@ -1,4 +1,6 @@
+import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
+import { ResourceRatingSummarySchema } from '@/modules/engagement/models/resourceRatingSummary';
 import { gentlePathEditorialStrings as copy } from '@/strings';
 import { ContentUrlSchema } from './contentUrl';
 import { EditorialResourceTypeSchema } from './resourceType';
@@ -14,16 +16,14 @@ export const EditorialResourceSchema = z.object({
   parent_id: z.string().nullable(),
   type: EditorialResourceTypeSchema,
   format: EditorialResourceFormatSchema.nullable(),
-  tags: z.array(z.string()).default([]),
+  tags: z.array(z.string().transform(normalizeContentTag)).default([]),
   title: z.string(),
   url: z.string().nullable(),
   description: z.string(),
   resource_details: EditorialResourceDetailsSchema,
   created_at: z.string(),
   updated_at: z.string(),
-  ratings: z
-    .object({ count: z.number(), average: z.number().nullable() })
-    .optional(),
+  ratings: ResourceRatingSummarySchema.optional(),
   children_count: z.number().optional(),
 });
 
@@ -38,7 +38,9 @@ export const EditorialResourceInputSchema = z
           .string()
           .trim()
           .min(1, copy.validation.tagsDescription)
-          .max(100, copy.validation.tagsDescription),
+          .max(100, copy.validation.tagsDescription)
+          .transform(normalizeContentTag)
+          .refine((tag) => tag.length <= 100, copy.validation.tagsDescription),
       )
       .max(30, copy.validation.tagsDescription),
     title: z
@@ -69,7 +71,10 @@ export const EditorialResourceInputSchema = z
           path: ['resource_details', 'source_url'],
         });
     }
-    if (new Set(input.tags).size !== input.tags.length)
+    if (
+      new Set(input.tags.map((tag) => tag.toLocaleLowerCase('en-US'))).size !==
+      input.tags.length
+    )
       context.addIssue({
         code: 'custom',
         message: copy.validation.tagsDescription,

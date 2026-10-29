@@ -4,6 +4,7 @@ import { Button, UiIcon } from '@/components/ui';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import type { Resource } from '../models/resource';
 import { getResourceArtwork } from './resourceArtwork';
+import { ResourceRatingSummary } from '@/modules/engagement/components/ResourceRatingSummary';
 
 export function ResourceCard({
   resource,
@@ -52,6 +53,7 @@ export function ResourceCard({
             {resource.title}
           </Link>
         </Heading>
+        <ResourceRatingSummary ratings={resource.ratings} compact />
         <p className="m-0 flex-1 text-sm leading-relaxed text-secondary">
           {resource.description}
         </p>
@@ -61,17 +63,17 @@ export function ResourceCard({
           </span>
           {onSave && (
             <Button
-              variant="ghost"
+              variant={resource.saved ? 'destructive' : 'ghost'}
               className="min-h-10 px-2 text-xs"
               loading={busy}
               aria-pressed={resource.saved}
               onClick={() => onSave(resource)}
             >
               <UiIcon
-                name={resource.saved ? 'check' : 'plus'}
+                name={resource.saved ? 'trash' : 'plus'}
                 className="size-4"
               />
-              {resource.saved ? copy.common.saved : copy.resources.save}
+              {resource.saved ? copy.resources.unsave : copy.resources.save}
             </Button>
           )}
         </div>

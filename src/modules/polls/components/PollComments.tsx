@@ -104,7 +104,7 @@ export function PollComments({
                             {copy.editComment}
                           </Button>
                           <Button
-                            variant="ghost"
+                            variant="destructive"
                             aria-label={copy.deleteComment}
                             disabled={!writable || remove.isPending}
                             onClick={() => {

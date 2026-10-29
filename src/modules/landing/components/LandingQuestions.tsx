@@ -1,4 +1,4 @@
-import { UiIcon } from '@/components/ui';
+import { Accordion } from '@/components/ui';
 import { gentlePathLandingStrings as copy } from '@/strings';
 
 export function LandingQuestions() {
@@ -11,17 +11,16 @@ export function LandingQuestions() {
         <p className="gp-eyebrow">{copy.questions.eyebrowLabel}</p>
         <h2 id="gentlepath-questions-title">{copy.questions.title}</h2>
       </div>
-      <div className="gp-question-list">
-        {copy.questions.items.map((question) => (
-          <details key={question.title} className="gp-question">
-            <summary>
-              <span>{question.title}</span>
-              <UiIcon name="plus" />
-            </summary>
-            <p>{question.description}</p>
-          </details>
-        ))}
-      </div>
+      <Accordion
+        className="gp-question-list"
+        itemClassName="gp-question"
+        allowsMultipleExpanded
+        items={copy.questions.items.map((question, index) => ({
+          id: `landing-question-${index}`,
+          title: question.title,
+          content: <p>{question.description}</p>,
+        }))}
+      />
     </section>
   );
 }

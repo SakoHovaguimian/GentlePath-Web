@@ -109,7 +109,7 @@ export function FamilyScreen() {
                       {copy.common.edit}
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="destructive"
                       disabled={remove.isPending}
                       aria-label={copy.family.deleteAction}
                       onClick={() => {

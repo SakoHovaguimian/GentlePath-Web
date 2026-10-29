@@ -148,7 +148,7 @@ export function ReviewedDraftAssistant({
         </Button>
         {(transcript || result) && (
           <Button
-            variant="secondary"
+            variant="destructive"
             disabled={pending || speechBusy}
             onClick={discard}
           >

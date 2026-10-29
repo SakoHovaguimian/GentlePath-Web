@@ -89,7 +89,7 @@ export function DocumentCard({
             {copy.editAction}
           </Button>
           <IconButton
-            variant="ghost"
+            variant="destructive"
             disabled={deleting || downloading}
             label={copy.deleteLabel(document.title)}
             onClick={onDelete}

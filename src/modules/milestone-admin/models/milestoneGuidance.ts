@@ -1,3 +1,4 @@
+import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import {
@@ -11,7 +12,7 @@ export const MilestoneGuidanceSchema = z.object({
   milestone: z.string(),
   information: z.string(),
   observation_guidance: z.string().nullable(),
-  tags: z.array(z.string()),
+  tags: z.array(z.string().transform(normalizeContentTag)),
   created_at: z.string(),
   updated_at: z.string(),
   response_options: z.array(MilestoneResponseOptionSchema).optional(),
@@ -41,11 +42,15 @@ export const MilestoneGuidanceInputSchema = z
           .string()
           .trim()
           .min(1, copy.validation.tags)
-          .max(100, copy.validation.tags),
+          .max(100, copy.validation.tags)
+          .transform(normalizeContentTag)
+          .refine((tag) => tag.length <= 100, copy.validation.tags),
       )
       .max(30, copy.validation.tags)
       .refine(
-        (tags) => new Set(tags).size === tags.length,
+        (tags) =>
+          new Set(tags.map((tag) => tag.toLocaleLowerCase('en-US'))).size ===
+          tags.length,
         copy.validation.tags,
       ),
     response_options: z

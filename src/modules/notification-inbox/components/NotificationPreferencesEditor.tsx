@@ -116,7 +116,7 @@ export function NotificationPreferencesEditor({
         live
       >
         <Button
-          variant="secondary"
+          variant="destructive"
           onClick={discard}
           disabled={!isDirty || mutation.isPending}
         >

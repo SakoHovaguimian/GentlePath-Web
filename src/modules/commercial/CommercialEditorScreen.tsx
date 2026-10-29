@@ -2,7 +2,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Route } from 'next';
-import { Button, Page, PageHeader, QueryBoundary } from '@/components/ui';
+import {
+  Button,
+  Message,
+  Page,
+  PageHeader,
+  QueryBoundary,
+} from '@/components/ui';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
 import { gentlePathCommercialStrings as copy } from '@/strings';
@@ -35,13 +41,20 @@ export function CommercialEditorScreen({
     return (
       <Page>
         <PageHeader
-          title={copy.create}
+          title={entity === 'offers' ? copy.createOffer : copy.create}
           eyebrow={copy[entity]}
           breadcrumbs={breadcrumb}
           onNavigate={(href) => {
             void navigate(href);
           }}
         />
+        {entity === 'offers' && (
+          <Message
+            title={copy.offerAuthoringTitle}
+            description={copy.offerAuthoringHint}
+            intent="neutral"
+          />
+        )}
         <CommercialContentForm entity={entity} />
       </Page>
     );

@@ -210,7 +210,7 @@ export function DocumentEditor({
                 </Button>
                 {file && (
                   <Button
-                    variant="ghost"
+                    variant="destructive"
                     disabled={mutation.isPending}
                     onClick={() => {
                       setFile(null);

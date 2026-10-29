@@ -1,10 +1,10 @@
 # GentlePath
 
-A single npm application built with Next.js **16.2.10**, React **19.2.4**, strict TypeScript, Tailwind CSS v4, and TanStack Query. Domain modules call an API client through an authenticated Next.js backend proxy. Shared React Aria/Radix UI primitives and GentlePath’s light/dark accent themes live in the same application.
+A family workspace for private reflections, documents, and observations, with reviewed resources, community posts and polls, editorial publishing, family discounts, and role-based administration. Built as one Next.js / TypeScript application; [AGENTS.md](AGENTS.md) routes contributors to the relevant code and guidance.
 
-## Start with the demo
+## Run Locally
 
-Requires Node 22.
+Requires Node 22 and npm.
 
 ```sh
 npm ci
@@ -12,42 +12,28 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3001. The development script uses Next.js Webpack because the installed Turbopack development CSS resolver resolves relative stylesheet imports from the repository root; the optimized production build still uses Turbopack. The sample environment sets `DEMO_MODE=true`. Choose Family Member, Admin, or SuperAdmin on the sign-in screen. Seed accounts are `user@gentlepath.demo`, `admin@gentlepath.demo`, and `superadmin@gentlepath.demo`; all use `password123`. You can also create a demo family account. Demo mutations are stored in server memory across navigation and reloads; restarting the server restores fixtures.
+Open [localhost:3001](http://localhost:3001). The sample environment enables demo mode. Sign-in offers Family Member, Admin, and SuperAdmin identities; [demo mode](docs/DEMO_MODE.md) documents credentials, scenarios, and reset behavior. Demo data persists in server memory across reloads and resets on restart. Use fictional data.
 
-Demo mode includes family profiles, private journals, a private document vault, structured blog publishing, guided steps and resource authoring, ratings/likes/saved content, community, polls, dynamic milestones and private observation history, reviewed family tips, sponsors/offers/advertising operations, a notification inbox/preferences, and account/operational tools. Role-aware dashboards, people, moderation, and SuperAdmin settings use the same design system. `/dev-settings` controls populated/loading/empty/error scenarios, explicit response latency, trusted role switching, and fixture reset. Normal demo requests have no artificial delay. Public visitors start at `/`; sign in to open `/dashboard` or `/admin`. It makes no Firebase, backend, Socket.IO, Messaging, or Amplitude calls. Optional analytics and browser push controls explain their demo state. See the [capability and permission map](docs/GENTLEPATH.md) for focused contracts.
-
-## Component foundation
-
-Open `/dev-settings/components` after signing in. GentlePath includes the LeafLaunch shared component foundation, mobile navigation and record layouts, animated segmented controls, horizontal/vertical steppers, persistent panels, Markdown editing, media previews, and shared light/dark/accent/motion settings. Previews stay local. Read [UI system](docs/UI_SYSTEM.md) before extending a screen.
-
-## Live mode
-
-Set `DEMO_MODE=false`, provide `PORTAL_API_URL`, `FIREBASE_WEB_API_KEY`, and a random `SESSION_SECRET` of at least 32 characters, then restart. `PORTAL_API_URL` includes the backend prefix, such as `http://localhost:3000/api`. Configure optional Socket.IO, Firebase Messaging, and Amplitude values from [.env.example](.env.example).
-
-The backend must implement the [documented contract](docs/BACKEND_CONTRACT.md). Feature adapters map the new workflows to the sibling GentlePath API. Structured publication requires its authored Prisma migration; follow [blog deployment notes](docs/BLOG.md). Operator delivery and AI routes additionally require the backend's configured external-ID allowlist. Missing live integrations are not silently replaced with demo data.
-
-Authentication uses Firebase REST on the server. Access and refresh tokens live in an encrypted HTTP-only session cookie. Browser calls use `/api/backend/*`; the proxy refreshes tokens and forwards the bearer and app-version headers. Socket.IO uses short-lived tickets. Firebase Messaging is explicitly opt-in. Amplitude loads only after consent; no Sentry frontend integration is included.
+Development uses Webpack; optimized production builds use Turbopack. `/dev-settings` controls demo scenarios and latency. `/dev-settings/components` is the shared component reference.
 
 ## Commands
 
-```sh
-npm run dev
-npm run check
-DEMO_MODE=true npm run build
-DEMO_MODE=true npm start
-npm run check:strings
-```
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Local development on port 3001 |
+| `npm run check` | Lint, types, Next diagnostics, strings, semantic colors, shared controls, and Tailwind checks |
+| `DEMO_MODE=true npm run build` | Optimized application build |
+| `DEMO_MODE=true npm start` | Production demo preview on port 3001 |
+| `git diff --check` | Whitespace/diff verification |
 
-Use `npm run dev` for local HTTP browsing. `npm start` enables production `Secure` cookies; Safari requires HTTPS to retain them, including demo sessions. See [demo sign-in troubleshooting](docs/DEMO_MODE.md).
+Use the development server for local HTTP browsing. Production cookies are Secure, including demo cookies; Safari needs trusted HTTPS for a production preview. Do not weaken cookie security to work around local sign-in.
 
-The repository contains no tests by instruction. `check` runs ESLint with zero warnings allowed, route-aware TypeScript, Next.js editor plugin diagnostics, display-string checks, semantic-color checks, shared-control checks, and Tailwind canonical-class checks. Keep the npm lockfile committed.
+## Configure Live Services
 
-## Find your way around
+Set `DEMO_MODE=false`, configure the required values in [.env.example](.env.example), and restart. The server needs `PORTAL_API_URL`, `FIREBASE_WEB_API_KEY`, and a random `SESSION_SECRET` of at least 32 characters. Optional socket, Messaging, and analytics settings remain independent.
 
-- [AGENTS.md](AGENTS.md): concise agent landing page and task index.
-- [GentlePath routes, RBAC, and API](docs/GENTLEPATH.md), [blog publishing](docs/BLOG.md).
-- [Architecture](docs/ARCHITECTURE.md): modules, services, browser/server boundaries, state ownership.
-- [Demo mode](docs/DEMO_MODE.md), [authentication](docs/AUTH.md), [realtime](docs/REALTIME.md), [analytics](docs/ANALYTICS.md).
-- [Strings](docs/STRINGS.md): all display copy is centralized in `src/strings.ts`.
-- [New project checklist](docs/NEW_PROJECT_CHECKLIST.md), [migration notes](docs/MIGRATION.md).
-- [Design](DESIGN.md), [UX contract](UX-CONTRACT.md), [verification](docs/VERIFICATION.md).
+Read [integrations](docs/INTEGRATIONS.md) before connecting services. The backend remains authoritative for ownership, roles, persistence, and delivery. Feature adapters and some retained portal contracts differ; verify actual wiring. Structured publishing and tag normalization require their backend migrations. An unavailable live service never silently falls back to demo data.
+
+## Documentation
+
+[AGENTS.md](AGENTS.md) is the task index. [Product map](docs/GENTLEPATH.md) explains features and permissions; [architecture](docs/ARCHITECTURE.md) explains implementation ownership; [verification](docs/VERIFICATION.md) explains checks and live deployment limits. [DESIGN.md](DESIGN.md) records visual intent, while [UI system](docs/UI_SYSTEM.md) owns interaction and component contracts.

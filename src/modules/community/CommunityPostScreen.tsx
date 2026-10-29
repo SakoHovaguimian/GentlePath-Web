@@ -131,7 +131,7 @@ function CommunityPostDetail({
                   {copy.editPost}
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant="destructive"
                   disabled={!writable || remove.isPending}
                   onClick={() => {
                     void remove.deletePost(post);

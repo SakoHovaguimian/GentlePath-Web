@@ -62,7 +62,10 @@ export function PollCard({
             <UiIcon name="chart" className="size-4" />
             {copy.participants(poll.participantsCount)}
           </span>
-          <span>{copy.comments(poll.commentsCount)}</span>
+          <span className="inline-flex items-center gap-2">
+            <UiIcon name="chat" className="size-4" />
+            {copy.comments(poll.commentsCount)}
+          </span>
         </div>
         {own && (
           <div className="flex flex-wrap gap-1">
@@ -74,7 +77,7 @@ export function PollCard({
               {copy.editPoll}
             </Button>
             <Button
-              variant="ghost"
+              variant="destructive"
               aria-label={copy.deletePoll}
               disabled={!writable || busy}
               onClick={onDelete}

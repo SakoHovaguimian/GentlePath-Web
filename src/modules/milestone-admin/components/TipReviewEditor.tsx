@@ -68,7 +68,7 @@ export function TipReviewEditor({
         !(await showAlert({
           title: copy.reverseTitle,
           description: copy.reverseDescription,
-          tone: 'warning',
+          tone: decision === 'REJECTED' ? 'danger' : 'info',
           confirmLabel: copy.confirmReview,
           cancelLabel: copy.cancel,
         }))

@@ -110,7 +110,7 @@ export function AIUsageScreen() {
               {copy.common.editAction}
             </Button>
             <Button
-              variant="ghost"
+              variant="destructive"
               disabled={remove.isPending}
               onClick={() => void deleteRecord(record)}
             >

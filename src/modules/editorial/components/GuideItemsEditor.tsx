@@ -63,7 +63,7 @@ export function GuideItemsEditor({
                 <div className="flex flex-wrap items-center gap-2">
                   {controls}
                   <Button
-                    variant="ghost"
+                    variant="destructive"
                     disabled={disabled || items.length === 1}
                     onClick={() =>
                       onChangeAction(

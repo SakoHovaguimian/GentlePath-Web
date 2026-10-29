@@ -5865,7 +5865,7 @@ export const strings = {
       'Edit, arrange, filter, and preview with the same components used in your project.',
     notes: 'Project Notes',
     notesSample:
-      '# Project notes\n\nKeep the team informed with **clear updates**.\n\n- Review the proposal\n- Publish the next release',
+      '# Project Notes\n\nKeep the team informed with **clear updates**.\n\n- Review the proposal\n- Publish the next release',
     markdown: 'Markdown Editor',
     reorder: 'Arrange Items',
     itemNames: ['Plan The Project', 'Design The Interface', 'Ship The Release'],
@@ -5878,7 +5878,8 @@ export const strings = {
     edit: 'Edit',
     preview: 'Preview',
     draftLabel: 'Draft Title',
-    draftSample: 'My next project',
+    // @title-case: Authored example of a draft title.
+    draftSample: 'My Next Project',
     filters: 'Directory Filters',
     noResults: 'No Matching Items',
     clearFilters: 'Clear Filters',
@@ -6865,7 +6866,8 @@ export const strings = {
     invalidInput: 'Invalid Input',
     errorHint: 'Enter a product name to continue.',
     productName: 'Product Name',
-    sampleProduct: 'Portal starter kit',
+    // @title-case: Authored product name shown in the component previews.
+    sampleProduct: 'Portal Starter Kit',
     sku: 'SKU / Internal Code',
     sampleSku: 'SKU-000123',
     brand: 'Manufacturer / Brand',
@@ -7521,15 +7523,16 @@ export const gentlePathDemoStrings = {
       category: 'Connection',
     },
   ],
-  // @preserve-case: Demo report content retains its authored case.
   reportSeeds: [
     {
       contentTitle: 'Community Resource Suggestion',
+      // @sentence-case: Supporting report details.
       reason: 'A shared link needs a source and a clearer description.',
       reporterName: 'Community Member',
     },
     {
       contentTitle: 'Discussion About Daily Routines',
+      // @sentence-case: Supporting report details.
       reason:
         'A reply may include personal information that should be reviewed.',
       reporterName: 'Community Member',
@@ -7572,8 +7575,7 @@ export const gentlePathBlogStrings = {
     `${from}–${to} of ${total} articles`,
   // @sentence-case: Editorial byline, not an action or title.
   authorByline: (author: string) => `By ${author}`,
-  // @sentence-case: Estimated reading time.
-  readingTime: (minutes: number) => `${minutes} min read`,
+  readingTime: (minutes: number) => `${minutes} Min Read`,
   coverAlt: (title: string) => `Illustration for “${title}”`,
   relatedTitle: 'More Along The Path',
   articleUnavailableTitle: 'This Read Is Taking A Moment',
@@ -7713,63 +7715,62 @@ export const gentlePathBlogStrings = {
   draftPreviewLabel: 'Private Draft Preview',
   unsavedPreviewTitle: 'Your Article Title',
   defaultAuthor: 'The GentlePath Team',
-  // @preserve-case: Editorial fixture data uses natural sentence casing and Markdown.
   fixtures: [
     {
-      title: 'Your family’s path does not need to look like anyone else’s',
+      title: 'Your Family’s Path Does Not Need To Look Like Anyone Else’s',
       description:
         'There is no single way to be a family. Making room for your own pace can begin with one small, kind choice.',
       author: 'The GentlePath Team',
-      body: '## Begin where you are\n\nSome days feel clear. Other days bring more questions than answers. Neither kind of day says anything about how much you care.\n\nYour family has its own rhythms, needs, and ways of connecting. Giving those differences room can help you notice what is working already.\n\n> Small moments of connection count, even when they look different from what you expected.\n\n## Make space for your own pace\n\n1. Notice a moment that felt comfortable for your child today.\n2. Write down what helped: a quieter space, a familiar routine, or extra time.\n3. Choose one small thing you would like to try again tomorrow.\n\nThere is no need to turn every moment into a goal. Sometimes being together is enough.\n\n## Keep your people close\n\nA trusted friend, another parent, or a professional who listens can help make the next question feel more manageable. Ask for the kind of support that fits your family.\n\n---\n\nEvery family finds their own way. You are allowed to take yours one step at a time.',
+      body: '## Begin Where You Are\n\nSome days feel clear. Other days bring more questions than answers. Neither kind of day says anything about how much you care.\n\nYour family has its own rhythms, needs, and ways of connecting. Giving those differences room can help you notice what is working already.\n\n> Small moments of connection count, even when they look different from what you expected.\n\n## Make Space For Your Own Pace\n\n1. Notice a moment that felt comfortable for your child today.\n2. Write down what helped: a quieter space, a familiar routine, or extra time.\n3. Choose one small thing you would like to try again tomorrow.\n\nThere is no need to turn every moment into a goal. Sometimes being together is enough.\n\n## Keep Your People Close\n\nA trusted friend, another parent, or a professional who listens can help make the next question feel more manageable. Ask for the kind of support that fits your family.\n\n---\n\nEvery family finds their own way. You are allowed to take yours one step at a time.',
     },
     {
-      title: 'Finding community, one conversation at a time',
+      title: 'Finding Community, One Conversation At A Time',
       description:
         'Connection can start quietly. A shared question, a listening ear, or a familiar experience can help you find your people.',
       author: 'The GentlePath Team',
-      body: '## You do not need a perfect introduction\n\nMeeting other parents can feel like another thing to figure out. It is okay to begin with a small question, or simply to listen.\n\nA useful community gives people room to share different experiences without making one family’s choices a rule for everyone.\n\n## Start with what feels comfortable\n\n- Look for a group with clear guidelines and thoughtful moderation.\n- Share only what you and your family are comfortable making public.\n- Notice whether people make room for different needs and perspectives.\n- Step back when a conversation stops feeling helpful.\n\n## A little encouragement goes a long way\n\nSometimes support sounds like “that was hard for us, too.” Sometimes it is a practical idea you can adapt, or a reminder that you do not have to reply right away.\n\n> You can belong without having all the answers.\n\nTake the connections that feel nourishing, leave room for privacy, and let trust grow at its own pace.',
+      body: '## You Do Not Need A Perfect Introduction\n\nMeeting other parents can feel like another thing to figure out. It is okay to begin with a small question, or simply to listen.\n\nA useful community gives people room to share different experiences without making one family’s choices a rule for everyone.\n\n## Start With What Feels Comfortable\n\n- Look for a group with clear guidelines and thoughtful moderation.\n- Share only what you and your family are comfortable making public.\n- Notice whether people make room for different needs and perspectives.\n- Step back when a conversation stops feeling helpful.\n\n## A Little Encouragement Goes A Long Way\n\nSometimes support sounds like “that was hard for us, too.” Sometimes it is a practical idea you can adapt, or a reminder that you do not have to reply right away.\n\n> You can belong without having all the answers.\n\nTake the connections that feel nourishing, leave room for privacy, and let trust grow at its own pace.',
     },
     {
-      title: 'A little preparation for your next appointment',
+      title: 'A Little Preparation For Your Next Appointment',
       description:
         'A few notes can make it easier to ask your questions and leave with a clearer understanding of the next step.',
       author: 'The GentlePath Team',
-      body: '## Make room for your questions\n\nAppointments can hold a lot of information in a short amount of time. Preparing a few notes can help you keep the questions that matter close.\n\n## Before you go\n\n1. Write down the two or three things you most want to discuss.\n2. Note observations in your own words, including what happened and when.\n3. Gather relevant letters, reports, or previous recommendations.\n4. Ask about any accessibility needs or adjustments that would help your family.\n\n## During the conversation\n\nIt is okay to ask someone to explain a term, slow down, or repeat the next step. You can ask for written information to read later.\n\n## Afterward\n\nKeep notes in a place you can return to. If something is unclear, contact the team involved for clarification.\n\nThese are general organization ideas. Your family’s qualified care team can help with questions specific to your child.',
+      body: '## Make Room For Your Questions\n\nAppointments can hold a lot of information in a short amount of time. Preparing a few notes can help you keep the questions that matter close.\n\n## Before You Go\n\n1. Write down the two or three things you most want to discuss.\n2. Note observations in your own words, including what happened and when.\n3. Gather relevant letters, reports, or previous recommendations.\n4. Ask about any accessibility needs or adjustments that would help your family.\n\n## During The Conversation\n\nIt is okay to ask someone to explain a term, slow down, or repeat the next step. You can ask for written information to read later.\n\n## Afterward\n\nKeep notes in a place you can return to. If something is unclear, contact the team involved for clarification.\n\nThese are general organization ideas. Your family’s qualified care team can help with questions specific to your child.',
     },
     {
-      title: 'Noticing the moments that matter',
+      title: 'Noticing The Moments That Matter',
       description:
         'A reflection does not need to be a big achievement. Ordinary moments can tell you something meaningful about your child’s day.',
       author: 'The GentlePath Team',
-      body: '## An ordinary moment is worth keeping\n\nPerhaps a favorite song brought a smile. Perhaps a familiar routine felt a little easier. Perhaps today was difficult, and you found a quiet moment together anyway.\n\nA journal can hold all of those things without asking you to rate or compare them.\n\n## Try a gentle reflection\n\n- What did your child enjoy today?\n- Was there a moment when they seemed more comfortable?\n- What felt difficult, and what support helped?\n- Is there anything you would like to remember for another day?\n\n## Leave room for the whole day\n\nA reflection can be a sentence, a few words, or a longer story. You can write for yourself, return later, or leave a day unwritten.\n\n> Paying attention can be an act of care. It does not need to become another task to get right.\n\nYour child’s experiences are their own. Protect their privacy, and keep only what feels helpful for your family.',
+      body: '## An Ordinary Moment Is Worth Keeping\n\nPerhaps a favorite song brought a smile. Perhaps a familiar routine felt a little easier. Perhaps today was difficult, and you found a quiet moment together anyway.\n\nA journal can hold all of those things without asking you to rate or compare them.\n\n## Try A Gentle Reflection\n\n- What did your child enjoy today?\n- Was there a moment when they seemed more comfortable?\n- What felt difficult, and what support helped?\n- Is there anything you would like to remember for another day?\n\n## Leave Room For The Whole Day\n\nA reflection can be a sentence, a few words, or a longer story. You can write for yourself, return later, or leave a day unwritten.\n\n> Paying attention can be an act of care. It does not need to become another task to get right.\n\nYour child’s experiences are their own. Protect their privacy, and keep only what feels helpful for your family.',
     },
     {
-      title: 'Making a routine feel more like your own',
+      title: 'Making A Routine Feel More Like Your Own',
       description:
         'Familiar patterns can offer comfort. A useful routine begins with your family’s real day, with room for flexibility.',
       author: 'The GentlePath Team',
-      body: '## Start with a moment you already have\n\nA routine does not need to organize every hour. It can be as small as a familiar song before leaving home, or a quiet pause after a busy afternoon.\n\n## Notice what helps\n\n1. Choose one part of the day that often feels unsettled.\n2. Notice what your child communicates through words, movement, or behavior.\n3. Try one small, predictable cue.\n4. Give yourselves time and adjust if it is not helping.\n\n## Make room for change\n\nDays change. Energy changes. A routine should support your family rather than become another measure of success.\n\nIf a particular transition is consistently difficult, a professional who knows your child may help you think through adjustments.\n\nBegin with curiosity. Keep what helps, and let the rest change.',
+      body: '## Start With A Moment You Already Have\n\nA routine does not need to organize every hour. It can be as small as a familiar song before leaving home, or a quiet pause after a busy afternoon.\n\n## Notice What Helps\n\n1. Choose one part of the day that often feels unsettled.\n2. Notice what your child communicates through words, movement, or behavior.\n3. Try one small, predictable cue.\n4. Give yourselves time and adjust if it is not helping.\n\n## Make Room For Change\n\nDays change. Energy changes. A routine should support your family rather than become another measure of success.\n\nIf a particular transition is consistently difficult, a professional who knows your child may help you think through adjustments.\n\nBegin with curiosity. Keep what helps, and let the rest change.',
     },
     {
-      title: 'The quiet value of asking for help',
+      title: 'The Quiet Value Of Asking For Help',
       description:
         'You can care deeply for your family and need support yourself. Asking for help can be a small, practical step.',
       author: 'The GentlePath Team',
-      body: '## Support can be specific\n\n“Let me know if you need anything” is kind, but it can leave you with the work of deciding what to ask for. A small, specific request may feel easier.\n\n## Put a shape around the request\n\n- Could someone bring dinner on a busy evening?\n- Would a friend listen while you sort through a question?\n- Could a trusted person help you organize a few documents?\n- Is there a local group where you can learn from other families?\n\nYou get to choose what you share and who you invite into your family’s life.\n\n## Your needs belong in the picture\n\nRest, connection, and a little time for yourself are not rewards you need to earn. They are part of being human.\n\nSome support will fit, and some will not. It is okay to say what would be helpful and to change your mind.',
+      body: '## Support Can Be Specific\n\n“Let me know if you need anything” is kind, but it can leave you with the work of deciding what to ask for. A small, specific request may feel easier.\n\n## Put A Shape Around The Request\n\n- Could someone bring dinner on a busy evening?\n- Would a friend listen while you sort through a question?\n- Could a trusted person help you organize a few documents?\n- Is there a local group where you can learn from other families?\n\nYou get to choose what you share and who you invite into your family’s life.\n\n## Your Needs Belong In The Picture\n\nRest, connection, and a little time for yourself are not rewards you need to earn. They are part of being human.\n\nSome support will fit, and some will not. It is okay to say what would be helpful and to change your mind.',
     },
     {
-      title: 'A place for the paperwork, and a little more breathing room',
+      title: 'A Place For The Paperwork, And A Little More Breathing Room',
       description:
         'Keeping care documents together can make a busy week feel a little less scattered. Start with what you have.',
       author: 'The GentlePath Team',
-      body: '## A useful system can be simple\n\nReports, appointment letters, school documents, and notes can arrive from different places. Bringing them together can help you find what you need when a question comes up.\n\n## Begin with three small steps\n\n1. Gather the documents you already have.\n2. Group them in a way that makes sense to you, such as by year or kind of document.\n3. Use clear names so you can recognize the right version later.\n\n## Think about privacy\n\nKeep family information in a secure place. Share documents only with people who need them, and check how a service protects your information before uploading it.\n\n## Leave room to adjust\n\nYou do not need to finish everything in one sitting. A small improvement that you can maintain is often more useful than an elaborate system.\n\nChoose one folder, one label, or one document today. That is a place to start.',
+      body: '## A Useful System Can Be Simple\n\nReports, appointment letters, school documents, and notes can arrive from different places. Bringing them together can help you find what you need when a question comes up.\n\n## Begin With Three Small Steps\n\n1. Gather the documents you already have.\n2. Group them in a way that makes sense to you, such as by year or kind of document.\n3. Use clear names so you can recognize the right version later.\n\n## Think About Privacy\n\nKeep family information in a secure place. Share documents only with people who need them, and check how a service protects your information before uploading it.\n\n## Leave Room To Adjust\n\nYou do not need to finish everything in one sitting. A small improvement that you can maintain is often more useful than an elaborate system.\n\nChoose one folder, one label, or one document today. That is a place to start.',
     },
     {
-      title: 'A note for the days that feel uncertain',
+      title: 'A Note For The Days That Feel Uncertain',
       description:
         'An unfinished reflection on making room for uncertainty, without rushing to make every question into an answer.',
       author: 'The GentlePath Team',
-      body: '## Some questions take time\n\nThis article is a private working draft. It is here to give editors a place to continue a thoughtful conversation.\n\nA day can carry care and uncertainty together. Sometimes the next useful step is to pause, ask a question, or return to something familiar.\n\n## A thought to return to\n\nThere is room to write this story with patience. Add the experiences and ideas that will make it useful for another family, then preview the article before publishing.',
+      body: '## Some Questions Take Time\n\nThis article is a private working draft. It is here to give editors a place to continue a thoughtful conversation.\n\nA day can carry care and uncertainty together. Sometimes the next useful step is to pause, ask a question, or return to something familiar.\n\n## A Thought To Return To\n\nThere is room to write this story with patience. Add the experiences and ideas that will make it useful for another family, then preview the article before publishing.',
     },
   ],
 } as const;
@@ -8404,7 +8405,8 @@ export const gentlePathBlogBuilderStrings = {
   invalidUrl:
     'Enter a complete HTTPS URL without a username, password, spaces, or a private network address.',
   // @sentence-case: Validation feedback.
-  invalidImageUrl: 'Upload an image or enter a permanent public HTTPS image URL without query parameters or private document paths.',
+  invalidImageUrl:
+    'Upload an image or enter a permanent public HTTPS image URL without query parameters or private document paths.',
   // @sentence-case: Validation feedback.
   invalidContent: 'Add at least one complete content block before saving.',
   // @sentence-case: Validation feedback.
@@ -8481,12 +8483,14 @@ export const gentlePathBlogBuilderStrings = {
     callout: 'Highlight a useful note.',
     link: 'Guide readers to another resource.',
   },
-  // @preserve-case: Authored article content keeps its editorial casing.
   demo: {
     heading: 'One Small Moment At A Time',
+    // @sentence-case: Article paragraphs retain natural prose.
     text: 'There is room for your family to find its own rhythm. Notice what brings a little ease today, and let that be enough for this moment.',
+    // @sentence-case: Quoted article prose.
     quote: 'A path can be gentle and still take you somewhere meaningful.',
     attribution: 'The GentlePath Team',
+    // @sentence-case: Article list items are complete instructions.
     items: [
       'Notice one thing that felt easier today.',
       'Make space for a pause.',
@@ -8494,10 +8498,13 @@ export const gentlePathBlogBuilderStrings = {
     ],
     imageAlt:
       'A watercolor illustration of a winding path through a green garden.',
+    // @sentence-case: Descriptive image caption.
     caption: 'Room to take the next step at your own pace.',
     calloutTitle: 'A Little Reminder',
+    // @sentence-case: Supporting callout prose.
     calloutText:
       'Your notes belong to your story. Choose what feels useful and leave the rest.',
+    // @sentence-case: Closing article paragraph.
     footer:
       'Keep the parts that help. You can return to this story whenever you need a little room to breathe.',
   },
@@ -8620,16 +8627,25 @@ export const gentlePathDocumentStrings = {
     tooLargeDescription:
       'The document request is too large. Choose a smaller file.',
   },
-  // @preserve-case: Sample document data preserves normal document wording and filenames.
   demo: {
-    documentHeading: 'GentlePath sample document',
+    documentHeading: 'GentlePath Sample Document',
     documentBody:
       'This fictional document is included to explore the private document vault. It contains no personal information or professional advice.',
+    // @title-case: Authored document titles follow the UI casing style.
     samples: [
-      { title: 'School support plan', fileName: 'school-support-plan.pdf' },
-      { title: 'Care team notes', fileName: 'care-team-notes.pdf' },
       {
-        title: 'Family appointment checklist',
+        title: 'School Support Plan',
+        // @preserve-case: Source filename retains its exact spelling.
+        fileName: 'school-support-plan.pdf',
+      },
+      {
+        title: 'Care Team Notes',
+        // @preserve-case: Source filename retains its exact spelling.
+        fileName: 'care-team-notes.pdf',
+      },
+      {
+        title: 'Family Appointment Checklist',
+        // @preserve-case: Source filename retains its exact spelling.
         fileName: 'appointment-checklist.pdf',
       },
     ],
@@ -8702,9 +8718,9 @@ export const gentlePathCommunityStrings = {
   updatedPost: 'Post Updated',
   like: 'Like',
   unlike: 'Unlike',
-  // @sentence-case: Accessible count formatter; includes a complete dynamic description.
+  // @title-case: Accessible name for the like/unlike action and its count.
   likeDescription: (count: number, liked: boolean) =>
-    `${liked ? 'Unlike' : 'Like'}; ${count} ${count === 1 ? 'like' : 'likes'}`,
+    `${liked ? 'Unlike' : 'Like'}; ${count} ${count === 1 ? 'Like' : 'Likes'}`,
   // @sentence-case: Supporting count of community contributions.
   likes: (count: number) => `${count} ${count === 1 ? 'like' : 'likes'}`,
   // @title-case: Navigable comment-count action.
@@ -8731,7 +8747,8 @@ export const gentlePathCommunityStrings = {
   ownLabel: 'You',
   communityMember: 'Community Member',
   // @preserve-case: Public author data retains the person's own spelling.
-  authorName: (firstName: string, lastName: string) => `${firstName} ${lastName}`.trim(),
+  authorName: (firstName: string, lastName: string) =>
+    `${firstName} ${lastName}`.trim(),
   edited: 'Edited',
   pagination: 'Community Pagination',
   // @sentence-case: Descriptive pagination range with dynamic values.
@@ -8759,9 +8776,15 @@ export const gentlePathCommunityStrings = {
     dismissed: 'Dismissed',
   },
   targets: {
-    post: 'Post', post_comment: 'Comment', blog: 'Blog', poll: 'Poll',
-    poll_comment: 'Poll Comment', tip: 'Tip', resource: 'Resource',
-    milestone: 'Milestone', guided_step: 'Guided Step',
+    post: 'Post',
+    post_comment: 'Comment',
+    blog: 'Blog',
+    poll: 'Poll',
+    poll_comment: 'Poll Comment',
+    tip: 'Tip',
+    resource: 'Resource',
+    milestone: 'Milestone',
+    guided_step: 'Guided Step',
   },
   reportReason: 'Your Reason',
   originalContent: 'Content At The Time Of Reporting',
@@ -8787,30 +8810,34 @@ export const gentlePathCommunityStrings = {
       'Use a permanent public HTTPS URL without credentials, a query, a fragment, or a private document path.',
     reason: 'Enter a reason between 1 and 10,000 characters.',
   },
-  // @preserve-case: Authored sample community contributions preserve natural writing.
   demo: {
     posts: [
       {
-        title: 'A quieter way to start the school day',
+        title: 'A Quieter Way To Start The School Day',
         body: 'We tried arriving a few minutes early and taking the same small path to the classroom. The predictable start made this week feel a little easier. What has helped your mornings?',
+        // @preserve-case: Community tags retain their authored data spelling.
         tags: ['school', 'routines'],
       },
       {
-        title: 'Celebrating a small win at the park',
+        title: 'Celebrating A Small Win At The Park',
         body: 'Today we stayed at the park long enough for one turn on the swing. We followed our child’s pace and left while everyone still felt comfortable. I wanted to share this little moment with people who understand.',
+        // @preserve-case: Community tags retain their authored data spelling.
         tags: ['small wins', 'everyday'],
       },
       {
-        title: 'What helps when plans change?',
+        title: 'What Helps When Plans Change?',
         body: 'We are practicing small changes to our afternoon routine. A picture of the new plan seems to help, but some days are harder than others. I would love to hear what other families find useful.',
+        // @preserve-case: Community tags retain their authored data spelling.
         tags: ['routines', 'communication'],
       },
       {
-        title: 'Finding a moment to recharge',
+        title: 'Finding A Moment To Recharge',
         body: 'I took a short walk after bedtime yesterday. Nothing on my list got done during those ten minutes, but I came back with a little more room to breathe. How do you make space for yourself?',
+        // @preserve-case: Community tags retain their authored data spelling.
         tags: ['wellbeing'],
       },
     ],
+    // @sentence-case: Community comments retain natural prose.
     comments: [
       'We use the same greeting each morning and leave a little time for a quiet pause. It has made our start more predictable too.',
       'Thank you for sharing this. Those small changes can mean so much.',
@@ -8823,14 +8850,17 @@ export const gentlePathPollStrings = {
   title: 'Polls',
   detailTitle: 'Community Poll',
   eyebrow: 'Community Voices',
-  description: 'Ask a question, share your experience, and learn from other families.',
+  description:
+    'Ask a question, share your experience, and learn from other families.',
   bannerTitle: 'Every Perspective Helps',
-  bannerDescription: 'Small questions can open useful conversations. Explore what other families are thinking about.',
+  bannerDescription:
+    'Small questions can open useful conversations. Explore what other families are thinking about.',
   newPoll: 'Create Poll',
   editPoll: 'Edit Poll',
   deletePoll: 'Delete Poll',
   deleteTitle: 'Delete This Poll?',
-  deleteDescription: (title: string) => `Remove “${title}” from the community? Its voting and discussion history will be retained by the service.`,
+  deleteDescription: (title: string) =>
+    `Remove “${title}” from the community? Its voting and discussion history will be retained by the service.`,
   deleted: 'Poll Deleted',
   created: 'Poll Created',
   updated: 'Poll Updated',
@@ -8854,13 +8884,18 @@ export const gentlePathPollStrings = {
   messagePlaceholder: 'Add context to help families understand your question.',
   tagsLabel: 'Tags',
   tagsPlaceholder: 'For example: routines, school, community',
-  tagsHint: 'Separate tags with commas. Add up to 30 tags, each up to 100 characters.',
-  formDescription: 'Give your question enough context and arrange the choices in the order you want people to see them.',
+  tagsHint:
+    'Separate tags with commas. Add up to 30 tags, each up to 100 characters.',
+  formDescription:
+    'Give your question enough context and arrange the choices in the order you want people to see them.',
   optionsTitle: 'Answer Options',
   leadingOptionsTitle: 'Most Voted',
-  optionVotes: (count: number) => `${count.toLocaleString('en-US')} ${count === 1 ? 'Vote' : 'Votes'}`,
-  moreOptions: (count: number) => `+${count.toLocaleString('en-US')} More ${count === 1 ? 'Option' : 'Options'}`,
-  optionsHint: 'Add 2–100 choices. Drag a handle or use the arrow controls to change their order.',
+  optionVotes: (count: number) =>
+    `${count.toLocaleString('en-US')} ${count === 1 ? 'Vote' : 'Votes'}`,
+  moreOptions: (count: number) =>
+    `+${count.toLocaleString('en-US')} More ${count === 1 ? 'Option' : 'Options'}`,
+  optionsHint:
+    'Add 2–100 choices. Drag a handle or use the arrow controls to change their order.',
   addOption: 'Add Option',
   optionLabel: (number: number) => `Option ${number}`,
   optionPlaceholder: 'Enter a choice',
@@ -8869,44 +8904,56 @@ export const gentlePathPollStrings = {
   moveDown: (number: number) => `Move Option ${number} Down`,
   dragOption: (number: number) => `Drag Option ${number} To Reorder`,
   lockedTitle: 'Voting Has Started',
-  lockedDescription: 'To keep recorded votes meaningful, the question, description, selection mode, and option text stay fixed after the first ballot. You can still update tags and reorder choices.',
+  lockedDescription:
+    'To keep recorded votes meaningful, the question, description, selection mode, and option text stay fixed after the first ballot. You can still update tags and reorder choices.',
   conflictTitle: 'The Poll Has Changed',
-  conflictDescription: 'A ballot may have arrived while you were editing. Your draft is preserved. Keep the original question and options, or create a new poll.',
+  conflictDescription:
+    'A ballot may have arrived while you were editing. Your draft is preserved. Keep the original question and options, or create a new poll.',
   voteTitle: 'Your Vote',
   singleHint: 'Choose one option. You can update or remove your vote later.',
-  multipleHint: 'Choose one or more options. You can update or remove your vote later.',
+  multipleHint:
+    'Choose one or more options. You can update or remove your vote later.',
   vote: 'Save Vote',
   updateVote: 'Update Vote',
   removeVote: 'Remove Vote',
   removeVoteTitle: 'Remove Your Vote?',
-  removeVoteDescription: 'Your choices will be removed from this poll. You can vote again while the poll is available.',
+  removeVoteDescription:
+    'Your choices will be removed from this poll. You can vote again while the poll is available.',
   voteSaved: 'Vote Saved',
   voteRemoved: 'Vote Removed',
   voted: 'Vote Recorded',
   resultsTitle: 'Results',
-  resultsHint: 'Counts reflect participating active accounts. In multiple-choice polls, percentages can add up to more than 100%.',
-  participants: (count: number) => `${count.toLocaleString('en-US')} ${count === 1 ? 'Participant' : 'Participants'}`,
-  comments: (count: number) => `${count.toLocaleString('en-US')} ${count === 1 ? 'Comment' : 'Comments'}`,
-  resultCount: (count: number, percent: number) => `${count.toLocaleString('en-US')} (${percent.toLocaleString('en-US')}%)`,
+  resultsHint:
+    'Counts reflect participating active accounts. In multiple-choice polls, percentages can add up to more than 100%.',
+  participants: (count: number) =>
+    `${count.toLocaleString('en-US')} ${count === 1 ? 'Participant' : 'Participants'}`,
+  comments: (count: number) =>
+    `${count.toLocaleString('en-US')} ${count === 1 ? 'Comment' : 'Comments'}`,
+  resultCount: (count: number, percent: number) =>
+    `${count.toLocaleString('en-US')} (${percent.toLocaleString('en-US')}%)`,
   selected: 'Your Choice',
   noVotesTitle: 'No Votes Yet',
   noVotesHint: 'Be the first to share your perspective.',
   discussionTitle: 'Discussion',
-  discussionDescription: 'Add context, ask a follow-up question, or share what has helped your family.',
+  discussionDescription:
+    'Add context, ask a follow-up question, or share what has helped your family.',
   commentLabel: 'Your Comment',
   commentPlaceholder: 'Add to the conversation',
   postComment: 'Post Comment',
   editComment: 'Edit Comment',
   deleteComment: 'Delete Comment',
   deleteCommentTitle: 'Delete This Comment?',
-  deleteCommentDescription: 'Your comment will be removed from this discussion.',
+  deleteCommentDescription:
+    'Your comment will be removed from this discussion.',
   commentSaved: 'Comment Saved',
   commentDeleted: 'Comment Deleted',
-  like: 'Like Comment',
-  unlike: 'Remove Like',
-  likes: (count: number) => `${count.toLocaleString('en-US')} ${count === 1 ? 'Like' : 'Likes'}`,
+  like: 'Like',
+  unlike: 'Unlike',
+  likes: (count: number) =>
+    `${count.toLocaleString('en-US')} ${count === 1 ? 'Like' : 'Likes'}`,
   authorFallback: 'Community Member',
-  authorName: (firstName: string, lastName: string) => `${firstName} ${lastName}`.trim(),
+  authorName: (firstName: string, lastName: string) =>
+    `${firstName} ${lastName}`.trim(),
   authorDate: (name: string, date: string) => `${name} · ${date}`,
   noCommentsTitle: 'Start The Conversation',
   noCommentsHint: 'Share the first comment on this question.',
@@ -8915,10 +8962,12 @@ export const gentlePathPollStrings = {
   noResultsTitle: 'No Matching Polls',
   noResultsHint: 'Try a different search or clear the filters.',
   pausedTitle: 'Community Posting Paused',
-  pausedDescription: 'You can read polls and discussions. New polls, votes, comments, and reactions are paused by the platform.',
+  pausedDescription:
+    'You can read polls and discussions. New polls, votes, comments, and reactions are paused by the platform.',
   pagination: 'Poll Pages',
   commentPagination: 'Discussion Pages',
-  range: (from: number, to: number) => `${from.toLocaleString('en-US')}–${to.toLocaleString('en-US')}`,
+  range: (from: number, to: number) =>
+    `${from.toLocaleString('en-US')}–${to.toLocaleString('en-US')}`,
   validation: {
     titleDescription: 'Enter a question between 1 and 500 characters.',
     messageDescription: 'Enter a description between 1 and 20,000 characters.',
@@ -8929,33 +8978,60 @@ export const gentlePathPollStrings = {
     singleDescription: 'Choose exactly one option for a single-choice poll.',
     commentDescription: 'Enter a comment between 1 and 20,000 characters.',
     dateDescription: 'The end of the date range must follow its start.',
-    historyDescription: 'Voting has started. Keep the original question, mode, and choices, or create a new poll.',
+    historyDescription:
+      'Voting has started. Keep the original question, mode, and choices, or create a new poll.',
     unavailableDescription: 'This poll is unavailable or is no longer visible.',
   },
-  // @preserve-case: Authored demo questions, descriptions, choices, and discussion content.
   demo: {
-    routineTitle: 'What helps your family settle into the evening?',
-    routineMessage: 'We are trying to make the transition from school to home feel calmer. Which small routines have helped your family most?',
-    routineOptions: ['Quiet time in a favorite space', 'A familiar snack and drink', 'Outdoor movement', 'A visual plan for the evening'],
-    schoolTitle: 'Which school-day supports have been useful?',
-    schoolMessage: 'Families use different supports, and more than one can make a difference. Share the options that have helped in your experience.',
-    schoolOptions: ['A visual daily schedule', 'A quieter break space', 'Regular teacher check-ins', 'A familiar transition object'],
-    weekendTitle: 'Where would you most like our next family meet-up?',
-    weekendMessage: 'A few families are exploring ideas for a relaxed weekend gathering. Which setting would you prefer?',
-    weekendOptions: ['A local park', 'A quiet library room', 'An accessible nature trail'],
-    commentOne: 'A little quiet time before we talk about the day has helped us. We follow our child’s lead on how long that takes.',
-    commentTwo: 'We keep the evening plan flexible. Having a familiar snack ready makes our transition easier.',
+    routineTitle: 'What Helps Your Family Settle Into The Evening?',
+    // @sentence-case: Supporting context for the poll question.
+    routineMessage:
+      'We are trying to make the transition from school to home feel calmer. Which small routines have helped your family most?',
+    routineOptions: [
+      'Quiet Time In A Favorite Space',
+      'A Familiar Snack And Drink',
+      'Outdoor Movement',
+      'A Visual Plan For The Evening',
+    ],
+    schoolTitle: 'Which School-Day Supports Have Been Useful?',
+    // @sentence-case: Supporting context for the poll question.
+    schoolMessage:
+      'Families use different supports, and more than one can make a difference. Share the options that have helped in your experience.',
+    schoolOptions: [
+      'A Visual Daily Schedule',
+      'A Quieter Break Space',
+      'Regular Teacher Check-Ins',
+      'A Familiar Transition Object',
+    ],
+    weekendTitle: 'Where Would You Most Like Our Next Family Meet-Up?',
+    // @sentence-case: Supporting context for the poll question.
+    weekendMessage:
+      'A few families are exploring ideas for a relaxed weekend gathering. Which setting would you prefer?',
+    weekendOptions: [
+      'A Local Park',
+      'A Quiet Library Room',
+      'An Accessible Nature Trail',
+    ],
+    // @sentence-case: Community comments retain natural prose.
+    commentOne:
+      'A little quiet time before we talk about the day has helped us. We follow our child’s lead on how long that takes.',
+    // @sentence-case: Community comments retain natural prose.
+    commentTwo:
+      'We keep the evening plan flexible. Having a familiar snack ready makes our transition easier.',
   },
 };
 
 export const gentlePathEditorialStrings = {
   guidesTitle: 'Guided Steps',
-  guidesDescription: 'Practical ideas, one step at a time. Explore at your own pace and choose what fits your family.',
+  guidesDescription:
+    'Practical ideas, one step at a time. Explore at your own pace and choose what fits your family.',
   guidesEyebrow: 'Your Family Toolkit',
   adminGuidesTitle: 'Manage Guided Steps',
-  adminGuidesDescription: 'Create clear, approachable guides with ordered steps and source attribution.',
+  adminGuidesDescription:
+    'Create clear, approachable guides with ordered steps and source attribution.',
   resourcesTitle: 'Manage Resources',
-  resourcesDescription: 'Curate useful resources and organize them into collections for the family library.',
+  resourcesDescription:
+    'Curate useful resources and organize them into collections for the family library.',
   editorialNav: 'Editorial Tools',
   guidesNav: 'Guided Steps',
   resourcesNav: 'Resources',
@@ -8975,8 +9051,10 @@ export const gentlePathEditorialStrings = {
   deleteResource: 'Delete Resource',
   deleteGuideTitle: 'Delete This Guide?',
   deleteResourceTitle: 'Delete This Resource?',
-  deleteGuideDescription: (title: string) => `“${title}” will be removed from guided steps.`,
-  deleteResourceDescription: (title: string) => `“${title}” will be removed from the library. If it is a collection, its nested resources will also become unavailable.`,
+  deleteGuideDescription: (title: string) =>
+    `“${title}” will be removed from guided steps.`,
+  deleteResourceDescription: (title: string) =>
+    `“${title}” will be removed from the library. If it is a collection, its nested resources will also become unavailable.`,
   cancel: 'Cancel',
   savedTitle: 'Changes Saved',
   savedDescription: 'The updated content is available to members.',
@@ -8988,62 +9066,74 @@ export const gentlePathEditorialStrings = {
   errorDescription: 'Your changes are preserved. Try again.',
   validationTitle: 'Check The Highlighted Fields',
   formTitle: 'Guide Details',
-  formDescription: 'Set the context, then arrange the steps in the order you want families to read them.',
+  formDescription:
+    'Set the context, then arrange the steps in the order you want families to read them.',
   resourceFormTitle: 'Resource Details',
-  resourceFormDescription: 'Describe the resource and choose where it belongs in the library.',
+  resourceFormDescription:
+    'Describe the resource and choose where it belongs in the library.',
   titleLabel: 'Title',
   descriptionLabel: 'Description',
   imageLabel: 'Image URL',
-  imageHint: 'Optional. Use a permanent public HTTPS image URL without a query or fragment.',
+  imageHint:
+    'Optional. Use a permanent public HTTPS image URL without a query or fragment.',
   typeLabel: 'Resource Type',
   formatLabel: 'Format',
   noFormat: 'Unspecified',
   parentLabel: 'Parent Collection',
   noParent: 'Library Root',
-  parentHint: 'Only collections can be parents. A collection cannot be placed inside itself or one of its descendants.',
+  parentHint:
+    'Only collections can be parents. A collection cannot be placed inside itself or one of its descendants.',
   linkLabel: 'Resource URL',
   tagsLabel: 'Tags',
   tagsHint: 'Separate tags with commas. Use up to 30 unique tags.',
   categoryLabel: 'Family Library Topic',
   minutesLabel: 'Estimated Reading Minutes',
   sourceTitle: 'Source Attribution',
-  sourceDescription: 'Identify the publisher and original link. Noncollection resources require both. Source dates are optional.',
+  sourceDescription:
+    'Identify the publisher and original link. Noncollection resources require both. Source dates are optional.',
   sourceNameLabel: 'Source Name',
   sourceUrlLabel: 'Source URL',
   sourceDateLabel: 'Source Publication Date',
   sourceLink: 'Open Source',
   sourcePublished: (date: string) => `Published ${date}`,
   reviewTitle: 'Editorial Review',
-  reviewDescription: 'The server records the staff account and time of each saved resource. Editorial review is not a clinical assessment.',
+  reviewDescription:
+    'The server records the staff account and time of each saved resource. Editorial review is not a clinical assessment.',
   reviewedLabel: 'Last Reviewed',
   reviewerLabel: 'Reviewer Account',
   metadataLabel: 'Additional Properties',
-  metadataHint: 'Optional JSON object for additional source or resource information. Existing properties are preserved when you edit.',
+  metadataHint:
+    'Optional JSON object for additional source or resource information. Existing properties are preserved when you edit.',
   metadataDisclosure: 'Additional Metadata',
   itemsTitle: 'Ordered Steps',
-  itemsDescription: 'Add 1–100 steps. Drag a handle or use the arrow controls to change the reading order. The order is saved with the guide.',
+  itemsDescription:
+    'Add 1–100 steps. Drag a handle or use the arrow controls to change the reading order. The order is saved with the guide.',
   addItem: 'Add Step',
   removeItem: 'Remove Step',
   stepLabel: (position: number) => `Step ${position}`,
-  itemCount: (count: number) => `${count.toLocaleString('en-US')} ${count === 1 ? 'Step' : 'Steps'}`,
+  itemCount: (count: number) =>
+    `${count.toLocaleString('en-US')} ${count === 1 ? 'Step' : 'Steps'}`,
   moveUp: (position: number) => `Move Step ${position} Up`,
   moveDown: (position: number) => `Move Step ${position} Down`,
   dragStep: (position: number) => `Reorder Step ${position}`,
   stepTitleLabel: 'Step Title',
   stepBodyLabel: 'Step Description',
-  stepSourceHint: 'Source attribution is optional for each step. It appears with the step in the reader.',
+  stepSourceHint:
+    'Source attribution is optional for each step. It appears with the step in the reader.',
   stepNav: 'Guide Steps',
   currentStep: 'Current Step',
   availableStep: 'Available Step',
   previousStep: 'Previous Step',
   nextStep: 'Next Step',
   lastStepTitle: 'Take What Works For Your Family',
-  lastStepHint: 'You can revisit any step whenever it is useful. There is no completion tracking or assessment.',
+  lastStepHint:
+    'You can revisit any step whenever it is useful. There is no completion tracking or assessment.',
   guideIntroTitle: 'Before You Begin',
   emptyGuidesTitle: 'Guides Are On Their Way',
   emptyGuidesHint: 'Come back soon for practical, step-by-step family ideas.',
   emptyAdminGuidesTitle: 'Create The First Guide',
-  emptyAdminGuidesHint: 'Turn a useful family idea into a clear sequence of steps.',
+  emptyAdminGuidesHint:
+    'Turn a useful family idea into a clear sequence of steps.',
   emptyResourcesTitle: 'Build The Family Library',
   emptyResourcesHint: 'Create a resource or a collection to get started.',
   noResultsTitle: 'No Matching Content',
@@ -9063,58 +9153,129 @@ export const gentlePathEditorialStrings = {
   allResources: 'All Resources',
   childrenTitle: 'Inside This Collection',
   childrenHint: 'Manage the resources immediately inside this collection.',
-  collectionChildCount: (count: number) => `${count.toLocaleString('en-US')} ${count === 1 ? 'Nested Resource' : 'Nested Resources'}`,
+  collectionChildCount: (count: number) =>
+    `${count.toLocaleString('en-US')} ${count === 1 ? 'Nested Resource' : 'Nested Resources'}`,
   pagination: 'Editorial Pages',
-  range: (from: number, to: number) => `${from.toLocaleString('en-US')}–${to.toLocaleString('en-US')}`,
+  range: (from: number, to: number) =>
+    `${from.toLocaleString('en-US')}–${to.toLocaleString('en-US')}`,
   loadingLabel: 'Loading Editorial Content',
   unavailableTitle: 'This Content Is Unavailable',
-  unavailableHint: 'It may have been removed. Return to the directory to find another resource.',
+  unavailableHint:
+    'It may have been removed. Return to the directory to find another resource.',
   types: {
-    COLLECTION: 'Collection', ARTICLE: 'Article', GUIDE: 'Guide', FAQ: 'FAQ', TOOLKIT: 'Toolkit', ACTIVITY: 'Activity', BOOK: 'Book', PODCAST: 'Podcast', RESEARCH_PAPER: 'Research Paper', COURSE: 'Course', WEBINAR: 'Webinar', WORKSHEET: 'Worksheet', CHECKLIST: 'Checklist', TEMPLATE: 'Template', SOCIAL_STORY: 'Social Story', VISUAL_SCHEDULE: 'Visual Schedule', COMMUNICATION_BOARD: 'Communication Board', APP: 'App', WEBSITE: 'Website', ORGANIZATION: 'Organization', SERVICE: 'Service', SUPPORT_GROUP: 'Support Group', EVENT: 'Event', OTHER: 'Other',
+    COLLECTION: 'Collection',
+    ARTICLE: 'Article',
+    GUIDE: 'Guide',
+    FAQ: 'FAQ',
+    TOOLKIT: 'Toolkit',
+    ACTIVITY: 'Activity',
+    BOOK: 'Book',
+    PODCAST: 'Podcast',
+    RESEARCH_PAPER: 'Research Paper',
+    COURSE: 'Course',
+    WEBINAR: 'Webinar',
+    WORKSHEET: 'Worksheet',
+    CHECKLIST: 'Checklist',
+    TEMPLATE: 'Template',
+    SOCIAL_STORY: 'Social Story',
+    VISUAL_SCHEDULE: 'Visual Schedule',
+    COMMUNICATION_BOARD: 'Communication Board',
+    APP: 'App',
+    WEBSITE: 'Website',
+    ORGANIZATION: 'Organization',
+    SERVICE: 'Service',
+    SUPPORT_GROUP: 'Support Group',
+    EVENT: 'Event',
+    OTHER: 'Other',
   },
   formats: {
-    WEB_PAGE: 'Web Page', PDF: 'PDF', DOCUMENT: 'Document', IMAGE: 'Image', VIDEO: 'Video', AUDIO: 'Audio', INTERACTIVE: 'Interactive', EXTERNAL_APP: 'External App', OTHER: 'Other',
+    WEB_PAGE: 'Web Page',
+    PDF: 'PDF',
+    DOCUMENT: 'Document',
+    IMAGE: 'Image',
+    VIDEO: 'Video',
+    AUDIO: 'Audio',
+    INTERACTIVE: 'Interactive',
+    EXTERNAL_APP: 'External App',
+    OTHER: 'Other',
   },
   validation: {
     titleDescription: 'Enter a title between 1 and 500 characters.',
-    descriptionDescription: 'Enter a description between 1 and 20,000 characters.',
+    descriptionDescription:
+      'Enter a description between 1 and 20,000 characters.',
     sourceNameDescription: 'Use a source name of up to 300 characters.',
-    sourceRequiredDescription: 'Add a source name and source URL for this resource.',
-    urlDescription: 'Use an HTTP or HTTPS URL without credentials, spaces, or backslashes.',
-    imageDescription: 'Use a permanent public HTTPS image URL without queries, fragments, credentials, or private vault paths.',
+    sourceRequiredDescription:
+      'Add a source name and source URL for this resource.',
+    urlDescription:
+      'Use an HTTP or HTTPS URL without credentials, spaces, or backslashes.',
+    imageDescription:
+      'Use a permanent public HTTPS image URL without queries, fragments, credentials, or private vault paths.',
     dateDescription: 'Use a valid publication date that is today or earlier.',
     itemsDescription: 'Include between 1 and 100 steps.',
-    itemOwnershipDescription: 'Each existing step must belong to this guide and appear exactly once.',
-    tagsDescription: 'Use up to 30 unique tags, each between 1 and 100 characters.',
-    metadataDescription: 'Use a JSON object of up to 20,000 bytes, 5 nesting levels, and 100 entries per object or array.',
+    itemOwnershipDescription:
+      'Each existing step must belong to this guide and appear exactly once.',
+    tagsDescription:
+      'Use up to 30 unique tags, each between 1 and 100 characters.',
+    metadataDescription:
+      'Use a JSON object of up to 20,000 bytes, 5 nesting levels, and 100 entries per object or array.',
     parentDescription: 'Choose an available collection as the parent.',
-    cycleDescription: 'A collection cannot contain itself or one of its descendants.',
-    collectionTypeDescription: 'A resource with children must remain a collection.',
-    parentFilterDescription: 'Choose either a parent collection or root-only browsing.',
+    cycleDescription:
+      'A collection cannot contain itself or one of its descendants.',
+    collectionTypeDescription:
+      'A resource with children must remain a collection.',
+    parentFilterDescription:
+      'Choose either a parent collection or root-only browsing.',
     minutesDescription: 'Use reading minutes between 0 and 1,440.',
-    libraryDescription: 'The resource library could not be loaded completely. Try again.',
+    libraryDescription:
+      'The resource library could not be loaded completely. Try again.',
   },
-  // @preserve-case: Authored demo guide content and source data.
   demo: {
     sourceName: 'GentlePath Editorial Team',
+    // @preserve-case: Source URL retains its exact spelling.
     sourceUrl: 'https://gentlepath.app/resources',
     guides: [
       {
         title: 'Make A Little Room For Calmer Transitions',
-        description: 'A small, flexible plan can help make the move from one activity to another feel more predictable. Adapt these ideas to your child’s preferences.',
+        description:
+          'A small, flexible plan can help make the move from one activity to another feel more predictable. Adapt these ideas to your child’s preferences.',
         items: [
-          { title: 'Notice What Happens Before The Transition', description: 'Choose one everyday change, such as leaving home or moving from play to dinner. Notice what your child seems to enjoy, what feels difficult, and what makes the change easier. There is no need to change everything at once.' },
-          { title: 'Offer A Familiar Cue', description: 'Try a simple cue your child can recognize: a picture, a short phrase, a song, or an object connected to what comes next. Give the cue in a way that is comfortable for your child and leave time for a response.' },
-          { title: 'Leave Space To Adjust', description: 'Keep a little room in the plan for extra time, a pause, or a different route. Afterwards, note what helped. Keep the parts that fit your family and let the rest go.' },
+          {
+            title: 'Notice What Happens Before The Transition',
+            description:
+              'Choose one everyday change, such as leaving home or moving from play to dinner. Notice what your child seems to enjoy, what feels difficult, and what makes the change easier. There is no need to change everything at once.',
+          },
+          {
+            title: 'Offer A Familiar Cue',
+            description:
+              'Try a simple cue your child can recognize: a picture, a short phrase, a song, or an object connected to what comes next. Give the cue in a way that is comfortable for your child and leave time for a response.',
+          },
+          {
+            title: 'Leave Space To Adjust',
+            description:
+              'Keep a little room in the plan for extra time, a pause, or a different route. Afterwards, note what helped. Keep the parts that fit your family and let the rest go.',
+          },
         ],
       },
       {
         title: 'Prepare For A School Conversation',
-        description: 'Gather a few observations and questions so your next conversation with school staff can focus on useful, shared next steps.',
+        description:
+          'Gather a few observations and questions so your next conversation with school staff can focus on useful, shared next steps.',
         items: [
-          { title: 'Start With What Your Child Enjoys', description: 'Write down a few strengths, interests, and things that help your child feel comfortable. These can provide a practical starting point for discussing support.' },
-          { title: 'Choose A Few Clear Examples', description: 'Bring two or three observations from home and invite staff to share what they notice at school. Describe the setting and what happened, without needing to explain why.' },
-          { title: 'Agree On A Small Next Step', description: 'Ask which support is possible to try, who will follow up, and when you can talk again. Keep a copy of the plan somewhere you can return to.' },
+          {
+            title: 'Start With What Your Child Enjoys',
+            description:
+              'Write down a few strengths, interests, and things that help your child feel comfortable. These can provide a practical starting point for discussing support.',
+          },
+          {
+            title: 'Choose A Few Clear Examples',
+            description:
+              'Bring two or three observations from home and invite staff to share what they notice at school. Describe the setting and what happened, without needing to explain why.',
+          },
+          {
+            title: 'Agree On A Small Next Step',
+            description:
+              'Ask which support is possible to try, who will follow up, and when you can talk again. Keep a copy of the plan somewhere you can return to.',
+          },
         ],
       },
     ],
@@ -9124,9 +9285,11 @@ export const gentlePathEditorialStrings = {
 export const gentlePathMilestoneAdminStrings = {
   observationTitle: 'Record Observation',
   observationEditTitle: 'Edit Observation',
-  observationDescription: 'Record what you noticed for this child. This entry stays private to your family.',
+  observationDescription:
+    'Record what you noticed for this child. This entry stays private to your family.',
   observationHistory: 'Observation History',
-  observationHistoryDescription: 'Dated observations retain the response value and label used when they were recorded.',
+  observationHistoryDescription:
+    'Dated observations retain the response value and label used when they were recorded.',
   responseLabel: 'Response',
   responsePlaceholder: 'Choose A Response',
   observedAtLabel: 'Observed At',
@@ -9135,66 +9298,81 @@ export const gentlePathMilestoneAdminStrings = {
   observationSaved: 'Observation Saved',
   observationDelete: 'Delete Observation',
   observationDeleteTitle: 'Delete Observation',
-  observationDeleteDescription: 'Remove this private observation? The retained record cannot be restored here.',
+  observationDeleteDescription:
+    'Remove this private observation? The retained record cannot be restored here.',
   observationDeleted: 'Observation Deleted',
   noObservationsTitle: 'No Observations Yet',
-  noObservationsDescription: 'Record a dated observation when you notice something you want to remember.',
+  noObservationsDescription:
+    'Record a dated observation when you notice something you want to remember.',
   noResponsesTitle: 'No Active Response Choices',
-  noResponsesDescription: 'A staff member needs to add a response choice before a new observation can be recorded.',
+  noResponsesDescription:
+    'A staff member needs to add a response choice before a new observation can be recorded.',
   retiredOption: (label: string) => `${label} (Retired)`,
-  retiredOptionHint: 'You may keep this retired choice when correcting the date or notes. A changed choice must be active.',
-  observationIdentityHint: 'The child and milestone stay the same when you edit. Create a new observation to use another child or milestone.',
+  retiredOptionHint:
+    'You may keep this retired choice when correcting the date or notes. A changed choice must be active.',
+  observationIdentityHint:
+    'The child and milestone stay the same when you edit. Create a new observation to use another child or milestone.',
   latestResponse: 'Latest Response',
   latestObservation: (label: string, date: string) => `${label} · ${date}`,
   // @sentence-case: Supporting instruction, validation, or descriptive count.
-  observationDateError: 'Choose a valid observation date and time that is not in the future.',
+  observationDateError:
+    'Choose a valid observation date and time that is not in the future.',
   // @sentence-case: Supporting instruction, validation, or descriptive count.
-  observationResponseError: 'Choose an active response option from this milestone.',
+  observationResponseError:
+    'Choose an active response option from this milestone.',
   // @sentence-case: Supporting instruction, validation, or descriptive count.
   observationNotesError: 'Use up to 20,000 characters for notes.',
   observationLoad: 'Loading Private Observations',
   retry: 'Try Again',
   browseMilestoneTips: 'Browse Tips',
   milestonesTitle: 'Milestone Guidance',
-  milestonesDescription: 'Manage the guidance and response choices families use to record their own observations.',
+  milestonesDescription:
+    'Manage the guidance and response choices families use to record their own observations.',
   milestonesEyebrow: 'Content Administration',
   newMilestone: 'New Milestone',
   editMilestone: 'Edit Milestone',
   guidanceTitle: 'Guidance',
   readGuidance: 'Read Guidance',
-  guidanceDescription: 'Keep descriptions clear and factual. Recorded observations belong to each family.',
+  guidanceDescription:
+    'Keep descriptions clear and factual. Recorded observations belong to each family.',
   milestoneLabel: 'Milestone',
   informationLabel: 'Information',
   observationGuidanceLabel: 'Observation Guidance',
   tagsLabel: 'Tags',
   tagsHint: 'Separate tags with commas. Use up to 30 distinct tags.',
   optionsTitle: 'Response Options',
-  optionsDescription: 'Drag a handle or use the arrow buttons to change the order. Omitted options are retired and remain attached to historical observations.',
+  optionsDescription:
+    'Drag a handle or use the arrow buttons to change the order. Omitted options are retired and remain attached to historical observations.',
   optionsHistoryTitle: 'History Is Preserved',
-  optionsHistoryDescription: 'Existing values cannot change. A label cannot change after an observation references its option. The server checks this when you save. Retired values cannot be reused.',
+  optionsHistoryDescription:
+    'Existing values cannot change. A label cannot change after an observation references its option. The server checks this when you save. Retired values cannot be reused.',
   valueLabel: 'Stable Value',
   labelLabel: 'Display Label',
   addOption: 'Add Option',
   removeOption: 'Retire Option',
   removeOptionTitle: 'Retire Response Option',
-  removeOptionDescription: (label: string) => `Remove “${label}” from future responses when you save? Historical observations retain this choice.`,
+  removeOptionDescription: (label: string) =>
+    `Remove “${label}” from future responses when you save? Historical observations retain this choice.`,
   newOptionLabel: 'New Response Option',
   optionNumber: (number: number) => `Response Option ${number}`,
   optionHandle: (label: string) => `Reorder ${label}`,
   optionUp: (label: string) => `Move ${label} Up`,
   optionDown: (label: string) => `Move ${label} Down`,
   noOptionsTitle: 'No Response Options',
-  noOptionsDescription: 'Add a choice when families need to record a response for this milestone.',
+  noOptionsDescription:
+    'Add a choice when families need to record a response for this milestone.',
   saveMilestone: 'Save Milestone',
   savedMilestone: 'Milestone Saved',
   hideMilestone: 'Hide Milestone',
   hideMilestoneTitle: 'Hide Milestone',
-  hideMilestoneDescription: (name: string) => `Hide “${name}” from guidance, tips, and observations? Retained history is preserved, but related records become unavailable.`,
+  hideMilestoneDescription: (name: string) =>
+    `Hide “${name}” from guidance, tips, and observations? Retained history is preserved, but related records become unavailable.`,
   hiddenMilestone: 'Milestone Hidden',
   cancel: 'Cancel',
   backMilestones: 'Back To Milestones',
   tipsTitle: 'Family Tips',
-  tipsDescription: 'Browse reviewed experiences shared by families, or submit a tip connected to a milestone.',
+  tipsDescription:
+    'Browse reviewed experiences shared by families, or submit a tip connected to a milestone.',
   approvedTips: 'Approved Tips',
   ownTips: 'My Submissions',
   submitTip: 'Submit Tip',
@@ -9202,54 +9380,70 @@ export const gentlePathMilestoneAdminStrings = {
   readTip: 'Read Tip',
   close: 'Close',
   saveTip: 'Save Tip',
-  tipFormDescription: 'Share your own experience. A staff member reviews every submission before it appears to other families.',
+  tipFormDescription:
+    'Share your own experience. A staff member reviews every submission before it appears to other families.',
   messageLabel: 'Your Experience',
   milestoneChoice: 'Choose A Milestone',
   // @sentence-case: Supporting instruction, validation, or descriptive count.
-  milestoneLocked: 'The milestone link stays the same. To use another milestone, submit a new tip.',
-  tipEditHint: 'Saving an edit returns this submission to Pending and clears its previous review.',
+  milestoneLocked:
+    'The milestone link stays the same. To use another milestone, submit a new tip.',
+  tipEditHint:
+    'Saving an edit returns this submission to Pending and clears its previous review.',
   tipSaved: 'Tip Submitted For Review',
   deleteTip: 'Delete Tip',
   deleteTipTitle: 'Delete Tip',
-  deleteTipDescription: 'Remove this submission from the library and your history? Its retained record cannot be restored here.',
+  deleteTipDescription:
+    'Remove this submission from the library and your history? Its retained record cannot be restored here.',
   tipDeleted: 'Tip Deleted',
   reviewTitle: 'Tip Review',
-  reviewDescription: 'Review family submissions in context. Authors retain control of their message and milestone link.',
+  reviewDescription:
+    'Review family submissions in context. Authors retain control of their message and milestone link.',
   reviewTip: 'Review Tip',
-  reviewFormDescription: 'Choose a decision and explain any rejection. Reviewer identity and time are recorded automatically.',
+  reviewFormDescription:
+    'Choose a decision and explain any rejection. Reviewer identity and time are recorded automatically.',
   decisionLabel: 'Decision',
   reviewNotesLabel: 'Review Notes',
-  reviewNotesHint: 'A rejection needs a clear reason. Notes are visible to the author and staff.',
+  reviewNotesHint:
+    'A rejection needs a clear reason. Notes are visible to the author and staff.',
   approve: 'Approve Tip',
   reject: 'Reject Tip',
   saveReview: 'Save Review',
   reviewSaved: 'Review Saved',
   reverseTitle: 'Change Review Decision',
-  reverseDescription: 'Apply this decision to a previously reviewed submission? Its current review attribution and notes will be replaced.',
+  reverseDescription:
+    'Apply this decision to a previously reviewed submission? Its current review attribution and notes will be replaced.',
   confirmReview: 'Change Decision',
   reviewerLabel: 'Reviewer',
   reviewedLabel: 'Reviewed',
   submittedLabel: 'Submitted',
   updatedLabel: 'Updated',
   authorLabel: 'Author',
-  authorName: (firstName: string, lastName: string) => `${firstName} ${lastName}`,
+  authorName: (firstName: string, lastName: string) =>
+    `${firstName} ${lastName}`,
   unavailableAuthor: 'Unavailable Author',
-  unavailableAuthorHint: 'This author is unavailable. Approving the submission does not make it visible in the public library.',
+  unavailableAuthorHint:
+    'This author is unavailable. Approving the submission does not make it visible in the public library.',
   pendingReview: 'Awaiting Staff Review',
   reviewHistoryTitle: 'Current Review',
-  reviewHistoryHint: 'This is the current review record. Author edits clear the previous review; earlier decisions are not exposed by the API.',
+  reviewHistoryHint:
+    'This is the current review record. Author edits clear the previous review; earlier decisions are not exposed by the API.',
   publicPrivacyTitle: 'Shared Experiences',
-  publicPrivacyDescription: 'Approved tips display the author’s public name. Private child profiles and observations are never included.',
+  publicPrivacyDescription:
+    'Approved tips display the author’s public name. Private child profiles and observations are never included.',
   emptyMilestonesTitle: 'No Milestone Guidance',
-  emptyMilestonesDescription: 'Create guidance to give families a clear place to record observations.',
+  emptyMilestonesDescription:
+    'Create guidance to give families a clear place to record observations.',
   noResultsTitle: 'No Matching Results',
   noResultsDescription: 'Try a different search or clear the filters.',
   emptyTipsTitle: 'No Approved Tips Yet',
-  emptyTipsDescription: 'Reviewed family experiences will appear here when they are available.',
+  emptyTipsDescription:
+    'Reviewed family experiences will appear here when they are available.',
   emptyOwnTitle: 'No Submissions Yet',
-  emptyOwnDescription: 'Share an experience linked to a milestone. You can follow its review status here.',
+  emptyOwnDescription:
+    'Share an experience linked to a milestone. You can follow its review status here.',
   emptyReviewTitle: 'No Matching Submissions',
-  emptyReviewDescription: 'Try another review status or return when a family submits a tip.',
+  emptyReviewDescription:
+    'Try another review status or return when a family submits a tip.',
   searchLabel: 'Search',
   // @sentence-case: Supporting instruction, validation, or descriptive count.
   searchMilestones: 'Search milestone guidance',
@@ -9269,9 +9463,11 @@ export const gentlePathMilestoneAdminStrings = {
   loadingMilestones: 'Loading Milestone Guidance',
   loadingTips: 'Loading Tips',
   // @sentence-case: Supporting instruction, validation, or descriptive count.
-  optionsCount: (count: number) => `${count} active response ${count === 1 ? 'option' : 'options'}`,
+  optionsCount: (count: number) =>
+    `${count} active response ${count === 1 ? 'option' : 'options'}`,
   // @sentence-case: Supporting instruction, validation, or descriptive count.
-  approvedCount: (count: number) => `${count} approved ${count === 1 ? 'tip' : 'tips'}`,
+  approvedCount: (count: number) =>
+    `${count} approved ${count === 1 ? 'tip' : 'tips'}`,
   milestoneCaption: 'Milestone Guidance Directory',
   tipCaption: 'Family Tip Submissions',
   statuses: { PENDING: 'Pending', APPROVED: 'Approved', REJECTED: 'Rejected' },
@@ -9290,33 +9486,47 @@ export const gentlePathMilestoneAdminStrings = {
     rejection: 'Explain why the tip is rejected.',
     decision: 'Choose Approved or Rejected.',
     immutableValue: 'Existing response values cannot change.',
-    immutableLabel: 'This response label is referenced by an observation and cannot change.',
+    immutableLabel:
+      'This response label is referenced by an observation and cannot change.',
     retiredValue: 'An existing or retired response value cannot be reused.',
     invalidOption: 'Choose active response options from this milestone.',
-    repeatedReview: 'This tip already has that review decision. Refresh it before continuing.',
-    unavailableMilestone: 'This milestone is no longer available. Choose another milestone.',
+    repeatedReview:
+      'This tip already has that review decision. Refresh it before continuing.',
+    unavailableMilestone:
+      'This milestone is no longer available. Choose another milestone.',
     invalidQuery: 'Check your filters and page size, then try again.',
   },
   // @sentence-case: Personal experience fixtures, never clinical guidance.
   demo: {
-    approvedMessage: 'We keep a short note about what we noticed, including when and where it happened. Looking back helps us remember the small moments.',
-    pendingMessage: 'Writing down the moment soon afterward helps me remember the details I want to discuss with our support team.',
+    approvedMessage:
+      'We keep a short note about what we noticed, including when and where it happened. Looking back helps us remember the small moments.',
+    pendingMessage:
+      'Writing down the moment soon afterward helps me remember the details I want to discuss with our support team.',
     rejectedMessage: 'This draft is still being revised before it is shared.',
-    rejectionNote: 'Please add a specific personal experience so other families can understand the context.',
+    rejectionNote:
+      'Please add a specific personal experience so other families can understand the context.',
   },
 } as const;
 
 export const gentlePathEngagementStrings = {
   title: 'Saved Content',
-  description: 'Keep useful resources, articles, guides, and community conversations together in your personal library.',
+  description:
+    'Keep useful resources, articles, guides, and community conversations together in your personal library.',
   searchLabel: 'Search Saved Content',
   searchPlaceholder: 'Search titles and previews…',
   typeLabel: 'Content Type',
   allTypes: 'All Content',
   clear: 'Clear Search',
   types: {
-    RESOURCE: 'Resource', BLOG: 'Journal Article', GUIDED_STEP: 'Guide', POST: 'Community Post',
-    POST_COMMENT: 'Community Comment', POLL: 'Poll', POLL_COMMENT: 'Poll Comment', TIP: 'Tip', MILESTONE: 'Milestone',
+    RESOURCE: 'Resource',
+    BLOG: 'Journal Article',
+    GUIDED_STEP: 'Guide',
+    POST: 'Community Post',
+    POST_COMMENT: 'Community Comment',
+    POLL: 'Poll',
+    POLL_COMMENT: 'Poll Comment',
+    TIP: 'Tip',
+    MILESTONE: 'Milestone',
   },
   save: 'Save',
   saved: 'Saved',
@@ -9325,28 +9535,48 @@ export const gentlePathEngagementStrings = {
   removedTitle: 'Content Removed',
   saveDescription: 'Saved content is private to your account.',
   emptyTitle: 'Your Library Starts Here',
-  emptyDescription: 'Save something you want to return to. Resources, journal articles, guides, and community content can all live here.',
+  emptyDescription:
+    'Save something you want to return to. Resources, journal articles, guides, and community content can all live here.',
   noResultsTitle: 'No Matching Content',
-  noResultsDescription: 'Try another search or choose a different content type.',
+  noResultsDescription:
+    'Try another search or choose a different content type.',
   explore: 'Explore Resources',
   browseJournal: 'Read The Journal',
   read: 'Open Content',
   readPreview: 'Read Saved Preview',
   previewTitle: 'Saved Preview',
-  previewDescription: 'This preview includes up to 500 characters. Open the original content to continue reading when a reader is available.',
+  previewDescription:
+    'This preview includes up to 500 characters. Open the original content to continue reading when a reader is available.',
   back: 'Back To Saved Content',
   untitled: 'Saved Content',
   unavailableTitle: 'Content Unavailable',
-  unavailableDescription: 'This content is no longer available. It may have been removed or its visibility may have changed.',
-  unavailableHint: 'Unavailable content is hidden from your library. You can still remove it from Saved.',
+  unavailableDescription:
+    'This content is no longer available. It may have been removed or its visibility may have changed.',
+  unavailableHint:
+    'Unavailable content is hidden from your library. You can still remove it from Saved.',
   paginationLabel: 'Saved Content Pages',
-  rangeDescription: (from: number, to: number) => `Showing ${from}–${to} saved items`,
+  rangeDescription: (from: number, to: number) =>
+    `Showing ${from}–${to} saved items`,
   retry: 'Try Again',
   ratingTitle: 'Rate This Resource',
-  ratingDescription: 'Share how useful this resource was for you. You can change or remove your rating at any time.',
+  ratingDescription:
+    'Share how useful this resource was for you. You can change or remove your rating at any time.',
   ratingLabel: 'Your Rating',
   ratingOption: (value: number) => `${value} ${value === 1 ? 'Star' : 'Stars'}`,
-  ratingSummaryDescription: (average: number, count: number) => `${average.toFixed(1)} out of 5 from ${count} ${count === 1 ? 'rating' : 'ratings'}`,
+  ratingNotSelected: 'Choose A Rating',
+  ratingLoadingTitle: 'Loading Your Rating',
+  ratingSavingTitle: 'Saving Your Rating',
+  ratingSavedDescription: 'Thank you for sharing what helped.',
+  ratingRemovedDescription:
+    'Your rating has been removed. You can choose another at any time.',
+  ratingKeyboardHint:
+    'Choose a star from 1 to 5. Use the arrow keys to change your selection.',
+  ratingAverageLabel: (average: number) => average.toFixed(1),
+  ratingCountLabel: (count: number) =>
+    `${count.toLocaleString('en-US')} ${count === 1 ? 'Rating' : 'Ratings'}`,
+  noRatingsLabel: 'No Ratings Yet',
+  ratingSummaryDescription: (average: number, count: number) =>
+    `${average.toFixed(1)} out of 5 from ${count} ${count === 1 ? 'rating' : 'ratings'}`,
   noRatingsDescription: 'No ratings yet. Be the first to share what helped.',
   ratingSavedTitle: 'Rating Saved',
   ratingRemovedTitle: 'Rating Removed',
@@ -9356,11 +9586,13 @@ export const gentlePathEngagementStrings = {
   unlike: 'Unlike',
   likesLabel: (count: number) => `${count} ${count === 1 ? 'Like' : 'Likes'}`,
   signIn: 'Sign In To Like Or Save',
-  signInDescription: 'Sign in to keep this article in your library or let others know it helped.',
+  signInDescription:
+    'Sign in to keep this article in your library or let others know it helped.',
   articleActionsLabel: 'Article Actions',
   demo: {
     tipTitle: 'Make Room For A Quiet Moment',
-    tipDescription: 'A familiar quiet space can make transitions easier. Offer a comfortable place to pause without making it a reward or a consequence.',
+    tipDescription:
+      'A familiar quiet space can make transitions easier. Offer a comfortable place to pause without making it a reward or a consequence.',
   },
 };
 
@@ -9397,51 +9629,65 @@ export const gentlePathAccountToolsStrings = {
     title: 'Account',
     description: 'Review your sign-in identity and manage account access.',
     identityTitle: 'Your Identity',
-    identityHint: 'Profile changes are available from your profile. Your sign-in email is managed separately.',
+    identityHint:
+      'Profile changes are available from your profile. Your sign-in email is managed separately.',
     operationsTitle: 'Operational Tools',
-    operationsHint: 'Authorized platform operators can inspect delivery history and maintain the AI usage ledger.',
+    operationsHint:
+      'Authorized platform operators can inspect delivery history and maintain the AI usage ledger.',
     profileAction: 'Edit Profile',
     devicesAction: 'Manage Devices',
     helpAction: 'Help And Legal Information',
     emailLabel: 'Sign-In Email',
     nameLabel: 'Name',
-    formatName: (firstName: string, lastName: string) => `${firstName} ${lastName}`,
+    formatName: (firstName: string, lastName: string) =>
+      `${firstName} ${lastName}`,
     deleteTitle: 'Delete Account',
-    deleteHint: 'Deleting your account removes access to GentlePath and hides your private family records. This action does not permanently erase stored records or uploaded files. You cannot restore access from this app.',
+    deleteHint:
+      'Deleting your account removes access to GentlePath and hides your private family records. This action does not permanently erase stored records or uploaded files. You cannot restore access from this app.',
     deleteAction: 'Delete My Account',
     confirmationTitle: 'Delete Your Account?',
-    confirmationDescription: (email: string) => `You are deleting the account for ${email}. You will be signed out, and this account will no longer be able to access GentlePath. Stored records and uploaded files are not permanently erased by this action.`,
+    confirmationDescription: (email: string) =>
+      `You are deleting the account for ${email}. You will be signed out, and this account will no longer be able to access GentlePath. Stored records and uploaded files are not permanently erased by this action.`,
     confirmationEmailLabel: 'Type Your Sign-In Email To Confirm',
     confirmationPlaceholder: 'Enter the email shown above',
-    confirmationHint: 'Enter the email exactly as it appears above. Keep this dialog open if you need to retry.',
+    confirmationHint:
+      'Enter the email exactly as it appears above. Keep this dialog open if you need to retry.',
     confirmationAcknowledgement: 'I Understand The Consequence',
-    confirmationAcknowledgementDescription: 'I understand that this account will lose access and I cannot restore it from this app.',
-    confirmationRequiredDescription: 'Enter your sign-in email and select the confirmation before deleting your account.',
+    confirmationAcknowledgementDescription:
+      'I understand that this account will lose access and I cannot restore it from this app.',
+    confirmationRequiredDescription:
+      'Enter your sign-in email and select the confirmation before deleting your account.',
     completedTitle: 'Account Deleted',
     completedDescription: 'Your account no longer has access to GentlePath.',
-    demoHint: 'In demo mode this removes only the sample account from this running demo. Resetting demo data restores seeded accounts.',
+    demoHint:
+      'In demo mode this removes only the sample account from this running demo. Resetting demo data restores seeded accounts.',
   },
   devices: {
     title: 'Registered Devices',
-    description: 'Review the devices registered to receive your notifications. Removing a registration stops future push delivery through that registration; it does not sign the device out.',
+    description:
+      'Review the devices registered to receive your notifications. Removing a registration stops future push delivery through that registration; it does not sign the device out.',
     searchLabel: 'Search Devices',
     searchPlaceholder: 'Search by device type',
     typeLabel: 'Device Type',
     allTypes: 'All Device Types',
     emptyTitle: 'No Registered Devices',
-    emptyHint: 'Devices appear after you enable push notifications on a supported device.',
+    emptyHint:
+      'Devices appear after you enable push notifications on a supported device.',
     removeAction: 'Remove Device',
     removedTitle: 'Device Removed',
     removeTitle: 'Remove This Device?',
-    removeDescription: (type: string, date: string, id: string) => `Remove the ${type} registration ${id}, created ${date}? It will stop receiving push notifications through this registration. The device will remain signed in.`,
+    removeDescription: (type: string, date: string, id: string) =>
+      `Remove the ${type} registration ${id}, created ${date}? It will stop receiving push notifications through this registration. The device will remain signed in.`,
     registrationColumn: 'Registration',
     registeredColumn: 'Registered',
     types: { iOS: 'iOS', Android: 'Android', Web: 'Web' },
   },
   deliveries: {
     title: 'Notification Delivery History',
-    description: 'Inspect platform delivery statuses and numbered provider attempts. Accepted means the provider accepted delivery; it does not confirm that a person read the notification.',
-    accessHint: 'Delivery history is limited to authorized platform operators. The live service also verifies the configured operator allowlist.',
+    description:
+      'Inspect platform delivery statuses and numbered provider attempts. Accepted means the provider accepted delivery; it does not confirm that a person read the notification.',
+    accessHint:
+      'Delivery history is limited to authorized platform operators. The live service also verifies the configured operator allowlist.',
     statusLabel: 'Delivery Status',
     allStatuses: 'All Statuses',
     notificationLabel: 'Notification ID',
@@ -9457,10 +9703,12 @@ export const gentlePathAccountToolsStrings = {
     errorLabel: 'Reported Error',
     skipReasonLabel: 'Skip Reason',
     emptyTitle: 'No Delivery Records',
-    emptyHint: 'Delivery records appear when an external notification is scheduled.',
+    emptyHint:
+      'Delivery records appear when an external notification is scheduled.',
     inspectAction: 'View Attempts',
     attemptsTitle: 'Delivery Attempts',
-    attemptsDescription: 'Review the recorded outcome of each provider attempt. This view cannot send or retry notifications.',
+    attemptsDescription:
+      'Review the recorded outcome of each provider attempt. This view cannot send or retry notifications.',
     attemptLabel: (number: number) => `Attempt ${number}`,
     noAttemptsTitle: 'No Attempts Yet',
     noAttemptsHint: 'This delivery has no recorded provider attempts.',
@@ -9470,22 +9718,33 @@ export const gentlePathAccountToolsStrings = {
     yesStatus: 'Yes',
     noStatus: 'No',
     channels: { PUSH: 'Push', EMAIL: 'Email' },
-    statuses: { PENDING: 'Pending', PROCESSING: 'Processing', ACCEPTED: 'Accepted', SKIPPED: 'Skipped', FAILED: 'Failed', UNKNOWN: 'Unknown' },
+    statuses: {
+      PENDING: 'Pending',
+      PROCESSING: 'Processing',
+      ACCEPTED: 'Accepted',
+      SKIPPED: 'Skipped',
+      FAILED: 'Failed',
+      UNKNOWN: 'Unknown',
+    },
   },
   aiUsage: {
     title: 'AI Usage',
-    description: 'Inspect and maintain recorded platform AI usage events. Editing a record changes the usage ledger; it does not run an AI request.',
-    accessHint: 'AI usage records are limited to authorized platform operators. The live service also verifies the configured operator allowlist.',
+    description:
+      'Inspect and maintain recorded platform AI usage events. Editing a record changes the usage ledger; it does not run an AI request.',
+    accessHint:
+      'AI usage records are limited to authorized platform operators. The live service also verifies the configured operator allowlist.',
     newAction: 'Add Usage Record',
     newTitle: 'Add AI Usage Record',
     editTitle: 'Edit AI Usage Record',
-    formDescription: 'Record the context and measured usage. Leave unknown token counts blank rather than estimating them.',
+    formDescription:
+      'Record the context and measured usage. Leave unknown token counts blank rather than estimating them.',
     searchLabel: 'Search Usage Records',
     searchPlaceholder: 'Search context, user ID, metadata, or error',
     activeOption: 'Active Records',
     deletedOption: 'Deleted Records',
     emptyTitle: 'No AI Usage Records',
-    emptyHint: 'Usage records appear when the server records an AI operation. Authorized operators can also add a record.',
+    emptyHint:
+      'Usage records appear when the server records an AI operation. Authorized operators can also add a record.',
     contextLabel: 'AI Context',
     contextPlaceholder: 'Enter the recorded operation context',
     userLabel: 'User ID',
@@ -9495,7 +9754,8 @@ export const gentlePathAccountToolsStrings = {
     totalLabel: 'Total Tokens',
     tokensColumn: 'Tokens',
     metadataLabel: 'Metadata JSON',
-    metadataHint: 'Use a JSON object. Leave blank when no metadata was recorded. Do not enter credentials or private family notes.',
+    metadataHint:
+      'Use a JSON object. Leave blank when no metadata was recorded. Do not enter credentials or private family notes.',
     metadataPlaceholder: 'Enter a JSON object',
     errorLabel: 'Recorded Error',
     errorPlaceholder: 'Optional recorded error',
@@ -9506,23 +9766,28 @@ export const gentlePathAccountToolsStrings = {
     updatedTitle: 'Usage Record Updated',
     deletedTitle: 'Usage Record Deleted',
     deleteTitle: 'Delete Usage Record?',
-    deleteDescription: (context: string) => `Delete the usage record for ${context}? This hides the record from the active ledger. It does not undo the AI operation.`,
+    deleteDescription: (context: string) =>
+      `Delete the usage record for ${context}? This hides the record from the active ledger. It does not undo the AI operation.`,
     deleteAction: 'Delete Usage Record',
-    deletedHint: 'Deleted records are available for inspection. This interface does not restore them.',
+    deletedHint:
+      'Deleted records are available for inspection. This interface does not restore them.',
     contextFilterLabel: 'Exact AI Context',
     applyFiltersAction: 'Apply Filters',
   },
   help: {
     title: 'Help And Legal Information',
-    description: 'Find answers and read the current terms and privacy information supplied by GentlePath.',
+    description:
+      'Find answers and read the current terms and privacy information supplied by GentlePath.',
     faqTab: 'Frequently Asked Questions',
     termsTab: 'Terms Of Service',
     privacyTab: 'Privacy Policy',
     sectionLabel: 'Help Section',
     emptyTitle: 'No Information Available',
-    emptyHint: 'This information has not been provided yet. Try refreshing this page later.',
+    emptyHint:
+      'This information has not been provided yet. Try refreshing this page later.',
     illustrativeTitle: 'Illustrative Demo Content',
-    illustrativeDescription: 'These examples explain the demo only. They are not the production terms, privacy policy, or a statement of data-retention commitments.',
+    illustrativeDescription:
+      'These examples explain the demo only. They are not the production terms, privacy policy, or a statement of data-retention commitments.',
   },
   validation: {
     // @sentence-case: Complete validation messages.
@@ -9534,7 +9799,8 @@ export const gentlePathAccountToolsStrings = {
     // @sentence-case: Complete validation messages.
     userId: 'Enter a valid user UUID or leave this field blank.',
     // @sentence-case: Complete validation messages.
-    tokenCount: 'Enter a whole-number token count from 0 to 2,147,483,647, or leave it blank.',
+    tokenCount:
+      'Enter a whole-number token count from 0 to 2,147,483,647, or leave it blank.',
     // @sentence-case: Complete validation messages.
     metadata: 'Enter a valid JSON object or leave this field blank.',
     // @sentence-case: Complete validation messages.
@@ -9550,100 +9816,340 @@ export const gentlePathAccountToolsStrings = {
     // @preserve-case: Illustrative demo records preserve source-like data.
     usageMetadata: { model: 'illustrative-demo-model', source: 'demo' },
     // @sentence-case: Illustrative operational record.
-    skippedReason: 'Push delivery was skipped because notifications were disabled in this illustrative example.',
+    skippedReason:
+      'Push delivery was skipped because notifications were disabled in this illustrative example.',
     // @sentence-case: Illustrative operational record.
     failedError: 'The provider did not accept this illustrative example.',
     faqTitle: 'Using The Demo',
-    // @sentence-case: Illustrative FAQ question.
-    faqQuestion: 'Does the demo send notifications or run AI requests?',
+    // @title-case: FAQ questions are displayed as headings.
+    faqQuestion: 'Does The Demo Send Notifications Or Run AI Requests?',
     // @sentence-case: Illustrative FAQ answer.
-    faqAnswer: 'No. The demo uses local sample records. It does not contact a notification provider or run an AI request.',
+    faqAnswer:
+      'No. The demo uses local sample records. It does not contact a notification provider or run an AI request.',
     legalTitle: 'About This Legal Information Example',
-    legalDescription: 'This screen demonstrates how legal information supplied by the API is displayed. This sample is not a production legal agreement or privacy policy.',
+    legalDescription:
+      'This screen demonstrates how legal information supplied by the API is displayed. This sample is not a production legal agreement or privacy policy.',
   },
 };
 
 export const gentlePathCommercialStrings = {
   title: 'Commercial Features',
-  description: 'Manage sponsors, verified family offers, and clearly disclosed advertising.',
+  description:
+    'Manage sponsors, verified family offers, and clearly disclosed advertising.',
   discountsTitle: 'Family Discounts',
-  discountsDescription: 'Explore current offers from approved sponsors. Check the terms and verification before visiting a partner.',
-  sponsors: 'Sponsors', offers: 'Offers', campaigns: 'Campaigns', creatives: 'Creatives', placements: 'Placements', metrics: 'Aggregate Metrics', preview: 'Serving Preview',
-  create: 'Create Record', edit: 'Edit Record', save: 'Save Changes', cancel: 'Cancel', back: 'Back To Commercial Features', backDiscounts: 'Back To Family Discounts',
-  delete: 'Delete Record', approve: 'Approve', reject: 'Reject', suspend: 'Suspend', review: 'Review', verify: 'Verify Offer', enable: 'Enable', disable: 'Disable',
-  savedTitle: 'Changes Saved', deletedTitle: 'Record Deleted', reviewedTitle: 'Review Saved', verifiedTitle: 'Verification Saved', enabledTitle: 'Enablement Saved',
-  search: 'Search', searchPlaceholder: 'Search names, titles, or descriptions', clear: 'Clear Search', category: 'Category', allCategories: 'All Categories', status: 'Status', allStatuses: 'All Statuses',
-  emptyTitle: 'No Records Found', emptyHint: 'Try another filter or create a record to get started.', discountsEmptyHint: 'No current verified offers match these filters. Try another category or check again later.',
-  loadingTitle: 'Loading Records', errorTitle: 'Unable To Load Records', errorHint: 'Try again. Your unsaved entries remain on this page.', retry: 'Try Again',
-  directoryCaption: 'Commercial Records', pagination: 'Commercial Pages', range: (from: number, to: number) => `${from}–${to}`,
-  name: 'Name', legal_name: 'Legal Name', website_url: 'Website URL', logo_url: 'Permanent Logo URL', contact_email: 'Contact Email', sponsor_id: 'Sponsor',
-  commercial_relationship: 'Commercial Relationship', disclosure_label: 'Advertising Disclosure', affiliate_disclosure: 'Affiliate Disclosure', titleLabel: 'Title', descriptionLabel: 'Description',
-  discount_label: 'Discount Label', code: 'Discount Code', landing_url: 'Offer URL', terms_text: 'Terms', starts_at: 'Starts At', expires_at: 'Expires At', ends_at: 'Ends At',
-  campaign_id: 'Campaign', discount_offer_id: 'Linked Offer', subtitle: 'Subtitle', image_url: 'Permanent Image URL', image_alt_text: 'Image Alternative Text', layout: 'Layout', image_fit: 'Image Fit',
-  background_color: 'Background Color', tint_color: 'Tint Color', title_color: 'Title Color', subtitle_color: 'Subtitle Color', button_tint_color: 'Button Tint Color', button_text_color: 'Button Text Color',
-  action_title: 'Action Title', action_type: 'Action Type', action_value: 'Action Destination', locale: 'Locale', supported_platforms: 'Platforms',
-  key: 'Placement Key', is_enabled: 'Enabled', max_items: 'Maximum Served Items', auto_advance_seconds: 'Auto-Advance Seconds', show_pagination: 'Show Pagination',
-  contentTitle: 'Content', contentHint: 'Saving content returns it to pending review and disables serving. Offers also need new verification.',
-  attributionHint: 'The sponsor, campaign, and placement key stay fixed after creation. Create another record to change attribution.',
-  appearanceTitle: 'Creative Appearance', appearanceHint: 'Use permanent public images. Optional colors use hexadecimal values; empty values retain the GentlePath theme.',
-  actionHint: 'Use a supported public app route, a safe web URL, or a supported GentlePath deep link. Code-copy actions derive the code from the linked offer.',
-  none: 'None', optional: 'Optional', review_notes: 'Review Notes', review_status: 'Review Decision', verification_status: 'Verification Status', verification_source_url: 'Verification Source URL', verification_valid_until: 'Verification Valid Until',
-  lifecycleTitle: 'Review And Serving', lifecycleHint: 'Approval leaves serving disabled. Enable a record separately after its parent records and verification are eligible.',
-  verificationHint: 'Verification requires a public source and future validity no later than the offer expiry.',
+  discountsDescription:
+    'Explore current offers from approved sponsors. Check the terms and verification before visiting a partner.',
+  createOffer: 'Create Family Discount',
+  manageOffers: 'Manage Family Discounts',
+  offerAuthoringTitle: 'Publish A Family Discount',
+  offerAuthoringHint:
+    'Choose an approved sponsor, create the offer, then approve its content, verify the source and expiry, and enable it. Only eligible offers appear for families.',
+  sponsors: 'Sponsors',
+  offers: 'Offers',
+  campaigns: 'Campaigns',
+  creatives: 'Creatives',
+  placements: 'Placements',
+  metrics: 'Aggregate Metrics',
+  preview: 'Serving Preview',
+  create: 'Create Record',
+  edit: 'Edit Record',
+  save: 'Save Changes',
+  cancel: 'Cancel',
+  back: 'Back To Commercial Features',
+  backDiscounts: 'Back To Family Discounts',
+  delete: 'Delete Record',
+  approve: 'Approve',
+  reject: 'Reject',
+  suspend: 'Suspend',
+  review: 'Review',
+  verify: 'Verify Offer',
+  enable: 'Enable',
+  disable: 'Disable',
+  savedTitle: 'Changes Saved',
+  deletedTitle: 'Record Deleted',
+  reviewedTitle: 'Review Saved',
+  verifiedTitle: 'Verification Saved',
+  enabledTitle: 'Enablement Saved',
+  search: 'Search',
+  searchPlaceholder: 'Search names, titles, or descriptions',
+  clear: 'Clear Search',
+  category: 'Category',
+  allCategories: 'All Categories',
+  status: 'Status',
+  allStatuses: 'All Statuses',
+  emptyTitle: 'No Records Found',
+  emptyHint: 'Try another filter or create a record to get started.',
+  discountsEmptyHint:
+    'No current verified offers match these filters. Try another category or check again later.',
+  loadingTitle: 'Loading Records',
+  errorTitle: 'Unable To Load Records',
+  errorHint: 'Try again. Your unsaved entries remain on this page.',
+  retry: 'Try Again',
+  directoryCaption: 'Commercial Records',
+  pagination: 'Commercial Pages',
+  range: (from: number, to: number) => `${from}–${to}`,
+  name: 'Name',
+  legal_name: 'Legal Name',
+  website_url: 'Website URL',
+  logo_url: 'Permanent Logo URL',
+  contact_email: 'Contact Email',
+  sponsor_id: 'Sponsor',
+  commercial_relationship: 'Commercial Relationship',
+  disclosure_label: 'Advertising Disclosure',
+  affiliate_disclosure: 'Affiliate Disclosure',
+  titleLabel: 'Title',
+  descriptionLabel: 'Description',
+  discount_label: 'Discount Label',
+  code: 'Discount Code',
+  landing_url: 'Offer URL',
+  terms_text: 'Terms',
+  starts_at: 'Starts At',
+  expires_at: 'Expires At',
+  ends_at: 'Ends At',
+  campaign_id: 'Campaign',
+  discount_offer_id: 'Linked Offer',
+  subtitle: 'Subtitle',
+  image_url: 'Permanent Image URL',
+  image_alt_text: 'Image Alternative Text',
+  layout: 'Layout',
+  image_fit: 'Image Fit',
+  background_color: 'Background Color',
+  tint_color: 'Tint Color',
+  title_color: 'Title Color',
+  subtitle_color: 'Subtitle Color',
+  button_tint_color: 'Button Tint Color',
+  button_text_color: 'Button Text Color',
+  action_title: 'Action Title',
+  action_type: 'Action Type',
+  action_value: 'Action Destination',
+  locale: 'Locale',
+  supported_platforms: 'Platforms',
+  key: 'Placement Key',
+  is_enabled: 'Enabled',
+  max_items: 'Maximum Served Items',
+  auto_advance_seconds: 'Auto-Advance Seconds',
+  show_pagination: 'Show Pagination',
+  contentTitle: 'Content',
+  contentHint:
+    'Saving content returns it to pending review and disables serving. Offers also need new verification.',
+  attributionHint:
+    'The sponsor, campaign, and placement key stay fixed after creation. Create another record to change attribution.',
+  appearanceTitle: 'Creative Appearance',
+  appearanceHint:
+    'Use permanent public images. Optional colors use hexadecimal values; empty values retain the GentlePath theme.',
+  actionHint:
+    'Use a supported public app route, a safe web URL, or a supported GentlePath deep link. Code-copy actions derive the code from the linked offer.',
+  none: 'None',
+  optional: 'Optional',
+  review_notes: 'Review Notes',
+  review_status: 'Review Decision',
+  verification_status: 'Verification Status',
+  verification_source_url: 'Verification Source URL',
+  verification_valid_until: 'Verification Valid Until',
+  lifecycleTitle: 'Review And Serving',
+  lifecycleHint:
+    'Approval leaves serving disabled. Enable a record separately after its parent records and verification are eligible.',
+  verificationHint:
+    'Verification requires a public source and future validity no later than the offer expiry.',
   notesHint: 'Rejection and sponsor suspension require notes.',
-  deleteTitle: 'Delete Commercial Record', deleteDescription: (name: string) => `Delete “${name}”? It will stop being available for serving. Historical aggregate metrics are retained.`,
-  reviewTitle: 'Save Review Decision', reviewDescription: 'This changes serving eligibility and records your staff review. Confirm the content and disclosure before continuing.',
-  enableTitle: 'Change Serving Eligibility', enableDescription: 'The server checks approval, attribution, verification, and expiry before enabling. Serving also checks the active date window.',
-  sponsored: 'Sponsored', verified: 'Verified', visit: 'Visit Partner', viewOffer: 'View Offer', copyCode: 'Copy Code', copiedTitle: 'Code Copied', copyErrorHint: 'The code could not be copied. Select and copy the displayed code.',
-  provenanceTitle: 'Verification And Terms', verifiedAt: 'Verified At', verificationUntil: 'Verification Valid Until', source: 'View Verification Source', sponsor: 'Sponsor',
-  privacyHint: 'Commercial serving uses placement, locale, platform, and eligibility. Private family records, journals, and health information are never targeting inputs.',
-  previewTitle: 'Current Serving Preview', previewHint: 'This preview resolves the same currently eligible carousel families receive. Previewing does not report impressions or clicks.',
-  placementLabel: 'Placement', platformLabel: 'Platform', previewEmptyTitle: 'No Eligible Creative', previewEmptyHint: 'Check placement items, review, enablement, windows, locale, platform, and linked-offer verification.',
-  itemsTitle: 'Placement Items', itemsHint: 'Configure up to 50 creatives. Items outside their window or eligibility are skipped before the serving limit is applied.',
-  addItem: 'Add Creative', removeItem: 'Remove Item', saveItems: 'Save Placement Items', itemsSavedTitle: 'Placement Items Saved', moveUp: 'Move Up', moveDown: 'Move Down', creativeLabel: 'Creative', order: 'Order',
-  metricsHint: 'Daily submitted aggregate counts, not unique people. No user, child, device, session, or health identifiers are included. Historical rows remain after records are deleted.',
-  metric_date: 'UTC Date', placement_item_id: 'Placement Item ID', placement_id: 'Placement ID', creative_id: 'Creative ID', impressions: 'Impressions', clicks: 'Clicks', code_copies: 'Code Copies', metric_from: 'From UTC Date', metric_to: 'To UTC Date',
-  metricFilterHint: 'Filter aggregate records by date and commercial record IDs.', applyFilters: 'Apply Filters',
-  simulate: 'Add Demo Impression', simulatedTitle: 'Demo Count Added', simulateHint: 'Demo counts stay in local demo state and never call external analytics.',
-  previousCreative: 'Previous Creative', nextCreative: 'Next Creative', pauseRotation: 'Pause Rotation', resumeRotation: 'Resume Rotation',
+  deleteTitle: 'Delete Commercial Record',
+  deleteDescription: (name: string) =>
+    `Delete “${name}”? It will stop being available for serving. Historical aggregate metrics are retained.`,
+  reviewTitle: 'Save Review Decision',
+  reviewDescription:
+    'This changes serving eligibility and records your staff review. Confirm the content and disclosure before continuing.',
+  enableTitle: 'Change Serving Eligibility',
+  enableDescription:
+    'The server checks approval, attribution, verification, and expiry before enabling. Serving also checks the active date window.',
+  sponsored: 'Sponsored',
+  verified: 'Verified',
+  visit: 'Visit Partner',
+  viewOffer: 'View Offer',
+  copyCode: 'Copy Code',
+  copiedTitle: 'Code Copied',
+  copyErrorHint:
+    'The code could not be copied. Select and copy the displayed code.',
+  provenanceTitle: 'Verification And Terms',
+  verifiedAt: 'Verified At',
+  verificationUntil: 'Verification Valid Until',
+  source: 'View Verification Source',
+  sponsor: 'Sponsor',
+  privacyHint:
+    'Commercial serving uses placement, locale, platform, and eligibility. Private family records, journals, and health information are never targeting inputs.',
+  previewTitle: 'Current Serving Preview',
+  previewHint:
+    'This preview resolves the same currently eligible carousel families receive. Previewing does not report impressions or clicks.',
+  placementLabel: 'Placement',
+  platformLabel: 'Platform',
+  previewEmptyTitle: 'No Eligible Creative',
+  previewEmptyHint:
+    'Check placement items, review, enablement, windows, locale, platform, and linked-offer verification.',
+  itemsTitle: 'Placement Items',
+  itemsHint:
+    'Configure up to 50 creatives. Items outside their window or eligibility are skipped before the serving limit is applied.',
+  addItem: 'Add Creative',
+  removeItem: 'Remove Item',
+  saveItems: 'Save Placement Items',
+  itemsSavedTitle: 'Placement Items Saved',
+  moveUp: 'Move Up',
+  moveDown: 'Move Down',
+  creativeLabel: 'Creative',
+  order: 'Order',
+  metricsHint:
+    'Daily submitted aggregate counts, not unique people. No user, child, device, session, or health identifiers are included. Historical rows remain after records are deleted.',
+  metric_date: 'UTC Date',
+  placement_item_id: 'Placement Item ID',
+  placement_id: 'Placement ID',
+  creative_id: 'Creative ID',
+  impressions: 'Impressions',
+  clicks: 'Clicks',
+  code_copies: 'Code Copies',
+  metric_from: 'From UTC Date',
+  metric_to: 'To UTC Date',
+  metricFilterHint:
+    'Filter aggregate records by date and commercial record IDs.',
+  applyFilters: 'Apply Filters',
+  simulate: 'Add Demo Impression',
+  simulatedTitle: 'Demo Count Added',
+  simulateHint:
+    'Demo counts stay in local demo state and never call external analytics.',
+  previousCreative: 'Previous Creative',
+  nextCreative: 'Next Creative',
+  pauseRotation: 'Pause Rotation',
+  resumeRotation: 'Resume Rotation',
   slidePosition: (position: number, count: number) => `${position} Of ${count}`,
-  categories: { PRODUCTS: 'Products', SERVICES: 'Services', ACTIVITIES: 'Activities', EDUCATION: 'Education', TOOLS: 'Tools', OTHER: 'Other' },
-  statuses: { PENDING_REVIEW: 'Pending Review', PENDING: 'Pending', APPROVED: 'Approved', REJECTED: 'Rejected', SUSPENDED: 'Suspended', UNVERIFIED: 'Unverified', VERIFIED: 'Verified', FAILED: 'Failed', enabled: 'Enabled', disabled: 'Disabled' },
-  relationships: { PAID_SPONSORSHIP: 'Paid Sponsorship', AFFILIATE: 'Affiliate' },
-  layouts: { IMAGE_BANNER: 'Image Banner', COMPACT_CARD: 'Compact Card', FEATURE_CARD: 'Feature Card' },
+  categories: {
+    PRODUCTS: 'Products',
+    SERVICES: 'Services',
+    ACTIVITIES: 'Activities',
+    EDUCATION: 'Education',
+    TOOLS: 'Tools',
+    OTHER: 'Other',
+  },
+  statuses: {
+    PENDING_REVIEW: 'Pending Review',
+    PENDING: 'Pending',
+    APPROVED: 'Approved',
+    REJECTED: 'Rejected',
+    SUSPENDED: 'Suspended',
+    UNVERIFIED: 'Unverified',
+    VERIFIED: 'Verified',
+    FAILED: 'Failed',
+    enabled: 'Enabled',
+    disabled: 'Disabled',
+  },
+  relationships: {
+    PAID_SPONSORSHIP: 'Paid Sponsorship',
+    AFFILIATE: 'Affiliate',
+  },
+  layouts: {
+    IMAGE_BANNER: 'Image Banner',
+    COMPACT_CARD: 'Compact Card',
+    FEATURE_CARD: 'Feature Card',
+  },
   imageFits: { COVER: 'Cover', CONTAIN: 'Contain' },
-  actionTypes: { OPEN_EXTERNAL_BROWSER: 'Open External Browser', OPEN_IN_APP_BROWSER: 'Open In-App Browser', OPEN_DEEP_LINK: 'Open Deep Link', OPEN_APP_ROUTE: 'Open App Route', COPY_DISCOUNT_CODE: 'Copy Discount Code' },
-  placementKeys: { HOME_CAROUSEL: 'Home Carousel', FAMILY_DISCOUNTS_CAROUSEL: 'Family Discounts Carousel' },
+  actionTypes: {
+    OPEN_EXTERNAL_BROWSER: 'Open External Browser',
+    OPEN_IN_APP_BROWSER: 'Open In-App Browser',
+    OPEN_DEEP_LINK: 'Open Deep Link',
+    OPEN_APP_ROUTE: 'Open App Route',
+    COPY_DISCOUNT_CODE: 'Copy Discount Code',
+  },
+  placementKeys: {
+    HOME_CAROUSEL: 'Home Carousel',
+    FAMILY_DISCOUNTS_CAROUSEL: 'Family Discounts Carousel',
+  },
   platforms: { IOS: 'iOS', ANDROID: 'Android', WEB: 'Web' },
   // @sentence-case: Complete validation and recovery messages.
   validation: {
-    required: 'Enter a value for this field.', invalid: 'Check the highlighted fields and enter valid values.', url: 'Enter an HTTP or HTTPS URL without credentials, spaces, or backslashes.',
-    publicUrl: 'Use a permanent HTTPS URL without queries, fragments, credentials, or private paths.', window: 'The end must follow the start.', affiliate: 'Affiliate content requires an explicit affiliate disclosure.',
-    image: 'Images require alternative text, and image banners require an image.', action: 'Choose a supported destination. Code-copy actions require a linked offer and no destination value.',
-    locale: 'Enter a valid language tag, such as en.', platforms: 'Choose at least one platform without duplicates.', color: 'Use a hexadecimal color with six or eight digits.',
-    verification: 'Verified offers require a source and future expiry no later than the offer expiry.', notes: 'Enter review notes for rejection or suspension.', transition: 'This decision is unavailable for the current status. Refresh the record and try again.',
-    relation: 'The linked offer must share the campaign sponsor and commercial relationship, and code-copy actions need an offer with a code.', eligible: 'Approval, enablement, current verification, and eligible parent records are required.',
-    duplicate: 'This placement key or creative association already exists.', items: 'Use each creative once, retain existing item identities, and check item date windows.', notFound: 'This record is unavailable or no longer eligible.',
-    date: 'Enter a valid date and time.', forbidden: 'Staff access is required for this operation.', metric: 'Use a served item, today or yesterday in UTC, and a positive aggregate count from 1 to 100.',
+    required: 'Enter a value for this field.',
+    invalid: 'Check the highlighted fields and enter valid values.',
+    url: 'Enter an HTTP or HTTPS URL without credentials, spaces, or backslashes.',
+    publicUrl:
+      'Use a permanent HTTPS URL without queries, fragments, credentials, or private paths.',
+    window: 'The end must follow the start.',
+    affiliate: 'Affiliate content requires an explicit affiliate disclosure.',
+    image:
+      'Images require alternative text, and image banners require an image.',
+    action:
+      'Choose a supported destination. Code-copy actions require a linked offer and no destination value.',
+    locale: 'Enter a valid language tag, such as en.',
+    platforms: 'Choose at least one platform without duplicates.',
+    color: 'Use a hexadecimal color with six or eight digits.',
+    verification:
+      'Verified offers require a source and future expiry no later than the offer expiry.',
+    notes: 'Enter review notes for rejection or suspension.',
+    transition:
+      'This decision is unavailable for the current status. Refresh the record and try again.',
+    relation:
+      'The linked offer must share the campaign sponsor and commercial relationship, and code-copy actions need an offer with a code.',
+    eligible:
+      'Approval, enablement, current verification, and eligible parent records are required.',
+    duplicate: 'This placement key or creative association already exists.',
+    items:
+      'Use each creative once, retain existing item identities, and check item date windows.',
+    notFound: 'This record is unavailable or no longer eligible.',
+    date: 'Enter a valid date and time.',
+    forbidden: 'Staff access is required for this operation.',
+    metric:
+      'Use a served item, today or yesterday in UTC, and a positive aggregate count from 1 to 100.',
   },
-  // @preserve-case: Illustrative demo data, never a real commercial agreement.
   demo: {
-    sponsorName: 'Kindred Learning', legalName: 'Kindred Learning Demo', website: 'https://example.com', contact: 'partner@example.com',
-    offerTitle: 'Family learning materials', offerDescription: 'An illustrative offer for everyday learning materials. This local demo offer is not redeemable.', discountLabel: '15% demo discount', code: 'FAMILY15', terms: 'Demo only. No purchase or redemption is available. Review the partner’s current terms for any real offer.',
-    disclosure: 'Sponsored demo offer', campaignName: 'Everyday family learning', creativeTitle: 'A Little Support For Everyday Learning', creativeSubtitle: 'Explore the terms of this verified demo offer.', creativeAction: 'View Offer', placementName: 'Family Discounts', homePlacementName: 'Family Home',
+    sponsorName: 'Kindred Learning',
+    legalName: 'Kindred Learning Demo',
+    // @preserve-case: Partner URL retains its exact spelling.
+    website: 'https://example.com',
+    // @preserve-case: Partner email address retains its exact spelling.
+    contact: 'partner@example.com',
+    offerTitle: 'Family Learning Materials',
+    offerDescription:
+      'An illustrative offer for everyday learning materials. This local demo offer is not redeemable.',
+    discountLabel: '15% Demo Discount',
+    // @preserve-case: Discount code must remain exact when copied.
+    code: 'FAMILY15',
+    // @sentence-case: Illustrative offer terms are supporting prose.
+    terms:
+      'Demo only. No purchase or redemption is available. Review the partner’s current terms for any real offer.',
+    disclosure: 'Sponsored Demo Offer',
+    campaignName: 'Everyday Family Learning',
+    creativeTitle: 'A Little Support For Everyday Learning',
+    // @sentence-case: Supporting creative description.
+    creativeSubtitle: 'Explore the terms of this verified demo offer.',
+    creativeAction: 'View Offer',
+    placementName: 'Family Discounts',
+    homePlacementName: 'Family Home',
   },
 } as const;
 
 export const gentlePathNotificationInboxStrings = {
   title: 'Notifications',
-  description: 'Keep up with updates in your GentlePath workspace. Opening the inbox leaves your unread messages unchanged.',
+  description:
+    'Updates and conversations from your GentlePath workspace, gathered in one place.',
+  views: { all: 'All', unread: 'Unread', read: 'Read' },
+  viewLabel: 'Notification View',
+  unreadViewLabel: (count: number) =>
+    `Unread (${count.toLocaleString('en-US')})`,
+  resultsLabel: 'Notification Updates',
+  manageAction: 'Manage Inbox',
+  bulkTitle: 'Update Multiple Notifications',
+  loadingSummaryHint: 'Checking your inbox…',
+  inboxTotalHint: (count: number) =>
+    `${count.toLocaleString('en-US')} update${count === 1 ? '' : 's'} in your inbox`,
+  matchingTotalHint: (count: number) =>
+    `${count.toLocaleString('en-US')} update${count === 1 ? ' matches' : 's match'} your search and category`,
   eyebrow: 'Your Workspace',
   settingsAction: 'Notification Settings',
   refreshAction: 'Refresh',
   inboxAction: 'View Inbox',
   preferencesTitle: 'Notification Settings',
-  preferencesDescription: 'Choose which updates reach you and how GentlePath schedules them.',
-  categories: { ACTIVITY: 'Activity', MENTION: 'Mentions', TAG: 'Tags', PRODUCT_UPDATE: 'Product Updates' },
+  preferencesDescription:
+    'Choose which updates reach you and how GentlePath schedules them.',
+  categories: {
+    ACTIVITY: 'Activity',
+    MENTION: 'Mentions',
+    TAG: 'Tags',
+    PRODUCT_UPDATE: 'Product Updates',
+  },
   categoryDescriptions: {
     ACTIVITY: 'Updates about activity in your workspace.',
     MENTION: 'Updates when someone mentions you.',
@@ -9652,59 +10158,92 @@ export const gentlePathNotificationInboxStrings = {
   },
   channels: { IN_APP: 'In App', PUSH: 'Push', EMAIL: 'Email' },
   readStatuses: { unread: 'Unread', read: 'Read' },
-  searchLabel: 'Search Notifications', searchPlaceholder: 'Search titles and messages',
-  clearSearchAction: 'Clear Search', clearFiltersAction: 'Clear Filters',
-  categoryLabel: 'Category', allCategories: 'All Categories',
-  readLabel: 'Read Status', allReadStatuses: 'All Notifications',
-  sortLabel: 'Order', newestOption: 'Newest First', oldestOption: 'Oldest First',
-  markReadAction: 'Mark Read', markUnreadAction: 'Mark Unread',
-  markAllReadAction: 'Mark All Read', markAllUnreadAction: 'Mark All Unread',
-  markMatchingReadAction: 'Mark Matching Read', markMatchingUnreadAction: 'Mark Matching Unread',
-  archiveAction: 'Archive', archiveAllAction: 'Archive All', archiveMatchingAction: 'Archive Matching',
-  archiveTitle: 'Archive Notification', archiveAllTitle: 'Archive All Notifications', archiveMatchingTitle: 'Archive Matching Notifications',
-  archiveDescription: (title: string) => `Archive “${title}”? It will leave your inbox. Restoring archived notifications is not available.`,
-  archiveAllDescription: 'Archive every notification currently in your inbox, across all pages? Restoring archived notifications is not available.',
-  archiveMatchingDescription: 'Archive every notification matching the current search, category, and read status, across all pages? Restoring archived notifications is not available.',
-  cancelAction: 'Cancel', openAction: 'Open Update',
-  readChangedTitle: 'Read Status Updated', archivedTitle: 'Notifications Archived',
-  mutationDescription: (count: number) => `${count.toLocaleString('en-US')} notification${count === 1 ? '' : 's'} changed.`,
+  searchLabel: 'Search Notifications',
+  searchPlaceholder: 'Search titles and messages',
+  clearSearchAction: 'Clear Search',
+  clearFiltersAction: 'Clear Filters',
+  categoryLabel: 'Category',
+  allCategories: 'All Categories',
+  readLabel: 'Read Status',
+  allReadStatuses: 'All Notifications',
+  sortLabel: 'Order',
+  newestOption: 'Newest First',
+  oldestOption: 'Oldest First',
+  markReadAction: 'Mark Read',
+  markUnreadAction: 'Mark Unread',
+  markAllReadAction: 'Mark All Read',
+  markAllUnreadAction: 'Mark All Unread',
+  markMatchingReadAction: 'Mark Matching Read',
+  markMatchingUnreadAction: 'Mark Matching Unread',
+  archiveAction: 'Archive',
+  archiveAllAction: 'Archive All',
+  archiveMatchingAction: 'Archive Matching',
+  archiveTitle: 'Archive Notification',
+  archiveAllTitle: 'Archive All Notifications',
+  archiveMatchingTitle: 'Archive Matching Notifications',
+  archiveDescription: (title: string) =>
+    `Archive “${title}”? It will leave your inbox. Restoring archived notifications is not available.`,
+  archiveAllDescription:
+    'Archive every notification currently in your inbox, across all pages? Restoring archived notifications is not available.',
+  archiveMatchingDescription:
+    'Archive every notification matching the current search, category, and read status, across all pages? Restoring archived notifications is not available.',
+  cancelAction: 'Cancel',
+  openAction: 'Open Update',
+  readChangedTitle: 'Read Status Updated',
+  archivedTitle: 'Notifications Archived',
+  mutationDescription: (count: number) =>
+    `${count.toLocaleString('en-US')} notification${count === 1 ? '' : 's'} changed.`,
   // @sentence-case: Persistent scope guidance.
   scopeAllHint: 'Bulk actions apply to your whole inbox across all pages.',
-  scopeFilteredHint: 'Bulk actions apply to all matching notifications across all pages.',
+  scopeFilteredHint:
+    'Bulk actions apply to all matching notifications across all pages.',
   unreadCount: (count: number) => `${count.toLocaleString('en-US')} Unread`,
   totalCount: (count: number) => `${count.toLocaleString('en-US')} Total`,
-  inboxLinkLabel: (count: number) => `Notifications, ${count.toLocaleString('en-US')} Unread`,
+  inboxLinkLabel: (count: number) =>
+    `Notifications, ${count.toLocaleString('en-US')} Unread`,
   inboxUnknownLabel: 'Notifications, Unread Count Unavailable',
   countLoadingLabel: 'Notifications, Loading Unread Count',
   countLimit: '99+',
   countUnavailable: 'Unread Count Unavailable',
   loadingTitle: 'Loading Notifications',
   emptyTitle: 'You Are All Caught Up',
-  emptyHint: 'New workspace updates will appear here when there is something to share.',
+  emptyHint:
+    'New workspace updates will appear here when there is something to share.',
   noResultsTitle: 'No Matching Notifications',
   noResultsHint: 'Try another search or clear your filters to see your inbox.',
   paginationLabel: 'Notification Pages',
-  rangeLabel: (from: number, to: number) => `${from.toLocaleString('en-US')}–${to.toLocaleString('en-US')}`,
+  rangeLabel: (from: number, to: number) =>
+    `${from.toLocaleString('en-US')}–${to.toLocaleString('en-US')}`,
   unknownDate: 'Date Unavailable',
   deliveryTitle: 'Categories And Channels',
-  deliveryDescription: 'Choose a channel for each kind of update. Channel preferences apply to future notifications.',
+  deliveryDescription:
+    'Choose a channel for each kind of update. Channel preferences apply to future notifications.',
   browserTitle: 'Browser Notifications',
-  browserDescription: 'Push preferences choose what can be sent. This browser must also be enabled in Appearance to receive push notifications.',
+  browserDescription:
+    'Push preferences choose what can be sent. This browser must also be enabled in Appearance to receive push notifications.',
   browserAction: 'Manage Browser Notifications',
-  savePreferencesAction: 'Save Preferences', savedPreferencesTitle: 'Preferences Saved',
+  savePreferencesAction: 'Save Preferences',
+  savedPreferencesTitle: 'Preferences Saved',
   discardAction: 'Discard Changes',
   noPreferencesTitle: 'Preferences Unavailable',
-  noPreferencesHint: 'No notification preferences were returned. Refresh to try again.',
+  noPreferencesHint:
+    'No notification preferences were returned. Refresh to try again.',
   timezoneTitle: 'Scheduling Timezone',
-  timezoneDescription: 'Follow this browser’s timezone, or keep a deliberate timezone for scheduled updates. Dates in the workspace still display in your browser’s local time.',
+  timezoneDescription:
+    'Follow this browser’s timezone, or keep a deliberate timezone for scheduled updates. Dates in the workspace still display in your browser’s local time.',
   browserTimezoneLabel: 'Use Browser Timezone',
   timezoneLabel: 'Timezone',
-  saveTimezoneAction: 'Save Timezone', savedTimezoneTitle: 'Timezone Saved',
+  saveTimezoneAction: 'Save Timezone',
+  savedTimezoneTitle: 'Timezone Saved',
   // @sentence-case: Current scheduling and browser detection information.
-  effectiveTimezoneHint: (timezone: string) => `Scheduled updates use ${timezone}.`,
-  detectedTimezoneHint: (timezone: string) => `This browser reports ${timezone}.`,
-  overrideTimezoneHint: 'Your saved timezone stays in effect when your browser’s timezone changes.',
-  automaticTimezoneHint: 'The most recently detected browser timezone is used. UTC is used until a browser timezone is available.',
+  effectiveTimezoneHint: (timezone: string) =>
+    `Scheduled updates use ${timezone}.`,
+  detectedTimezoneHint: (timezone: string) =>
+    `This browser reports ${timezone}.`,
+  overrideTimezoneHint:
+    'Your saved timezone stays in effect when your browser’s timezone changes.',
+  automaticTimezoneHint:
+    'The most recently detected browser timezone is used. UTC is used until a browser timezone is available.',
   unsavedHint: 'You have unsaved changes.',
   savedHint: 'Your saved preferences are active.',
   // @sentence-case: Complete input validation messages.
@@ -9713,23 +10252,30 @@ export const gentlePathNotificationInboxStrings = {
     preferences: 'Use each category and channel once.',
     selection: 'Choose between 1 and 100 distinct notifications.',
     filters: 'Choose at least one restrictive filter.',
-    unavailable: 'This notification is unavailable or no longer belongs to your visible inbox.',
+    unavailable:
+      'This notification is unavailable or no longer belongs to your visible inbox.',
   },
-  // @preserve-case: Illustrative inbox data, owned by local demo accounts.
   demo: {
-    activityTitle: 'A moment to reflect',
-    activityBody: 'Your family journal is ready whenever you want to capture a small win or a difficult moment.',
-    mentionTitle: 'A conversation worth returning to',
-    mentionBody: 'An illustrative mention from the community. Explore the conversations in your local demo workspace.',
-    tagTitle: 'Everyday routines',
-    tagBody: 'Find a resource about building gentler transitions into your day.',
-    updateTitle: 'A little more room to grow',
-    updateBody: 'Your GentlePath workspace brings family profiles, journals, resources, and observations together.',
-    archiveTitle: 'An earlier update',
-    archiveBody: 'This demo notification is archived and stays out of the visible inbox.',
-    scheduledTitle: 'A future update',
-    scheduledBody: 'This demo notification is scheduled and stays out of the visible inbox until it is published.',
-    expiredTitle: 'An expired update',
-    expiredBody: 'This demo notification has expired and stays out of the visible inbox.',
+    activityTitle: 'A Moment To Reflect',
+    activityBody:
+      'Your family journal is ready whenever you want to capture a small win or a difficult moment.',
+    mentionTitle: 'A Conversation Worth Returning To',
+    mentionBody:
+      'An illustrative mention from the community. Explore the conversations in your local demo workspace.',
+    tagTitle: 'Everyday Routines',
+    tagBody:
+      'Find a resource about building gentler transitions into your day.',
+    updateTitle: 'A Little More Room To Grow',
+    updateBody:
+      'Your GentlePath workspace brings family profiles, journals, resources, and observations together.',
+    archiveTitle: 'An Earlier Update',
+    archiveBody:
+      'This demo notification is archived and stays out of the visible inbox.',
+    scheduledTitle: 'A Future Update',
+    scheduledBody:
+      'This demo notification is scheduled and stays out of the visible inbox until it is published.',
+    expiredTitle: 'An Expired Update',
+    expiredBody:
+      'This demo notification has expired and stays out of the visible inbox.',
   },
 } as const;

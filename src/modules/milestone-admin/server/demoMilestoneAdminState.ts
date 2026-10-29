@@ -1,3 +1,4 @@
+import { normalizeContentTags } from '@/utils/normalizeContentTag';
 import 'server-only';
 import {
   gentlePathMilestoneAdminStrings as copy,
@@ -126,6 +127,8 @@ function createState(): DemoMilestoneAdminState {
 }
 export function getDemoMilestoneAdminState() {
   const state = (globalState.gentlePathMilestoneAdminState ??= createState());
+  for (const record of state.milestones)
+    record.tags = normalizeContentTags(record.tags);
   // A running demo may have initialized guidance before the observation module
   // was hot-reloaded. Upgrade only the missing collection and retain all edits.
   state.observations ??= getDemoPortalState().observations.flatMap(

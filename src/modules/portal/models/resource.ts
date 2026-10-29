@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ResourceRatingSummarySchema } from '@/modules/engagement/models/resourceRatingSummary';
 
 export const ResourceCategorySchema = z.enum([
   'everyday',
@@ -15,6 +16,7 @@ export const ResourceSchema = z.object({
   readMinutes: z.number().nonnegative(),
   body: z.string(),
   saved: z.boolean(),
+  ratings: ResourceRatingSummarySchema.default({ count: 0, average: null }),
   sourceName: z.string().nullable().optional(),
   sourceUrl: z.string().nullable().optional(),
   sourcePublishedAt: z.string().nullable().optional(),

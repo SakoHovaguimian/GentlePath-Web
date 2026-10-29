@@ -82,14 +82,15 @@ export function MilestoneCard({ milestone, childId }: MilestoneCardProps) {
           </p>
         )}
         <Button
-          variant="secondary"
+          variant="primary"
           disabled={!activeOptions.length}
           onClick={() => setEditor(true)}
         >
           <UiIcon name="plus" />
           {copy.observationTitle}
         </Button>
-        <Button variant="ghost" onClick={() => setHistory(true)}>
+        <Button variant="secondary" onClick={() => setHistory(true)}>
+          <UiIcon name="clock" />
           {copy.observationHistory}
         </Button>
         <div className="flex flex-wrap items-center gap-2 border-t border-secondary pt-4">

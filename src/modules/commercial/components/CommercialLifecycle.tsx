@@ -129,7 +129,7 @@ export function CommercialLifecycle({
         description: copy.enableDescription,
         confirmLabel: record.is_enabled ? copy.disable : copy.enable,
         cancelLabel: copy.cancel,
-        tone: 'warning',
+        tone: record.is_enabled ? 'danger' : 'info',
       }))
     )
       return;
@@ -238,6 +238,11 @@ export function CommercialLifecycle({
             )}
             <Button
               type="submit"
+              variant={
+                chosen === 'REJECTED' || chosen === 'SUSPENDED'
+                  ? 'destructive'
+                  : 'primary'
+              }
               className="justify-self-start"
               loading={review.isPending}
             >
@@ -249,7 +254,7 @@ export function CommercialLifecycle({
         {['offers', 'campaigns', 'creatives'].includes(entity) &&
           'is_enabled' in record && (
             <Button
-              variant="secondary"
+              variant={record.is_enabled ? 'destructive' : 'secondary'}
               className="justify-self-start"
               loading={enable.isPending}
               disabled={pending}

@@ -1,3 +1,4 @@
+import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { PollSelectionModeSchema } from './pollSelectionMode';
 import { gentlePathPollStrings as copy } from '@/strings';
@@ -10,7 +11,7 @@ export const PollQuerySchema = PollPagingSchema.extend({
   query: z.string().trim().max(500).default(''),
   selectionMode: PollSelectionModeSchema.optional(),
   scope: z.enum(['all', 'mine']).default('all'),
-  tag: z.string().trim().max(100).default(''),
+  tag: z.string().trim().max(100).default('').transform(normalizeContentTag),
   createdAfter: z.iso.datetime({ offset: true }).optional(),
   createdBefore: z.iso.datetime({ offset: true }).optional(),
 }).refine(

@@ -68,7 +68,7 @@ function PollDetail({ poll, returnTo }: { poll: Poll; returnTo: string }) {
                   {copy.editPoll}
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant="destructive"
                   disabled={!writable}
                   loading={remove.isPending}
                   onClick={() => {

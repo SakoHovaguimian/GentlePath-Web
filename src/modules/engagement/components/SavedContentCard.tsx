@@ -41,7 +41,7 @@ export function SavedContentCard({ item }: { item: SavedContent }) {
           </Button>
         )}
         <Button
-          variant="ghost"
+          variant="destructive"
           loading={mutation.isPending}
           onClick={async () => {
             try {

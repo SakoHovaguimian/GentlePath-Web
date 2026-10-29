@@ -1,6 +1,9 @@
 export * from './components/AlertModal';
+export * from './components/Accordion';
+export type { AccordionItem } from './models/accordionItem';
 export * from './components/NavigationLink';
 export * from './components/Button';
+export * from './components/ReactionButton';
 export * from './components/Card';
 export * from './components/DataTable';
 export * from './components/Input';
@@ -105,3 +108,5 @@ export * from './components/AddressSelect';
 export type { DirectoryPage } from './models/directoryPage';
 
 export * from './components/InitialsAvatar';
+export * from './components/StarRating';
+export * from './components/RatingSummary';

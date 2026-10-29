@@ -29,7 +29,7 @@ export function useUnsavedFormGuard(
         const confirmation = showAlert({
           title: strings.common.unsavedTitle,
           description,
-          tone: 'warning',
+          tone: 'danger',
           confirmLabel: strings.common.discardChanges,
           cancelLabel: strings.common.keepEditing,
         });

@@ -462,7 +462,7 @@
   line-height: 1.5;
 }
 
-.gp-stories-copy .gp-text-link {
+.gp-stories-copy .gp-stories-action {
   margin-top: 1.65rem;
 }
 
@@ -491,45 +491,38 @@
   background: var(--gp-paper);
 }
 
-.gp-question summary {
+.gp-question .ui-accordion-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
   min-height: 5rem;
-  padding-block: 1.1rem;
+  padding: 1.1rem 0;
   color: var(--gp-forest);
   font-size: 1rem;
   font-weight: 500;
-  list-style: none;
   cursor: pointer;
 }
 
-.gp-question summary::-webkit-details-marker {
-  display: none;
-}
-
-.gp-question summary:hover {
+.gp-question .ui-accordion-trigger:hover {
   color: var(--gp-plum);
 }
 
-.gp-question summary:active {
+.gp-question .ui-accordion-trigger:active {
   opacity: 0.7;
 }
 
-.gp-question summary svg {
+.gp-question .ui-accordion-trigger svg {
   width: 1.25rem;
   height: 1.25rem;
   flex: none;
-  transition: transform var(--motion-duration-base) ease;
 }
 
-.gp-question[open] summary svg {
-  transform: rotate(45deg);
+.gp-question .ui-accordion-panel-content {
+  padding: 0 2rem 1.35rem 0;
 }
 
 .gp-question p {
-  padding: 0 2rem 1.35rem 0;
   color: var(--gp-muted);
   font-size: 1rem;
   line-height: 1.8;
@@ -820,7 +813,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .gp-text-link svg,
-  .gp-question summary svg {
+  .gp-question .ui-accordion-trigger svg {
     transition: none;
   }
 
@@ -831,7 +824,7 @@
 }
 
 html[data-motion='reduced'] .gp-text-link svg,
-html[data-motion='reduced'] .gp-question summary svg {
+html[data-motion='reduced'] .gp-question .ui-accordion-trigger svg {
   transition: none;
 }
 

@@ -95,7 +95,7 @@ export function PlacementItemsEditor({ placement }: PlacementItemsEditorProps) {
         description: copy.deleteDescription(item.creative_id),
         confirmLabel: copy.removeItem,
         cancelLabel: copy.cancel,
-        tone: 'warning',
+        tone: 'danger',
       }))
     )
       return;
@@ -177,7 +177,7 @@ export function PlacementItemsEditor({ placement }: PlacementItemsEditorProps) {
                     {controls}
                     <Button
                       type="button"
-                      variant="ghost"
+                      variant="destructive"
                       disabled={save.isPending}
                       onClick={() => {
                         void removeItem(item);

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { UiIcon } from '@/components/ui';
+import { UiIcon, buttonClassName } from '@/components/ui';
 import { gentlePathLandingStrings as copy } from '@/strings';
 
 export function LandingStories() {
@@ -27,7 +27,13 @@ export function LandingStories() {
             <span key={topic}>{topic}</span>
           ))}
         </div>
-        <Link href="/blog" className="gp-text-link">
+        <Link
+          href="/blog"
+          className={buttonClassName(
+            'primary',
+            'gp-button gp-button-large gp-stories-action',
+          )}
+        >
           {copy.stories.primaryAction}
           <UiIcon name="arrowRight" />
         </Link>

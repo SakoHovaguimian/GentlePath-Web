@@ -1,45 +1,62 @@
 # Architecture
 
-GentlePath is one npm application. There are no workspace packages, generated API SDK, controller adapters, or repositories.
+GentlePath is one npm application. Domain services orchestrate requests; API clients handle transport; server adapters bridge the actual backend. There is no web repository/controller layer or generated API SDK.
 
-```text
-src/app                   route composition, layouts, auth handlers, backend proxy
-src/modules/<domain>      screens, hooks, domain services, domain-specific models
-src/services              API, auth, session, demo, realtime, notifications, analytics, privacy
-src/models                shared, independent domain schemas and types
-src/clientContainer.ts    browser service construction
-src/publicClientContainer.ts optional-account public article service construction
-src/container.ts          server service construction and demo/live selection
-src/components/ui         shared components and shell
-src/presentation          canonical toast, alert, sheet service
-src/strings.ts            all authored display copy
-```
+## Source Map
 
-## Browser data flow
+| Owner | Responsibility |
+| --- | --- |
+| `src/app/` | Routes, layouts, metadata, auth handlers, public reads, authenticated proxy |
+| `src/modules/<domain>/` | Screens/components, hooks, domain services, feature models, demo/live adapters |
+| `src/services/` | API/auth/session/runtime, shared demo dispatch, realtime, Messaging, analytics, privacy |
+| `src/models/` | Shared schemas and types; transport-only models stay with their transport owner |
+| `src/clientContainer.ts` | Browser service construction |
+| `src/publicClientContainer.ts` | Optional-account article actions without protected-shell dependencies |
+| `src/container.ts` | Server construction and effective demo/live service selection |
+| `src/components/ui/` | Shared controls, layouts, interaction primitives |
+| `src/presentation/` | Queued alerts, sheets, and toasts |
+| `src/strings.ts` | Every authored display string |
 
-Screen → query/mutation hook → domain service → `BrowserApiClient` → `/api/backend/*` → session verification/refresh → live API or `DemoApiClient`.
+## Request And Trust Boundaries
 
-Domain services validate mutation inputs, encode paths/query parameters, and map transport data to domain models. The proxy supplies authentication; browser-supplied ownership or authorization headers are never forwarded. The real backend remains authoritative for permissions. The demo API enforces current-user ownership itself.
+**Screen → query/mutation hook → domain service → BrowserApiClient → `/api/backend/*` → trusted session → live adapter/API or DemoApiClient.**
 
-The browser calls Firebase only for opt-in Messaging. It never receives access/refresh tokens or calls Firebase Authentication. Client code imports public session models, never server containers or environment.
+Services accept `ApiClientInterface`, validate inputs/responses with Zod, and encode paths/query parameters. Browser input never establishes ownership or authorization. The proxy supplies credentials; canonical backend permissions and demo ownership checks remain independent of UI controls. See [integrations](INTEGRATIONS.md).
 
-## Server composition
+Root layout projects public runtime configuration. Protected layouts read the private session and pass a token-free `AppSession`; they do not write cookies. Route Handlers own refresh/cookie writes. `proxy.ts` gates navigation; API routes independently authenticate.
 
-Root layout passes only a public runtime configuration to `RuntimeProvider`. Protected layouts read the encrypted cookie and pass a token-free `AppSession` to `AppProviders`. They never write cookies. Query loading occurs through the browser proxy, which can safely refresh cookies in a Route Handler. `proxy.ts` provides navigation gating; API routes independently verify sessions.
+`getContainer()` caches separate live/demo containers but selects them from each request's effective server runtime. Auth, sessions, public article reads, proxying, and Messaging configuration use the same decision. Mode changes require a new session. A browser fixture flag never selects business behavior.
 
-`getContainer()` in `container.ts` selects separate cached live/demo service containers from the request’s effective server runtime. `DEMO_MODE` is the default; an HTTP-only preference can override it only in development or an explicitly enabled demo server. The root layout, encrypted session codec, auth routes, backend proxy, public blog adapter, and Messaging worker use that same decision. No browser fixture flag selects business behavior. Mode switches invalidate the old session. See [demo mode](DEMO_MODE.md).
+Public landing/blog routes stay outside the protected layout. Blog SSR uses published-only endpoints without session refresh. Optional article likes/saves use the public client container and an API client that does not redirect anonymous readers on 401.
 
-Public `/` and `/blog` sit outside the authenticated layout. The public blog service uses the server API client and published-only endpoints without session tokens; authenticated editorial changes use the normal domain service → BrowserApiClient → backend proxy path. Developer configuration has a separate authenticated `/api/dev-settings` boundary, gated off in production live mode; recovery only enables demo routing and never grants identity or a role.
+## State Ownership
 
-Public article likes and saves use a focused client container and query provider without mounting the protected shell. Its canonical API client disables automatic navigation on HTTP 401, allowing anonymous readers to receive a sign-in action while the article remains readable. Account writes still go through the authenticated proxy and never grant anonymous access. Public SSR remains independent of authentication.
+| State | Owner |
+| --- | --- |
+| Backend records, status, cache, invalidation | TanStack Query |
+| Committed nonprivate filters, selection, paging | URL |
+| Private journal search, forms, disclosure, pending UI | Component state |
+| Existing dashboard density/chrome | Zustand |
+| Appearance/motion, consent, per-user push opt-in/registration | Preference services/browser storage |
+| Demo records and credentials | Server-process stores |
 
-## State ownership
+Never put auth tokens or private drafts in browser storage. Use stable query keys containing every filter/page/identity that changes results. Pass AbortSignal through reads. Mutations invalidate authoritative detail/list keys and affected summaries; realtime invalidates those same keys. Logout clears account query data. Current defaults retain fresh reads for 30 seconds and inactive results for five minutes.
 
-- TanStack Query: server data, request status, cache and mutation invalidation.
-- URL: committed filters, selected dashboard model, list query.
-- Component state: forms, disclosure, pending UI.
-- Zustand: existing dashboard density/chrome only; do not duplicate server data there.
-- Local storage: appearance and motion, consent choice, per-user push opt-in and FCM registration identifier. Never auth tokens.
-- Server process: demo records and demo credentials. Live data lives on the backend.
+Client-only filters use Next's supported History API integration; filters consumed by server route props use router pushes. Both create history entries. Keep private searches out of URLs. Preserve safe mounted drafts during transient refetch failures; 401/403/404 remain authoritative.
 
-The custom UI system in `src/components/ui` includes the reusable LeafLaunch foundation. Theme CSS is canonical; preference services are constructed in the client container, and shared providers own appearance/motion/navigation/assistant presentation. Components receive callbacks; server data stays in domain services and query hooks. See [UI system](UI_SYSTEM.md) and [migration decisions](MIGRATION.md).
+## Models And Coding
+
+Use strict TypeScript, descriptive camelCase values, PascalCase components, and the root Prettier configuration. Split independent schemas/models into files; keep an inferred type and directly derived inputs with their schema. Keep shared types in `src/models`, feature-only types in their module, and upstream DTOs in the owning API/server models directory.
+
+Parse external data before use. Validate browser input for feedback and server input for trust. Show catalog-backed safe errors instead of unknown exceptions, raw upstream bodies, or secrets. Keep imports of environment, private sessions, and server containers out of client graphs; server integration files use `server-only`.
+
+## Extend A Feature
+
+1. Search for the closest existing model, service, hook, component, and string. [Feature requests](../src/modules/feature-requests/) is a small service/hook example; use the nearest domain for lifecycle rules.
+2. Add the domain model/input and service method; register new services in the correct container. Routes compose screens rather than orchestrate API work.
+3. Define stable query keys and mutation invalidation. Keep loading, retry, empty/no-results, pending, and successful states explicit.
+4. If the browser facade differs from the actual API, add a server-only module adapter and register it in [featureBackendProxy](../src/services/api/featureBackendProxy.ts). Return `null` for unrelated paths. Preserve the backend's page contract and derive actor IDs from the trusted session.
+5. Add matching demo operations, ownership/role validation, scenario behavior, and reset registration. Never simulate a live success by falling back to fixtures.
+6. Reuse [shared UI](UI_SYSTEM.md), [centralized strings](STRINGS.md), and the [product lifecycle](GENTLEPATH.md). Run the applicable [verification](VERIFICATION.md).
+
+Infrastructure integrations belong in `src/services/<capability>` and receive dependencies through a container. Document initialization, cancellation, retry, cleanup, and demo isolation. Interfaces are useful for actual alternative implementations, not as an extra abstraction around every class.

@@ -19,7 +19,7 @@ export function SavedContentButton({
   return (
     <div className="grid gap-2">
       <Button
-        variant={saved ? 'secondary' : 'primary'}
+        variant={saved ? 'destructive' : 'primary'}
         loading={query.isPending || mutation.isPending}
         disabled={query.isError}
         aria-pressed={saved}
@@ -40,7 +40,7 @@ export function SavedContentButton({
           }
         }}
       >
-        <UiIcon name={saved ? 'check' : 'pin'} className="size-4" />
+        <UiIcon name={saved ? 'trash' : 'pin'} className="size-4" />
         {saved ? copy.unsave : copy.save}
       </Button>
       {query.isError && (

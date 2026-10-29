@@ -4,6 +4,7 @@ import { getDemoBlogState } from '@/services/demo/demoBlogState';
 import { getDemoState } from '@/services/demo/demoState';
 import type { SavedContentType } from '../models/savedContentType';
 import type { SavedContent } from '../models/savedContent';
+import type { ResourceRatingSummary } from '../models/resourceRatingSummary';
 import type { DemoEngagementState } from './models/demoEngagementState';
 import { demoSavedTarget } from './demoSavedTarget';
 const globalEngagement = globalThis as typeof globalThis & {
@@ -108,6 +109,31 @@ export function getDemoSavedContent(userId: string): SavedContent[] {
 }
 export function getDemoSavedCount(userId: string) {
   return getDemoSavedContent(userId).length;
+}
+/** Batch projection for resource directories; account identities never enter the result. */
+export function getDemoResourceRatingSummaries(): Map<
+  string,
+  ResourceRatingSummary
+> {
+  const activeIds = new Set(
+    getDemoState()
+      .users.filter((user) => !user.deleted)
+      .map((user) => user.id),
+  );
+  const totals = new Map<string, { count: number; total: number }>();
+  for (const rating of getDemoEngagementState().ratings) {
+    if (!activeIds.has(rating.userId)) continue;
+    const current = totals.get(rating.resourceId) ?? { count: 0, total: 0 };
+    current.count += 1;
+    current.total += rating.rating;
+    totals.set(rating.resourceId, current);
+  }
+  return new Map(
+    [...totals].map(([id, value]) => [
+      id,
+      { count: value.count, average: value.total / value.count },
+    ]),
+  );
 }
 export function getDemoResourceEngagement(userId: string, id: string) {
   const activeIds = new Set(

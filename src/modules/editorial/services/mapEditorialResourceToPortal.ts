@@ -28,6 +28,7 @@ export function mapEditorialResourceToPortal(
     body:
       typeof metadata.body === 'string' ? metadata.body : resource.description,
     saved,
+    ratings: resource.ratings ?? { count: 0, average: null },
     parentId: resource.parent_id,
     resourceType: resource.type,
     sourceName: resource.resource_details.source_name,

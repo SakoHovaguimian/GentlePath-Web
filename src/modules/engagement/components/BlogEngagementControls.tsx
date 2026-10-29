@@ -9,7 +9,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { Button, UiIcon } from '@/components/ui';
+import { Button, ReactionButton, UiIcon } from '@/components/ui';
 import { createQueryClient } from '@/lib/client/queryClient';
 import { createPublicEngagementService } from '@/publicClientContainer';
 import { DomainError } from '@/errors/domainErrors';
@@ -86,11 +86,11 @@ function ArticleActions({
       className="my-6 grid min-h-20 gap-3 rounded-xl border border-secondary bg-secondary_subtle p-4 sm:p-6"
     >
       <div className="flex flex-wrap items-center gap-3">
-        <Button
-          variant={query.data?.liked ? 'secondary' : 'ghost'}
+        <ReactionButton
+          liked={query.data?.liked ?? false}
+          label={query.data?.liked ? copy.unlike : copy.like}
           loading={query.isPending || like.isPending}
           disabled={!query.data || (busy && !like.isPending)}
-          aria-pressed={query.data?.liked ?? false}
           onClick={async () => {
             if (!query.data || busy) return;
             try {
@@ -99,10 +99,7 @@ function ArticleActions({
               /* Inline recovery. */
             }
           }}
-        >
-          <UiIcon name="heart" className="size-4" />
-          {query.data?.liked ? copy.unlike : copy.like}
-        </Button>
+        />
         <span
           role="status"
           aria-live="polite"

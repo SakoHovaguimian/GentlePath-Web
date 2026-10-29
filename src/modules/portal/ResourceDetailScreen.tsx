@@ -20,6 +20,7 @@ import { useResources, useSaveResource } from './hooks';
 import { MutationError } from './components/MutationError';
 import { getResourceArtwork } from './components/resourceArtwork';
 import { ResourceRatingControl } from '@/modules/engagement/components/ResourceRatingControl';
+import { ResourceRatingSummary } from '@/modules/engagement/components/ResourceRatingSummary';
 import { ResourceProvenance } from '@/modules/editorial/components/ResourceProvenance';
 import './styles/portal.css';
 
@@ -55,9 +56,24 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                 { label: resource.title },
               ]}
               eyebrow={copy.resources.categories[resource.category]}
+              meta={
+                <>
+                  <Badge>{copy.resources.formats[resource.format]}</Badge>
+                  <span className="inline-flex items-center gap-2">
+                    <UiIcon name="clock" className="size-4" />
+                    {copy.common.minutes(resource.readMinutes)}
+                  </span>
+                  <ResourceRatingSummary ratings={resource.ratings} />
+                  {demoMode && (
+                    <span className="text-xs text-tertiary">
+                      {copy.resources.sampleHint}
+                    </span>
+                  )}
+                </>
+              }
               action={
                 <Button
-                  variant={resource.saved ? 'secondary' : 'primary'}
+                  variant={resource.saved ? 'destructive' : 'primary'}
                   loading={mutation.isPending}
                   aria-pressed={resource.saved}
                   onClick={async () => {
@@ -77,7 +93,7 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                     }
                   }}
                 >
-                  <UiIcon name={resource.saved ? 'check' : 'plus'} />
+                  <UiIcon name={resource.saved ? 'trash' : 'plus'} />
                   {resource.saved ? copy.resources.unsave : copy.resources.save}
                 </Button>
               }
@@ -97,18 +113,6 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                 sizes="(max-width: 767px) 100vw, 70vw"
                 priority
               />
-            </div>
-            <div className="gp-resource-detail__meta">
-              <Badge>{copy.resources.formats[resource.format]}</Badge>
-              <span className="inline-flex items-center gap-2">
-                <UiIcon name="clock" className="size-4" />
-                {copy.common.minutes(resource.readMinutes)}
-              </span>
-              {demoMode && (
-                <span className="text-xs text-tertiary">
-                  {copy.resources.sampleHint}
-                </span>
-              )}
             </div>
             <ResourceProvenance resource={resource} resources={resources} />
             <Card className="gp-resource-detail__body">

@@ -9,6 +9,10 @@ import {
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { UserRoleSchema } from '@/models/userRole';
+import {
+  canManageContent,
+  canManagePlatform,
+} from '@/services/auth/permissions';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import type { ManagedUser } from '../models/managedUser';
 import { useUpdateManagedUser } from '../adminHooks';
@@ -24,6 +28,10 @@ export function ManagedUserEditor({
 }) {
   const [role, setRole] = useState(user.role);
   const [enabled, setEnabled] = useState(!user.disabled);
+  const restrictsAccess =
+    (!enabled && !user.disabled) ||
+    (canManageContent(user.role) && !canManageContent(role)) ||
+    (canManagePlatform(user.role) && !canManagePlatform(role));
   const mutation = useUpdateManagedUser();
   const { showAlert, showToast } = usePresentationService();
   return (
@@ -45,7 +53,7 @@ export function ManagedUserEditor({
             !(await showAlert({
               title: copy.people.confirmTitle,
               description: copy.people.confirmDescription,
-              tone: 'warning',
+              tone: restrictsAccess ? 'danger' : 'info',
               confirmLabel: copy.people.confirmAction,
               cancelLabel: copy.common.cancel,
             }))
@@ -103,6 +111,7 @@ export function ManagedUserEditor({
           </Button>
           <Button
             type="submit"
+            variant={restrictsAccess ? 'destructive' : 'primary'}
             loading={mutation.isPending}
             disabled={role === user.role && enabled === !user.disabled}
           >

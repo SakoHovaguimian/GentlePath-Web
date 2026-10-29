@@ -9,7 +9,6 @@ import { ThemeToggle } from '@/modules/settings/components/ThemeToggle';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { ShellActions } from '@/components/ShellActions';
 import { GentlePathBrand } from '@/components/GentlePathBrand';
-import { SidebarCareNote } from '@/components/SidebarCareNote';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { portalNavigation } from '@/modules/portal/portalNavigation';
@@ -58,7 +57,6 @@ export function ProtectedShell({
         navigationLabel={
           adminArea ? copy.navigation.adminGroup : copy.navigation.familyGroup
         }
-        supportSlot={<SidebarCareNote />}
         bannerSlot={
           runtime.demoMode ? (
             <p className="m-0 flex flex-wrap items-center gap-2 text-xs text-tertiary">

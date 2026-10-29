@@ -1,3 +1,4 @@
+import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import { CommunityAuthorSchema } from './communityAuthor';
@@ -22,11 +23,15 @@ export const CommunityPostInputSchema = z
           .string()
           .trim()
           .min(1, copy.validation.tags)
-          .max(100, copy.validation.tags),
+          .max(100, copy.validation.tags)
+          .transform(normalizeContentTag)
+          .refine((tag) => tag.length <= 100, copy.validation.tags),
       )
       .max(30, copy.validation.tags)
       .refine(
-        (tags) => new Set(tags).size === tags.length,
+        (tags) =>
+          new Set(tags.map((tag) => tag.toLocaleLowerCase('en-US'))).size ===
+          tags.length,
         copy.validation.tags,
       ),
   })

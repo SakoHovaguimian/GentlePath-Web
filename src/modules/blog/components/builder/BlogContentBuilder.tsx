@@ -48,7 +48,7 @@ export function BlogContentBuilder({
       description: copy.removeDescription,
       confirmLabel: copy.remove,
       cancelLabel: copy.keep,
-      tone: 'warning',
+      tone: 'danger',
     });
     if (confirmed)
       onChangeAction(content.filter((item) => item.id !== block.id));
@@ -103,7 +103,7 @@ export function BlogContentBuilder({
                     {controls}
                     <IconButton
                       label={copy.removeLabel(copy.types[block.contentType])}
-                      variant="ghost"
+                      variant="destructive"
                       disabled={disabled}
                       onClick={() => void remove(block)}
                     >

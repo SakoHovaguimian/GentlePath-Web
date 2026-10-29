@@ -1,9 +1,11 @@
+import { normalizeContentTags } from '@/utils/normalizeContentTag';
 import 'server-only';
 import { getDemoPortalState } from '@/services/demo/demoPortalState';
 import { getDemoState } from '@/services/demo/demoState';
 import { gentlePathEditorialStrings as copy } from '@/strings';
 import type { DemoEditorialState } from '../models/demoEditorialState';
 import { mapEditorialResourceToPortal } from '../services/mapEditorialResourceToPortal';
+import { getDemoResourceRatingSummaries } from '@/modules/engagement/demo/engagementState';
 
 const globalEditorial = globalThis as typeof globalThis & {
   gentlePathEditorialState?: DemoEditorialState;
@@ -80,7 +82,10 @@ function createState(): DemoEditorialState {
 }
 
 export function getDemoEditorialState(): DemoEditorialState {
-  return (globalEditorial.gentlePathEditorialState ??= createState());
+  const state = (globalEditorial.gentlePathEditorialState ??= createState());
+  for (const record of state.resources)
+    record.tags = normalizeContentTags(record.tags);
+  return state;
 }
 
 export function getVisibleDemoResources() {
@@ -94,8 +99,10 @@ export function getVisibleDemoResources() {
     );
   };
   const resources = state.resources.filter((resource) => visible(resource.id));
+  const ratingSummaries = getDemoResourceRatingSummaries();
   return resources.map((resource) => ({
     ...resource,
+    ratings: ratingSummaries.get(resource.id) ?? { count: 0, average: null },
     children_count: resources.filter((item) => item.parent_id === resource.id)
       .length,
   }));

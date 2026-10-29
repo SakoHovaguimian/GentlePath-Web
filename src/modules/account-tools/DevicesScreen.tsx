@@ -160,7 +160,7 @@ export function DevicesScreen() {
                     header: copy.common.actionsColumn,
                     render: (device) => (
                       <Button
-                        variant="secondary"
+                        variant="destructive"
                         disabled={remove.isPending}
                         onClick={() => void removeDevice(device)}
                       >
@@ -189,7 +189,7 @@ export function DevicesScreen() {
                     }
                     footer={
                       <Button
-                        variant="secondary"
+                        variant="destructive"
                         disabled={remove.isPending}
                         onClick={() => void removeDevice(device)}
                       >
