@@ -5,6 +5,7 @@ import type {
 } from './apiClientInterface';
 import { parseApiResponse } from './response';
 export class BrowserApiClient implements ApiClientInterface {
+  constructor(private readonly prefix = '/api/backend') {}
   async request<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
     if (!path.startsWith('/') || path.startsWith('//') || path.includes('\\'))
       throw new Error(strings.errors.invalidPath);
@@ -12,7 +13,7 @@ export class BrowserApiClient implements ApiClientInterface {
     headers.set('accept', 'application/json');
     if (options.body !== undefined)
       headers.set('content-type', 'application/json');
-    const response = await fetch(`/api/backend${path}`, {
+    const response = await fetch(`${this.prefix}${path}`, {
       ...options,
       headers,
       body:

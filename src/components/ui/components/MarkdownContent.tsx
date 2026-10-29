@@ -7,7 +7,18 @@ import { strings } from '@/strings';
 import styles from './MarkdownContent.module.css';
 
 // Share rendering between previews and saved legal readers. Never fetch embeds.
-export function MarkdownContent({ value }: { value: string }) {
+export function MarkdownContent({
+  value,
+  headingContext = 'nested',
+}: {
+  value: string;
+  headingContext?: 'nested' | 'article';
+}) {
+  const Heading1 = headingContext === 'article' ? 'h2' : 'h3';
+  const Heading2 = headingContext === 'article' ? 'h2' : 'h4';
+  const Heading3 = headingContext === 'article' ? 'h3' : 'h5';
+  const Heading4 = headingContext === 'article' ? 'h4' : 'h6';
+  const Heading5 = headingContext === 'article' ? 'h5' : 'h6';
   const id = useId();
   const prefix = `markdown-${id.replace(/[^a-zA-Z0-9]/g, '')}-`;
   return (
@@ -25,18 +36,22 @@ export function MarkdownContent({ value }: { value: string }) {
           /^(?:https?:\/\/|mailto:|#)/i.test(url) ? url : ''
         }
         components={{
-          h1: ({ children }) => <h3 className={styles.heading1}>{children}</h3>,
+          h1: ({ children }) => (
+            <Heading1 className={styles.heading1}>{children}</Heading1>
+          ),
           h2: ({ children, id }) => (
-            <h4
+            <Heading2
               id={id === 'footnote-label' ? `${prefix}footnote-label` : id}
               className={styles.heading2}
             >
               {children}
-            </h4>
+            </Heading2>
           ),
-          h3: ({ children }) => <h5 className={styles.heading3}>{children}</h5>,
-          h4: ({ children }) => <h6>{children}</h6>,
-          h5: ({ children }) => <h6>{children}</h6>,
+          h3: ({ children }) => (
+            <Heading3 className={styles.heading3}>{children}</Heading3>
+          ),
+          h4: ({ children }) => <Heading4>{children}</Heading4>,
+          h5: ({ children }) => <Heading5>{children}</Heading5>,
           h6: ({ children }) => <h6>{children}</h6>,
           a: ({ href, children, id, ...props }) =>
             href ? (

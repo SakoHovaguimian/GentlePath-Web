@@ -8,5 +8,5 @@ export const AppearancePreferenceSchema = z.object({
 export type AppearancePreference = z.infer<typeof AppearancePreferenceSchema>;
 export const defaultAppearancePreference: AppearancePreference = {
   mode: 'light',
-  accent: 'aqua',
+  accent: 'brand',
 };

@@ -5924,8 +5924,9 @@ export const strings = {
   },
   app: {
     backToWorkspace: 'Back To Workspace',
-    name: 'Portal',
-    description: 'Your workspace for people, requests, and conversations.',
+    name: 'GentlePath',
+    description:
+      'A thoughtful family space for reflections, resources, and small steps.',
   },
   // @sentence-case: Validation and error messages are complete sentences.
   errors: {
@@ -5935,9 +5936,9 @@ export const strings = {
     forbidden: 'You do not have permission to perform this action.',
     sessionExpired: 'Your session has expired. Sign in again.',
     notFound: 'This item could not be found.',
-    untrusted: 'This request did not originate from Portal.',
+    untrusted: 'This request did not originate from GentlePath.',
     invalidPath: 'Invalid API path.',
-    configuration: 'Portal is not configured for this service.',
+    configuration: 'GentlePath is not configured for this service.',
     unexpected: 'Something went wrong. Please try again.',
     provider: 'This component must be rendered inside its provider.',
   },
@@ -6108,7 +6109,7 @@ export const strings = {
       navProducts: 'Products',
       navUsers: 'Users',
       navCategories: 'Categories',
-      navigation: 'Portal Navigation',
+      navigation: 'GentlePath Navigation',
       openNavigation: 'Open Navigation Menu',
       closeNavigation: 'Close Navigation Menu',
     },
@@ -7323,4 +7324,971 @@ export const labels = {
     top: 'Top Panel',
     bottom: 'Bottom Panel',
   },
+} as const;
+
+export const gentlePathDemoStrings = {
+  title: 'Developer Settings',
+  description:
+    'Explore GentlePath with disposable demo accounts, private sample data, and controlled response states.',
+  runtimeTitle: 'Runtime',
+  runtimeDescription:
+    'Choose the server services used by this browser. Changing modes signs you out so the next session uses the selected environment.',
+  demoModeLabel: 'Demo Mode',
+  demoModeDescription:
+    'Use local demo authentication and data. External integrations stay disabled.',
+  demoModeStatus: 'Demo Services Active',
+  liveModeStatus: 'Live Services Active',
+  scenarioTitle: 'Response Simulation',
+  scenarioDescription:
+    'Exercise real request loading, empty results, failure recovery, and populated data without changing the saved records.',
+  scenarioLabel: 'Response State',
+  scenarios: {
+    populated: 'Populated',
+    loading: 'Loading',
+    empty: 'Empty',
+    error: 'Error',
+  },
+  latencyLabel: 'Response Delay',
+  latencyOptions: {
+    instant: 'No Delay',
+    normal: '350 Milliseconds',
+    slow: '1 Second',
+    slower: '3 Seconds',
+    maximum: '5 Seconds',
+  },
+  applyAction: 'Apply Settings',
+  savedTitle: 'Settings Applied',
+  savedDescription: 'New requests now use these server settings.',
+  roleTitle: 'Demo Account',
+  roleDescription:
+    'Switch to a separate sample identity. Each account keeps its own journal, child profiles, observations, and favorites.',
+  roleLabel: 'Account Role',
+  roles: { user: 'User', admin: 'Admin', superadmin: 'SuperAdmin' },
+  switchAction: 'Switch Account',
+  roleConfirmationTitle: 'Switch Demo Account',
+  roleConfirmationDescription:
+    'A new demo session will replace this session. Unsaved changes on other pages will be lost.',
+  roleUnavailableDescription:
+    'Account switching is available while demo mode is active.',
+  resetTitle: 'Reset Demo Data',
+  resetDescription:
+    'Restore the original sample records and account roles for this local server. All demo browsers share this disposable state.',
+  resetAction: 'Reset Demo Data',
+  resetConfirmationTitle: 'Reset Shared Demo Data',
+  resetConfirmationDescription:
+    'This removes sample edits, new demo accounts, journals, children, observations, favorites, and blog changes from every browser using this server. The original demo records will be restored.',
+  resetSuccessTitle: 'Demo Data Reset',
+  cancelAction: 'Cancel',
+  errorTitle: 'Settings Could Not Be Applied',
+  errorDescription:
+    'Keep your settings and try again. If your session expired, sign in again.',
+  retryAction: 'Try Again',
+  // @sentence-case: Complete runtime or validation message.
+  simulatedError:
+    'The demo response is temporarily unavailable. Change the response state to recover.',
+  // @sentence-case: Complete runtime or validation message.
+  unavailable: 'Developer settings are unavailable in this environment.',
+  // @sentence-case: Complete runtime or validation message.
+  demoRequired: 'Enable demo mode before using this control.',
+  // @sentence-case: Complete runtime or validation message.
+  superadminRequired:
+    'Only a superadmin can change platform settings or account permissions.',
+  // @sentence-case: Complete runtime or validation message.
+  protectedSuperadmin:
+    'Your account and the final active superadmin cannot be disabled or demoted.',
+  // @sentence-case: Complete runtime or validation message.
+  invalidChild: 'Choose a child profile from your own account.',
+  // @sentence-case: Complete runtime or validation message.
+  invalidDate: 'Choose a valid date of birth that is not in the future.',
+  // @sentence-case: Complete runtime or validation message.
+  invalidResolution: 'Describe how the report was reviewed before closing it.',
+  // @sentence-case: Complete runtime or validation message.
+  accountUnavailable:
+    'The selected demo account is unavailable. Reset the demo data to restore the sample accounts.',
+  // @sentence-case: Complete runtime or validation message.
+  registrationPaused: 'New account registration is temporarily paused.',
+  // @sentence-case: Complete runtime or validation message.
+  maintenanceActive:
+    'GentlePath is taking a short maintenance pause. Please try again later.',
+  // @sentence-case: Complete runtime or validation message.
+  communityPaused: 'Community messages are temporarily paused.',
+  // @preserve-case: Demo credential; spelling must remain exact.
+  seedPassword: 'password123',
+  // @preserve-case: Sample account data retains its original spelling.
+  accounts: {
+    user: {
+      firstName: 'Sam',
+      lastName: 'Rivera',
+      email: 'user@gentlepath.demo',
+    },
+    admin: {
+      firstName: 'Alex',
+      lastName: 'Chen',
+      email: 'admin@gentlepath.demo',
+    },
+    superadmin: {
+      firstName: 'Jordan',
+      lastName: 'Morgan',
+      email: 'superadmin@gentlepath.demo',
+    },
+  },
+  childName: 'Jamie',
+  // @preserve-case: Private demo note content retains its authored case.
+  childNotes:
+    'Enjoys quiet mornings, picture books, and having time to prepare for changes.',
+  journalSeeds: [
+    {
+      title: 'A Small Moment Of Connection',
+      body: 'Jamie brought a favorite book over this morning and settled beside me. We took our time with the pictures. It felt good to follow their lead.',
+    },
+    {
+      title: 'Making Room For A Quiet Afternoon',
+      body: 'The morning felt busy, so we kept the afternoon simple. A familiar snack and a quiet corner helped us both settle.',
+    },
+    {
+      title: 'Something To Remember',
+      body: 'Today I noticed how much easier a transition felt when we talked about it ahead of time. I want to keep making space for those little preparations.',
+    },
+  ],
+  resourceSeeds: [
+    {
+      title: 'A Gentler Start To The Day',
+      description: 'Small, flexible routines that leave room for your family.',
+      body: 'A predictable morning can offer a little steadiness. Start with one familiar step: opening the curtains together, choosing breakfast, or looking at a simple picture plan. Offer time to move between activities and notice which parts feel comfortable.\n\nThere is no perfect routine. Keep what helps, adapt what does not, and make space for rest. These ideas support everyday life and do not replace advice from a qualified professional who knows your family.',
+    },
+    {
+      title: 'Preparing For A School Conversation',
+      description:
+        'Bring your observations and questions into a shared conversation.',
+      body: 'Write down a few things your child enjoys, any situations that feel difficult, and the supports that have helped. Ask what the school is noticing and agree on one next step together.\n\nA short follow-up note can help everyone remember the plan. Your family can ask for more time, clearer explanations, and accessible information.',
+    },
+    {
+      title: 'Connection Beyond Words',
+      description: 'Notice the many ways your child shares their world.',
+      body: 'Communication can include a look, a gesture, a movement, a picture, a sound, or words. Make space to notice what your child is showing you. Pause and respond to their interest without requiring a particular response.\n\nFor personalized communication support, speak with a qualified professional. Every child has their own ways of connecting.',
+    },
+    {
+      title: 'A Pause For You',
+      description: 'A practical check-in for the person doing the caring.',
+      body: 'Try a brief pause: notice your breathing, unclench your shoulders, and name one thing you need today. Water, food, a quiet moment, or a message to someone you trust can be a useful starting point.\n\nYou deserve support as well. If caring feels persistently overwhelming, consider speaking with a qualified professional or someone in your support network.',
+    },
+    {
+      title: 'Making Transitions More Predictable',
+      description: 'Simple tools for moving from one activity to another.',
+      body: 'A transition can feel easier when there is time to prepare. Offer a clear cue, show what comes next, and leave room for a familiar object or pause. Try one change at a time and observe how it feels for your child.\n\nKeep your expectations flexible. A strategy that helped yesterday may need adjusting today.',
+    },
+    {
+      title: 'A Family Strengths Notebook',
+      description: 'Keep a small collection of what works for your family.',
+      body: 'Collect small observations about comfort, interests, connection, and helpful support. A few words or a quick note is enough. Over time, these details can help you see what matters to your child.\n\nYou choose what to record and share. There is no score or finish line.',
+    },
+  ],
+  milestoneSeeds: [
+    {
+      title: 'Sharing An Interest',
+      description:
+        'Notice moments when your child invites someone into something they enjoy.',
+      category: 'Connection',
+    },
+    {
+      title: 'Expressing A Preference',
+      description:
+        'Notice any way your child shows what they want, like, or need.',
+      category: 'Communication',
+    },
+    {
+      title: 'Finding A Familiar Comfort',
+      description:
+        'Notice the people, places, or activities that help your child feel settled.',
+      category: 'Everyday Life',
+    },
+    {
+      title: 'Trying Something In Their Own Way',
+      description:
+        'Notice exploration at your child’s pace, with whatever support feels helpful.',
+      category: 'Exploration',
+    },
+    {
+      title: 'Moving Between Activities',
+      description:
+        'Notice what helps a transition feel more predictable or comfortable.',
+      category: 'Everyday Life',
+    },
+    {
+      title: 'Enjoying Time Together',
+      description:
+        'Notice a shared moment that feels comfortable and connected.',
+      category: 'Connection',
+    },
+  ],
+  // @preserve-case: Demo report content retains its authored case.
+  reportSeeds: [
+    {
+      contentTitle: 'Community Resource Suggestion',
+      reason: 'A shared link needs a source and a clearer description.',
+      reporterName: 'Community Member',
+    },
+    {
+      contentTitle: 'Discussion About Daily Routines',
+      reason:
+        'A reply may include personal information that should be reviewed.',
+      reporterName: 'Community Member',
+    },
+  ],
+} as const;
+
+export const gentlePathBlogStrings = {
+  decorativeAlt: '',
+  publicTitle: 'A Little Clarity, A Lot Of Care',
+  publicEyebrow: 'The GentlePath Journal',
+  publicDescription:
+    'Thoughtful reads, lived experiences, and practical ideas for your family’s own path.',
+  publicMetadataTitle: 'The Journal',
+  allArticles: 'All Articles',
+  backToJournal: 'Back To The Journal',
+  readArticle: 'Read Article',
+  searchLabel: 'Search Articles',
+  searchPlaceholder: 'Find a little clarity…',
+  clearSearch: 'Clear Search',
+  categoryLabel: 'Topic',
+  allCategories: 'All Topics',
+  categories: {
+    family: 'Family Life',
+    community: 'Community',
+    practical: 'Practical Support',
+    stories: 'Personal Stories',
+  },
+  statuses: { draft: 'Draft', published: 'Published' },
+  emptyTitle: 'A New Chapter Is Coming',
+  emptyDescription:
+    'There are no published articles yet. Come back soon for thoughtful reads from GentlePath.',
+  noResultsTitle: 'A Different Path To Explore',
+  noResultsDescription:
+    'No articles match those filters. Try another topic or a different search.',
+  resetFilters: 'View All Articles',
+  paginationLabel: 'Article Pages',
+  // @sentence-case: A dynamic count summary.
+  articleRange: (from: number, to: number, total: number) =>
+    `${from}–${to} of ${total} articles`,
+  // @sentence-case: Editorial byline, not an action or title.
+  authorByline: (author: string) => `By ${author}`,
+  // @sentence-case: Estimated reading time.
+  readingTime: (minutes: number) => `${minutes} min read`,
+  coverAlt: (title: string) => `Illustration for “${title}”`,
+  relatedTitle: 'More Along The Path',
+  articleUnavailableTitle: 'This Read Is Taking A Moment',
+  articleUnavailableDescription:
+    'We could not load the journal. Please try again in a moment.',
+  retry: 'Try Again',
+  loadingTitle: 'Opening The Journal',
+  loadingDescription: 'Gathering thoughtful reads for your family.',
+  notFoundTitle: 'This Article Is Not Here',
+  notFoundDescription:
+    'It may have moved or is not currently published. There are more reads waiting in the journal.',
+  adminTitle: 'The Journal',
+  adminDescription:
+    'Make room for thoughtful stories. Write, preview, and publish articles at your own pace.',
+  newArticle: 'Write An Article',
+  newTitle: 'A New Chapter',
+  editTitle: 'Edit Article',
+  formDescription:
+    'A clear, considered read can help another family feel a little less alone.',
+  articleDetails: 'The First Impression',
+  articleDetailsDescription:
+    'Give your article a clear title, a useful introduction, and a topic that helps readers find it.',
+  bodyTitle: 'The Story',
+  bodyDescription:
+    'Use headings, quotes, and ordered or bulleted lists to give your article a comfortable rhythm. Preview before publishing.',
+  titleLabel: 'Article Title',
+  titlePlaceholder: 'A small moment worth sharing',
+  slugLabel: 'Article Address',
+  slugHint:
+    'Use lowercase letters, numbers, and hyphens. This becomes the public link.',
+  descriptionLabel: 'Introduction',
+  descriptionPlaceholder: 'A few sentences to invite the reader in…',
+  authorLabel: 'Author',
+  coverLabel: 'Cover Illustration',
+  coverOptions: {
+    family: 'A Moment Together',
+    community: 'Finding Your People',
+    journal: 'Room For Reflection',
+    growth: 'Growing At Your Pace',
+    folder: 'Keeping Clarity Close',
+    path: 'Your Own Path',
+  },
+  contentLabel: 'Article Content',
+  contentHint:
+    'Write in Markdown. Headings, quotes, ordered lists, bullets, and links are supported.',
+  preview: 'Preview Article',
+  previewTitle: 'A Reader’s View',
+  previewDescription:
+    'This private preview shows the current form. Save your changes before sharing a public link.',
+  // @sentence-case: Complete editor guidance or validation message.
+  previewEmpty: 'Your story will appear here as you write.',
+  closePreview: 'Back To Writing',
+  saveDraft: 'Save Draft',
+  saveChanges: 'Save Changes',
+  publish: 'Publish Article',
+  unpublish: 'Unpublish Article',
+  delete: 'Delete Article',
+  cancel: 'Cancel',
+  backToArticles: 'Back To Articles',
+  openPublic: 'View Published Article',
+  draftHint:
+    'Only administrators can see this draft. Publish when the article is ready for readers.',
+  publishedHint:
+    'This article is public. Saved changes appear in the journal immediately.',
+  unsavedHint: 'You have changes waiting to be saved.',
+  savedTitle: 'Article Saved',
+  savedDescription: 'Your changes are safely saved.',
+  publishedTitle: 'Article Published',
+  publishedDescription: 'Your article is now available in the public journal.',
+  unpublishedTitle: 'Article Returned To Draft',
+  unpublishedDescription:
+    'Readers can no longer open this article. You can publish it again when it is ready.',
+  deletedTitle: 'Article Deleted',
+  deletedDescription: 'The article has been removed from the journal.',
+  mutationErrorTitle: 'Your Changes Need Another Moment',
+  mutationErrorDescription:
+    'We could not save that change. Your writing is still here. Please try again.',
+  validationTitle: 'A Few Details Need Your Attention',
+  // @sentence-case: Complete editor guidance or validation message.
+  invalidTitle: 'Enter a title between 3 and 140 characters.',
+  // @sentence-case: Complete editor guidance or validation message.
+  invalidSlug:
+    'Use 3–100 lowercase letters, numbers, and hyphens, with no hyphen at either end.',
+  invalidDescription: 'Write an introduction between 20 and 350 characters.',
+  // @sentence-case: Complete editor guidance or validation message.
+  invalidAuthor: 'Enter an author name between 2 and 100 characters.',
+  invalidBody: 'Write at least 40 characters, up to 50,000 characters.',
+  // @sentence-case: Complete editor guidance or validation message.
+  invalidCategory: 'Choose a topic for the article.',
+  // @sentence-case: Complete editor guidance or validation message.
+  invalidCover: 'Choose one of the cover illustrations.',
+  // @sentence-case: Complete editor guidance or validation message.
+  invalidInput: 'Review the article details and try again.',
+  // @sentence-case: Complete editor guidance or validation message.
+  duplicateSlug:
+    'An article already uses that address. Choose a different article address.',
+  // @sentence-case: Complete editor guidance or validation message.
+  permissionError: 'Only administrators can manage journal articles.',
+  // @sentence-case: Complete editor guidance or validation message.
+  conflictError:
+    'This article changed since you opened it. Copy your writing, reload the article, and review the latest version before saving.',
+  // @sentence-case: Complete editor guidance or validation message.
+  missingArticle: 'This article could not be found.',
+  publishConfirmTitle: 'Ready To Share This Article?',
+  publishConfirmDescription: (title: string) =>
+    `“${title}” will be available to everyone in the GentlePath journal.`,
+  unpublishConfirmTitle: 'Return This Article To Draft?',
+  unpublishConfirmDescription: (title: string) =>
+    `“${title}” will be removed from the public journal. Its writing will remain available here.`,
+  deleteConfirmTitle: 'Delete This Article?',
+  deleteConfirmDescription: (title: string) =>
+    `“${title}” and its writing will be permanently removed. This cannot be undone.`,
+  discardTitle: 'Leave Your Writing Behind?',
+  discardDescription:
+    'You have changes that have not been saved. Leave this page to discard them, or stay to keep writing.',
+  discard: 'Discard Changes',
+  keepWriting: 'Keep Writing',
+  statusLabel: 'Status',
+  allStatuses: 'All Statuses',
+  adminSearchPlaceholder: 'Find a title, topic, or author…',
+  tableCaption: 'Journal Articles',
+  titleColumn: 'Article',
+  statusColumn: 'Status',
+  topicColumn: 'Topic',
+  updatedColumn: 'Last Edited',
+  editAction: 'Edit Article',
+  adminEmptyTitle: 'Your First Story Starts Here',
+  adminEmptyDescription:
+    'Create an article, take your time with a draft, and share it when you are ready.',
+  adminNoResultsTitle: 'No Articles Found',
+  adminNoResultsDescription:
+    'Try another search, topic, or publication status.',
+  adminLoading: 'Loading Your Articles',
+  adminErrorTitle: 'Articles Are Unavailable',
+  adminErrorDescription:
+    'We could not open your article library. Please try again.',
+  draftPreviewLabel: 'Private Draft Preview',
+  unsavedPreviewTitle: 'Your Article Title',
+  defaultAuthor: 'The GentlePath Team',
+  // @preserve-case: Editorial fixture data uses natural sentence casing and Markdown.
+  fixtures: [
+    {
+      title: 'Your family’s path does not need to look like anyone else’s',
+      description:
+        'There is no single way to be a family. Making room for your own pace can begin with one small, kind choice.',
+      author: 'The GentlePath Team',
+      body: '## Begin where you are\n\nSome days feel clear. Other days bring more questions than answers. Neither kind of day says anything about how much you care.\n\nYour family has its own rhythms, needs, and ways of connecting. Giving those differences room can help you notice what is working already.\n\n> Small moments of connection count, even when they look different from what you expected.\n\n## Make space for your own pace\n\n1. Notice a moment that felt comfortable for your child today.\n2. Write down what helped: a quieter space, a familiar routine, or extra time.\n3. Choose one small thing you would like to try again tomorrow.\n\nThere is no need to turn every moment into a goal. Sometimes being together is enough.\n\n## Keep your people close\n\nA trusted friend, another parent, or a professional who listens can help make the next question feel more manageable. Ask for the kind of support that fits your family.\n\n---\n\nEvery family finds their own way. You are allowed to take yours one step at a time.',
+    },
+    {
+      title: 'Finding community, one conversation at a time',
+      description:
+        'Connection can start quietly. A shared question, a listening ear, or a familiar experience can help you find your people.',
+      author: 'The GentlePath Team',
+      body: '## You do not need a perfect introduction\n\nMeeting other parents can feel like another thing to figure out. It is okay to begin with a small question, or simply to listen.\n\nA useful community gives people room to share different experiences without making one family’s choices a rule for everyone.\n\n## Start with what feels comfortable\n\n- Look for a group with clear guidelines and thoughtful moderation.\n- Share only what you and your family are comfortable making public.\n- Notice whether people make room for different needs and perspectives.\n- Step back when a conversation stops feeling helpful.\n\n## A little encouragement goes a long way\n\nSometimes support sounds like “that was hard for us, too.” Sometimes it is a practical idea you can adapt, or a reminder that you do not have to reply right away.\n\n> You can belong without having all the answers.\n\nTake the connections that feel nourishing, leave room for privacy, and let trust grow at its own pace.',
+    },
+    {
+      title: 'A little preparation for your next appointment',
+      description:
+        'A few notes can make it easier to ask your questions and leave with a clearer understanding of the next step.',
+      author: 'The GentlePath Team',
+      body: '## Make room for your questions\n\nAppointments can hold a lot of information in a short amount of time. Preparing a few notes can help you keep the questions that matter close.\n\n## Before you go\n\n1. Write down the two or three things you most want to discuss.\n2. Note observations in your own words, including what happened and when.\n3. Gather relevant letters, reports, or previous recommendations.\n4. Ask about any accessibility needs or adjustments that would help your family.\n\n## During the conversation\n\nIt is okay to ask someone to explain a term, slow down, or repeat the next step. You can ask for written information to read later.\n\n## Afterward\n\nKeep notes in a place you can return to. If something is unclear, contact the team involved for clarification.\n\nThese are general organization ideas. Your family’s qualified care team can help with questions specific to your child.',
+    },
+    {
+      title: 'Noticing the moments that matter',
+      description:
+        'A reflection does not need to be a big achievement. Ordinary moments can tell you something meaningful about your child’s day.',
+      author: 'The GentlePath Team',
+      body: '## An ordinary moment is worth keeping\n\nPerhaps a favorite song brought a smile. Perhaps a familiar routine felt a little easier. Perhaps today was difficult, and you found a quiet moment together anyway.\n\nA journal can hold all of those things without asking you to rate or compare them.\n\n## Try a gentle reflection\n\n- What did your child enjoy today?\n- Was there a moment when they seemed more comfortable?\n- What felt difficult, and what support helped?\n- Is there anything you would like to remember for another day?\n\n## Leave room for the whole day\n\nA reflection can be a sentence, a few words, or a longer story. You can write for yourself, return later, or leave a day unwritten.\n\n> Paying attention can be an act of care. It does not need to become another task to get right.\n\nYour child’s experiences are their own. Protect their privacy, and keep only what feels helpful for your family.',
+    },
+    {
+      title: 'Making a routine feel more like your own',
+      description:
+        'Familiar patterns can offer comfort. A useful routine begins with your family’s real day, with room for flexibility.',
+      author: 'The GentlePath Team',
+      body: '## Start with a moment you already have\n\nA routine does not need to organize every hour. It can be as small as a familiar song before leaving home, or a quiet pause after a busy afternoon.\n\n## Notice what helps\n\n1. Choose one part of the day that often feels unsettled.\n2. Notice what your child communicates through words, movement, or behavior.\n3. Try one small, predictable cue.\n4. Give yourselves time and adjust if it is not helping.\n\n## Make room for change\n\nDays change. Energy changes. A routine should support your family rather than become another measure of success.\n\nIf a particular transition is consistently difficult, a professional who knows your child may help you think through adjustments.\n\nBegin with curiosity. Keep what helps, and let the rest change.',
+    },
+    {
+      title: 'The quiet value of asking for help',
+      description:
+        'You can care deeply for your family and need support yourself. Asking for help can be a small, practical step.',
+      author: 'The GentlePath Team',
+      body: '## Support can be specific\n\n“Let me know if you need anything” is kind, but it can leave you with the work of deciding what to ask for. A small, specific request may feel easier.\n\n## Put a shape around the request\n\n- Could someone bring dinner on a busy evening?\n- Would a friend listen while you sort through a question?\n- Could a trusted person help you organize a few documents?\n- Is there a local group where you can learn from other families?\n\nYou get to choose what you share and who you invite into your family’s life.\n\n## Your needs belong in the picture\n\nRest, connection, and a little time for yourself are not rewards you need to earn. They are part of being human.\n\nSome support will fit, and some will not. It is okay to say what would be helpful and to change your mind.',
+    },
+    {
+      title: 'A place for the paperwork, and a little more breathing room',
+      description:
+        'Keeping care documents together can make a busy week feel a little less scattered. Start with what you have.',
+      author: 'The GentlePath Team',
+      body: '## A useful system can be simple\n\nReports, appointment letters, school documents, and notes can arrive from different places. Bringing them together can help you find what you need when a question comes up.\n\n## Begin with three small steps\n\n1. Gather the documents you already have.\n2. Group them in a way that makes sense to you, such as by year or kind of document.\n3. Use clear names so you can recognize the right version later.\n\n## Think about privacy\n\nKeep family information in a secure place. Share documents only with people who need them, and check how a service protects your information before uploading it.\n\n## Leave room to adjust\n\nYou do not need to finish everything in one sitting. A small improvement that you can maintain is often more useful than an elaborate system.\n\nChoose one folder, one label, or one document today. That is a place to start.',
+    },
+    {
+      title: 'A note for the days that feel uncertain',
+      description:
+        'An unfinished reflection on making room for uncertainty, without rushing to make every question into an answer.',
+      author: 'The GentlePath Team',
+      body: '## Some questions take time\n\nThis article is a private working draft. It is here to give editors a place to continue a thoughtful conversation.\n\nA day can carry care and uncertainty together. Sometimes the next useful step is to pause, ask a question, or return to something familiar.\n\n## A thought to return to\n\nThere is room to write this story with patience. Add the experiences and ideas that will make it useful for another family, then preview the article before publishing.',
+    },
+  ],
+} as const;
+
+export const gentlePathPortalStrings = {
+  navigation: {
+    home: 'My Path',
+    journal: 'My Journal',
+    resources: 'Resource Library',
+    milestones: 'Small Steps',
+    family: 'My Family',
+    saved: 'Saved Resources',
+    blog: 'Stories And Insights',
+    admin: 'Administration',
+    users: 'People',
+    moderation: 'Moderation',
+    publishing: 'Blog Studio',
+    system: 'Platform Settings',
+    developer: 'Developer Settings',
+    appearance: 'Appearance',
+    profile: 'My Profile',
+    public: 'Visit GentlePath',
+    workspace: 'Your Family Space',
+    adminWorkspace: 'Platform Workspace',
+    demo: 'Demo Workspace',
+    demoHint: 'Sample data. Changes stay in this demo.',
+    role: { user: 'User', admin: 'Admin', superadmin: 'SuperAdmin' },
+  },
+  common: {
+    decorativeAlt: '',
+    cancel: 'Cancel',
+    save: 'Save Changes',
+    edit: 'Edit',
+    remove: 'Delete',
+    viewAll: 'View All',
+    open: 'Open',
+    back: 'Back',
+    search: 'Search',
+    clear: 'Clear Search',
+    next: 'Next',
+    previous: 'Previous',
+    category: 'Category',
+    allCategories: 'All Topics',
+    allStatuses: 'All Statuses',
+    status: 'Status',
+    date: 'Date',
+    actions: 'Actions',
+    saved: 'Saved',
+    read: 'Read',
+    emptyTitle: 'A Little Room To Begin',
+    emptyHint:
+      'There is nothing here yet. Take a first step whenever you are ready.',
+    noResultsTitle: 'Try A Different Search',
+    noResultsHint:
+      'No items match these filters. Clear your search or choose another topic.',
+    errorTitle: 'Your Changes Could Not Be Saved',
+    errorHint: 'Please try again. Your entries are still here.',
+    private: 'Private To You',
+    close: 'Close',
+    pagination: 'Page Navigation',
+    range: (from: number, to: number, total: number) =>
+      `${from}–${to} Of ${total}`,
+    minutes: (minutes: number) => `${minutes} Min Read`,
+  },
+  home: {
+    eyebrow: 'One Step At A Time',
+    title: (name: string) => `Welcome Back, ${name}`,
+    description:
+      'A little space for your family, your reflections, and the next small step.',
+    newEntry: 'Write A Reflection',
+    heroTitle: 'Your Path Is Your Own.',
+    heroDescription:
+      'Some days are for moving forward. Others are for taking a breath. Both belong here.',
+    heroAction: 'Find A Little Support',
+    heroAlt: 'A winding path through soft green hills toward warm sunlight',
+    journals: 'Journal Entries',
+    journalHint: 'Moments you have made space for',
+    saved: 'Saved Resources',
+    savedHint: 'Helpful things to return to',
+    observations: 'Small Steps Noticed',
+    observationHint: 'At your child’s own pace',
+    children: 'Family Profiles',
+    childHint: 'Care that stays personal',
+    recent: 'Your Recent Reflections',
+    recommended: 'A Little Support For Today',
+    week: 'Your Week, At Your Pace',
+    weekHint:
+      'Reflections and observations you recorded over the last seven days.',
+    weekDays: ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed'],
+    noJournalTitle: 'Make Room For A Moment',
+    noJournalHint:
+      'A thought, a small win, a difficult day. Your first reflection starts with you.',
+    familyTitle: 'Made For Your Family',
+    familyHint:
+      'Add a child’s profile to connect reflections and small steps to their own journey.',
+    familyAction: 'Meet Your Family',
+    quoteDescription:
+      'There is no one right pace. There is only your family’s pace.',
+  },
+  journal: {
+    title: 'My Journal',
+    description:
+      'A private place for the everyday moments, big feelings, and little things worth remembering.',
+    create: 'New Reflection',
+    newTitle: 'A Moment For You',
+    editTitle: 'Edit Your Reflection',
+    formDescription:
+      'Only you can read these reflections. Write as much or as little as you need.',
+    titleLabel: 'A Name For This Moment',
+    titlePlaceholder: 'What would you like to remember?',
+    bodyLabel: 'Your Reflection',
+    bodyPlaceholder: 'Today, I noticed…',
+    emotionLabel: 'How Are You Feeling?',
+    childLabel: 'Connect To A Child',
+    personal: 'Just For Me',
+    publish: 'Save Reflection',
+    created: 'Reflection Saved',
+    updated: 'Reflection Updated',
+    deleted: 'Reflection Deleted',
+    deleteTitle: 'Delete This Reflection?',
+    deleteDescription:
+      'This reflection will be removed from your journal. You cannot undo this.',
+    deleteAction: 'Delete Reflection',
+    searchPlaceholder: 'Search your reflections…',
+    emptyTitle: 'Your Story Begins With A Moment',
+    emptyHint:
+      'Notice a feeling, celebrate something small, or simply make space for your day.',
+    emotions: {
+      hopeful: 'Hopeful',
+      calm: 'Calm',
+      tired: 'Tired',
+      overwhelmed: 'Overwhelmed',
+      grateful: 'Grateful',
+    },
+  },
+  resources: {
+    title: 'A Little Clarity, Close By',
+    description:
+      'Practical reads and thoughtful tools for the questions that come with family life.',
+    savedTitle: 'Your Saved Resources',
+    savedDescription:
+      'The helpful things you chose to keep, ready when you need them.',
+    searchPlaceholder: 'Search resources, guides, and everyday support…',
+    save: 'Save Resource',
+    unsave: 'Remove From Saved',
+    savedToast: 'Resource Saved',
+    unsavedToast: 'Resource Removed',
+    emptySavedTitle: 'Keep Something Helpful Close',
+    emptySavedHint:
+      'Save a guide or article from the resource library and you will find it here.',
+    explore: 'Explore Resources',
+    detailHint:
+      'A practical starting point for your family. Adapt these ideas to your own needs.',
+    sampleHint: 'Demo resource · illustrative reading material',
+    categories: {
+      everyday: 'Everyday Life',
+      education: 'School And Learning',
+      communication: 'Communication',
+      wellbeing: 'Family Wellbeing',
+    },
+    formats: { guide: 'Guide', article: 'Article', toolkit: 'Toolkit' },
+    // @sentence-case: Descriptive alternative text for resource illustrations.
+    illustrations: {
+      everyday: 'A small sprout growing beside stepping stones',
+      education: 'A folder holding helpful papers and leaves',
+      communication: 'A parent listening to their child',
+      wellbeing: 'Caregivers sharing a conversation',
+    },
+  },
+  family: {
+    title: 'Your Family, Your Way',
+    description:
+      'A space for each child and the details that help you care in your own way.',
+    create: 'Add A Child',
+    newTitle: 'A Place For Your Child',
+    editTitle: 'Edit Child Profile',
+    formDescription: 'These details stay in your private family space.',
+    nameLabel: 'Child’s Name',
+    birthDateLabel: 'Date Of Birth',
+    notesLabel: 'What Helps Them Feel Supported?',
+    notesPlaceholder:
+      'Their favorite comforts, ways of communicating, or things to keep in mind…',
+    save: 'Save Profile',
+    created: 'Family Profile Saved',
+    deleteTitle: 'Remove This Child Profile?',
+    deleteDescription:
+      'Their observations will be removed. Linked journal entries will be kept as personal reflections.',
+    deleteAction: 'Remove Profile',
+    deleted: 'Family Profile Removed',
+    emptyTitle: 'Every Journey Is Personal',
+    emptyHint:
+      'Add your first child profile to start noticing small steps and keeping their reflections together.',
+    birthDate: (date: string) => `Born ${date}`,
+  },
+  milestones: {
+    title: 'Every Small Step Matters',
+    description:
+      'Notice moments of connection and growth. These observations are personal reflections, never a checklist or assessment.',
+    childLabel: 'Notice Steps For',
+    chooseChild: 'Choose A Child',
+    addChildTitle: 'Start With Your Family',
+    addChildHint: 'Add a child profile before recording their small steps.',
+    responseLabel: 'What Have You Noticed?',
+    record: 'Record Observation',
+    updated: 'Small Step Recorded',
+    lastObserved: (date: string) => `Last Noticed ${date}`,
+    notObserved: 'Ready When You Are',
+    responses: {
+      not_yet: 'Not Yet',
+      emerging: 'Beginning To Notice',
+      often: 'Happening Often',
+    },
+    privacyHint:
+      'Only you can see your child’s observations. There are no scores or comparisons.',
+  },
+  admin: {
+    title: 'Care Behind The Scenes',
+    superTitle: 'The Bigger Picture',
+    description:
+      'A thoughtful view of the people, content, and community you help support.',
+    users: 'Registered People',
+    usersHint: 'Accounts across the platform',
+    active: 'Active Accounts',
+    activeHint: 'Accounts with access enabled',
+    published: 'Published Stories',
+    publishedHint: 'Available in the public library',
+    reports: 'Open Reports',
+    reportsHint: 'Waiting for a thoughtful review',
+    content: 'Your Publishing Desk',
+    contentHint:
+      'Turn useful knowledge into clear, considered stories for families.',
+    create: 'Write A Story',
+    drafts: (count: number) =>
+      `${count} ${count === 1 ? 'Draft' : 'Drafts'} In Progress`,
+    moderation: 'Keep The Community Welcoming',
+    moderationHint: 'Review content reports and record the action you took.',
+    review: 'Review Reports',
+    growth: 'New Accounts This Week',
+    growthHint: 'Account registrations over the last seven days.',
+    roleBreakdown: 'Platform Roles',
+    privacyTitle: 'Family Privacy Comes First',
+    privacyHint:
+      'Administration shows platform records and public content. Journals, family notes, and observations remain private to the family that owns them.',
+    settings: 'System Configuration',
+    settingsHint:
+      'Manage access, community availability, and publishing safeguards.',
+    configure: 'Manage Platform',
+  },
+  people: {
+    title: 'The People Of GentlePath',
+    description:
+      'Manage platform access while keeping personal family records private.',
+    searchPlaceholder: 'Search names or email addresses…',
+    name: 'Person',
+    email: 'Email',
+    role: 'Platform Role',
+    allRoles: 'All Roles',
+    joined: 'Joined',
+    active: 'Active',
+    disabled: 'Disabled',
+    editTitle: 'Manage Platform Access',
+    editDescription:
+      'Role changes affect what this person can manage. Private family records remain private.',
+    enabledLabel: 'Account Access Enabled',
+    save: 'Update Access',
+    updated: 'Access Updated',
+    confirmTitle: 'Change This Person’s Access?',
+    confirmDescription:
+      'Their platform permissions or ability to sign in will change.',
+    confirmAction: 'Update Access',
+    readOnlyHint:
+      'Only a SuperAdmin can change platform roles or account access.',
+  },
+  moderation: {
+    title: 'A Welcoming Space Takes Care',
+    description:
+      'Review reports about public content and keep a clear record of your decision.',
+    searchPlaceholder: 'Search reported content…',
+    reason: 'Report Reason',
+    reporter: 'Reported By',
+    reportedBy: (name: string) => `Reported By ${name}`,
+    open: 'Open',
+    resolved: 'Resolved',
+    dismissed: 'Dismissed',
+    review: 'Review Report',
+    reviewTitle: 'Review Content Report',
+    noteLabel: 'Resolution Note',
+    notePlaceholder: 'Describe what you reviewed and the action you took…',
+    decisionLabel: 'Decision',
+    resolve: 'Resolve Report',
+    dismiss: 'Dismiss Report',
+    save: 'Save Review',
+    updated: 'Report Reviewed',
+    emptyTitle: 'All Caught Up',
+    emptyHint:
+      'There are no reports waiting for review. Thank you for keeping this space welcoming.',
+  },
+  system: {
+    title: 'Platform Settings',
+    description:
+      'System-wide controls for GentlePath. Changes apply to everyone on the platform.',
+    general: 'Availability And Safeguards',
+    community: 'Community Conversations',
+    communityDescription: 'Allow access to shared community conversations.',
+    registrations: 'New Registrations',
+    registrationsDescription: 'Allow new families to create an account.',
+    maintenance: 'Maintenance Mode',
+    maintenanceDescription:
+      'Temporarily pause member workspace access while maintenance is underway.',
+    review: 'Require Resource Review',
+    reviewDescription:
+      'Require administrative review before new resources are made available.',
+    saved: 'Platform Settings Updated',
+    confirmTitle: 'Apply Platform Changes?',
+    confirmDescription:
+      'These settings change availability and safeguards across GentlePath.',
+    confirmAction: 'Apply Changes',
+  },
+  // @sentence-case: Complete form-validation messages.
+  validation: {
+    childName: 'Enter your child’s name, using up to 100 characters.',
+    birthDate: 'Enter a valid date of birth that is not in the future.',
+    title: 'Give your reflection a title between 1 and 160 characters.',
+    body: 'Write a reflection between 1 and 20,000 characters.',
+    resolution: 'Add a resolution note with at least 3 characters.',
+  },
+  access: {
+    title: 'This Space Needs A Different Role',
+    description: 'Your account does not have permission to open this area.',
+    action: 'Back To My Path',
+    unavailableTitle: 'We Are Taking A Short Pause',
+    unavailableDescription:
+      'GentlePath is temporarily undergoing maintenance. Please check back a little later.',
+  },
+  auth: {
+    eyebrow: 'A Thoughtful Way Forward',
+    title: 'Welcome Back',
+    description:
+      'Sign in to your family’s space. A little clarity, a lot of care.',
+    signupTitle: 'Find Your Own Gentle Path',
+    signupDescription:
+      'Create a private family space for reflections, resources, and the steps that matter to you.',
+    demoHint:
+      'Explore a sample family space. Every demo account uses password123.',
+    demoRoleLabel: 'Explore As',
+    demoRoles: {
+      user: 'Family Member',
+      admin: 'Admin',
+      superadmin: 'SuperAdmin',
+    },
+    home: 'Back To GentlePath',
+    // @sentence-case: Supporting brand reassurance.
+    trust: 'At your family’s pace. With care, every step.',
+    artAlt: 'A parent and child enjoying a quiet moment together',
+  },
+} as const;
+
+export const gentlePathLandingStrings = {
+  brandTitle: 'GentlePath',
+  homeLabel: 'GentlePath Home',
+  skipAction: 'Skip To Content',
+  mainNavigationLabel: 'Main Navigation',
+  mobileNavigationLabel: 'Mobile Navigation',
+  metadata: {
+    title: 'GentlePath — A Little Clarity. A Lot Of Care.',
+    description:
+      'A thoughtful space for parents and caregivers navigating autism. Find community, make room for reflection, and keep helpful resources close, at your family’s pace.',
+  },
+  navigation: {
+    supportLabel: 'How It Helps',
+    familyLabel: 'For Your Family',
+    blogLabel: 'Thoughtful Reads',
+    loginAction: 'Log In',
+    signupAction: 'Get Started',
+    portalLabel: 'Your Space',
+    openMenuAction: 'Open Navigation',
+    closeMenuAction: 'Close Navigation',
+  },
+  hero: {
+    eyebrowLabel: 'A Thoughtful Way Forward',
+    firstHeading: 'A Little Clarity.',
+    secondHeading: 'A Lot Of Care.',
+    description:
+      'A thoughtful space for parents navigating autism. Find a little perspective, keep what matters close, and take the next step at your family’s pace.',
+    primaryAction: 'Find Your GentlePath',
+    secondaryAction: 'Explore The Support',
+    reassuranceDescription:
+      'For the questions, the small wins, and everything in between.',
+    artAlt: 'A winding path through sage and forest hills toward warm sunlight',
+    artCaption: 'Every Family Finds Their Own Way.',
+    bottomLabel: 'At Your Family’s Pace.',
+    bottomDescription:
+      'A little connection. A little perspective. A place to begin.',
+  },
+  support: {
+    eyebrowLabel: 'Room For Your Whole Journey',
+    title: 'You Don’t Have To Figure It All Out Alone.',
+    description:
+      'Some days call for useful guidance. Others call for a quiet moment to reflect. There’s room for both here.',
+    pillars: [
+      {
+        title: 'Find A Little Perspective.',
+        description:
+          'Read thoughtful stories and practical guidance for parents and caregivers, with room for your own way forward.',
+        artAlt: 'Three caregivers sharing a relaxed conversation',
+      },
+      {
+        title: 'Notice What Matters.',
+        description:
+          'Make room for reflection, everyday observations, and the small moments that tell your child’s own story.',
+        artAlt: 'A parent listening as their child shares a drawing',
+      },
+      {
+        title: 'Keep Clarity Close.',
+        description:
+          'Bring helpful reads, practical guidance, and your family’s own notes together in a place you can return to.',
+        artAlt: 'A lilac folder with saved papers, a bookmark, and leaves',
+      },
+    ],
+  },
+  family: {
+    eyebrowLabel: 'A Space That Grows With You',
+    title: 'A Little Less To Carry.',
+    description:
+      'There’s a lot to hold in your head. Give your family’s reflections, discoveries, and next steps a home of their own.',
+    primaryAction: 'Make Space For Your Family',
+    noteDescription: 'Start wherever you are. Come back whenever you need.',
+    features: [
+      {
+        title: 'Their Own Story',
+        description:
+          'Keep a profile for each child, with space for their individual experiences and the things you’re noticing along the way.',
+      },
+      {
+        title: 'A Moment To Reflect',
+        description:
+          'Write down a feeling, remember a good day, or work through a question in a journal that belongs to you.',
+      },
+      {
+        title: 'The Important Things, Together',
+        description:
+          'Keep family notes and save helpful discoveries so the things you need are easier to find again.',
+      },
+    ],
+    sentimentDescription:
+      'No two children follow the same path. Your space shouldn’t expect them to.',
+  },
+  stories: {
+    eyebrowLabel: 'A Little Perspective',
+    title: 'Words To Meet You Where You Are.',
+    description:
+      'Thoughtful articles, shared experiences, and practical ideas for the everyday. Read what feels useful. Leave the rest for another day.',
+    topicsLabel: 'Reading Topics',
+    topics: ['Everyday Life', 'Family Stories', 'Gentle Guidance'],
+    primaryAction: 'Explore Thoughtful Reads',
+    artAlt: 'Care notes and a journal illustrated with soft green leaves',
+  },
+  questions: {
+    eyebrowLabel: 'Before Your First Step',
+    title: 'A Few Things You Might Be Wondering.',
+    items: [
+      {
+        title: 'Who Is GentlePath For?',
+        description:
+          'GentlePath is for parents and caregivers navigating autism, whether you’re finding your feet, looking for useful reading, or making space for your family’s reflections.',
+      },
+      {
+        title: 'Where Should I Start?',
+        description:
+          'Start with what feels helpful today. Read an article, create your family’s space, or take a moment to reflect. There’s no checklist to finish and no pace to keep up with.',
+      },
+      {
+        title: 'Can I Make Space For More Than One Child?',
+        description:
+          'Yes. You can keep a separate profile for each child, so their experiences, observations, and records stay connected to their own story.',
+      },
+    ],
+  },
+  invitation: {
+    eyebrowLabel: 'One Gentle Step At A Time',
+    title: 'Your Family. Your Pace. Your Path.',
+    description:
+      'You don’t need to have it all figured out. A little support is a good place to start.',
+    primaryAction: 'Take The First Step',
+    artAlt: 'A small sprout growing beside stepping stones and sunshine',
+  },
+  footer: {
+    description: 'A little clarity. A lot of care. At your family’s pace.',
+    navigationLabel: 'Footer Navigation',
+    copyrightDescription: '© 2026 GentlePath. With care, every step.',
+    careDescription: 'Made for real families, and their own way forward.',
+  },
+} as const;
+
+export const gentlePathAuthStrings = {
+  restoreDemoAction: 'Return To Demo Workspace',
+  demoRestoreErrorDescription:
+    'The demo workspace could not be restored. Please try again.',
+  loginStoryTitle: 'A Familiar Place To Find Your Feet.',
+  loginStoryDescription:
+    'Your reflections, your family, and the helpful things you’ve kept. Ready when you are.',
+  signupStoryTitle: 'Every Family Finds Their Own Way.',
+  signupStoryDescription:
+    'Make a little room for reflection, clarity, and the moments that matter to your family.',
+  storyArtAlt:
+    'A parent listening to their child share a drawing, surrounded by soft green leaves',
+  firstNamePlaceholder: 'Your first name',
+  lastNamePlaceholder: 'Your last name',
+  emailPlaceholder: 'you@example.com',
+  passwordHint: 'Use at least 8 characters for your password.',
+  demoSignupHint: 'Your demo account and changes stay in this local demo.',
+  demoRoleHint:
+    'Choose a sample account to explore. You can edit the email and password below.',
+  // @preserve-case: Sample account credentials are displayed and must retain their exact spelling.
+  demoEmails: {
+    user: 'user@gentlepath.demo',
+    admin: 'admin@gentlepath.demo',
+    superadmin: 'superadmin@gentlepath.demo',
+  },
+  // @preserve-case: Demo credential; casing must stay exact.
+  demoPassword: 'password123',
 } as const;

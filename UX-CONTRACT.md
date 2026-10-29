@@ -1,8 +1,8 @@
-# Portal UX contract
+# GentlePath UX contract
 
 ## Product context
 
-English-language workspace for operators managing people, requests, and conversations. Dates display in the browser’s timezone using en-US formatting; date of birth is a date-only field serialized at UTC midnight. Accessibility target: WCAG 2.2 AA. Native profile date control intentionally accepts OS popup geometry and locale.
+English-language family workspace for private profiles, journals, resources, and observations, with public editorial content and role-gated platform operations. Dates display in the browser’s timezone using en-US formatting; date of birth is a date-only field serialized at UTC midnight. Accessibility target: WCAG 2.2 AA. Native profile date control intentionally accepts OS popup geometry and locale.
 
 ## Business-context sources
 
@@ -61,3 +61,13 @@ The shell uses the shared navigation guard. Forms opt into dirty/busy refs throu
 ## Verification policy
 
 Do not write tests. Run static checks, a demo build, and manual browser/HTTP workflows. Record evidence and external integration limits in [docs/VERIFICATION.md](docs/VERIFICATION.md). The static design audit is supplementary and does not establish complete accessibility or production integration correctness.
+
+## GentlePath roles and workflows
+
+The route and permission map in [GENTLEPATH.md](docs/GENTLEPATH.md) is canonical. Public `/` and `/blog` never require authentication. Users only read and mutate their own child profiles, journal entries, and observations; saved resources are per-user. Admin and SuperAdmin permissions never grant access to another family’s private records. Authenticated route layouts and backend proxies check roles independently; the live backend remains authoritative.
+
+New/reflected journal entries and child profiles save through domain mutations, show success only after server confirmation, preserve draft input on failure, and use shared navigation/discard guards. Removing a child removes its observations and keeps linked journals as personal entries. Resource saves are idempotent and invalidate overview and library queries. Milestone responses are scoped to a selected owned child and never presented as a clinical assessment.
+
+Operational directory/resource filters and paging use URL state. Private journal search stays in component state to keep reflection text out of shared URLs. Lists are bounded in the UI; pages clamp after filters/removal. Shared authored Select owns dropdown geometry; native date-of-birth input retains OS geometry.
+
+Developer Settings is available only in development or an explicitly enabled demo server. Simulation preferences are HTTP-only server cookies. Switching mode clears the old mode’s session and requires sign-in; roles change only through trusted demo identities, with a full reload clearing cached private data. A gated return-to-demo action remains available on live-mode sign-in so local developers can recover without a configured backend. Production live mode ignores demo preference cookies and hides these controls.

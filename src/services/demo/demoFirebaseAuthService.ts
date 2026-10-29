@@ -1,6 +1,7 @@
 import 'server-only';
-import { AuthError } from '@/errors/domainErrors';
-import { strings } from '@/strings';
+import { AuthError, OwnershipError } from '@/errors/domainErrors';
+import { strings, gentlePathDemoStrings } from '@/strings';
+import { getDemoPortalState } from './demoPortalState';
 import type { SignupInput } from '@/models/auth';
 import type { FirebaseAuthSession } from '@/services/auth/models/firebaseAuthSession';
 import type { FirebaseAuthServiceInterface } from '@/services/auth/firebaseAuthServiceInterface';
@@ -12,11 +13,19 @@ export class DemoFirebaseAuthService implements FirebaseAuthServiceInterface {
       (user) => user.email.toLowerCase() === email.trim().toLowerCase(),
     );
     const credential = user && state.credentials.get(user.external_id);
-    if (!user || !credential || !passwordMatches(password, credential))
+    if (
+      !user ||
+      user.deleted ||
+      user.disabled ||
+      !credential ||
+      !passwordMatches(password, credential)
+    )
       throw new AuthError(strings.auth.invalidCredentials);
     return this.session(user.external_id, user.email);
   }
   async signUp(input: SignupInput): Promise<FirebaseAuthSession> {
+    if (!getDemoPortalState().settings.registrationsEnabled)
+      throw new OwnershipError(gentlePathDemoStrings.registrationPaused);
     const state = getDemoState();
     const email = input.email.trim().toLowerCase();
     if (state.users.some((user) => user.email.toLowerCase() === email))
@@ -28,6 +37,8 @@ export class DemoFirebaseAuthService implements FirebaseAuthServiceInterface {
       first_name: input.firstName,
       last_name: input.lastName,
       email,
+      role: 'user' as const,
+      disabled: false,
       phone_number: null,
       date_of_birth: null,
       created_at: now,
@@ -40,7 +51,15 @@ export class DemoFirebaseAuthService implements FirebaseAuthServiceInterface {
   }
   async refresh(session: FirebaseAuthSession): Promise<FirebaseAuthSession> {
     const state = getDemoState();
-    if (state.refreshTokens.get(session.refreshToken) !== session.externalId)
+    if (
+      state.refreshTokens.get(session.refreshToken) !== session.externalId ||
+      !state.users.some(
+        (user) =>
+          user.external_id === session.externalId &&
+          !user.deleted &&
+          !user.disabled,
+      )
+    )
       throw new AuthError(strings.errors.sessionExpired);
     state.refreshTokens.delete(session.refreshToken);
     return this.session(session.externalId, session.email);

@@ -1,7 +1,6 @@
 import { z } from 'zod';
-import { container } from '@/container';
+import { getContainer } from '@/container';
 import { LoginInputSchema, SignupInputSchema } from '@/models/auth';
-import { environment } from '@/config/environment';
 import { AuthError, OwnershipError } from '@/errors/domainErrors';
 import { getProfileSession } from '@/services/auth/profileSession';
 import { errorResponse, trustedMutation } from '@/services/api/routeSafety';
@@ -12,6 +11,7 @@ const InputSchema = z.discriminatedUnion('action', [
 ]);
 export async function POST(request: Request) {
   try {
+    const container = await getContainer();
     if (!trustedMutation(request))
       throw new OwnershipError(strings.errors.untrusted);
     const input = InputSchema.parse(await request.json());
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
             input.email,
             input.password,
           );
-    if (input.action === 'signup' && !environment.demoMode) {
+    if (input.action === 'signup' && !container.demoMode) {
       await container.apiClient.request('/users', auth.idToken, {
         method: 'POST',
         body: {
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     const session = {
       auth,
       user: await getProfileSession(auth),
-      demo: environment.demoMode,
+      demo: container.demoMode,
     };
     await container.sessionService.create(session);
     return Response.json(container.sessionService.toPublic(session), {
@@ -48,6 +48,7 @@ export async function POST(request: Request) {
 }
 export async function GET() {
   try {
+    const container = await getContainer();
     const session = await container.sessionService.valid();
     if (!session) throw new AuthError(strings.errors.sessionExpired);
     return Response.json(container.sessionService.toPublic(session), {
@@ -59,6 +60,7 @@ export async function GET() {
 }
 export async function PUT(request: Request) {
   try {
+    const container = await getContainer();
     if (!trustedMutation(request))
       throw new OwnershipError(strings.errors.untrusted);
     const session = await container.sessionService.valid();

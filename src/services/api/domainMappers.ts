@@ -30,6 +30,7 @@ export function mapUserTransportToDomain(transport: UserTransport): User {
     firstName: transport.first_name,
     lastName: transport.last_name,
     email: transport.email,
+    role: transport.role,
     phoneNumber: transport.phone_number ?? null,
     dateOfBirth: transport.date_of_birth ?? null,
     createdAt: transport.created_at,

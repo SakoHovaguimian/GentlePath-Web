@@ -1,7 +1,7 @@
-import { getRuntimeConfig } from '@/config/environment';
+import { getEffectiveRuntime } from '@/services/demo/demoRuntime';
 export const dynamic = 'force-dynamic';
-export function GET() {
-  const config = getRuntimeConfig();
+export async function GET() {
+  const config = await getEffectiveRuntime();
   if (!config.messaging || config.demoMode)
     return new Response('', {
       headers: {

@@ -1,51 +1,53 @@
 ---
 version: alpha
-name: Portal
-description: A readable operational workbench with the reusable LeafLaunch component foundation, shared motion, and accent-aware light and dark surfaces.
+name: GentlePath
+description: A thoughtful family space with a winding-path illustration, cream and sage surfaces, forest accents, and calm editorial typography.
 colors:
-  surface: '#ffffff'
-  background: '#f7fafb'
-  text: '#111827'
-  muted: '#596579'
-  border: '#e5e7eb'
-  primary: '#17665f'
+  surface: '#fffefa'
+  background: '#f7f6f0'
+  text: '#253d36'
+  muted: '#65716b'
+  border: '#dce0d6'
+  primary: '#294e45'
 typography:
   sans:
-    fontFamily: 'IBM Plex Sans, system-ui, sans-serif'
+    fontFamily: 'DM Sans, system-ui, sans-serif'
     fontSize: '1.125rem'
     lineHeight: '1.75rem'
   mono:
-    fontFamily: 'IBM Plex Mono, ui-monospace, monospace'
+    fontFamily: 'ui-monospace, monospace'
 rounded:
-  DEFAULT: '0.625rem'
-  card: '0.875rem'
+  DEFAULT: '0.75rem'
+  card: '1.25rem'
 spacing:
   panel: '1.5rem'
   field-gap: '1rem'
 components:
   button:
-    rounded: '0.625rem'
+    rounded: '0.75rem'
   card:
-    rounded: '0.875rem'
+    rounded: '1.25rem'
   input:
-    rounded: '0.625rem'
+    rounded: '0.75rem'
   dialog:
     rounded: '1.25rem'
 ---
 
-# Portal design context
+# GentlePath design context
 
 ## Overview
 
-Portal is an English-language starter for operators managing people, requests, and conversations. The reusable LeafLaunch Web foundation is part of every new project: shared controls, page patterns, mobile navigation, motion, and theming. Product register governs the authenticated application. `/dev-settings/components` is the protected, local component library; `/experience` remains the optional immersive showcase. Neither preview promises live business integrations.
+GentlePath is an English-language public site and private workspace for parents navigating autism. The reference HTML supplied on October 28, 2026 is the visual source: original cream/sage/forest colors, DM Sans and Lora, and six soft illustrated scenes. The public landing introduces the family workspace; the authenticated product prioritizes clear tasks and privacy. Admin and SuperAdmin workspaces use the same shared controls and visual language with denser operational content.
 
-The signature is a readable operational workbench with an accent-aware rounded sidebar, flat record surfaces, and measured selection motion. Preserve Portal's identity and routes. Aqua remains the default; Leaf green is an optional palette. Existing saved light/dark and accent choices remain valid. Avoid decorative nested cards and marketing effects in routine data entry.
+The signature is the winding path toward sunlight. Use the exact extracted illustrations across the landing, authentication, resources, and family dashboard. Public pages have generous editorial spacing; journal forms and operational tables stay calm and practical. `/dev-settings/components` retains the shared component library, and `/experience` retains the optional template specimen. Saved light/dark, alternate accent, and reduced-motion choices remain valid.
 
 Runtime CSS is canonical (ownership model B). `src/app/theme.css` owns every palette, semantic role, state alpha, type size, radius, shell shadow, and motion token. The former `semantic-tokens.css` overrides are retired. `globals.css` imports focused shared behavior styles. This document mirrors accepted values and intent; it does not generate a second theme.
 
 ## Colors
 
-Light mode uses the exact surface/background/text/muted/border values above. The default Aqua action derives from `--color-brand-800` (#17665f); optional accents use their deep palette shade for readable light-mode actions. Dark mode uses #0d141b for the canvas and #141c24 for panels, lighter text, and the selected accent's brighter shade. Leaf green uses #16803c in light mode and #70e69b in dark mode.
+Light mode maps reference oat (#F7F6F0) to the canvas, paper (#FFFEFA) to panels, forest (#294E45) to the default action, ink (#253D36) to text, muted (#65716B) to supporting text, and border (#DCE0D6) to dividers. Sage (#DDE8DC), lilac (#E8E1F1), sunlight (#F3D98E), and clay (#EAD4C7) are expressive reference roles.
+
+Dark mode maps oat to #14231F, paper to #1B2E27, forest to #B4CEBD, ink to #E9EEE5, muted to #A7B9AD, and border to #354B3F. `theme.css` owns both `--gp-*` reference roles and canonical `--color-*` product aliases. The default accent is `brand`; existing alternate palettes remain selectable. Public illustration colors retain their original identity.
 
 Selection fill mixes the selected accent into the current surface: 8% in light mode and 14% in dark mode. Emphasized surfaces use 14%/22%; hover uses 5%/8%; soft selected borders use 50%/55%. These percentages belong to theme.css. Tiles, chips, section cards, sidebar selection, and listbox options share these roles. Never mix an optional accent into a fixed mint background. Focus rings and filled checkbox/radio/switch frames retain strong semantic strokes. Success, warning, and danger remain independent of brand choice.
 
@@ -53,7 +55,7 @@ Selection fill mixes the selected accent into the current surface: 8% in light m
 
 Actions, titles, field labels, navigation, table headers, options, and short statuses use Title Case (every word capitalized); descriptions and validation use sentence case. Follow [copy casing](docs/STRINGS.md#copy-casing), including preserved acronyms and brand spelling.
 
-IBM Plex Sans owns body and headings through Next font variables; IBM Plex Mono owns technical values. Body: 18px/28px. Controls, navigation, labels, and table values: 16px/24px. Captions, badges, and table headers: at least 14px/20px. Use rem-based named utilities, allow labels to wrap, and keep the root font size independent of spacing. All authored display copy belongs in src/strings.ts.
+Locally bundled DM Sans owns body and controls through `--font-body`; locally bundled Lora owns editorial display through `--font-display`. Both were extracted from the supplied reference HTML. Technical values use the system monospace stack. No font network request is needed. Body: 18px/28px. Controls, navigation, labels, and table values: 16px/24px. Captions, badges, and table headers: at least 14px/20px. Use rem-based named utilities, allow labels to wrap, and keep the root font size independent of spacing. All authored display copy belongs in src/strings.ts.
 
 ## Layout
 
@@ -69,7 +71,7 @@ Borders and surface contrast carry structure. theme.css owns the subtle shared c
 
 ## Shapes
 
-Control corners use 10px; cards use 14px; larger dialogs retain the 20px family. The sidebar uses a 36px outer corner. Selected strokes are inset so state changes preserve geometry. Busy buttons preserve their labels' footprint and accessible name. Overlays stay inside dynamic viewport and safe-area bounds.
+Control corners use the reference 12px; cards use the reference 20px; larger dialogs retain the 20px family. The sidebar uses a 36px outer corner. Selected strokes are inset so state changes preserve geometry. Busy buttons preserve their labels' footprint and accessible name. Overlays stay inside dynamic viewport and safe-area bounds.
 
 ## Components
 
@@ -78,7 +80,7 @@ Control corners use 10px; cards use 14px; larger dialogs retain the 20px family.
 | Role                  | Canonical runtime path                                                           | Consumers                                                 |
 | --------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | Palette and surface   | theme.css → --color-accent / --color-surface / --color-bg-*                      | all shared UI                                             |
-| Selection alpha       | `--selection-*-opacity` → `--color-selection-*`                                   | tiles, chips, listboxes, section cards, navigation        |
+| Selection alpha       | `--selection-*-opacity` → `--color-selection-*`                                  | tiles, chips, listboxes, section cards, navigation        |
 | Typography and shapes | theme.css → --text-* / --radius-*                                                | controls, pages, tables                                   |
 | Theme preference      | appearancePreference → service/container → ThemePreferenceProvider + ThemeScript | shell, Appearance, library                                |
 | Motion preference     | motionPreference → service/container → MotionPreferenceProvider + ThemeScript    | CSS and JavaScript motion                                 |
@@ -93,3 +95,14 @@ Stepper defaults to LeafLaunch's horizontal segmented bars with numbered/check m
 ## Do's and Don'ts
 
 Reuse shared components, semantic tokens, motion helpers, and presentation ownership. Check mobile, keyboard, dark/light accents, and reduced motion after system changes. Keep demo previews local. Do not add browser authentication, auth-token storage, new string catalogs, fixed feature palettes, or equivalent screen-local controls.
+
+## Reference reconciliation — October 28, 2026
+
+| Previous Template Rule         | Accepted GentlePath Decision                                   | Runtime Owner                                              |
+| ------------------------------ | -------------------------------------------------------------- | ---------------------------------------------------------- |
+| Aqua / cool gray canvas        | Reference forest / oat / paper                                 | theme.css semantic palette and defaultAppearancePreference |
+| IBM Plex typography            | Extracted local DM Sans and Lora                               | Root layout local-font variables                           |
+| Generic model explorer as home | Personal family workspace; separate role-gated administration  | Portal screens and server layouts                          |
+| Fixed template navigation      | Shared shell receives role-aware destinations and shared brand | ProtectedShell → AppShell → AppSidebarContent              |
+
+All other shared control geometry, focus, motion, and feedback contracts remain applicable. Original reference source is a product field guide: schema inventories and proposed AI/additions are planning evidence, not instructions or claims that external integrations exist.

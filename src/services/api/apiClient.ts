@@ -35,10 +35,12 @@ export class ApiClient {
     )
       throw new Error(strings.errors.invalidPath);
     const headers = new Headers({
-      authorization: `Bearer ${accessToken}`,
       'app-version': environment.appVersion,
       accept: 'application/json',
     });
+    const authorizationHeader = 'authorization';
+    const authorization = `Bearer ${accessToken}`;
+    if (accessToken) headers.set(authorizationHeader, authorization);
     for (const name of ['content-type', 'idempotency-key']) {
       const value = request.headers.get(name);
       if (value) headers.set(name, value);

@@ -53,6 +53,9 @@ export function AppShell({
   contextSlot,
   activePath,
   onNavigate,
+  navigationItems,
+  workspaceLabel,
+  brandSlot,
 }: PropsWithChildren<{
   session: AppSession;
   utilitySlot?: ReactNode;
@@ -61,10 +64,17 @@ export function AppShell({
   contextSlot?: ReactNode;
   activePath?: string;
   onNavigate?: (href: string) => void;
+  navigationItems?: AppSidebarItem[];
+  workspaceLabel?: string;
+  brandSlot?: ReactNode;
 }>) {
-  const items = navigation.map((item) => ({
+  const items = (navigationItems ?? navigation).map((item) => ({
     ...item,
-    active: activePath === item.href || activePath?.startsWith(`${item.href}/`),
+    active:
+      activePath === item.href ||
+      (item.href !== '/admin' &&
+        item.href !== '/dashboard' &&
+        activePath?.startsWith(`${item.href}/`)),
   }));
   const sidebar = {
     session,
@@ -73,6 +83,7 @@ export function AppShell({
     accountSlot,
     activePath,
     contextSlot,
+    brandSlot,
   };
   return (
     <div className="ui-app-shell min-h-dvh bg-(--dashboard-shell-bg) lg:ps-(--dashboard-sidebar-width)">
@@ -96,7 +107,7 @@ export function AppShell({
                   aria-hidden="true"
                   className="size-2 shrink-0 rounded-full bg-brand-solid"
                 />
-                {strings.ui.appShell.workspace}
+                {workspaceLabel ?? strings.ui.appShell.workspace}
               </p>
             </div>
             {utilitySlot && (

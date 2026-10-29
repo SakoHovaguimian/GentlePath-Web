@@ -112,7 +112,10 @@ export function titleCaseViolations(source, file = 'src/strings.ts') {
     for (const declaration of statement.declarationList.declarations) {
       if (
         !declaration.initializer ||
-        !['strings', 'labels'].includes(declaration.name.getText(sf))
+        !(
+          ['strings', 'labels'].includes(declaration.name.getText(sf)) ||
+          declaration.name.getText(sf).endsWith('Strings')
+        )
       )
         continue;
       visit(declaration.initializer, [declaration.name.getText(sf)], 'title');

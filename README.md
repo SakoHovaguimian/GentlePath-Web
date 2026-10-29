@@ -1,6 +1,6 @@
-# Portal
+# GentlePath
 
-A single npm application built with Next.js **16.2.10**, React **19.2.4**, strict TypeScript, Tailwind CSS v4, and TanStack Query. Domain modules call an API client through an authenticated Next.js backend proxy. Shared React Aria/Radix UI primitives and Portal’s light/dark accent themes live in the same application.
+A single npm application built with Next.js **16.2.10**, React **19.2.4**, strict TypeScript, Tailwind CSS v4, and TanStack Query. Domain modules call an API client through an authenticated Next.js backend proxy. Shared React Aria/Radix UI primitives and GentlePath’s light/dark accent themes live in the same application.
 
 ## Start with the demo
 
@@ -12,13 +12,13 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3001. The sample environment sets `DEMO_MODE=true`. Sign in with `sako@example.com` and `password123`, or create a demo account. Demo mutations are stored in server memory across navigation and reloads; restarting the server restores fixtures.
+Open http://localhost:3001. The development script uses Next.js Webpack because the installed Turbopack development CSS resolver resolves relative stylesheet imports from the repository root; the optimized production build still uses Turbopack. The sample environment sets `DEMO_MODE=true`. Choose Family Member, Admin, or SuperAdmin on the sign-in screen. Seed accounts are `user@gentlepath.demo`, `admin@gentlepath.demo`, and `superadmin@gentlepath.demo`; all use `password123`. You can also create a demo family account. Demo mutations are stored in server memory across navigation and reloads; restarting the server restores fixtures.
 
-Demo mode includes users, profile updates, feature requests, dashboard counts, a shared chat, and simulated alerts. It makes no Firebase, backend, Socket.IO, Messaging, or Amplitude calls. Optional analytics and browser push controls explain their demo state.
+Demo mode includes family profiles, private journals, resources and favorites, per-child observations, role-aware dashboards, a complete blog publishing workflow, people and moderation operations, and SuperAdmin platform settings. `/dev-settings` controls server-backed populated/loading/empty/error scenarios, response latency, trusted demo role switching, and fixture reset. Public visitors start at `/`; sign in to open `/dashboard` or `/admin`. It makes no Firebase, backend, Socket.IO, Messaging, or Amplitude calls. Optional analytics and browser push controls explain their demo state.
 
 ## Component foundation
 
-Open `/dev-settings/components` after signing in. Portal includes the LeafLaunch shared component foundation, mobile navigation and record layouts, animated segmented controls, horizontal/vertical steppers, persistent panels, Markdown editing, media previews, and shared light/dark/accent/motion settings. Previews stay local. Read [UI system](docs/UI_SYSTEM.md) before extending a screen.
+Open `/dev-settings/components` after signing in. GentlePath includes the LeafLaunch shared component foundation, mobile navigation and record layouts, animated segmented controls, horizontal/vertical steppers, persistent panels, Markdown editing, media previews, and shared light/dark/accent/motion settings. Previews stay local. Read [UI system](docs/UI_SYSTEM.md) before extending a screen.
 
 ## Live mode
 
@@ -43,6 +43,7 @@ The repository contains no tests by instruction. `check` runs ESLint with zero w
 ## Find your way around
 
 - [AGENTS.md](AGENTS.md): concise agent landing page and task index.
+- [GentlePath routes, RBAC, and API](docs/GENTLEPATH.md), [blog publishing](docs/BLOG.md).
 - [Architecture](docs/ARCHITECTURE.md): modules, services, browser/server boundaries, state ownership.
 - [Demo mode](docs/DEMO_MODE.md), [authentication](docs/AUTH.md), [realtime](docs/REALTIME.md), [analytics](docs/ANALYTICS.md).
 - [Strings](docs/STRINGS.md): all display copy is centralized in `src/strings.ts`.

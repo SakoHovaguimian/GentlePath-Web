@@ -19,6 +19,8 @@ interface MarkdownEditorProps {
   required?: boolean;
   maxLength?: number;
   'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean;
 }
 
 export function MarkdownEditor({
@@ -29,6 +31,8 @@ export function MarkdownEditor({
   required = false,
   maxLength = 100000,
   'aria-labelledby': labelledBy,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
 }: MarkdownEditorProps) {
   const generated = useId();
   const inputId = id ?? generated;
@@ -98,7 +102,10 @@ export function MarkdownEditor({
             id={inputId}
             aria-labelledby={labelledBy}
             aria-label={labelledBy ? undefined : copy.source}
-            aria-describedby={`${inputId}-hint`}
+            aria-describedby={[`${inputId}-hint`, describedBy]
+              .filter(Boolean)
+              .join(' ')}
+            aria-invalid={invalid}
             rows={18}
             className="min-h-96 resize-none font-mono leading-relaxed"
             value={value}

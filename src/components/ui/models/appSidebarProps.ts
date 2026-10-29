@@ -9,4 +9,5 @@ export interface AppSidebarProps {
   accountSlot?: ReactNode;
   activePath?: string;
   contextSlot?: ReactNode;
+  brandSlot?: ReactNode;
 }

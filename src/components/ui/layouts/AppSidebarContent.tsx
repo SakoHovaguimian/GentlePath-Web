@@ -16,6 +16,7 @@ export function AppSidebarContent({
   activePath,
   contextSlot,
   headerAction,
+  brandSlot,
 }: AppSidebarProps & { headerAction?: ReactNode }) {
   const homeHref = '/dashboard';
   const displayName =
@@ -50,7 +51,7 @@ export function AppSidebarContent({
                 : undefined
             }
           >
-            {strings.app.name}
+            {brandSlot ?? strings.app.name}
           </a>
           {headerAction}
         </div>

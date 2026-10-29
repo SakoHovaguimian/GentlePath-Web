@@ -7,6 +7,9 @@
 @import '../components/ui/styles/choices.css';
 @import '../components/ui/styles/navigation.css';
 @import '../components/ui/styles/imageMosaic.css';
+@import '../modules/landing/styles/public-shell.css';
+@import '../modules/landing/styles/landing.css';
+@import '../modules/auth/styles/auth.css';
 
 @plugin "tailwindcss-react-aria-components";
 @plugin "tailwindcss-animate";

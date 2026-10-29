@@ -7,6 +7,7 @@ import type { FirebaseAuthServiceInterface } from '@/services/auth/firebaseAuthS
 import type { FirebaseAuthSession } from '@/services/auth/models/firebaseAuthSession';
 import { AuthError } from '@/errors/domainErrors';
 import { strings } from '@/strings';
+import { getDemoState } from '@/services/demo/demoState';
 import {
   decodeSession,
   encodeSession,
@@ -15,10 +16,32 @@ import {
 } from './sessionCodec';
 export class SessionService {
   private readonly refreshes = new Map<string, Promise<FirebaseAuthSession>>();
-  constructor(private readonly auth: FirebaseAuthServiceInterface) {}
+  constructor(
+    private readonly auth: FirebaseAuthServiceInterface,
+    private readonly demoMode = false,
+  ) {}
   async read(): Promise<ServerSession | null> {
     const token = (await cookies()).get(sessionCookieName)?.value;
-    return token ? decodeSession(token) : null;
+    const session = token ? await decodeSession(token, this.demoMode) : null;
+    if (session?.demo) {
+      const user = getDemoState().users.find(
+        (candidate) =>
+          candidate.id === session.user.id &&
+          candidate.external_id === session.auth.externalId &&
+          !candidate.deleted &&
+          !candidate.disabled,
+      );
+      if (!user) return null;
+      session.user = {
+        id: user.id,
+        externalId: user.external_id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        role: user.role ?? 'user',
+      };
+    }
+    return session;
   }
   async publicSession(): Promise<AppSession | null> {
     const session = await this.read();

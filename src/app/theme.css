@@ -10,10 +10,10 @@
   --ios-push-shadow:
     0 8px 32px rgb(16 24 40 / 18%), inset 0 1px 0 rgb(255 255 255 / 70%);
   /* FONT FAMILY */
-  --font-body: Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display:
-    Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'Geist Mono', SFMono-Regular, Consolas, monospace;
+  --font-body:
+    'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: Lora, Georgia, 'Times New Roman', serif;
+  --font-mono: SFMono-Regular, Consolas, 'Liberation Mono', monospace;
 
   /* FONT SIZE: readable controls, body text, and captions at every width. */
   --text-xs: 0.875rem;
@@ -80,9 +80,9 @@
   --radius-xs: 0.125rem;
   --radius-sm: 0.375rem;
   --radius-DEFAULT: 0.25rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 0.625rem;
-  --radius-xl: 0.875rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1.25rem;
   --radius-2xl: 1.25rem;
   --radius-3xl: 1.75rem;
   --radius-full: 9999px;
@@ -955,17 +955,17 @@
   --font-weight-semibold: 600;
 
   /* First-class semantic aliases used by Leaf Launch. */
-  --color-surface: #ffffff;
-  --color-body: #f7fafb;
-  --color-primary: #111827;
-  --color-secondary: #596579;
+  --color-surface: var(--gp-paper);
+  --color-body: var(--gp-oat);
+  --color-primary: var(--gp-ink);
+  --color-secondary: var(--gp-muted);
   /* Reference green is retained for artwork; action green supports white text. */
-  --color-reference-green: #22c55e;
-  --color-soft-green: #ecfdf3;
-  --color-accent-light: #16803c;
+  --color-reference-green: #8fa78b;
+  --color-soft-green: var(--gp-sage);
+  --color-accent-light: var(--gp-forest);
   --color-accent: var(--color-accent-light);
-  --color-border: #cbd3df;
-  --color-control-border: #8592a5;
+  --color-border: var(--gp-border);
+  --color-control-border: #849184;
   --color-switch-thumb: var(--color-white);
   --color-error: #c62838;
   --color-success: var(--color-success-600);
@@ -978,7 +978,7 @@
     var(--color-primary) 84%,
     var(--color-surface)
   );
-  --color-text-tertiary: #687280;
+  --color-text-tertiary: var(--color-secondary);
   --color-text-tertiary_hover: var(--color-secondary);
   --color-text-quaternary: color-mix(
     in srgb,
@@ -1018,7 +1018,7 @@
   --color-text-brand-tertiary_alt: var(--color-accent);
 
   --color-border-primary: var(--color-border);
-  --color-border-secondary: #e5e7eb;
+  --color-border-secondary: var(--color-border);
   --color-border-secondary_alt: color-mix(
     in srgb,
     var(--color-primary) 10%,
@@ -1569,21 +1569,13 @@
     --outline-color-error_subtle: var(--color-border-error_subtle);
 
     /* PORTAL DARK MODE ---------------------------------------------- */
-    --color-surface: #141c24;
-    --color-body: #0d141b;
-    --color-primary: #f2f6fb;
-    --color-control-border: #738398;
-    --color-secondary: color-mix(
-      in srgb,
-      var(--color-primary) 72%,
-      var(--color-surface)
-    );
-    --color-accent: #70e69b;
-    --color-border: color-mix(
-      in srgb,
-      var(--color-primary) 18%,
-      var(--color-surface)
-    );
+    --color-surface: var(--gp-paper);
+    --color-body: var(--gp-oat);
+    --color-primary: var(--gp-ink);
+    --color-control-border: #809887;
+    --color-secondary: var(--gp-muted);
+    --color-accent: var(--gp-forest);
+    --color-border: var(--gp-border);
     --color-error: #ff8a8a;
     --color-success: var(--color-success-400);
 
@@ -2292,4 +2284,43 @@
   --selection-emphasis-opacity: 22%;
   --selection-hover-opacity: 8%;
   --selection-border-opacity: 55%;
+}
+
+/* GentlePath brand roles: the supplied field guide owns the public identity. */
+:root {
+  --gp-forest: #294e45;
+  --gp-forest-hover: #1f4139;
+  --gp-on-forest: #fffefa;
+  --gp-sage: #dde8dc;
+  --gp-oat: #f7f6f0;
+  --gp-paper: #fffefa;
+  --gp-lilac: #e8e1f1;
+  --gp-plum: #655376;
+  --gp-sunlight: #f3d98e;
+  --gp-clay: #ead4c7;
+  --gp-ink: #253d36;
+  --gp-muted: #65716b;
+  --gp-border: #dce0d6;
+  --gp-leaf: #8fa78b;
+  --gp-shadow: 0 6px 24px rgb(37 61 54 / 3.5%);
+  --gp-menu-shadow: 0 14px 28px rgb(37 61 54 / 8%);
+}
+
+:root.dark-mode {
+  --gp-forest: #b4cebd;
+  --gp-forest-hover: #cbe0cf;
+  --gp-on-forest: #14231f;
+  --gp-sage: #2b4237;
+  --gp-oat: #14231f;
+  --gp-paper: #1b2e27;
+  --gp-lilac: #393246;
+  --gp-plum: #d1bcdf;
+  --gp-sunlight: #4d4229;
+  --gp-clay: #4e3d34;
+  --gp-ink: #e9eee5;
+  --gp-muted: #a7b9ad;
+  --gp-border: #354b3f;
+  --gp-leaf: #a4b69c;
+  --gp-shadow: 0 6px 24px rgb(0 0 0 / 8%);
+  --gp-menu-shadow: 0 14px 28px rgb(0 0 0 / 22%);
 }

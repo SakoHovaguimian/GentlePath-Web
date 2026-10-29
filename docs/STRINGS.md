@@ -2,7 +2,7 @@
 
 **Every authored user-visible string belongs in the single [src/strings.ts](../src/strings.ts) file.** This includes JSX text, labels, placeholders, page metadata, buttons, table headers, validation/error messages, empty/loading states, toasts, dialog copy, accessible names, static demo content, and visible enum labels. English is the current language; browser locale is used only for the platform-owned date picker.
 
-Import `strings` and, when needed, `labels` from `@/strings`. Both exports are defined directly in `src/strings.ts`. Organize copy with nested domain/screen keys inside that file. Do not create additional catalog files, a strings directory, or re-export shims. Shared accent, tone, and panel labels belong in the same file.
+Import `strings` and, when needed, `labels` from `@/strings`. Both exports are defined directly in `src/strings.ts`. GentlePath domain groups also use named `*Strings` exports in that same catalog; they receive the same title-case checks. Organize copy with nested domain/screen keys inside that file. Do not create additional catalog files, a strings directory, or re-export shims. Shared accent, tone, and panel labels belong in the same file.
 
 ```tsx
 import { strings } from '@/strings';

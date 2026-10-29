@@ -36,8 +36,10 @@ export const environment = {
     return process.env.APP_VERSION || '1.0.0';
   },
 };
-export function getRuntimeConfig(): RuntimeConfig {
-  if (environment.demoMode)
+export function getRuntimeConfig(
+  demoMode = environment.demoMode,
+): RuntimeConfig {
+  if (demoMode)
     return {
       demoMode: true,
       socketUrl: null,

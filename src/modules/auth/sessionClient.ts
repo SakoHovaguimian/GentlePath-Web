@@ -2,6 +2,7 @@
 
 import { strings } from '@/strings';
 import type { Route } from 'next';
+import { AppSessionSchema } from '@/models/appSession';
 
 const allowedRedirectPrefixes = [
   '/dashboard',
@@ -12,6 +13,13 @@ const allowedRedirectPrefixes = [
   '/experience',
   '/dev-settings',
   '/chat',
+  '/journal',
+  '/family',
+  '/resources',
+  '/milestones',
+  '/saved',
+  '/admin',
+  '/superadmin',
 ] as const;
 
 export async function createSession(body: Record<string, unknown>) {
@@ -29,6 +37,15 @@ export async function createSession(body: Record<string, unknown>) {
       payload?.message ?? strings.ui.sessionClient.unableToEstablishSession,
     );
   }
+  return AppSessionSchema.parse(await response.json());
+}
+
+export async function enableDemoMode() {
+  const response = await fetch('/api/dev-settings/demo', {
+    method: 'POST',
+    credentials: 'same-origin',
+  });
+  if (!response.ok) throw new Error(strings.errors.unavailable);
 }
 
 export function resolveAuthRedirect(redirectTo?: string): Route {

@@ -1,6 +1,13 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { buttonClassName, Card } from '@/components/ui';
+import { GentlePathBrand } from '@/components/GentlePathBrand';
+import { UiIcon } from '@/components/ui';
+import {
+  gentlePathAuthStrings,
+  gentlePathLandingStrings,
+  gentlePathPortalStrings,
+} from '@/strings';
 
 type AuthCardShellProps = {
   badge: string;
@@ -11,6 +18,7 @@ type AuthCardShellProps = {
   footerAction: string;
   children: ReactNode;
   mockHint?: string;
+  variant?: 'login' | 'signup';
 };
 
 export function AuthCardShell({
@@ -22,37 +30,76 @@ export function AuthCardShell({
   footerAction,
   children,
   mockHint,
+  variant = 'login',
 }: AuthCardShellProps) {
   return (
-    <Card className="auth-card-enter overflow-hidden p-0 shadow-(--dashboard-shell-shadow-lg)">
-      <div className="border-b border-secondary bg-secondary_subtle px-6 py-6 sm:px-8">
-        <div className="auth-reveal mb-4 inline-flex rounded-full border border-brand/40 bg-brand-primary px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-brand-secondary">
-          {badge}
+    <main className="gp-auth">
+      <aside className="gp-auth-story">
+        <Link
+          href="/"
+          className="gp-brand-link"
+          aria-label={gentlePathLandingStrings.homeLabel}
+        >
+          <GentlePathBrand />
+        </Link>
+        <div className="gp-auth-story-content">
+          <p className="gp-eyebrow">{gentlePathPortalStrings.auth.eyebrow}</p>
+          <h2>
+            {variant === 'signup'
+              ? gentlePathAuthStrings.signupStoryTitle
+              : gentlePathAuthStrings.loginStoryTitle}
+          </h2>
+          <p className="gp-auth-story-description">
+            {variant === 'signup'
+              ? gentlePathAuthStrings.signupStoryDescription
+              : gentlePathAuthStrings.loginStoryDescription}
+          </p>
+          <Image
+            src="/gentlepath/parent-and-child.png"
+            width={1280}
+            height={1280}
+            alt={gentlePathAuthStrings.storyArtAlt}
+            sizes="(max-width: 900px) 1px, 42vw"
+            priority
+          />
         </div>
-        <h1 className="auth-reveal auth-reveal-delay-1 font-display text-3xl font-semibold tracking-tight text-primary">
-          {title}
-        </h1>
-        <p className="auth-reveal auth-reveal-delay-2 mt-2 max-w-md text-sm leading-6 text-tertiary">
-          {description}
+        <p className="gp-auth-story-trust">
+          {gentlePathPortalStrings.auth.trust}
         </p>
-        {mockHint ? (
-          <div className="auth-reveal auth-reveal-delay-3 mt-4 rounded-2xl border border-secondary bg-primary/90 px-4 py-3 text-sm text-secondary">
-            {mockHint}
+      </aside>
+      <section
+        className="gp-auth-form-area"
+        aria-labelledby="gentlepath-auth-title"
+      >
+        <Link href="/" className="gp-auth-back">
+          <UiIcon name="chevronLeft" />
+          {gentlePathPortalStrings.auth.home}
+        </Link>
+        <Link
+          href="/"
+          className="gp-auth-mobile-brand"
+          aria-label={gentlePathLandingStrings.homeLabel}
+        >
+          <GentlePathBrand />
+        </Link>
+        <div className="gp-auth-card">
+          <div className="gp-auth-heading">
+            <p className="gp-eyebrow">{badge}</p>
+            <h1 id="gentlepath-auth-title">{title}</h1>
+            <p>{description}</p>
           </div>
-        ) : null}
-      </div>
-      <div className="grid gap-6 px-6 py-6 sm:px-8">
-        {children}
-        <div className="auth-reveal auth-reveal-delay-3 flex flex-wrap items-center justify-between gap-3 border-t border-secondary pt-5 text-sm text-tertiary">
-          <span>{footerPrompt}</span>
-          <Link
-            className={buttonClassName('secondary', 'min-w-36')}
-            href={footerHref as never}
-          >
-            {footerAction}
-          </Link>
+          {mockHint ? (
+            <p id="gentlepath-auth-demo-hint" className="gp-auth-demo-hint">
+              {mockHint}
+            </p>
+          ) : null}
+          {children}
+          <div className="gp-auth-footer">
+            <span>{footerPrompt}</span>
+            <Link href={footerHref as never}>{footerAction}</Link>
+          </div>
         </div>
-      </div>
-    </Card>
+      </section>
+    </main>
   );
 }

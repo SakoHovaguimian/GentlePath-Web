@@ -1,6 +1,6 @@
 # Reusable UI foundation
 
-Every Portal project starts with the LeafLaunch Web component foundation in `src/components/ui`. Open the authenticated `/dev-settings/components` route to inspect foundations, motion, page patterns, controls, states, tables, reordering, Markdown, and media. Examples use local state only. Appearance and the library share the same theme/motion controls. The component page has one scroll legend and no duplicate section dropdown.
+GentlePath uses the LeafLaunch Web component foundation in `src/components/ui`. Open the authenticated `/dev-settings/components` route to inspect foundations, motion, page patterns, controls, states, tables, reordering, Markdown, and media. Examples use local state only. Appearance and the library share the same theme/motion controls. The component page has one scroll legend and no duplicate section dropdown.
 
 ## Ownership and inventory
 
@@ -29,7 +29,7 @@ Forms/settings use SplitSection and FormActions. Do not constrain a long form to
 
 ## Theme and state
 
-`src/app/theme.css` is the only runtime color source. The old secondary token overrides are removed. Aqua remains the default and 16 accent presets are supported, including Leaf green. ThemeScript validates stored values before hydration. The container constructs preference services; providers apply saved preferences and synchronize browser tabs. Blocked storage produces an inline failure without pretending the choice was saved.
+`src/app/theme.css` is the only runtime color source. The old secondary token overrides are removed. The supplied GentlePath forest palette (`brand`) is the default, with oat/paper surfaces, DM Sans/Lora typography, 12px controls, and 20px cards. Existing alternate accent presets, including Leaf green, remain supported. ThemeScript validates stored values before hydration. The container constructs preference services; providers apply saved preferences and synchronize browser tabs. Blocked storage produces an inline failure without pretending the choice was saved.
 
 Selection uses `--color-selection-fill`, `--color-selection-hover`, and `--color-selection-border`. Their opacity changes with light/dark mode and their hue follows the selected accent. Tiles, chips, listboxes, navigation, and section-card hover/selected states share these roles. Checkbox and focus semantics retain stronger strokes. Keep state opacity in theme.css, not in per-component constants.
 

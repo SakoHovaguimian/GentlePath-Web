@@ -1,4 +1,4 @@
-import { strings } from '@/strings';
+import { strings, gentlePathDemoStrings as copy } from '@/strings';
 import type {
   DashboardModelMetaTransport,
   FeatureRequestTransport,
@@ -13,9 +13,11 @@ export const users: UserTransport[] = [
   {
     id: '11111111-1111-4111-8111-111111111111',
     external_id: 'firebase-demo-user-1',
-    first_name: strings.ui.demoFixtures.sako,
-    last_name: strings.ui.demoFixtures.template,
-    email: strings.ui.demoFixtures.sakoExampleCom,
+    first_name: copy.accounts.user.firstName,
+    last_name: copy.accounts.user.lastName,
+    email: copy.accounts.user.email,
+    role: 'user',
+    disabled: false,
     phone_number: strings.ui.demoFixtures.value15551110001,
     date_of_birth: daysAgo(12000),
     created_at: daysAgo(120),
@@ -25,9 +27,11 @@ export const users: UserTransport[] = [
   {
     id: '22222222-2222-4222-8222-222222222222',
     external_id: 'firebase-demo-user-2',
-    first_name: strings.ui.demoFixtures.ada,
-    last_name: strings.ui.demoFixtures.operator,
-    email: strings.ui.demoFixtures.adaExampleCom,
+    first_name: copy.accounts.admin.firstName,
+    last_name: copy.accounts.admin.lastName,
+    email: copy.accounts.admin.email,
+    role: 'admin',
+    disabled: false,
     phone_number: strings.ui.demoFixtures.value15551110002,
     date_of_birth: daysAgo(10000),
     created_at: daysAgo(90),
@@ -37,9 +41,11 @@ export const users: UserTransport[] = [
   {
     id: '33333333-3333-4333-8333-333333333333',
     external_id: 'firebase-demo-user-3',
-    first_name: strings.ui.demoFixtures.mina,
-    last_name: strings.ui.demoFixtures.signals,
-    email: strings.ui.demoFixtures.minaExampleCom,
+    first_name: copy.accounts.superadmin.firstName,
+    last_name: copy.accounts.superadmin.lastName,
+    email: copy.accounts.superadmin.email,
+    role: 'superadmin',
+    disabled: false,
     phone_number: null,
     date_of_birth: null,
     created_at: daysAgo(45),

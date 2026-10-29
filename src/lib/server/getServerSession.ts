@@ -1,6 +1,6 @@
 import 'server-only';
 import { cache } from 'react';
-import { container } from '@/container';
-export const getServerSession = cache(() =>
-  container.sessionService.publicSession(),
+import { getContainer } from '@/container';
+export const getServerSession = cache(async () =>
+  (await getContainer()).sessionService.publicSession(),
 );

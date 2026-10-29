@@ -4,16 +4,23 @@ import { UserMutationInputSchema } from '@/models/user';
 import { FeatureRequestMutationInputSchema } from '@/models/featureRequest';
 import {
   AuthError,
+  ApiError,
   NotFoundError,
   OwnershipError,
   ValidationError,
 } from '@/errors/domainErrors';
-import { strings } from '@/strings';
+import { strings, gentlePathDemoStrings } from '@/strings';
 import { ChatMessageInputSchema } from '@/modules/chat/models/chatMessage';
 import type { ServerSession } from '@/services/session/models/serverSession';
 import { getDemoState } from './demoState';
 import { dashboardModelMeta } from './demoFixtures';
 import { mapUserMutationToTransport } from '../api/domainMappers';
+import type { DemoContext } from '@/models/demoContext';
+import { getDemoContext } from './demoRuntime';
+import { simulateDemoRequest } from './demoSimulation';
+import { handleDemoPortalRequest } from './demoPortalApi';
+import { handleDemoBlogRequest } from './demoBlogApi';
+import { getDemoPortalState } from './demoPortalState';
 const PageQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(25),
   offset: z.coerce.number().int().min(0).default(0),
@@ -23,10 +30,19 @@ export class DemoApiClient {
     request: Request,
     path: string,
     session: ServerSession,
+    context?: DemoContext,
   ): Promise<Response> {
+    context ??= await getDemoContext();
     const state = getDemoState();
-    const current = state.users.find((user) => user.id === session.user.id);
-    if (!current) throw new AuthError(strings.errors.sessionExpired);
+    const current = state.users.find(
+      (user) =>
+        user.id === session.user.id &&
+        user.external_id === session.auth.externalId &&
+        !user.disabled &&
+        !user.deleted,
+    );
+    if (!current || !session.demo)
+      throw new AuthError(strings.errors.sessionExpired);
     const url = new URL(path, 'http://portal.internal');
     const parts = url.pathname
       .split('/')
@@ -34,6 +50,55 @@ export class DemoApiClient {
       .map(decodeURIComponent);
     const [resource, id] = parts;
     const method = request.method;
+    const trustedSession = {
+      ...session,
+      user: { ...session.user, role: current.role ?? ('user' as const) },
+    };
+    const { settings } = getDemoPortalState();
+    if (
+      settings.maintenanceMode &&
+      trustedSession.user.role === 'user' &&
+      ['portal', 'feature-requests', 'chat'].includes(resource)
+    )
+      throw new ApiError(gentlePathDemoStrings.maintenanceActive, 503);
+    if (!settings.communityEnabled && resource === 'chat' && method !== 'GET')
+      throw new OwnershipError(gentlePathDemoStrings.communityPaused);
+    if (resource === 'admin' && trustedSession.user.role === 'user')
+      throw new OwnershipError();
+    if (
+      ((resource === 'users' && id !== 'profile' && id !== current.id) ||
+        resource === 'dashboard') &&
+      trustedSession.user.role === 'user'
+    )
+      throw new OwnershipError();
+    await simulateDemoRequest(context);
+    if (resource === 'portal' || resource === 'admin')
+      return handleDemoPortalRequest(request, path, trustedSession, context);
+    if (resource === 'blog') {
+      const response = await handleDemoBlogRequest(
+        request,
+        path,
+        trustedSession.user,
+      );
+      if (context.scenario === 'empty' && method === 'GET' && !id) {
+        const body: unknown = await response.clone().json();
+        if (Array.isArray(body))
+          return Response.json([], {
+            headers: { 'cache-control': 'no-store' },
+          });
+        if (
+          body &&
+          typeof body === 'object' &&
+          'data' in body &&
+          Array.isArray(body.data)
+        )
+          return Response.json(
+            { ...body, data: [], total: 0, offset: 0 },
+            { headers: { 'cache-control': 'no-store' } },
+          );
+      }
+      return response;
+    }
     const json = (body: unknown, status = 200) =>
       Response.json(body, { status, headers: { 'cache-control': 'no-store' } });
     const input = async () =>
@@ -41,6 +106,7 @@ export class DemoApiClient {
         throw new ValidationError(strings.errors.invalidInput);
       });
     const page = <T>(rows: T[]) => {
+      if (context.scenario === 'empty') rows = [];
       const { limit, offset } = PageQuerySchema.parse(
         Object.fromEntries(url.searchParams),
       );
@@ -65,17 +131,28 @@ export class DemoApiClient {
       if (method === 'GET' && !id)
         return json(
           page(
-            state.users.filter((user) =>
-              [user.first_name, user.last_name, user.email].some((value) =>
-                value.toLowerCase().includes(search),
-              ),
-            ),
+            state.users
+              .filter(
+                (user) =>
+                  !user.deleted &&
+                  [user.first_name, user.last_name, user.email].some((value) =>
+                    value.toLowerCase().includes(search),
+                  ),
+              )
+              .map((user) => ({
+                ...user,
+                phone_number: null,
+                date_of_birth: null,
+              })),
           ),
         );
       const user =
         id === 'profile' ? current : state.users.find((user) => user.id === id);
       if (!user) throw new NotFoundError();
-      if (method === 'GET') return json(user);
+      if (method === 'GET') {
+        if (user.id !== current.id) throw new OwnershipError();
+        return json(user);
+      }
       if (method === 'PUT' && id !== 'profile') {
         if (user.id !== current.id) throw new OwnershipError();
         const raw = await input();
@@ -182,7 +259,14 @@ export class DemoApiClient {
         const model = url.searchParams.get('model');
         if (model !== 'user' && model !== 'featureRequest')
           throw new NotFoundError();
-        const rows = model === 'user' ? state.users : visibleRequests;
+        const rows =
+          model === 'user'
+            ? state.users.map((user) => ({
+                ...user,
+                phone_number: null,
+                date_of_birth: null,
+              }))
+            : visibleRequests;
         return json(
           page(
             rows.filter((item) =>
@@ -193,7 +277,10 @@ export class DemoApiClient {
       }
     }
     if (resource === 'chat' && id === 'messages') {
-      if (method === 'GET') return json(state.messages.slice(-100));
+      if (method === 'GET')
+        return json(
+          context.scenario === 'empty' ? [] : state.messages.slice(-100),
+        );
       if (method === 'POST') {
         const body = ChatMessageInputSchema.parse(await input());
         const message = {

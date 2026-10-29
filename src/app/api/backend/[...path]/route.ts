@@ -1,6 +1,10 @@
 import { NextRequest } from 'next/server';
-import { container } from '@/container';
-import { environment } from '@/config/environment';
+import { getContainer } from '@/container';
+import { getDemoContext } from '@/services/demo/demoRuntime';
+import {
+  canManageContent,
+  canManagePlatform,
+} from '@/services/auth/permissions';
 import {
   AuthError,
   OwnershipError,
@@ -13,6 +17,7 @@ async function handle(
   request: NextRequest,
   context: { params: Promise<{ path: string[] }> },
 ) {
+  const container = await getContainer();
   try {
     if (!trustedMutation(request))
       throw new OwnershipError(strings.errors.untrusted);
@@ -29,12 +34,29 @@ async function handle(
       throw new ValidationError(strings.errors.invalidPath);
     const session = await container.sessionService.valid();
     if (!session) throw new AuthError(strings.errors.sessionExpired);
+    if (
+      (path[0] === 'admin' ||
+        path[0] === 'blog' ||
+        (path[0] === 'users' &&
+          path[1] !== 'profile' &&
+          path[1] !== session.user.id)) &&
+      !canManageContent(session.user.role)
+    )
+      throw new OwnershipError();
+    if (
+      path[0] === 'admin' &&
+      (path[1] === 'settings' ||
+        (path[1] === 'users' && request.method !== 'GET')) &&
+      !canManagePlatform(session.user.role)
+    )
+      throw new OwnershipError();
     const upstreamPath = `/${path.map(encodeURIComponent).join('/')}${request.nextUrl.search}`;
-    if (environment.demoMode)
+    if (container.demoMode)
       return await container.demoApiClient.proxy(
         request,
         upstreamPath,
         session,
+        await getDemoContext(),
       );
     const retry = request.clone();
     const response = await container.apiClient.proxy(

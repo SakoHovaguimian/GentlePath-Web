@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { strings } from '@/strings';
-export const metadata: Metadata = { title: strings.ui.dashboardScreen.dashboard };
-import { DashboardScreen } from '@/modules/dashboard/DashboardScreen';
+import { gentlePathPortalStrings as copy } from '@/strings';
+import { FamilyDashboardScreen } from '@/modules/portal/FamilyDashboardScreen';
 
-export default async function DashboardPage() {
-  return <DashboardScreen />;
+export const metadata: Metadata = { title: copy.navigation.home };
+export default function GentlePathPage() {
+  return <FamilyDashboardScreen />;
 }

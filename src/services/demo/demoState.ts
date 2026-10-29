@@ -2,7 +2,7 @@ import 'server-only';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { users, featureRequests } from './demoFixtures';
 import type { DemoState } from './models/demoState';
-import { strings } from '@/strings';
+import { strings, gentlePathDemoStrings } from '@/strings';
 export function passwordRecord(password: string) {
   const salt = randomBytes(16).toString('hex');
   return { salt, hash: scryptSync(password, salt, 32).toString('hex') };
@@ -27,7 +27,7 @@ export function getDemoState(): DemoState {
       credentials: new Map(
         users.map((user) => [
           user.external_id,
-          passwordRecord(strings.ui.demoState.password123),
+          passwordRecord(gentlePathDemoStrings.seedPassword),
         ]),
       ),
       refreshTokens: new Map(),
@@ -43,4 +43,9 @@ export function getDemoState(): DemoState {
     };
   }
   return globalDemo.portalDemoState;
+}
+
+export function resetDemoState() {
+  globalDemo.portalDemoState = undefined;
+  return getDemoState();
 }

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserRoleSchema } from './userRole';
 
 export const UserSchema = z.object({
   id: z.string().uuid(),
@@ -6,6 +7,7 @@ export const UserSchema = z.object({
   firstName: z.string().trim().min(1).max(80),
   lastName: z.string().trim().min(1).max(80),
   email: z.string().email(),
+  role: UserRoleSchema.default('user'),
   phoneNumber: z.string().nullable().default(null),
   dateOfBirth: z.string().datetime().nullable().default(null),
   createdAt: z.string().datetime(),

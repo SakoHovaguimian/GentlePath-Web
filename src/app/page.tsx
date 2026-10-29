@@ -1,7 +1,5 @@
-import { redirect } from 'next/navigation';
-import { getServerSession } from '../lib/server/getServerSession';
+import { LandingPage } from '@/modules/landing/LandingPage';
 
-export default async function HomePage() {
-  const session = await getServerSession();
-  redirect(session ? '/dashboard' : '/login');
+export default function HomePage() {
+  return <LandingPage />;
 }
