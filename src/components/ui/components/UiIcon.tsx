@@ -7,6 +7,8 @@ const paths: Record<IconName, string> = {
   chat: 'M4 4h16v12H9l-5 4V4Zm4 5h8m-8 3h5',
   bell: 'M6 9a6 6 0 0 1 12 0v6l2 3H4l2-3V9Zm4 12h4M12 1v2',
   sun: 'M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0ZM12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5',
+  moon: 'M21 13A9 9 0 0 1 11 3a9 9 0 1 0 10 10Z',
+  calendar: 'M4 5h16v16H4V5ZM8 3v4m8-4v4M4 10h16M8 14h2m4 0h2m-8 3h2',
   heart: 'M20 5a5 5 0 0 0-8 1 5 5 0 0 0-8-1c-3 3-1 7 8 14 9-7 11-11 8-14Z',
   star: 'm12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z',
   image: 'M3 3h18v18H3V3Zm0 14 5-5 4 4 3-3 6 6M15 7h.01',

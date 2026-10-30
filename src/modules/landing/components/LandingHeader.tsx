@@ -34,11 +34,11 @@ export function LandingHeader() {
           <Link href="/blog">{copy.navigation.blogLabel}</Link>
         </nav>
         <div className="gp-header-actions">
-          <Link href="/login" className="gp-login-link">
+          <Link href="/login" prefetch={false} className="gp-login-link">
             {copy.navigation.loginAction}
           </Link>
           <Button asChild className="gp-button gp-header-signup">
-            <Link href="/signup">
+            <Link href="/signup" prefetch={false}>
               {copy.navigation.signupAction}
               <UiIcon name="arrowRight" />
             </Link>
@@ -75,11 +75,11 @@ export function LandingHeader() {
         <Link href="/blog" onClick={closeMenu}>
           {copy.navigation.blogLabel}
         </Link>
-        <Link href="/login" onClick={closeMenu}>
+        <Link href="/login" prefetch={false} onClick={closeMenu}>
           {copy.navigation.loginAction}
         </Link>
         <Button asChild className="gp-button">
-          <Link href="/signup" onClick={closeMenu}>
+          <Link href="/signup" prefetch={false} onClick={closeMenu}>
             {copy.navigation.signupAction}
             <UiIcon name="arrowRight" />
           </Link>

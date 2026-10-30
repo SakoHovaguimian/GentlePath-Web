@@ -147,6 +147,10 @@
   color: var(--dashboard-sidebar-foreground);
 }
 
+.ui-sidebar-account .ui-sidebar-profile[aria-current='page'] {
+  background: var(--dashboard-sidebar-hover);
+}
+
 .ui-sidebar-account .ui-button[data-variant='secondary'] {
   width: 100%;
   background: var(--color-transparent);

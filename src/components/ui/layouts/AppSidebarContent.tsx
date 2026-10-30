@@ -27,7 +27,7 @@ export function AppSidebarContent({
     `${session.user.firstName} ${session.user.lastName}`.trim();
   return (
     <div className="ui-sidebar-content flex h-full min-h-0 flex-col">
-      <div className="flex min-h-0 flex-1 flex-col items-stretch gap-6 pt-8 pb-4">
+      <div className="flex min-h-0 flex-1 flex-col items-stretch gap-6 pt-8">
         <div
           className={cn(
             'ui-sidebar-brand flex shrink-0 items-center justify-between gap-3 px-6',
@@ -68,7 +68,13 @@ export function AppSidebarContent({
           variant="ghost"
           className="ui-sidebar-profile -mx-2 h-auto w-[calc(100%+1rem)] min-w-0 justify-start px-2 py-2 text-left whitespace-nowrap"
           aria-label={strings.designSystem.profileLink}
-          aria-current={activePath === '/profile' ? 'page' : undefined}
+          aria-current={
+            activePath === '/profile' ||
+            activePath === '/settings/account' ||
+            activePath === '/settings/devices'
+              ? 'page'
+              : undefined
+          }
         >
           <NavigationLink
             href="/profile"

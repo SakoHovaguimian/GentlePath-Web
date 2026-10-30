@@ -47,7 +47,7 @@ export function MilestoneDirectoryFilters({
       additionalFilters={
         <>
           {milestones && (
-            <Field labelText={copy.milestoneLabel} orientation="inline">
+            <Field labelText={copy.milestoneLabel}>
               <Select
                 value={query.milestone_id}
                 onValueChange={(value) =>
@@ -65,7 +65,7 @@ export function MilestoneDirectoryFilters({
               </Select>
             </Field>
           )}
-          <Field labelText={copy.tagLabel} orientation="inline">
+          <Field labelText={copy.tagLabel}>
             <Select
               value={query.tag}
               onValueChange={(value) => onChange({ tag: value, offset: 0 })}
@@ -80,7 +80,7 @@ export function MilestoneDirectoryFilters({
                 ))}
             </Select>
           </Field>
-          <Field labelText={copy.pageSizeLabel} orientation="inline">
+          <Field labelText={copy.pageSizeLabel}>
             <Select
               value={String(query.limit)}
               onValueChange={(value) =>

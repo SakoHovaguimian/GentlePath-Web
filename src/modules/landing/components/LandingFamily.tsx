@@ -21,7 +21,7 @@ export function LandingFamily() {
             variant="secondary"
             className="gp-button gp-button-soft"
           >
-            <Link href="/signup">
+            <Link href="/signup" prefetch={false}>
               {copy.family.primaryAction}
               <UiIcon name="arrowRight" />
             </Link>

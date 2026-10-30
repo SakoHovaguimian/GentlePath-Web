@@ -30,7 +30,7 @@ interface DirectoryFiltersProps<Status extends string> {
   };
 }
 
-// A compact toolbar row: search grows, status keeps an inline label.
+// Search grows alongside filters, with every label above its control.
 export function DirectoryFilters<Status extends string>({
   id,
   value,
@@ -56,7 +56,7 @@ export function DirectoryFilters<Status extends string>({
     >
       <div
         className={cn(
-          'flex min-w-0 items-center gap-2',
+          'flex min-w-0 items-end gap-2',
           layout === 'stackedSearch'
             ? 'w-full'
             : cn(
@@ -65,10 +65,10 @@ export function DirectoryFilters<Status extends string>({
               ),
         )}
       >
-        <label htmlFor={id} className="sr-only">
-          {copy.search}
-        </label>
-        <div className="min-w-0 flex-1">
+        <div className="grid min-w-0 flex-1 gap-1.5">
+          <label htmlFor={id} className="text-sm font-medium text-secondary">
+            {copy.search}
+          </label>
           <Input
             ref={inputRef}
             id={id}
@@ -108,22 +108,12 @@ export function DirectoryFilters<Status extends string>({
                   'items-start',
                 )
               : additionalFilters
-                ? 'grid w-full min-w-0 grid-cols-2 gap-3 @4xl:ms-auto @4xl:flex @4xl:w-auto @4xl:items-center'
+                ? 'grid w-full min-w-0 grid-cols-2 gap-3 @4xl:ms-auto @4xl:flex @4xl:w-auto @4xl:items-end'
                 : 'w-full @2xl:ms-auto @2xl:w-auto',
           )}
         >
           {showStatus && (
-            <Field
-              labelText={copy.status}
-              orientation="inline"
-              className={
-                layout === 'stackedSearch'
-                  ? 'flex-col items-stretch gap-1.5 sm:flex-row sm:items-center sm:gap-3'
-                  : additionalFilters && layout === 'inline'
-                    ? 'flex-col items-stretch gap-1.5 @4xl:flex-row @4xl:items-center @4xl:gap-3'
-                    : undefined
-              }
-            >
+            <Field labelText={copy.status}>
               <Select
                 className={
                   additionalFilters && layout === 'inline'

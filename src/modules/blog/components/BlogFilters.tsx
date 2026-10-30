@@ -44,7 +44,7 @@ export function BlogFilters({
       }}
       additionalFilters={
         admin ? (
-          <Field labelText={copy.statusLabel} orientation="inline">
+          <Field labelText={copy.statusLabel}>
             <Select
               value={query.status || ''}
               onValueChange={(value) =>

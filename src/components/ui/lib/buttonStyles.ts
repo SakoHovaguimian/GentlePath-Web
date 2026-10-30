@@ -7,7 +7,7 @@ const buttonVariants = {
   secondary:
     'bg-primary text-secondary shadow-none ring-1 ring-secondary ring-inset hover:bg-primary_hover hover:text-secondary_hover disabled:bg-disabled_subtle disabled:text-fg-disabled disabled:ring-disabled',
   destructive:
-    'bg-error-primary text-error-primary ring-1 ring-error_subtle ring-inset hover:bg-error-secondary disabled:bg-disabled_subtle disabled:text-disabled disabled:ring-disabled_subtle',
+    'bg-transparent text-error-primary shadow-none hover:text-error-primary_hover disabled:text-disabled',
   ghost:
     'bg-transparent text-secondary ring-1 ring-transparent hover:bg-secondary_subtle hover:text-primary disabled:text-fg-disabled',
 } as const;

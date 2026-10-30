@@ -5,6 +5,7 @@ import {
   Badge,
   Button,
   Card,
+  IconButton,
   Modal,
   QueryBoundary,
   UiIcon,
@@ -36,7 +37,7 @@ export function MilestoneCard({ milestone, childId }: MilestoneCardProps) {
   return (
     <>
       <Card className="gp-milestone-card">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 flex-wrap gap-1">
             {milestone.tags.map((tag) => (
               <Badge key={tag} intent="brand">
@@ -44,35 +45,52 @@ export function MilestoneCard({ milestone, childId }: MilestoneCardProps) {
               </Badge>
             ))}
           </div>
-          <span className="gp-milestone-card__icon" aria-hidden="true">
-            <UiIcon name="leaf" />
-          </span>
+          <IconButton
+            label={copy.readGuidance}
+            variant="ghost"
+            onClick={() => setReader(true)}
+          >
+            <UiIcon name="info" className="size-5" />
+          </IconButton>
         </div>
-        <h2 className="wrap-anywhere">{milestone.milestone}</h2>
-        <p className="m-0 line-clamp-5 flex-1 whitespace-pre-wrap text-sm leading-7 text-secondary wrap-anywhere">
-          {milestone.information}
-        </p>
-        <Button
-          variant="ghost"
-          className="self-start"
-          onClick={() => setReader(true)}
-        >
-          {copy.readGuidance}
-        </Button>
+        <div className="grid gap-2">
+          <h2 className="wrap-anywhere">{milestone.milestone}</h2>
+          <p className="m-0 line-clamp-2 whitespace-pre-wrap text-sm leading-6 text-secondary wrap-anywhere">
+            {milestone.information}
+          </p>
+        </div>
         <QueryBoundary query={query} loadingMessage={copy.observationLoad}>
           {(page) => (
-            <div className="grid gap-1 rounded-xl bg-secondary_subtle p-3">
-              <span className="text-xs font-medium text-secondary">
-                {copy.latestResponse}
-              </span>
-              <p className="m-0 text-xs text-tertiary wrap-anywhere">
-                {page.data[0]
-                  ? copy.latestObservation(
-                      page.data[0].response_option?.label ?? copy.responseLabel,
-                      formatMilestoneDate(page.data[0].observed_at),
-                    )
-                  : copy.noObservationsDescription}
-              </p>
+            <div className="gp-milestone-card__latest">
+              <UiIcon
+                name={page.data[0] ? 'check' : 'leaf'}
+                className="size-5 shrink-0 text-brand-secondary"
+              />
+              <div className="grid min-w-0 gap-1">
+                <span className="text-xs text-tertiary">
+                  {page.data[0]
+                    ? copy.latestResponse
+                    : copy.noObservationsTitle}
+                </span>
+                {page.data[0] ? (
+                  <>
+                    <p className="m-0 text-sm font-semibold text-primary wrap-anywhere">
+                      {page.data[0].response_option?.label ??
+                        copy.responseLabel}
+                    </p>
+                    <time
+                      dateTime={page.data[0].observed_at}
+                      className="text-xs text-tertiary"
+                    >
+                      {formatMilestoneDate(page.data[0].observed_at)}
+                    </time>
+                  </>
+                ) : (
+                  <p className="m-0 text-sm text-secondary">
+                    {copy.firstObservationHint}
+                  </p>
+                )}
+              </div>
             </div>
           )}
         </QueryBoundary>
@@ -81,29 +99,37 @@ export function MilestoneCard({ milestone, childId }: MilestoneCardProps) {
             {copy.noResponsesDescription}
           </p>
         )}
-        <Button
-          variant="primary"
-          disabled={!activeOptions.length}
-          onClick={() => setEditor(true)}
-        >
-          <UiIcon name="plus" />
-          {copy.observationTitle}
-        </Button>
-        <Button variant="secondary" onClick={() => setHistory(true)}>
-          <UiIcon name="clock" />
-          {copy.observationHistory}
-        </Button>
-        <div className="flex flex-wrap items-center gap-2 border-t border-secondary pt-4">
-          <Button variant="ghost" asChild>
+        <div className="gp-milestone-card__actions">
+          <Button
+            className="px-3 py-2"
+            disabled={!activeOptions.length}
+            onClick={() => setEditor(true)}
+          >
+            <UiIcon name="plus" className="size-4" />
+            {copy.recordShortAction}
+          </Button>
+          <Button
+            variant="ghost"
+            className="px-3 py-2"
+            onClick={() => setHistory(true)}
+          >
+            <UiIcon name="clock" className="size-4" />
+            {copy.historyShortAction}
+          </Button>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-secondary pt-2">
+          <Button variant="ghost" className="px-2 py-2" asChild>
             <Link
               href={`/tips?milestone_id=${encodeURIComponent(milestone.id)}`}
             >
               {copy.browseMilestoneTips}
+              <UiIcon name="arrowRight" className="size-4" />
             </Link>
           </Button>
           <SavedContentButton
             contentType="MILESTONE"
             contentId={milestone.id}
+            variant="ghost"
           />
         </div>
       </Card>

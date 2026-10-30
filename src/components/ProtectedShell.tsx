@@ -9,7 +9,6 @@ import { ThemeToggle } from '@/modules/settings/components/ThemeToggle';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { ShellActions } from '@/components/ShellActions';
 import { GentlePathBrand } from '@/components/GentlePathBrand';
-import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { portalNavigation } from '@/modules/portal/portalNavigation';
 import { NotificationInboxLink } from '@/modules/notification-inbox/components/NotificationInboxLink';
@@ -25,7 +24,6 @@ export function ProtectedShell({
   const { confirmNavigation } = useNavigationGuard();
   const pathname = usePathname();
   const { session } = useSessionState();
-  const runtime = useRuntimeConfig();
   const current = session ?? initialSession;
   const adminArea =
     pathname.startsWith('/admin') || pathname.startsWith('/superadmin');
@@ -45,25 +43,13 @@ export function ProtectedShell({
             <ThemeToggle />
           </>
         }
-        navigationItems={portalNavigation(
-          current.user.role,
-          adminArea,
-          Boolean(runtime.devSettingsEnabled),
-        )}
+        navigationItems={portalNavigation(current.user.role, adminArea)}
         workspaceLabel={
           adminArea ? copy.navigation.adminWorkspace : copy.navigation.workspace
         }
         brandSlot={<GentlePathBrand />}
         navigationLabel={
           adminArea ? copy.navigation.adminGroup : copy.navigation.familyGroup
-        }
-        bannerSlot={
-          runtime.demoMode ? (
-            <p className="m-0 flex flex-wrap items-center gap-2 text-xs text-tertiary">
-              <Badge>{copy.navigation.demo}</Badge>
-              {copy.navigation.demoHint}
-            </p>
-          ) : undefined
         }
         activePath={pathname}
         onBeforeNavigate={confirmNavigation}

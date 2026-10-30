@@ -21,7 +21,9 @@ export function LandingFooter() {
             <Link href="/#support">{copy.navigation.supportLabel}</Link>
             <Link href="/blog">{copy.navigation.blogLabel}</Link>
             <Link href="/dashboard">{copy.navigation.portalLabel}</Link>
-            <Link href="/signup">{copy.navigation.signupAction}</Link>
+            <Link href="/signup" prefetch={false}>
+              {copy.navigation.signupAction}
+            </Link>
           </nav>
         </div>
         <div className="gp-footer-bottom">

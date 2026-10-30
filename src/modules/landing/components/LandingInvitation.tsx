@@ -15,7 +15,7 @@ export function LandingInvitation() {
           <h2 id="gentlepath-invitation-title">{copy.invitation.title}</h2>
           <p>{copy.invitation.description}</p>
           <Button asChild className="gp-button gp-button-large">
-            <Link href="/signup">
+            <Link href="/signup" prefetch={false}>
               {copy.invitation.primaryAction}
               <UiIcon name="arrowRight" />
             </Link>

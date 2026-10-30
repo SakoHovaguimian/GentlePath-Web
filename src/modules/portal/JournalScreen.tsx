@@ -11,6 +11,7 @@ import {
   EmptyState,
   IconButton,
   Input,
+  Field,
   Page,
   PageHeader,
   QueryBoundary,
@@ -90,18 +91,20 @@ export function JournalScreen() {
       />
       <div className="gp-journal-toolbar">
         <div className="gp-journal-search">
-          <Input
-            ref={searchRef}
-            type="search"
-            aria-label={copy.common.search}
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-              setOffset(0);
-            }}
-            placeholder={copy.journal.searchPlaceholder}
-            leadingIcon={<UiIcon name="search" />}
-          />
+          <Field labelText={copy.common.search}>
+            <Input
+              ref={searchRef}
+              type="search"
+              aria-label={copy.common.search}
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
+                setOffset(0);
+              }}
+              placeholder={copy.journal.searchPlaceholder}
+              leadingIcon={<UiIcon name="search" />}
+            />
+          </Field>
           {search && (
             <IconButton
               className="gp-journal-search__clear"

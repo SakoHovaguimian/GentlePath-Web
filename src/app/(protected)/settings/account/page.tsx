@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
-import { AccountScreen } from '@/modules/account-tools/AccountScreen';
-import { gentlePathAccountToolsStrings as copy } from '@/strings';
+import { ProfileScreen } from '@/modules/users/ProfileScreen';
+import { strings } from '@/strings';
 
-export const metadata: Metadata = { title: copy.account.title };
+export const metadata: Metadata = {
+  title: strings.ui.profileScreen.yourProfile,
+};
 export default function AccountPage() {
-  return <AccountScreen />;
+  return <ProfileScreen />;
 }

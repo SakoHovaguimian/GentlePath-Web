@@ -11,7 +11,9 @@ import {
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get(sessionCookieName)?.value;
   const runtime = await getEffectiveRuntime(request.cookies);
-  const session = token ? await decodeSession(token, runtime.demoMode) : null;
+  const decoded = token ? await decodeSession(token, runtime.demoMode) : null;
+  const session =
+    decoded && decoded.auth.expiresAt > Date.now() ? decoded : null;
   const authRoute = ['/login', '/signup'].includes(request.nextUrl.pathname);
   if (!session && !authRoute) {
     const url = new URL('/login', request.url);

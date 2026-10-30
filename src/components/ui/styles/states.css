@@ -1,6 +1,12 @@
 /* Inset strokes preserve control geometry, shadows, and separate focus rings. */
 :is(
-  .ui-button:not(.ui-section-card, .ui-sidebar-link, .ui-step),
+  .ui-button:not(
+    .ui-section-card,
+    .ui-sidebar-link,
+    .ui-sidebar-profile,
+    .ui-step,
+    [data-variant='destructive']
+  ),
   .ui-select-option,
   .ui-badge
 ):is(
@@ -10,10 +16,13 @@
   [aria-current]:not([aria-current='false']),
   [data-selected]:not([data-selected='false'])
 ),
-.ui-button:not(.ui-section-card, .ui-sidebar-link, .ui-step):is(
-    :active,
-    [data-pressed]
-  ):not(:disabled):not([aria-disabled='true']) {
+.ui-button:not(
+    .ui-section-card,
+    .ui-sidebar-link,
+    .ui-sidebar-profile,
+    .ui-step,
+    [data-variant='destructive']
+  ):is(:active, [data-pressed]):not(:disabled):not([aria-disabled='true']) {
   @apply inset-ring-[length:var(--control-selected-border-width)] inset-ring-[color:var(--ui-selection-border-color,var(--color-border-brand))];
 }
 
@@ -35,10 +44,6 @@
 .ui-input[data-preview-state='focused'] {
   border-color: var(--color-border-brand);
   @apply inset-ring-[length:calc(var(--control-selected-border-width)-1px)] inset-ring-[color:var(--color-border-brand)];
-}
-
-.ui-button[data-variant='destructive'] {
-  --ui-selection-border-color: var(--color-border-error);
 }
 
 .ui-input[aria-invalid='true']:is(:focus, [data-preview-state='focused']),
@@ -125,7 +130,11 @@
 ),
 .ui-selection-tile:has(:checked),
 .ui-section-card:active:not(:disabled),
-.ui-button[data-variant='ghost']:not(.ui-step, .ui-section-card):is(
+.ui-button[data-variant='ghost']:not(
+    .ui-step,
+    .ui-section-card,
+    .ui-sidebar-profile
+  ):is(
     [aria-pressed='true'],
     [aria-expanded='true'],
     [aria-current]:not([aria-current='false'])
@@ -133,7 +142,11 @@
   border-color: var(--color-selection-border);
   @apply inset-ring-[length:calc(var(--control-selected-border-width)-1px)] inset-ring-[color:var(--color-selection-border)];
 }
-.ui-button[data-variant='ghost']:not(.ui-step, .ui-section-card):is(
+.ui-button[data-variant='ghost']:not(
+    .ui-step,
+    .ui-section-card,
+    .ui-sidebar-profile
+  ):is(
     [aria-pressed='true'],
     [aria-expanded='true'],
     [aria-current]:not([aria-current='false'])

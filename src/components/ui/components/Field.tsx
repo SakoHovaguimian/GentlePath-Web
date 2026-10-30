@@ -13,13 +13,10 @@ export function Field({
   labelText,
   children,
   className,
-  orientation = 'vertical',
 }: {
   labelText: string;
   children: ReactNode;
   className?: string;
-  // Inline places a compact label beside its control, e.g. in toolbars.
-  orientation?: 'vertical' | 'inline';
 }) {
   const generatedId = useId();
   const control = isValidElement<{ id?: string; 'aria-labelledby'?: string }>(
@@ -31,10 +28,7 @@ export function Field({
   return (
     <div
       className={cn(
-        'flex min-w-0 text-sm font-medium text-secondary',
-        orientation === 'inline'
-          ? 'flex-row items-center gap-3 [&>label]:shrink-0 [&>label]:text-tertiary'
-          : 'flex-col gap-1.5',
+        'flex min-w-0 flex-col gap-1.5 text-sm font-medium text-secondary',
         className,
       )}
     >

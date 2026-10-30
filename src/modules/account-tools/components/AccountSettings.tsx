@@ -1,60 +1,42 @@
 'use client';
 
-import Link from 'next/link';
+import { NavigationLink } from '@/components/ui/components/NavigationLink';
+import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { useState } from 'react';
-import {
-  Button,
-  DescriptionList,
-  Page,
-  PageHeader,
-  SectionStack,
-  SplitSection,
-} from '@/components/ui';
+import { Button, SectionStack, SplitSection } from '@/components/ui';
 import { useSessionState } from '@/providers/AppProviders';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import { canManagePlatform } from '@/services/auth/permissions';
 import { gentlePathAccountToolsStrings as copy } from '@/strings';
-import { AccountDeletionDialog } from './components/AccountDeletionDialog';
+import { AccountDeletionDialog } from './AccountDeletionDialog';
 
-export function AccountScreen() {
+export function AccountSettings() {
   const { session } = useSessionState();
+  const { confirmNavigation } = useNavigationGuard();
   const runtime = useRuntimeConfig();
   const [deleting, setDeleting] = useState(false);
   if (!session) return null;
   return (
-    <Page>
-      <PageHeader
-        title={copy.account.title}
-        description={copy.account.description}
-        eyebrow={copy.common.accountEyebrow}
-      />
+    <>
       <SectionStack>
         <SplitSection
-          id="account-identity"
-          title={copy.account.identityTitle}
-          description={copy.account.identityHint}
+          id="account-devices"
+          title={copy.account.devicesTitle}
+          description={copy.account.devicesHint}
         >
-          <DescriptionList
-            items={[
-              { label: copy.account.emailLabel, value: session.user.email },
-              {
-                label: copy.account.nameLabel,
-                value: copy.account.formatName(
-                  session.user.firstName,
-                  session.user.lastName,
-                ),
-              },
-            ]}
-          />
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="secondary">
-              <Link href="/profile">{copy.account.profileAction}</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/settings/devices">{copy.account.devicesAction}</Link>
+              <NavigationLink
+                beforeNavigate={confirmNavigation}
+                href="/settings/devices"
+              >
+                {copy.account.devicesAction}
+              </NavigationLink>
             </Button>
             <Button asChild variant="ghost">
-              <Link href="/help">{copy.account.helpAction}</Link>
+              <NavigationLink beforeNavigate={confirmNavigation} href="/help">
+                {copy.account.helpAction}
+              </NavigationLink>
             </Button>
           </div>
         </SplitSection>
@@ -66,12 +48,20 @@ export function AccountScreen() {
           >
             <div className="flex flex-wrap gap-3">
               <Button asChild variant="secondary">
-                <Link href="/settings/delivery-history">
+                <NavigationLink
+                  beforeNavigate={confirmNavigation}
+                  href="/settings/delivery-history"
+                >
                   {copy.deliveries.title}
-                </Link>
+                </NavigationLink>
               </Button>
               <Button asChild variant="secondary">
-                <Link href="/admin/ai-usage">{copy.aiUsage.title}</Link>
+                <NavigationLink
+                  beforeNavigate={confirmNavigation}
+                  href="/admin/ai-usage"
+                >
+                  {copy.aiUsage.title}
+                </NavigationLink>
               </Button>
             </div>
           </SplitSection>
@@ -99,6 +89,6 @@ export function AccountScreen() {
           onClose={() => setDeleting(false)}
         />
       )}
-    </Page>
+    </>
   );
 }

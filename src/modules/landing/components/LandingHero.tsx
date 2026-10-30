@@ -21,7 +21,7 @@ export function LandingHero() {
         <p className="gp-hero-description">{copy.hero.description}</p>
         <div className="gp-hero-actions">
           <Button asChild className="gp-button gp-button-large">
-            <Link href="/signup">
+            <Link href="/signup" prefetch={false}>
               {copy.hero.primaryAction}
               <UiIcon name="arrowRight" />
             </Link>

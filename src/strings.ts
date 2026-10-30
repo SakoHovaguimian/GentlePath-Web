@@ -7805,8 +7805,6 @@ export const gentlePathPortalStrings = {
     familyGroup: 'Your Family',
     adminGroup: 'Your Workspace',
     exploreGroup: 'Explore',
-    demo: 'Demo Workspace',
-    demoHint: 'Sample data. Changes stay in this demo.',
     role: { user: 'User', admin: 'Admin', superadmin: 'SuperAdmin' },
   },
   common: {
@@ -7996,6 +7994,12 @@ export const gentlePathPortalStrings = {
     emptyHint:
       'Add your first child profile to start noticing small steps and keeping their reflections together.',
     birthDate: (date: string) => `Born ${date}`,
+    openProfile: (name: string) => `Open Profile For ${name}`,
+    removeProfile: (name: string) => `Remove Profile For ${name}`,
+    profileAction: 'View Profile',
+    noNotesHint: 'Add the little things that help them feel supported.',
+    // @preserve-case: Compact age units use conventional lowercase abbreviations.
+    age: (years: number, months: number) => `${years} yr ${months} mo`,
   },
   milestones: {
     title: 'Every Small Step Matters',
@@ -9308,6 +9312,9 @@ export const gentlePathEditorialStrings = {
 };
 
 export const gentlePathMilestoneAdminStrings = {
+  recordShortAction: 'Record',
+  historyShortAction: 'History',
+  firstObservationHint: 'A small moment worth remembering.',
   observationTitle: 'Record Observation',
   observationEditTitle: 'Edit Observation',
   observationDescription:
@@ -9659,6 +9666,9 @@ export const gentlePathAccountToolsStrings = {
     operationsTitle: 'Operational Tools',
     operationsHint:
       'Authorized platform operators can inspect delivery history and maintain the AI usage ledger.',
+    devicesTitle: 'Devices And Access',
+    devicesHint:
+      'Manage the devices that receive your notifications and find account support.',
     profileAction: 'Edit Profile',
     devicesAction: 'Manage Devices',
     helpAction: 'Help And Legal Information',

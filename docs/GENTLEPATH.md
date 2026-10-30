@@ -31,6 +31,8 @@ All paths above are under `src/`. Navigation is composed in [portalNavigation](.
 
 ## Family Records And Documents
 
+Family profile cards open the child editor from their main surface, with a separate removal control. Cards display the date of birth and completed calendar age in years/months. Small Steps cards summarize guidance and the latest private observation, with compact Record/History actions and separate guidance, tips, and save controls.
+
 Private journal search/drafts stay out of URLs and browser storage. Child references must belong to the current account. Demo child removal deletes related observations and detaches journal links while retaining journal text. Check the actual backend family contract before changing lifecycle behavior.
 
 Document facade `/portal/documents` maps to `/care-documents` in [the family API](../../GentlePath-API/docs/FAMILY_RECORDS_API.md). Models, service, and live adapter live in `modules/documents`; metadata editing changes title/type/owned child, not the uploaded file or owner.
@@ -98,6 +100,10 @@ Counts ignore the selected read-status filter; the shell bell counts the entire 
 Category/channel preferences apply to future notifications and are separate from FCM/browser authorization. Effective scheduling timezone is explicit override → last detected browser zone → UTC. Nonblocking detection records only the last zone and cannot replace an override. Displayed dates still use browser timezone. Appearance remains the owner of browser push opt-in.
 
 ## Account And Operational Tools
+
+The sidebar account footer opens `/profile`, which combines the profile form, device management entry point, operator tools when authorized, and account deletion. `/settings/account` renders the same combined screen for existing links. Notifications are reached through the header; Account And Devices, Notifications, Developer Settings, and Stories And Insights are absent from sidebar navigation. Developer and public blog routes remain available directly.
+
+Appearance offers two side-by-side Light/Dark choices and browser notification controls. Accent and motion selectors and the analytics settings section are not shown. Device reduced-motion preferences and the existing consent-gated analytics service remain in effect.
 
 `AccountToolsService` maps account/devices/Help to existing users/devices/system endpoints; operator delivery/attempt and AI ledger tools map to their dedicated APIs. Pass trusted current identity and role through the proxy. Never return device tokens, provider identifiers, delivery destinations, or leases to the browser.
 

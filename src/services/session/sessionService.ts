@@ -45,7 +45,9 @@ export class SessionService {
   }
   async publicSession(): Promise<AppSession | null> {
     const session = await this.read();
-    return session ? this.toPublic(session) : null;
+    return session && session.auth.expiresAt > Date.now()
+      ? this.toPublic(session)
+      : null;
   }
   toPublic(session: ServerSession): AppSession {
     return {

@@ -12,7 +12,6 @@ const navigationCopy = gentlePathWorkspaceStrings.navigation;
 export function portalNavigation(
   role: UserRole,
   adminArea: boolean,
-  developer: boolean,
 ): AppSidebarItem[] {
   const family: AppSidebarItem[] = [
     {
@@ -129,22 +128,6 @@ export function portalNavigation(
       ? [...administration, family[0]]
       : [...family, ...(canManageContent(role) ? [administration[0]] : [])]),
     {
-      href: '/blog',
-      label: copy.navigation.blog,
-      icon: <UiIcon name="globe" />,
-      sectionLabel: adminArea ? copy.navigation.exploreGroup : undefined,
-    },
-    {
-      href: '/notifications',
-      label: navigationCopy.notifications,
-      icon: <UiIcon name="bell" />,
-    },
-    {
-      href: '/settings/account',
-      label: navigationCopy.account,
-      icon: <UiIcon name="user" />,
-    },
-    {
       href: '/help',
       label: navigationCopy.help,
       icon: <UiIcon name="file" />,
@@ -155,15 +138,6 @@ export function portalNavigation(
       icon: <UiIcon name="settings" />,
       placement: 'bottom',
     },
-    ...(developer
-      ? [
-          {
-            href: '/dev-settings',
-            label: copy.navigation.developer,
-            icon: <UiIcon name="code" />,
-          },
-        ]
-      : []),
     {
       href: '/',
       label: copy.navigation.public,

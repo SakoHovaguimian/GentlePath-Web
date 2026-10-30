@@ -3,6 +3,8 @@ export type IconName =
   | 'chat'
   | 'bell'
   | 'sun'
+  | 'moon'
+  | 'calendar'
   | 'heart'
   | 'star'
   | 'image'

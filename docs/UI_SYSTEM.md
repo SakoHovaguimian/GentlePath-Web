@@ -31,13 +31,15 @@ Use shared NavigationLink with the navigation guard for guarded links. Clean for
 
 Guard registration alone does not intercept every arbitrary link or browser-history action. Register dirty/busy refs through useUnsavedFormGuard, pass guarded navigation to relevant actions, and clear dirty state only after successful save/discard. Never persist private drafts in browser storage.
 
+Place visible field labels above text fields, dropdowns, and search inputs, including directory filters. Shared Field has one vertical layout.
+
 Show initial loading, background refresh, empty/no-results, and recoverable errors distinctly. Cancel/ignore superseded searches; debounce composition-safe remote search, clear immediately, and restore input focus. Keep safe mounted forms during transient refresh failures. Do not retain inaccessible content after 401/403/404. Mutations prevent duplicate submissions and retain inputs on failure; success feedback follows server confirmation.
 
 ## Controls, Icons, And Destruction
 
 Button loading preserves dimensions and accessible name. Badge/Chip content and UiIcon keep icons inline with text; do not add block wrappers that stack a leading icon over its label. Every icon-only action needs an accessible name.
 
-Use `variant="destructive"` for delete, remove, archive, unpublish, discard, and disabling/reducing access. Conditional save/unlike controls use destructive colors only in the removal state. Confirm consequential actions through PresentationProvider with danger tone, object/scope/consequence, and the safe action initially focused. Do not style ordinary filter clearing or cancellation as destructive.
+Use `variant="destructive"` for delete, remove, archive, unpublish, discard, and disabling/reducing access. It renders red text/icons on a transparent surface without a border or selection stroke; keyboard focus remains visible. Conditional save/unlike controls use destructive colors only in the removal state. Confirm consequential actions through PresentationProvider with danger tone, object/scope/consequence, and the safe action initially focused. Do not style ordinary filter clearing or cancellation as destructive.
 
 Select/MultiSelect keep the trigger's authored width. The popup uses the longest option's intrinsic width, at least the trigger width, capped inside the viewport; wrap only when the viewport requires it. Preserve selected/disabled/highlight/focus states, visible scrolling, typeahead, and keyboard selection. Address/timezone/compact-segmented choices use this same owner.
 

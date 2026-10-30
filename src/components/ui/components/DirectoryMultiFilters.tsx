@@ -47,11 +47,11 @@ export function DirectoryMultiFilters<Status extends string>({
       onSubmit={filters.submit}
       className="@container flex min-w-0 flex-wrap items-end gap-3"
     >
-      <div className="flex min-w-0 flex-1 basis-72 items-center gap-2 lg:max-w-xl">
-        <label htmlFor={id} className="sr-only">
-          {copy.search}
-        </label>
-        <div className="min-w-0 flex-1">
+      <div className="flex min-w-0 flex-1 basis-72 items-end gap-2 lg:max-w-xl">
+        <div className="grid min-w-0 flex-1 gap-1.5">
+          <label htmlFor={id} className="text-sm font-medium text-secondary">
+            {copy.search}
+          </label>
           <Input
             ref={inputRef}
             id={id}
@@ -80,7 +80,7 @@ export function DirectoryMultiFilters<Status extends string>({
         )}
       </div>
       <div className="w-full @2xl:ms-auto @2xl:w-auto">
-        <Field labelText={copy.status} orientation="inline">
+        <Field labelText={copy.status}>
           <MultiSelect
             className="w-full @2xl:w-64"
             value={filters.draft.status ?? []}

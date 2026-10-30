@@ -48,7 +48,7 @@ Light roles are oat canvas, paper panels, forest actions, deep green ink, and mu
 
 Dark mode and alternate accents use the existing semantic aliases in theme.css. Selection/hover fill follows the current surface and accent: light/dark selection 8%/14%, emphasized 14%/22%, hover 5%/8%. Do not copy these constants into screens.
 
-Gold resource ratings use the existing warning/gold utility palette with readable text; a rating is not a warning banner. Selected heart reactions use the shared destructive/red palette. Destructive/removal actions remain visibly red through the canonical button variant. Promotional artwork may use authored colors; disclosures and controls keep themed contrast.
+Gold resource ratings use the existing warning/gold utility palette with readable text; a rating is not a warning banner. Selected heart reactions use the shared destructive/red palette. Destructive/removal actions use the canonical transparent variant with red text/icons and no border or fill. Promotional artwork may use authored colors; disclosures and controls keep themed contrast.
 
 ## Typography
 
@@ -72,11 +72,11 @@ Fields use 12px corners, cards/dialogs 20px, actions the shared capsule radius, 
 
 ## Components
 
-Import shared owners from `@/components/ui`. Their runtime path is theme tokens → shared styles/components → domain screens. Preference services and providers own saved light/dark/accent/motion choices; ThemeScript applies validated values before hydration.
+Import shared owners from `@/components/ui`. Their runtime path is theme tokens → shared styles/components → domain screens. Preference services and providers own saved appearance values; the Appearance screen exposes two illustrated Light/Dark choice tiles, with no accent or motion selectors. ThemeScript applies validated values before hydration.
 
 Use StarRating/RatingSummary for gold resource feedback, ReactionButton for confirmed heart reactions, and Accordion for animated disclosures. Dropdown triggers retain their layout width; popups size to the longest option, at least the trigger width, clamped to the viewport. See the [canonical map](docs/UI_SYSTEM.md#canonical-ui-map).
 
-Motion uses shared 90/140/200/240ms press/feedback/selection/entrance tokens. Device and saved reduced motion suppress CSS/JavaScript movement while state, focus, and placement still update. Keep interactions purposeful: FAQ open/close, star feedback, heart confirmation, and reordering, rather than continuous decoration.
+Motion uses shared 90/140/200/240ms interaction tokens and a 520ms reaction celebration token. Device and saved reduced motion suppress CSS/JavaScript movement while state, focus, and placement still update. Keep interactions purposeful: FAQ open/close, star feedback, heart confirmation, and reordering, rather than continuous decoration.
 
 ## Illustrations And Fonts
 

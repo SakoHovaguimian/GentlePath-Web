@@ -30,7 +30,7 @@ export function ThemeToggle() {
   return (
     <Button
       variant="ghost"
-      className="h-11 w-11 shrink-0 px-0"
+      className="size-11 shrink-0 rounded-full border border-secondary bg-primary px-0 text-secondary hover:bg-primary_hover"
       aria-label={strings.ui.shellActions.darkMode}
       aria-pressed={dark}
       aria-busy={pending}

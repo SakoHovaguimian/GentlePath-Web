@@ -149,11 +149,7 @@ export function DocumentVaultScreen() {
             allStatuses: copy.allCategories,
           }}
           additionalFilters={
-            <Field
-              labelText={copy.childLabel}
-              orientation="inline"
-              className="flex-col items-stretch gap-1.5 sm:flex-row sm:items-center sm:gap-3"
-            >
+            <Field labelText={copy.childLabel}>
               <Select
                 value={childFilter}
                 onValueChange={(value) =>

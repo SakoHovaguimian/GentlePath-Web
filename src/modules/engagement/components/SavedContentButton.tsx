@@ -8,9 +8,11 @@ import { useSavedContentState, useSetSavedContent } from '../hooks';
 export function SavedContentButton({
   contentType,
   contentId,
+  variant = 'primary',
 }: {
   contentType: SavedContentType;
   contentId: string;
+  variant?: 'primary' | 'ghost';
 }) {
   const query = useSavedContentState(contentType, contentId);
   const mutation = useSetSavedContent();
@@ -19,7 +21,8 @@ export function SavedContentButton({
   return (
     <div className="grid gap-2">
       <Button
-        variant={saved ? 'destructive' : 'primary'}
+        variant={saved ? 'destructive' : variant}
+        className={variant === 'ghost' ? 'px-2 py-2' : undefined}
         loading={query.isPending || mutation.isPending}
         disabled={query.isError}
         aria-pressed={saved}

@@ -2237,6 +2237,7 @@
 
 /* Shared interaction timing: short presses, settled selection, restrained entrances. */
 :root {
+  --motion-duration-celebration: 520ms;
   --motion-duration-press: 90ms;
   --motion-duration-fast: 140ms;
   --motion-duration-base: 200ms;
