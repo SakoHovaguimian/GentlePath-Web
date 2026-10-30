@@ -6,18 +6,18 @@ Import from `@/components/ui`; inspect `/dev-settings/components` before adding 
 
 ## Canonical UI Map
 
-| Capability     | Canonical Owner                                         | Source Of Truth     | Allowed Variants                                                   | Verification                                           |
-| -------------- | ------------------------------------------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
-| Select/Listbox | shared Select/MultiSelect, AddressSelect/TimezoneSelect | This Guide + DESIGN | authored trigger; content-sized collision-aware popup              | long options, viewport clamp, keyboard, modal Escape   |
-| Date           | Field/Input and shared schedule fields                  | This Guide + DESIGN | native date/time/datetime-local, OS popup geometry/locale accepted | date-only versus instant, keyboard/browser             |
-| Form           | Field/Input, module Zod schema, FormActions             | This Guide + DESIGN | create/edit/read-only; associated validation                       | first invalid focus, success/failure, retained draft   |
-| Scrollbar      | globals.css and theme tokens                            | This Guide + DESIGN | document/table/chat/overlay, engine fallbacks                      | visible/usable, forced colors, narrow layout           |
-| Toast          | PresentationProvider                                    | This Guide + DESIGN | success/info/warning/error                                         | live region; critical errors also inline               |
-| CRUD           | domain services, query hooks, guarded navigation        | This Guide + DESIGN | lifecycle from owning product contract                             | full demo flow and recovery                            |
+| Capability     | Canonical Owner                                         | Source Of Truth     | Allowed Variants                                                   | Verification                                            |
+| -------------- | ------------------------------------------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------- |
+| Select/Listbox | shared Select/MultiSelect, AddressSelect/TimezoneSelect | This Guide + DESIGN | authored trigger; content-sized collision-aware popup              | long options, viewport clamp, keyboard, modal Escape    |
+| Date           | Field/Input and shared schedule fields                  | This Guide + DESIGN | native date/time/datetime-local, OS popup geometry/locale accepted | date-only versus instant, keyboard/browser              |
+| Form           | Field/Input, module Zod schema, FormActions             | This Guide + DESIGN | create/edit/read-only; associated validation                       | first invalid focus, success/failure, retained draft    |
+| Scrollbar      | globals.css and theme tokens                            | This Guide + DESIGN | document/table/chat/overlay, engine fallbacks                      | visible/usable, forced colors, narrow layout            |
+| Toast          | PresentationProvider                                    | This Guide + DESIGN | success/info/warning/error                                         | live region; critical errors also inline                |
+| CRUD           | domain services, query hooks, guarded navigation        | This Guide + DESIGN | lifecycle from owning product contract                             | full demo flow and recovery                             |
 | Rating         | StarRating/RatingSummary                                | This Guide + DESIGN | native 1–5 radios and aggregate summary                            | hover/focus, keyboard, pending/rollback, theme contrast |
-| Reactions      | ReactionButton                                          | This Guide + DESIGN | pressed/count, outlined/filled heart                               | confirmed animation, errors, reduced motion            |
-| Disclosure     | Accordion                                               | This Guide + DESIGN | accessible multi-open FAQ, retained answers                        | open/close motion, keyboard, reduced motion            |
-| Reordering     | ReorderableList                                         | This Guide + DESIGN | pointer, handle arrows, explicit move controls                     | stable IDs/content, focus, narrow layout               |
+| Reactions      | ReactionButton                                          | This Guide + DESIGN | pressed/count, outlined/filled heart                               | confirmed animation, errors, reduced motion             |
+| Disclosure     | Accordion                                               | This Guide + DESIGN | accessible multi-open FAQ, retained answers                        | open/close motion, keyboard, reduced motion             |
+| Reordering     | ReorderableList                                         | This Guide + DESIGN | pointer, handle arrows, explicit move controls                     | stable IDs/content, focus, narrow layout                |
 
 ## Compose A Screen
 
@@ -36,6 +36,8 @@ Place visible field labels above text fields, dropdowns, and search inputs, incl
 Show initial loading, background refresh, empty/no-results, and recoverable errors distinctly. Cancel/ignore superseded searches; debounce composition-safe remote search, clear immediately, and restore input focus. Keep safe mounted forms during transient refresh failures. Do not retain inaccessible content after 401/403/404. Mutations prevent duplicate submissions and retain inputs on failure; success feedback follows server confirmation.
 
 ## Controls, Icons, And Destruction
+
+MultiSelect’s selection formatter receives the count and selected labels. Directory filters may summarize the count; form fields such as journal feelings show comma-separated labels. Both use the same keyboard-operable popup and clear action.
 
 Button loading preserves dimensions and accessible name. Badge/Chip content and UiIcon keep icons inline with text; do not add block wrappers that stack a leading icon over its label. Every icon-only action needs an accessible name.
 

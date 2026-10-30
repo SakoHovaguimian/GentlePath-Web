@@ -33,7 +33,7 @@ All paths above are under `src/`. Navigation is composed in [portalNavigation](.
 
 Family profile cards open the child editor from their main surface, with a separate removal control. Cards display the date of birth and completed calendar age in years/months. Saved library cards open their content from the card surface; their filled bookmark opens a removal confirmation. Small Steps cards summarize guidance and the latest private observation, with compact Record/History actions and separate guidance, tips, and save controls.
 
-Private journal search/drafts stay out of URLs and browser storage. Child references must belong to the current account. Demo child removal deletes related observations and detaches journal links while retaining journal text. Check the actual backend family contract before changing lifecycle behavior.
+Private journal search/drafts stay out of URLs and browser storage. Reflections support multiple feelings; the picker shows selected labels separated by commas, cards show every feeling on a separate row below the child token, and the top border blends their existing theme colors. New reflections start with Hopeful selected. Saved custom feeling labels remain available when editing. Child references must belong to the current account. Demo child removal deletes related observations and detaches journal links while retaining journal text. Check the actual backend family contract before changing lifecycle behavior.
 
 Document facade `/portal/documents` maps to `/care-documents` in [the family API](../../GentlePath-API/docs/FAMILY_RECORDS_API.md). Models, service, and live adapter live in `modules/documents`; metadata editing changes title/type/owned child, not the uploaded file or owner.
 

@@ -3,6 +3,7 @@ import { gentlePathDemoStrings as copy } from '@/strings';
 import { users } from './demoFixtures';
 import type { Resource } from '@/modules/portal/models/resource';
 import type { DemoPortalState } from './models/demoPortalState';
+import { JournalEmotionSchema } from '@/modules/portal/models/journalEmotion';
 
 const globalPortal = globalThis as typeof globalThis & {
   gentlePathPortalState?: DemoPortalState;
@@ -42,12 +43,13 @@ function createPortalState(): DemoPortalState {
         childId: `child-${userIndex + 1}`,
         title: seed.title,
         body: seed.body,
-        emotion:
+        emotions: [
           index === 0
             ? ('grateful' as const)
             : index === 1
               ? ('calm' as const)
               : ('hopeful' as const),
+        ],
         createdAt: daysAgo(index + 1),
         updatedAt: daysAgo(index + 1),
       })),
@@ -96,7 +98,17 @@ function createPortalState(): DemoPortalState {
 }
 
 export function getDemoPortalState(): DemoPortalState {
-  return (globalPortal.gentlePathPortalState ??= createPortalState());
+  const state = (globalPortal.gentlePathPortalState ??= createPortalState());
+  // Upgrade retained development records without resetting private drafts or edits.
+  for (const entry of state.journals) {
+    if (Array.isArray(entry.emotions)) continue;
+    const legacyEmotion = JournalEmotionSchema.safeParse(
+      'emotion' in entry ? entry.emotion : undefined,
+    );
+    entry.emotions = legacyEmotion.success ? [legacyEmotion.data] : [];
+    Reflect.deleteProperty(entry, 'emotion');
+  }
+  return state;
 }
 
 export function resetDemoPortalState() {

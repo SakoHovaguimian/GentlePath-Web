@@ -1,5 +1,13 @@
 import { useRef, useState, type FormEvent } from 'react';
-import { Button, Field, Input, Modal, Select, TextArea } from '@/components/ui';
+import {
+  Button,
+  Field,
+  Input,
+  Modal,
+  MultiSelect,
+  Select,
+  TextArea,
+} from '@/components/ui';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
@@ -29,11 +37,23 @@ export function JournalEditor({
       ? {
           title: entry.title,
           body: entry.body,
-          emotion: entry.emotion,
+          emotions: entry.emotions,
           childId: entry.childId,
         }
-      : { title: String(), body: '', emotion: 'hopeful', childId: null },
+      : { title: String(), body: '', emotions: ['hopeful'], childId: null },
   );
+  const presetEmotions = Object.entries(copy.journal.emotions).map(
+    ([value, label]) => ({ value, label }),
+  );
+  const emotionOptions = [
+    ...presetEmotions,
+    ...(entry?.emotions ?? [])
+      .filter(
+        (emotion) => !presetEmotions.some((option) => option.value === emotion),
+      )
+      .map((emotion) => ({ value: emotion, label: emotion })),
+  ];
+  const emotionsRef = useRef<HTMLButtonElement>(null);
   const [validation, setValidation] = useState<Record<string, string>>({});
   const mutation = useSaveJournal();
   const { showToast } = usePresentationService();
@@ -61,6 +81,10 @@ export function JournalEditor({
           ]),
         ),
       );
+      if (parsed.error.issues[0].path[0] === 'emotions') {
+        emotionsRef.current?.focus();
+        return;
+      }
       event.currentTarget
         .querySelector<HTMLElement>(
           `[name="${String(parsed.error.issues[0].path[0])}"]`,
@@ -126,19 +150,21 @@ export function JournalEditor({
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field labelText={copy.journal.emotionLabel}>
-            <Select
-              value={input.emotion}
-              onValueChange={(value) =>
-                change('emotion', JournalInputSchema.shape.emotion.parse(value))
+            <MultiSelect
+              ref={emotionsRef}
+              value={input.emotions}
+              options={emotionOptions}
+              onValueChange={(value) => change('emotions', value)}
+              label={copy.journal.emotionLabel}
+              placeholder={copy.journal.emotionsPlaceholder}
+              selectionLabel={copy.journal.selectedEmotions}
+              clearLabel={copy.journal.clearEmotions}
+              aria-invalid={Boolean(validation.emotions)}
+              aria-describedby={
+                validation.emotions ? 'journal-validation' : undefined
               }
               disabled={mutation.isPending}
-            >
-              {Object.entries(copy.journal.emotions).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </Select>
+            />
           </Field>
           <Field labelText={copy.journal.childLabel}>
             <Select

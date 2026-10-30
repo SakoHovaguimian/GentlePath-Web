@@ -18,6 +18,7 @@ import { useJournals, usePortalOverview, useResources } from './hooks';
 import { CommercialServing } from '@/modules/commercial/components/CommercialServing';
 import { WeeklyActivity } from './components/WeeklyActivity';
 import { ResourceCard } from './components/ResourceCard';
+import { JournalEmotions } from './components/JournalEmotions';
 import './styles/portal.css';
 
 export function FamilyDashboardScreen() {
@@ -146,10 +147,14 @@ export function FamilyDashboardScreen() {
                           >
                             <div className="grid min-w-0 gap-2">
                               <span className="text-xs text-tertiary">
-                                {new Date(entry.createdAt).toLocaleDateString(
-                                  'en-US',
-                                  { month: 'short', day: 'numeric' },
-                                )}
+                                {entry.createdAt
+                                  ? new Date(
+                                      entry.createdAt,
+                                    ).toLocaleDateString('en-US', {
+                                      month: 'short',
+                                      day: 'numeric',
+                                    })
+                                  : copy.journal.dateUnavailable}
                               </span>
                               <h3 className="m-0 font-medium text-primary">
                                 {entry.title}
@@ -158,12 +163,9 @@ export function FamilyDashboardScreen() {
                                 {entry.body}
                               </p>
                             </div>
-                            <span
-                              className="gp-emotion"
-                              data-emotion={entry.emotion}
-                            >
-                              {copy.journal.emotions[entry.emotion]}
-                            </span>
+                            <div className="gp-journal-card__tags">
+                              <JournalEmotions emotions={entry.emotions} />
+                            </div>
                           </Link>
                         ))}
                       </div>

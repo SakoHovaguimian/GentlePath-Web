@@ -5929,6 +5929,16 @@ export const strings = {
     description:
       'A thoughtful family space for reflections, resources, and small steps.',
   },
+  notFoundPage: {
+    metadataTitle: 'Page Not Found',
+    eyebrow: '404 · Page Not Found',
+    title: 'A Little Off The Path',
+    description:
+      'We couldn’t find what you’re looking for. The link may have changed, or this item may no longer be available. Let’s get you back to familiar ground.',
+    homeAction: 'Go To Homepage',
+    illustrationAlt:
+      'A winding garden path beside a wooden sign, surrounded by sage leaves and lavender flowers in soft sunlight.',
+  },
   // @sentence-case: Validation and error messages are complete sentences.
   errors: {
     invalidInput: 'Check your entries and try again.',
@@ -7932,6 +7942,12 @@ export const gentlePathPortalStrings = {
     bodyLabel: 'Your Reflection',
     bodyPlaceholder: 'Today, I noticed…',
     emotionLabel: 'How Are You Feeling?',
+    emotionsPlaceholder: 'Choose your feelings…',
+    clearEmotions: 'Clear Feelings',
+    selectedEmotions: (_count: number, labels: readonly string[]) =>
+      labels.join(', '),
+    untitledTitle: 'Untitled Reflection',
+    dateUnavailable: 'Date Unavailable',
     childLabel: 'Connect To A Child',
     personal: 'Just For Me',
     publish: 'Save Reflection',
@@ -8176,6 +8192,8 @@ export const gentlePathPortalStrings = {
     birthDate: 'Enter a valid date of birth that is not in the future.',
     title: 'Give your reflection a title between 1 and 160 characters.',
     body: 'Write a reflection between 1 and 20,000 characters.',
+    emotions:
+      'Choose up to 20 different feelings, each with 1 to 80 characters.',
     resolution: 'Add a resolution note with at least 3 characters.',
   },
   access: {

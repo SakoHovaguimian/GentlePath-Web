@@ -91,6 +91,7 @@ Original PNG illustrations and bundled fonts came from the supplied product refe
 | `path-landscape-v2.png`                                                                                         | Sunlit landscape for public/auth/family/admin regions |
 | `reading-garden-v2.png`                                                                                         | Journal, reading, and resource regions                |
 | `community-garden-v2.png`                                                                                       | Community/communication regions                       |
+| `off-the-path.png`                                                                                              | Watercolor garden and signpost for the root 404 screen |
 | `public/gentlepath/fonts/`                                                                                      | Local DM Sans and Lora; no font network dependency    |
 
 All PNG names above are under `public/gentlepath/`. Use responsive images and catalog alt text. Never embed phone/UI reference mockups as the product interface.

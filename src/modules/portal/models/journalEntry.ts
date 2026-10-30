@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { gentlePathPortalStrings as copy } from '@/strings';
+import { JournalEmotionsSchema } from './journalEmotion';
 
 export const JournalInputSchema = z.object({
   title: z
@@ -12,14 +13,16 @@ export const JournalInputSchema = z.object({
     .trim()
     .min(1, copy.validation.body)
     .max(20000, copy.validation.body),
-  emotion: z.enum(['hopeful', 'calm', 'tired', 'overwhelmed', 'grateful']),
+  emotions: JournalEmotionsSchema,
   childId: z.string().nullable().default(null),
 });
 export const JournalEntrySchema = JournalInputSchema.extend({
   id: z.string(),
   userId: z.string(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  // Existing API records can contain feelings without a message or timestamps.
+  body: z.string(),
+  createdAt: z.string().datetime().nullable(),
+  updatedAt: z.string().datetime().nullable(),
 });
 export type JournalEntry = z.infer<typeof JournalEntrySchema>;
 export type JournalInput = z.infer<typeof JournalInputSchema>;

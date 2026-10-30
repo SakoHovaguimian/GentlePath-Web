@@ -4,6 +4,8 @@ import { gentlePathPortalStrings as copy } from '@/strings';
 import type { ChildProfile } from '../models/childProfile';
 import type { JournalEntry } from '../models/journalEntry';
 import { journalEntryCardId } from '../journalEntryLocation';
+import { journalEmotionGradient } from '../journalEmotionGradient';
+import { JournalEmotions } from './JournalEmotions';
 
 const numericYear = 'numeric';
 
@@ -39,28 +41,34 @@ export function JournalEntryCard({
       aria-labelledby={`${id}-title`}
       tabIndex={-1}
       className="gp-journal-card"
-      data-emotion={entry.emotion}
+      style={{
+        backgroundImage: `linear-gradient(var(--gp-paper), var(--gp-paper)), ${journalEmotionGradient(entry.emotions)}`,
+      }}
       data-linked={focused || undefined}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs text-tertiary">
-          {new Date(entry.createdAt).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: numericYear,
-          })}
+          {entry.createdAt
+            ? new Date(entry.createdAt).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: numericYear,
+              })
+            : copy.journal.dateUnavailable}
         </span>
       </div>
-      <div className="gp-journal-card__tags">
+      <div className="grid justify-items-start gap-2">
         {entry.childId && (
           <span className="gp-child-tag">
             <UiIcon name="user" className="size-3.5" />
             {childrenProfiles.find((child) => child.id === entry.childId)?.name}
           </span>
         )}
-        <span className="gp-emotion" data-emotion={entry.emotion}>
-          {copy.journal.emotions[entry.emotion]}
-        </span>
+        {entry.emotions.length > 0 && (
+          <div className="gp-journal-card__tags">
+            <JournalEmotions emotions={entry.emotions} />
+          </div>
+        )}
       </div>
       <h2 id={`${id}-title`}>{entry.title}</h2>
       <p className="m-0 line-clamp-4 flex-1 text-sm leading-7 whitespace-pre-line text-secondary">

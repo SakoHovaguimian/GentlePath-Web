@@ -407,21 +407,10 @@
   min-height: 21rem;
   padding: 1.5rem;
   border-radius: 1.5rem;
-  border-top: 4px solid var(--gp-sage);
-  background: var(--gp-paper);
-}
-
-.gp-journal-card[data-emotion='calm'],
-.gp-journal-card[data-emotion='tired'] {
-  border-top-color: var(--gp-lilac);
-}
-
-.gp-journal-card[data-emotion='overwhelmed'] {
-  border-top-color: var(--gp-clay);
-}
-
-.gp-journal-card[data-emotion='grateful'] {
-  border-top-color: var(--gp-sunlight);
+  border-top: 4px solid transparent;
+  background-color: var(--gp-paper);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
 }
 
 .gp-journal-card[data-linked],

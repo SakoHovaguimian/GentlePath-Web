@@ -40,7 +40,11 @@ Deploy/check the API's structured-blog and tag-normalization migrations against 
 
 Keep this guide and the compact current evidence below up to date; do not append an implementation diary or historical build transcript.
 
-## Current Evidence — October 29, 2026
+## Current Evidence — October 30, 2026
+
+- Multi-feeling reflections passed web `npm run check` and `DEMO_MODE=true npm run build`; the API passed `npm run check`, `npm run build`, and `npm run validate` under Node 22. Demo browser review confirmed all five feelings, comma-separated picker labels, keyboard deselection, nested Escape, create/reload/edit persistence, every feeling chip on a separate row below the child token, and the gradient card border. The editor and cards fit 390px without horizontal overflow in the reviewed light/dark states. Clearing feelings retained the draft through Keep Editing; temporary reflection removal passed. Appearance and viewport were restored, and the existing preview was left running. The live adapter and registered API contract were inspected locally; live backend writes were not exercised. Apply `20261030120000_journal_reflection_title` before starting the updated API against live data.
+
+- The illustrated root 404 passed `npm run check`, `DEMO_MODE=true npm run build`, and desktop/390px browser review in an isolated production demo preview. Artwork loaded with no horizontal overflow at 390px; workspace recovery retained the dashboard destination through sign-in, homepage recovery opened the landing page, and Back restored the missing-page screen. An unmatched route returned HTTP 404. No live providers or writes were used.
 
 - Web `npm run check` and `DEMO_MODE=true npm run build` passed. API `npm run check`, `npm run build`, and `npm run validate` passed after custom blog topic/cover support. No tests were written.
 - Demo browser review confirmed the removed AI Usage page is unavailable; former ledger facade/canonical proxies returned 404 for reads and mutations. Staff My Path sits after Administration, confirms exit, and retains dirty-draft cancellation. Sequential confirmations start on the safe action and restore focus to the original navigation link after cancellation. Saved Content is reached from the dashboard with no sidebar entry. FAQ disclosures open/close with keyboard controls and expanded purple titles; Light/Dark previews retain their respective palette in both active modes.

@@ -1,4 +1,5 @@
 import 'server-only';
+import { handleLiveJournalRequest } from '@/modules/portal/server/handleLiveJournalRequest';
 import { handleLiveAdministrationRequest } from '@/modules/portal/server/handleLiveAdministrationRequest';
 import { handleLiveDocumentVaultRequest } from '@/modules/documents/server/handleLiveDocumentVaultRequest';
 import { handleLiveCommunityRequest } from '@/modules/community/server/handleLiveCommunityRequest';
@@ -25,6 +26,7 @@ export async function featureBackendProxy(
     (await handleLiveAdministrationRequest(request, path, forward)) ??
     (await handleLiveBlogMediaRequest(request, path, forward)) ??
     (await portalFamilyReads(request, path, forward)) ??
+    (await handleLiveJournalRequest(request, path, forward, userId)) ??
     (await handleLiveDocumentVaultRequest(request, path, forward)) ??
     (await handleLiveCommunityRequest(request, path, forward, userId)) ??
     (await handleLivePollRequest(request, path, forward, userId)) ??

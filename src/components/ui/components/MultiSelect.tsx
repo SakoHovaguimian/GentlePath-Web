@@ -63,7 +63,14 @@ export function MultiSelect<Value extends string>({
               ? placeholder
               : value.length === 1
                 ? options.find((option) => option.value === value[0])?.label
-                : selectionLabel(value.length)
+                : selectionLabel(
+                    value.length,
+                    value.map(
+                      (selected) =>
+                        options.find((option) => option.value === selected)
+                          ?.label ?? selected,
+                    ),
+                  )
           }
         </SelectValue>
         <UiIcon

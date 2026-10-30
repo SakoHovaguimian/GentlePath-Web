@@ -93,7 +93,7 @@ export async function handleDemoPortalRequest(
           .toISOString()
           .slice(0, 10);
         return (
-          ownJournals.filter((entry) => entry.createdAt.startsWith(day))
+          ownJournals.filter((entry) => entry.createdAt?.startsWith(day))
             .length +
           observationDates.filter((observedAt) => observedAt.startsWith(day))
             .length
@@ -145,7 +145,7 @@ export async function handleDemoPortalRequest(
           empty
             ? []
             : [...ownJournals].sort((a, b) =>
-                b.createdAt.localeCompare(a.createdAt),
+                (b.createdAt ?? '').localeCompare(a.createdAt ?? ''),
               ),
         );
       if (method === 'POST' && !id) {
