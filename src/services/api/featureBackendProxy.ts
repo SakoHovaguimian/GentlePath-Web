@@ -5,7 +5,7 @@ import { handleLiveDocumentVaultRequest } from '@/modules/documents/server/handl
 import { handleLiveCommunityRequest } from '@/modules/community/server/handleLiveCommunityRequest';
 import { handleLiveBlogMediaRequest } from '@/modules/blog/server/handleLiveBlogMediaRequest';
 import type { BackendForward } from './models/backendForward';
-import { portalFamilyReads } from './portalFamilyReads';
+import { handleLiveChildProfileRequest } from '@/modules/portal/server/handleLiveChildProfileRequest';
 import { handleLivePollRequest } from '@/modules/polls/server/handleLivePollRequest';
 import { handleLiveEditorialRequest } from '@/modules/editorial/server/handleLiveEditorialRequest';
 import { handleLiveEngagementRequest } from '@/modules/engagement/server/handleLiveEngagementRequest';
@@ -25,7 +25,7 @@ export async function featureBackendProxy(
   return (
     (await handleLiveAdministrationRequest(request, path, forward)) ??
     (await handleLiveBlogMediaRequest(request, path, forward)) ??
-    (await portalFamilyReads(request, path, forward)) ??
+    (await handleLiveChildProfileRequest(request, path, forward, userId)) ??
     (await handleLiveJournalRequest(request, path, forward, userId)) ??
     (await handleLiveDocumentVaultRequest(request, path, forward)) ??
     (await handleLiveCommunityRequest(request, path, forward, userId)) ??

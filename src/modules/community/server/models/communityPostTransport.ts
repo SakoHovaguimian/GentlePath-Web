@@ -1,7 +1,9 @@
+import { CommunityAttachmentsSchema } from '@/modules/community/models/communityAttachment';
 import { z } from 'zod';
 import { CommunityAuthorTransportSchema } from './communityAuthorTransport';
 
 export const CommunityPostTransportSchema = z.object({
+  attachments: CommunityAttachmentsSchema.optional(),
   id: z.string(),
   content_type: z.literal('POST'),
   user_id: z.string().nullable(),

@@ -1,6 +1,12 @@
 'use client';
 
-import { Button, DataPanel, EmptyState, UiIcon } from '@/components/ui';
+import {
+  Button,
+  DataPanel,
+  EmptyState,
+  ErrorState,
+  UiIcon,
+} from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { strings } from '@/strings';
 import { ShowcaseSection } from './ShowcaseSection';
@@ -61,6 +67,22 @@ export function EmptyStatesShowcase() {
             description={copy.emptyHint}
           />
         </DataPanel>
+      </div>
+      <div className="grid min-w-0 gap-3">
+        <h3 className="m-0 text-sm font-semibold text-primary">
+          {strings.ui.states.error}
+        </h3>
+        <ErrorState
+          title={strings.ui.queryBoundary.somethingWentWrong}
+          description={strings.ui.queryBoundary.loadFailureDescription}
+          onRetry={() =>
+            void showToast({
+              title: copy.successTitle,
+              description: copy.actionPreviewHint,
+              intent: 'success',
+            })
+          }
+        />
       </div>
     </ShowcaseSection>
   );

@@ -36,6 +36,8 @@ The [DemoApiClient dispatcher](../src/services/demo/demoApiClient.ts) applies re
 
 All active identities, including staff, own only their private records. Child links must be owned. Server handlers validate mutation inputs, roles, visibility, and current account status independently of the UI. Resource favorite membership is authoritative in the portal favorite set; generalized engagement metadata uses that same membership. Dynamic milestone state owns observation history/counts; legacy fixed responses remain compatibility data. Tag capitalization upgrades retained state without clearing edits.
 
+Community post/poll demo stores retain ordered public attachments and immutable one-level reply links. Root/direct-reply paging uses the same scopes and ascending thread order as the API. Hidden/deleted ancestors or disabled/deleted authors hide replies from discussion counts, reactions, reports, and saved-target resolution; authors can still remove their own hidden replies. Poll media is fixed once voting starts. Reset restores the seeded root/reply discussions and removes added attachments with their synthetic records.
+
 `POST /api/dev-settings/reset` requires confirmation and restores **all server users'** fixtures, removing synthetic accounts/records and uploaded bytes. It reissues a trusted seed session and selects Populated; configured latency is retained. Custom accounts removed by reset must sign in again. Mode changes/recovery do not implicitly reset shared records.
 
 ## Response Scenarios

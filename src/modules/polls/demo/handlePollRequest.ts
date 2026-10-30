@@ -1,3 +1,4 @@
+import { isDemoCommentVisible } from '@/modules/community/demo/isDemoCommentVisible';
 import 'server-only';
 import { z } from 'zod';
 import {
@@ -19,10 +20,13 @@ import { PollInputSchema, type Poll } from '../models/poll';
 import { PollBallotInputSchema } from '../models/pollBallot';
 import {
   PollCommentInputSchema,
+  PollCommentUpdateInputSchema,
   type PollComment,
 } from '../models/pollComment';
 import { PollReactionInputSchema } from '../models/pollReaction';
-import { PollPagingSchema, PollQuerySchema } from '../models/pollQuery';
+import { PollQuerySchema } from '../models/pollQuery';
+import { CommunityCommentQuerySchema } from '@/modules/community/models/communityCommentQuery';
+import { gentlePathCommunityStrings as communityCopy } from '@/strings';
 import type { DemoPoll } from './models/demoPoll';
 import type { DemoPollComment } from './models/demoPollComment';
 import { getDemoPollState } from './pollState';
@@ -80,10 +84,13 @@ export async function handlePollRequest(
   };
   const visiblePoll = (poll: DemoPoll) =>
     !poll.deleted && !poll.hidden && Boolean(activeUser(poll.userId));
-  const visibleComment = (comment: DemoPollComment) =>
-    !comment.deleted &&
-    !comment.hidden &&
-    Boolean(activeUser(comment.userId)) &&
+  const visibleComment = (comment: DemoPollComment): boolean =>
+    isDemoCommentVisible(
+      comment,
+      state.comments,
+      (item) => item.pollId,
+      activeUser,
+    ) &&
     state.polls.some((poll) => poll.id === comment.pollId && visiblePoll(poll));
   const requirePoll = (pollId: string, includeHidden = false) => {
     z.string().uuid().parse(pollId);
@@ -107,6 +114,7 @@ export async function handlePollRequest(
     pollId: comment.pollId,
     userId: comment.userId,
     body: comment.body,
+    parentCommentId: comment.parentCommentId ?? null,
     author: author(comment.userId),
     createdAt: comment.createdAt,
     updatedAt: comment.updatedAt,
@@ -131,6 +139,7 @@ export async function handlePollRequest(
       userId: poll.userId,
       title: poll.title,
       message: poll.message,
+      attachments: poll.attachments ?? [],
       selectionMode: poll.selectionMode,
       tags: [...poll.tags],
       author: author(poll.userId),
@@ -181,7 +190,7 @@ export async function handlePollRequest(
       }
       Object.assign(
         comment,
-        PollCommentInputSchema.parse(await readInput(request)),
+        PollCommentUpdateInputSchema.parse(await readInput(request)),
         { updatedAt: new Date().toISOString() },
       );
       return json(commentData(comment));
@@ -277,6 +286,9 @@ export async function handlePollRequest(
         (input.title !== poll.title ||
           input.message !== poll.message ||
           input.selectionMode !== poll.selectionMode ||
+          (input.attachments !== undefined &&
+            JSON.stringify(input.attachments) !==
+              JSON.stringify(poll.attachments ?? [])) ||
           input.options.length !== activeOptions.length ||
           input.options.some(
             (option) =>
@@ -312,6 +324,9 @@ export async function handlePollRequest(
         message: input.message,
         selectionMode: input.selectionMode,
         tags: input.tags,
+        ...(input.attachments !== undefined
+          ? { attachments: input.attachments }
+          : {}),
         updatedAt: new Date().toISOString(),
       });
       return json(pollData(poll));
@@ -362,7 +377,7 @@ export async function handlePollRequest(
   }
   if (action === 'comments' && !detail) {
     if (method === 'GET') {
-      const paging = PollPagingSchema.parse(
+      const paging = CommunityCommentQuerySchema.parse(
         Object.fromEntries(url.searchParams),
       );
       return json(
@@ -370,9 +385,17 @@ export async function handlePollRequest(
           state.comments
             .filter(
               (comment) =>
-                comment.pollId === poll.id && visibleComment(comment),
+                comment.pollId === poll.id &&
+                visibleComment(comment) &&
+                (!paging.rootOnly || !comment.parentCommentId) &&
+                (!paging.parentCommentId ||
+                  comment.parentCommentId === paging.parentCommentId),
             )
-            .sort(newest)
+            .sort((a, b) =>
+              paging.rootOnly || paging.parentCommentId
+                ? newest(b, a)
+                : newest(a, b),
+            )
             .map(commentData),
           paging,
         ),
@@ -380,9 +403,15 @@ export async function handlePollRequest(
     }
     if (method === 'POST') {
       const input = PollCommentInputSchema.parse(await readInput(request));
+      if (input.parentCommentId) {
+        const parent = requireComment(input.parentCommentId);
+        if (parent.pollId !== poll.id || parent.parentCommentId)
+          throw new ValidationError(communityCopy.validation.replyParent);
+      }
       const now = new Date().toISOString();
       const comment = {
         ...input,
+        parentCommentId: input.parentCommentId ?? null,
         id: crypto.randomUUID(),
         pollId: poll.id,
         userId: current.id,

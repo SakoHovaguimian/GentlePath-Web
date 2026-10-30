@@ -59,7 +59,6 @@ export function ResourceFields({
         error={errors.description}
       >
         <TextArea
-          rows={7}
           value={form.description}
           maxLength={20000}
           disabled={disabled}

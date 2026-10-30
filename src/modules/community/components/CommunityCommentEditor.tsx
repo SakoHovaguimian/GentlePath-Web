@@ -1,5 +1,14 @@
-import { useRef, useState, type FormEvent } from 'react';
-import { Button, Card, Field, Modal, TextArea } from '@/components/ui';
+import { useId, useRef, useState, type FormEvent } from 'react';
+import {
+  BookmarkButton,
+  Button,
+  Card,
+  Field,
+  Modal,
+  TextArea,
+  UiIcon,
+  SuccessCelebration,
+} from '@/components/ui';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { MutationError } from '@/modules/portal/components/MutationError';
@@ -9,19 +18,24 @@ import {
   type CommunityComment,
 } from '../models/communityComment';
 import { useSaveCommunityComment } from '../hooks';
+import { useCommunityCommentActions } from '../useCommunityCommentActions';
 
 interface CommunityCommentEditorProps {
   postId: string;
+  parentCommentId?: string;
   comment?: CommunityComment;
   onClose?: () => void;
   onSaved: () => void;
+  onDeleted?: () => void;
   disabled?: boolean;
 }
 export function CommunityCommentEditor({
   postId,
+  parentCommentId,
   comment,
   onClose,
   onSaved,
+  onDeleted,
   disabled = false,
 }: CommunityCommentEditorProps) {
   const [body, setBody] = useState(comment?.body ?? '');
@@ -30,10 +44,15 @@ export function CommunityCommentEditor({
   const busy = useRef(false);
   const confirmLeave = useUnsavedFormGuard(dirty, busy);
   const mutation = useSaveCommunityComment();
+  const [celebration, setCelebration] = useState(0);
+  const remove = useCommunityCommentActions(() => {
+    dirty.current = false;
+    onDeleted?.();
+    onClose?.();
+  });
+  const pending = mutation.isPending || remove.isPending;
   const { showToast } = usePresentationService();
-  const errorId = comment
-    ? 'community-comment-edit-validation'
-    : 'community-comment-validation';
+  const errorId = useId();
   function close() {
     void confirmLeave().then((allowed) => {
       if (!allowed) return;
@@ -48,8 +67,11 @@ export function CommunityCommentEditor({
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy.current || disabled) return;
-    const parsed = CommunityCommentInputSchema.safeParse({ body });
+    if (busy.current || disabled || remove.isPending) return;
+    const parsed = CommunityCommentInputSchema.safeParse({
+      body,
+      ...(!comment && parentCommentId ? { parentCommentId } : {}),
+    });
     if (!parsed.success) {
       setValidation(copy.validation.comment);
       event.currentTarget.querySelector<HTMLElement>('[name="body"]')?.focus();
@@ -63,9 +85,14 @@ export function CommunityCommentEditor({
         id: comment?.id,
       });
       dirty.current = false;
+      if (!comment) setCelebration((current) => current + 1);
       setBody('');
       void showToast({
-        title: comment ? copy.updatedComment : copy.createdComment,
+        title: comment
+          ? copy.updatedComment
+          : parentCommentId
+            ? copy.replyPosted
+            : copy.createdComment,
         intent: 'success',
       });
       onSaved();
@@ -77,15 +104,17 @@ export function CommunityCommentEditor({
     }
   }
   const form = (
-    <form noValidate onSubmit={submit} className="grid gap-4">
-      <Field labelText={copy.commentLabel}>
+    <form noValidate onSubmit={submit} className="relative grid gap-4">
+      <SuccessCelebration sequence={celebration} />
+      <Field labelText={parentCommentId ? copy.replyLabel : copy.commentLabel}>
         <TextArea
           name="body"
-          rows={comment ? 6 : 4}
           maxLength={20000}
           value={body}
-          placeholder={copy.commentPlaceholder}
-          disabled={mutation.isPending || disabled}
+          placeholder={
+            parentCommentId ? copy.replyPlaceholder : copy.commentPlaceholder
+          }
+          disabled={pending || disabled}
           aria-invalid={Boolean(validation)}
           aria-describedby={validation ? errorId : undefined}
           onChange={(event) => {
@@ -100,28 +129,50 @@ export function CommunityCommentEditor({
           {validation}
         </p>
       )}
-      <MutationError error={mutation.error} />
+      <MutationError error={mutation.error ?? remove.error} />
       <div className="flex flex-wrap justify-end gap-3">
-        {(comment || body) && (
+        {comment && (
           <Button
-            variant="secondary"
-            disabled={mutation.isPending}
-            onClick={close}
+            variant="destructive"
+            className="mr-auto"
+            loading={remove.isPending}
+            disabled={mutation.isPending || disabled}
+            onClick={() => {
+              void remove.deleteComment(comment);
+            }}
           >
+            <UiIcon name="trash" className="size-4" />
+            {copy.deleteComment}
+          </Button>
+        )}
+        {(comment || body || onClose) && (
+          <Button variant="secondary" disabled={pending} onClick={close}>
             {copy.cancel}
           </Button>
         )}
-        <Button type="submit" loading={mutation.isPending} disabled={disabled}>
-          {comment ? copy.saveComment : copy.publishComment}
-        </Button>
+        <BookmarkButton
+          type="submit"
+          loading={mutation.isPending}
+          disabled={disabled || remove.isPending}
+        >
+          {comment
+            ? copy.saveComment
+            : parentCommentId
+              ? copy.postReply
+              : copy.publishComment}
+        </BookmarkButton>
       </div>
     </form>
   );
-  return comment ? (
+  return comment || parentCommentId ? (
     <Modal
       open
-      title={copy.editComment}
-      description={copy.editCommentDescription}
+      title={comment ? copy.editComment : copy.reply}
+      description={
+        parentCommentId && !comment
+          ? copy.replyDescription
+          : copy.editCommentDescription
+      }
       onDismiss={close}
     >
       {form}

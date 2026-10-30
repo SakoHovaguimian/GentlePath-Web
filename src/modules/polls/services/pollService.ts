@@ -1,9 +1,12 @@
+import { CommunityCommentQuerySchema } from '@/modules/community/models/communityCommentQuery';
+import type { CommunityCommentQuery } from '@/modules/community/models/communityCommentQuery';
 import type { ApiClientInterface } from '@/services/api/apiClientInterface';
 import { PollInputSchema, PollSchema, type PollInput } from '../models/poll';
 import { PollPageSchema } from '../models/pollPage';
 import { PollCommentPageSchema } from '../models/pollCommentPage';
 import {
   PollCommentInputSchema,
+  PollCommentUpdateInputSchema,
   PollCommentSchema,
   type PollCommentInput,
 } from '../models/pollComment';
@@ -11,10 +14,8 @@ import { PollBallotInputSchema, PollBallotSchema } from '../models/pollBallot';
 import { PollReactionSchema } from '../models/pollReaction';
 import { PollStatusSchema } from '../models/pollStatus';
 import {
-  PollPagingSchema,
   PollQuerySchema,
   pollQueryParams,
-  type PollPaging,
   type PollQuery,
 } from '../models/pollQuery';
 
@@ -71,10 +72,14 @@ export class PollService {
       method: 'DELETE',
     });
   }
-  async comments(id: string, paging: PollPaging, signal?: AbortSignal) {
+  async comments(
+    id: string,
+    paging: CommunityCommentQuery,
+    signal?: AbortSignal,
+  ) {
     return PollCommentPageSchema.parse(
       await this.api.request(
-        `${root}/${encodeURIComponent(id)}/comments?${pollQueryParams(PollPagingSchema.parse(paging))}`,
+        `${root}/${encodeURIComponent(id)}/comments?${pollQueryParams(CommunityCommentQuerySchema.parse(paging))}`,
         { signal },
       ),
     );
@@ -87,7 +92,10 @@ export class PollService {
           : `${root}/${encodeURIComponent(pollId)}/comments`,
         {
           method: id ? 'PATCH' : 'POST',
-          body: PollCommentInputSchema.parse(input),
+          body: (id
+            ? PollCommentUpdateInputSchema
+            : PollCommentInputSchema
+          ).parse(input),
         },
       ),
     );

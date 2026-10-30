@@ -110,7 +110,6 @@ export function LoginScreen({
           : '/signup'
       }
       footerAction={strings.ui.loginScreen.createAccount}
-      mockHint={demoMode ? gentlePathPortalStrings.auth.demoHint : undefined}
     >
       {accountDeleted && (
         <Card role="status" className="grid gap-2 bg-secondary_subtle">
@@ -129,7 +128,6 @@ export function LoginScreen({
               <Select
                 value={demoRole}
                 disabled={pending}
-                aria-describedby="gentlepath-auth-demo-hint"
                 leadingIcon={<UiIcon name="user" />}
                 onValueChange={(value) => {
                   const role = UserRoleSchema.safeParse(value);

@@ -1,4 +1,5 @@
 import 'server-only';
+import { isDemoCommentVisible } from '@/modules/community/demo/isDemoCommentVisible';
 import { getDemoBlogState } from '@/services/demo/demoBlogState';
 import { getDemoState } from '@/services/demo/demoState';
 import { getDemoCommunityState } from '@/modules/community/demo/communityState';
@@ -16,7 +17,9 @@ export function demoSavedTarget(
   id: string,
 ): SavedContentTarget | null {
   const activeUser = (userId: string) =>
-    getDemoState().users.some((user) => user.id === userId && !user.deleted);
+    getDemoState().users.some(
+      (user) => user.id === userId && !user.deleted && !user.disabled,
+    );
   const summary = (
     title: string | null,
     body: string | null,
@@ -61,9 +64,12 @@ export function demoSavedTarget(
     const comment = state.comments.find(
       (item) =>
         item.id === id &&
-        !item.deleted &&
-        !item.hidden &&
-        activeUser(item.userId),
+        isDemoCommentVisible(
+          item,
+          state.comments,
+          (record) => record.postId,
+          activeUser,
+        ),
     );
     return comment &&
       state.posts.some(
@@ -85,9 +91,12 @@ export function demoSavedTarget(
     const comment = state.comments.find(
       (item) =>
         item.id === id &&
-        !item.deleted &&
-        !item.hidden &&
-        activeUser(item.userId),
+        isDemoCommentVisible(
+          item,
+          state.comments,
+          (record) => record.pollId,
+          activeUser,
+        ),
     );
     return comment &&
       state.polls.some(

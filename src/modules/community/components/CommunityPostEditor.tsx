@@ -1,5 +1,13 @@
 import { useRef, useState, type FormEvent } from 'react';
-import { Button, Field, Input, Modal, TextArea } from '@/components/ui';
+import {
+  BookmarkButton,
+  Button,
+  Field,
+  Input,
+  Modal,
+  TextArea,
+  UiIcon,
+} from '@/components/ui';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { MutationError } from '@/modules/portal/components/MutationError';
@@ -9,24 +17,39 @@ import {
   type CommunityPost,
 } from '../models/communityPost';
 import { useSaveCommunityPost } from '../hooks';
+import { useCommunityPostActions } from '../useCommunityPostActions';
+import type { CommunityAttachment } from '../models/communityAttachment';
+import { CommunityAttachmentsEditor } from './CommunityAttachmentsEditor';
 
 interface CommunityPostEditorProps {
   post?: CommunityPost;
+  writable: boolean;
   onClose: () => void;
+  onDeleted?: () => void;
 }
 export function CommunityPostEditor({
   post,
+  writable,
   onClose,
+  onDeleted,
 }: CommunityPostEditorProps) {
   const [title, setTitle] = useState(post?.title ?? '');
   const [body, setBody] = useState(post?.body ?? '');
   const [tags, setTags] = useState(post?.tags.join(', ') ?? '');
-  const [imageUrl, setImageUrl] = useState(post?.imageUrl ?? '');
+  const [attachments, setAttachments] = useState<CommunityAttachment[]>(
+    post?.attachments ?? [],
+  );
   const [validation, setValidation] = useState<Record<string, string>>({});
   const dirty = useRef(false);
   const busy = useRef(false);
   const confirmLeave = useUnsavedFormGuard(dirty, busy);
   const mutation = useSaveCommunityPost();
+  const remove = useCommunityPostActions(() => {
+    dirty.current = false;
+    onClose();
+    onDeleted?.();
+  });
+  const pending = mutation.isPending || remove.isPending;
   const { showToast } = usePresentationService();
   function change(key: string, update: (value: string) => void, value: string) {
     dirty.current = true;
@@ -40,7 +63,7 @@ export function CommunityPostEditor({
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy.current) return;
+    if (busy.current || !writable || remove.isPending) return;
     const parsed = CommunityPostInputSchema.safeParse({
       title,
       body,
@@ -48,7 +71,8 @@ export function CommunityPostEditor({
         .split(',')
         .map((value) => value.trim())
         .filter(Boolean),
-      imageUrl: imageUrl.trim() || null,
+      imageUrl: attachments.find((item) => item.kind === 'IMAGE')?.url ?? null,
+      attachments,
     });
     if (!parsed.success) {
       setValidation(
@@ -59,10 +83,13 @@ export function CommunityPostEditor({
           ]),
         ),
       );
+      const path = parsed.error.issues[0].path;
+      const name =
+        path[0] === 'attachments'
+          ? `attachment-${path[2] === 'description' ? 'description' : 'url'}-${typeof path[1] === 'number' ? path[1] : 0}`
+          : String(path[0]);
       event.currentTarget
-        .querySelector<HTMLElement>(
-          `[name="${String(parsed.error.issues[0].path[0])}"]`,
-        )
+        .querySelector<HTMLElement>(`[name="${name}"]`)
         ?.focus();
       return;
     }
@@ -95,7 +122,7 @@ export function CommunityPostEditor({
             value={title}
             maxLength={500}
             placeholder={copy.titlePlaceholder}
-            disabled={mutation.isPending}
+            disabled={pending || !writable}
             aria-invalid={Boolean(validation.title)}
             aria-describedby={
               validation.title ? 'community-post-validation' : undefined
@@ -106,11 +133,10 @@ export function CommunityPostEditor({
         <Field labelText={copy.bodyLabel}>
           <TextArea
             name="body"
-            rows={8}
             value={body}
             maxLength={20000}
             placeholder={copy.bodyPlaceholder}
-            disabled={mutation.isPending}
+            disabled={pending || !writable}
             aria-invalid={Boolean(validation.body)}
             aria-describedby={
               validation.body ? 'community-post-validation' : undefined
@@ -125,7 +151,7 @@ export function CommunityPostEditor({
               value={tags}
               maxLength={3030}
               placeholder={copy.tagsPlaceholder}
-              disabled={mutation.isPending}
+              disabled={pending || !writable}
               aria-invalid={Boolean(validation.tags)}
               aria-describedby={
                 validation.tags
@@ -139,30 +165,16 @@ export function CommunityPostEditor({
             {copy.tagsHint}
           </p>
         </div>
-        <div className="grid gap-2">
-          <Field labelText={copy.imageLabel}>
-            <Input
-              name="imageUrl"
-              type="url"
-              value={imageUrl}
-              maxLength={1000}
-              placeholder={copy.imagePlaceholder}
-              disabled={mutation.isPending}
-              aria-invalid={Boolean(validation.imageUrl)}
-              aria-describedby={
-                validation.imageUrl
-                  ? 'community-post-validation community-image-hint'
-                  : 'community-image-hint'
-              }
-              onChange={(event) =>
-                change('imageUrl', setImageUrl, event.target.value)
-              }
-            />
-          </Field>
-          <p id="community-image-hint" className="m-0 text-xs text-tertiary">
-            {copy.imageHint}
-          </p>
-        </div>
+        <CommunityAttachmentsEditor
+          value={attachments}
+          disabled={pending || !writable}
+          error={validation.attachments}
+          onChange={(value) => {
+            dirty.current = true;
+            setAttachments(value);
+            setValidation((current) => ({ ...current, attachments: '' }));
+          }}
+        />
         {Object.values(validation).some(Boolean) && (
           <p
             id="community-post-validation"
@@ -172,18 +184,32 @@ export function CommunityPostEditor({
             {Object.values(validation).filter(Boolean).join(' ')}
           </p>
         )}
-        <MutationError error={mutation.error} />
+        <MutationError error={mutation.error ?? remove.error} />
         <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
-          <Button
-            variant="secondary"
-            disabled={mutation.isPending}
-            onClick={close}
-          >
+          {post && (
+            <Button
+              variant="destructive"
+              className="mr-auto"
+              loading={remove.isPending}
+              disabled={mutation.isPending || !writable}
+              onClick={() => {
+                void remove.deletePost(post);
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.deletePost}
+            </Button>
+          )}
+          <Button variant="secondary" disabled={pending} onClick={close}>
             {copy.cancel}
           </Button>
-          <Button type="submit" loading={mutation.isPending}>
+          <BookmarkButton
+            type="submit"
+            loading={mutation.isPending}
+            disabled={remove.isPending || !writable}
+          >
             {post ? copy.savePost : copy.publish}
-          </Button>
+          </BookmarkButton>
         </div>
       </form>
     </Modal>

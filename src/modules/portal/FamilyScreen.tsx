@@ -33,12 +33,14 @@ export function FamilyScreen() {
         cancelLabel: copy.common.cancel,
       }))
     )
-      return;
+      return false;
     try {
       await remove.mutateAsync(child.id);
       void showToast({ title: copy.family.deleted, intent: 'success' });
+      return true;
     } catch {
       /* Inline error. */
+      return false;
     }
   }
   return (
@@ -87,6 +89,9 @@ export function FamilyScreen() {
           key={editor === 'new' ? 'new' : editor.id}
           child={editor === 'new' ? undefined : editor}
           onClose={() => setEditor(null)}
+          onRemove={editor === 'new' ? undefined : () => deleteChild(editor)}
+          removing={remove.isPending}
+          removalError={remove.error}
         />
       )}
     </Page>

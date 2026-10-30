@@ -1,3 +1,4 @@
+import { CommunityCommentQuerySchema } from '@/modules/community/models/communityCommentQuery';
 import 'server-only';
 import { PlatformAvailabilityTransportSchema } from '@/modules/portal/models/platformAvailabilityTransport';
 import { z } from 'zod';
@@ -5,13 +6,12 @@ import { NotFoundError, ValidationError } from '@/errors/domainErrors';
 import type { BackendForward } from '@/services/api/models/backendForward';
 import { PollInputSchema } from '../models/poll';
 import { PollBallotInputSchema } from '../models/pollBallot';
-import { PollCommentInputSchema } from '../models/pollComment';
-import { PollReactionInputSchema } from '../models/pollReaction';
 import {
-  PollPagingSchema,
-  PollQuerySchema,
-  pollQueryParams,
-} from '../models/pollQuery';
+  PollCommentInputSchema,
+  PollCommentUpdateInputSchema,
+} from '../models/pollComment';
+import { PollReactionInputSchema } from '../models/pollReaction';
+import { PollQuerySchema, pollQueryParams } from '../models/pollQuery';
 import { PollPageMetadataSchema } from '../models/pollPageMetadata';
 import { PollTransportSchema } from './models/pollTransport';
 import { PollBallotTransportSchema } from './models/pollBallotTransport';
@@ -93,7 +93,7 @@ export async function handleLivePollRequest(
     if (id === 'comments' && action) {
       const commentId = z.string().uuid().parse(action);
       if (!detail && method === 'PATCH') {
-        const body = PollCommentInputSchema.parse(await readInput());
+        const body = PollCommentUpdateInputSchema.parse(await readInput());
         return json(
           await comment(
             await read(
@@ -170,6 +170,9 @@ export async function handleLivePollRequest(
         {
           title: body.title,
           message: body.message,
+          ...(body.attachments !== undefined
+            ? { attachments: body.attachments }
+            : {}),
           selection_mode: body.selectionMode,
           tags: body.tags,
           options: body.options.map((option) => ({
@@ -218,12 +221,12 @@ export async function handleLivePollRequest(
     }
     if (action === 'comments' && !detail) {
       if (method === 'GET') {
-        const paging = PollPagingSchema.parse(
+        const paging = CommunityCommentQuerySchema.parse(
           Object.fromEntries(url.searchParams),
         );
         const page = await read(
           pageSchema(PollCommentTransportSchema),
-          `/poll-comments?${pollQueryParams({ ...paging, poll_id: id })}`,
+          `/poll-comments?${pollQueryParams({ limit: paging.limit, offset: paging.offset, poll_id: id, parent_comment_id: paging.parentCommentId, root_only: paging.rootOnly })}`,
         );
         return json({
           data: await Promise.all(page.data.map(comment)),
@@ -236,6 +239,7 @@ export async function handleLivePollRequest(
           mapPollComment(
             await read(PollCommentTransportSchema, '/poll-comments', 'POST', {
               poll_id: id,
+              parent_comment_id: body.parentCommentId ?? null,
               body: body.body,
             }),
             false,

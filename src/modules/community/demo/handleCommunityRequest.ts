@@ -1,3 +1,4 @@
+import { isDemoCommentVisible } from '@/modules/community/demo/isDemoCommentVisible';
 import 'server-only';
 import {
   ApiError,
@@ -20,6 +21,7 @@ import {
 } from '../models/communityPost';
 import {
   CommunityCommentInputSchema,
+  CommunityCommentUpdateInputSchema,
   type CommunityComment,
 } from '../models/communityComment';
 import {
@@ -27,7 +29,7 @@ import {
   type CommunityReport,
 } from '../models/communityReport';
 import { CommunityReactionInputSchema } from '../models/communityReaction';
-import { CommunityPagingSchema } from '../models/communityPaging';
+import { CommunityCommentQuerySchema } from '../models/communityCommentQuery';
 import { CommunityPostQuerySchema } from '../models/communityPostQuery';
 import { CommunityReportQuerySchema } from '../models/communityReportQuery';
 import type { DemoCommunityPost } from './models/demoCommunityPost';
@@ -92,10 +94,13 @@ export async function handleCommunityRequest(
   };
   const visiblePost = (post: DemoCommunityPost) =>
     !post.deleted && !post.hidden && Boolean(activeUser(post.userId));
-  const visibleComment = (comment: DemoCommunityComment) =>
-    !comment.deleted &&
-    !comment.hidden &&
-    Boolean(activeUser(comment.userId)) &&
+  const visibleComment = (comment: DemoCommunityComment): boolean =>
+    isDemoCommentVisible(
+      comment,
+      state.comments,
+      (item) => item.postId,
+      activeUser,
+    ) &&
     state.posts.some((post) => post.id === comment.postId && visiblePost(post));
   const requirePost = (postId: string, includeHidden = false) => {
     const post = state.posts.find(
@@ -120,6 +125,11 @@ export async function handleCommunityRequest(
     title: post.title,
     body: post.body,
     imageUrl: post.imageUrl,
+    attachments: post.attachments?.length
+      ? post.attachments
+      : post.imageUrl
+        ? [{ kind: 'IMAGE', url: post.imageUrl, description: post.title }]
+        : [],
     tags: [...post.tags],
     author: author(post.userId),
     createdAt: post.createdAt,
@@ -135,6 +145,7 @@ export async function handleCommunityRequest(
     postId: comment.postId,
     userId: comment.userId,
     body: comment.body,
+    parentCommentId: comment.parentCommentId ?? null,
     author: author(comment.userId),
     createdAt: comment.createdAt,
     updatedAt: comment.updatedAt,
@@ -175,6 +186,9 @@ export async function handleCommunityRequest(
     }
     if (!id && method === 'POST') {
       const body = CommunityPostInputSchema.parse(await input(request));
+      if (body.attachments !== undefined)
+        body.imageUrl =
+          body.attachments.find((item) => item.kind === 'IMAGE')?.url ?? null;
       const now = new Date().toISOString();
       const post = {
         ...body,
@@ -194,11 +208,12 @@ export async function handleCommunityRequest(
       if (method === 'PATCH' || method === 'DELETE') {
         if (post.userId !== current.id) throw new OwnershipError();
         if (method === 'PATCH') {
-          Object.assign(
-            post,
-            CommunityPostInputSchema.parse(await input(request)),
-            { updatedAt: new Date().toISOString() },
-          );
+          const body = CommunityPostInputSchema.parse(await input(request));
+          if (body.attachments !== undefined)
+            body.imageUrl =
+              body.attachments.find((item) => item.kind === 'IMAGE')?.url ??
+              null;
+          Object.assign(post, body, { updatedAt: new Date().toISOString() });
           return json(postData(post));
         }
         post.deleted = true;
@@ -208,15 +223,23 @@ export async function handleCommunityRequest(
     if (id && action === 'comments') {
       const post = requirePost(id);
       if (method === 'GET') {
-        const paging = CommunityPagingSchema.parse(rawQuery);
+        const paging = CommunityCommentQuerySchema.parse(rawQuery);
         return json(
           page(
             state.comments
               .filter(
                 (comment) =>
-                  comment.postId === post.id && visibleComment(comment),
+                  comment.postId === post.id &&
+                  visibleComment(comment) &&
+                  (!paging.rootOnly || !comment.parentCommentId) &&
+                  (!paging.parentCommentId ||
+                    comment.parentCommentId === paging.parentCommentId),
               )
-              .sort(newest)
+              .sort((a, b) =>
+                paging.rootOnly || paging.parentCommentId
+                  ? newest(b, a)
+                  : newest(a, b),
+              )
               .map(commentData),
             paging,
           ),
@@ -224,9 +247,15 @@ export async function handleCommunityRequest(
       }
       if (method === 'POST') {
         const body = CommunityCommentInputSchema.parse(await input(request));
+        if (body.parentCommentId) {
+          const parent = requireComment(body.parentCommentId);
+          if (parent.postId !== post.id || parent.parentCommentId)
+            throw new ValidationError(copy.validation.replyParent);
+        }
         const now = new Date().toISOString();
         const comment = {
           ...body,
+          parentCommentId: body.parentCommentId ?? null,
           id: crypto.randomUUID(),
           postId: post.id,
           userId: current.id,
@@ -251,7 +280,7 @@ export async function handleCommunityRequest(
     if (method === 'PATCH') {
       Object.assign(
         comment,
-        CommunityCommentInputSchema.parse(await input(request)),
+        CommunityCommentUpdateInputSchema.parse(await input(request)),
         { updatedAt: new Date().toISOString() },
       );
       return json(commentData(comment));
@@ -332,7 +361,11 @@ export async function handleCommunityRequest(
         title: 'title' in target ? target.title : null,
         body: target.body,
         ...('title' in target
-          ? { tags: [...target.tags], imageUrl: target.imageUrl }
+          ? {
+              tags: [...target.tags],
+              imageUrl: target.imageUrl,
+              attachments: structuredClone(target.attachments ?? []),
+            }
           : {}),
         parentId: 'postId' in target ? target.postId : null,
         author: author(target.userId),

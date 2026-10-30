@@ -56,7 +56,6 @@ export function BlogBlockFields({
       <TextArea
         id={`${id}-${key}`}
         {...invalidProps(key)}
-        rows={5}
         disabled={disabled}
         value={value}
         maxLength={maxLength}

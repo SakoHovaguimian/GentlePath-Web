@@ -1,5 +1,7 @@
 'use client';
 
+import { CommunityAttachments } from './components/CommunityAttachments';
+
 import {
   Badge,
   Button,
@@ -129,6 +131,9 @@ export function CommunityReportsScreen() {
                       <p className="gp-community-body mt-3">
                         {report.snapshot.body}
                       </p>
+                      <CommunityAttachments
+                        items={report.snapshot.attachments ?? []}
+                      />
                     </details>
                     {report.resolutionNote ? (
                       <div className="gp-community-review">

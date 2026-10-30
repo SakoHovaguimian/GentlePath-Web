@@ -60,3 +60,17 @@ body:has(.ui-floating-assistant) .ui-page {
     padding: 1rem;
   }
 }
+.ui-card-open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+.ui-card-open:focus-visible::after {
+  outline: 2px solid var(--color-border-brand);
+  outline-offset: 3px;
+}
+.ui-card-open:disabled::after {
+  cursor: not-allowed;
+}

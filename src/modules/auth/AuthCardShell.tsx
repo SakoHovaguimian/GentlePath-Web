@@ -17,7 +17,6 @@ type AuthCardShellProps = {
   footerHref: string;
   footerAction: string;
   children: ReactNode;
-  mockHint?: string;
   variant?: 'login' | 'signup';
 };
 
@@ -29,7 +28,6 @@ export function AuthCardShell({
   footerHref,
   footerAction,
   children,
-  mockHint,
   variant = 'login',
 }: AuthCardShellProps) {
   return (
@@ -45,10 +43,10 @@ export function AuthCardShell({
         <div className="gp-auth-story-content">
           <div className="gp-auth-story-art">
             <Image
-              src="/gentlepath/path-landscape-v2.png"
-              width={1536}
-              height={1024}
-              alt={gentlePathLandingStrings.hero.artAlt}
+              src="/gentlepath/parent-and-child.png"
+              width={1280}
+              height={1280}
+              alt={gentlePathAuthStrings.storyArtAlt}
               sizes="(max-width: 900px) 1px, 48vw"
               preload
             />
@@ -86,10 +84,10 @@ export function AuthCardShell({
         </Link>
         <div className="gp-auth-mobile-art" aria-hidden="true">
           <Image
-            src="/gentlepath/path-landscape-v2.png"
-            width={1536}
-            height={1024}
-            alt={gentlePathLandingStrings.hero.artAlt}
+            src="/gentlepath/parent-and-child.png"
+            width={1280}
+            height={1280}
+            alt={gentlePathAuthStrings.storyArtAlt}
             sizes="(max-width: 900px) 90vw, 1px"
           />
         </div>
@@ -99,11 +97,6 @@ export function AuthCardShell({
             <h1 id="gentlepath-auth-title">{title}</h1>
             <p>{description}</p>
           </div>
-          {mockHint ? (
-            <p id="gentlepath-auth-demo-hint" className="gp-auth-demo-hint">
-              {mockHint}
-            </p>
-          ) : null}
           {children}
           <div className="gp-auth-footer">
             <span>{footerPrompt}</span>

@@ -2,9 +2,9 @@
 
 import { strings } from '@/strings';
 import type { UseQueryResult } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Card } from './Card';
-import { Button } from './Button';
+import { ErrorState } from './ErrorState';
 import { Spinner } from './Spinner';
 
 /**
@@ -33,30 +33,23 @@ function LoadingState({
 function QueryErrorState({
   error,
   onRetry,
+  retrying,
 }: {
-  error: Error;
+  error: Error | null;
   onRetry?: () => void;
+  retrying: boolean;
 }) {
-  const message = getErrorMessage(error);
+  const [previousError, setPreviousError] = useState(error);
+  if (error && error !== previousError) setPreviousError(error);
+  const message = getErrorMessage(error ?? previousError);
 
   return (
-    <Card
-      role="alert"
-      className="grid gap-3 border-error_subtle bg-error-primary"
-    >
-      <span className="inline-flex w-fit items-center rounded-full bg-error px-2.5 py-1 text-xs font-semibold tracking-[0.14em] text-on-error">
-        {strings.ui.queryBoundary.error}
-      </span>
-      <h3 className="m-0 text-lg font-semibold text-primary">
-        {strings.ui.queryBoundary.somethingWentWrong}
-      </h3>
-      <p className="m-0 text-sm text-secondary">{message}</p>
-      {onRetry ? (
-        <Button variant="secondary" onClick={onRetry}>
-          {strings.ui.queryBoundary.tryAgain}
-        </Button>
-      ) : null}
-    </Card>
+    <ErrorState
+      title={strings.ui.queryBoundary.somethingWentWrong}
+      description={message}
+      onRetry={onRetry}
+      retrying={retrying}
+    />
   );
 }
 
@@ -77,8 +70,10 @@ function getErrorMessage(error: unknown): string {
     if (anyError.code === 'NOT_FOUND_ERROR' || anyError.status === 404) {
       return strings.ui.queryBoundary.theRequestedResourceCouldNotBeFound;
     }
+    if (anyError.status && anyError.status >= 500)
+      return strings.ui.queryBoundary.loadFailureDescription;
     if (anyError.code) return error.message;
-    return strings.errors.requestFailed;
+    return strings.ui.queryBoundary.loadFailureDescription;
   }
   return strings.ui.queryBoundary.anUnexpectedErrorOccurred;
 }
@@ -129,13 +124,20 @@ export function QueryBoundary<T>({
   showError = true,
   inset = false,
 }: QueryBoundaryProps<T>): ReactNode {
-  if (query.isLoading) {
+  // A retry retains its error panel and action instead of flashing the initial loader.
+  const retryingError =
+    showError && query.isLoading && query.errorUpdatedAt > 0;
+  if (query.isLoading && !retryingError) {
     return loadingFallback ?? <LoadingState message={loadingMessage} />;
   }
 
-  if (query.isError && showError) {
+  if (showError && (query.isError || retryingError)) {
     const error = (
-      <QueryErrorState error={query.error} onRetry={() => query.refetch()} />
+      <QueryErrorState
+        error={query.error}
+        onRetry={() => void query.refetch()}
+        retrying={query.isFetching}
+      />
     );
     return inset ? <div className="p-4 sm:p-6">{error}</div> : error;
   }

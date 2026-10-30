@@ -15,6 +15,7 @@ import {
   SectionStack,
   SplitSection,
   UiIcon,
+  BookmarkButton,
 } from '@/components/ui';
 import {
   gentlePathBlogStrings as copy,
@@ -336,7 +337,6 @@ export function BlogEditor({
                   <TextArea
                     id="blog-legacy-body"
                     value={form.body}
-                    rows={8}
                     readOnly
                     aria-describedby="blog-legacy-description"
                   />
@@ -423,7 +423,8 @@ export function BlogEditor({
           >
             {copy.backToArticles}
           </Button>
-          <Button
+          <BookmarkButton
+            saved={Boolean(notice) && !dirty}
             type="submit"
             variant="secondary"
             loading={mutations.save.isPending}
@@ -432,7 +433,7 @@ export function BlogEditor({
             {article?.status === 'published'
               ? copy.saveChanges
               : copy.saveDraft}
-          </Button>
+          </BookmarkButton>
           <Button
             variant={
               article?.status === 'published' ? 'destructive' : 'secondary'

@@ -1,5 +1,5 @@
 export function communityQueryParams(
-  query: Record<string, string | number | undefined>,
+  query: Record<string, string | number | boolean | undefined>,
 ) {
   const params = new URLSearchParams();
   Object.entries(query).forEach(([key, value]) => {

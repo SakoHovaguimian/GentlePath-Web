@@ -15,6 +15,9 @@
     "Date": "native",
     "Select/Listbox": "authored"
   },
+  "ownershipNotes": {
+    "Date": "Native by default; Family Profiles use the shared authored DatePicker for the requested accent-colored popup. See docs/UI_SYSTEM.md."
+  },
   "requiredCommands": ["check", "build"],
   "commands": {
     "check": "npm run check",

@@ -46,15 +46,16 @@
   overflow: hidden;
   border-radius: 2rem 2rem 5rem 2rem;
   margin-bottom: 2.25rem;
-  background: var(--gp-paper);
+  background: color-mix(in srgb, var(--gp-paper) 62%, var(--gp-sage));
+  padding: 0.5rem 1rem 0;
 }
 
 .gp-auth-story-art img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 57% center;
+  object-fit: contain;
+  object-position: center 60%;
 }
 
 .gp-auth-story-content h2 {
@@ -154,16 +155,6 @@
   color: var(--gp-muted);
   font-size: 1.0625rem;
   line-height: 1.8;
-}
-
-.gp-auth p.gp-auth-demo-hint {
-  margin-top: 1.5rem;
-  border-radius: 1rem;
-  padding: 1rem 1.15rem;
-  background: var(--gp-sage);
-  color: var(--gp-forest);
-  font-size: 0.875rem;
-  line-height: 1.75;
 }
 
 .gp-auth-form {
@@ -302,8 +293,8 @@
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center 58%;
+    object-fit: contain;
+    object-position: center;
   }
 
   .gp-auth-back {

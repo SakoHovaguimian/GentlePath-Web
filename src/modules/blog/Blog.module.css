@@ -73,6 +73,7 @@
 }
 
 .articleCard {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(8rem, 0.7fr);
   grid-template-rows: 1fr auto;
@@ -174,6 +175,18 @@
   text-decoration: underline;
 }
 
+.cardOpen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 1.75rem;
+}
+.articleCard:has(.cardOpen:focus-visible) {
+  outline: 3px solid var(--color-border-brand);
+  outline-offset: 3px;
+}
+
 .cardCopy a:focus-visible,
 .readLink:focus-visible {
   outline: 3px solid var(--gp-forest);
@@ -197,6 +210,8 @@
 }
 
 .readLink {
+  position: relative;
+  z-index: 2;
   display: flex;
   grid-column: 1 / -1;
   align-items: center;

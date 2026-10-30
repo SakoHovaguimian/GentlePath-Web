@@ -37,7 +37,9 @@ export function BlogArticleCard({
       <div className={styles.cardCopy}>
         <p className={styles.topic}>{blogCategoryLabel(article.category)}</p>
         <Heading>
-          <Link href={`/blog/${article.slug}`}>{article.title}</Link>
+          <Link className={styles.cardOpen} href={`/blog/${article.slug}`}>
+            {article.title}
+          </Link>
         </Heading>
         <p className={styles.description}>{article.description}</p>
         <div className={styles.byline}>

@@ -54,6 +54,7 @@ const paths: Record<IconName, string> = {
   plus: 'M12 5v14M5 12h14',
   close: 'm6 6 12 12M18 6 6 18',
   menu: 'M4 6h16M4 12h16M4 18h16',
+  moreVertical: 'M12 5h.01M12 12h.01M12 19h.01',
   check: 'm5 12 4 4L19 6',
   chevronRight: 'm9 5 7 7-7 7',
   chevronDown: 'm5 9 7 7 7-7',

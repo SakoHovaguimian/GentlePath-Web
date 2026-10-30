@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, type FormEvent } from 'react';
 import {
+  BookmarkButton,
   Button,
   Field,
   FormActions,
@@ -13,13 +14,16 @@ import {
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { MutationError } from '@/modules/portal/components/MutationError';
-import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
+import {
+  gentlePathMilestoneAdminStrings as copy,
+  gentlePathPortalStrings as portalCopy,
+} from '@/strings';
 import {
   MilestoneGuidanceInputSchema,
   type MilestoneGuidance,
 } from '../models/milestoneGuidance';
 import type { ResponseOptionDraft } from '../models/responseOptionDraft';
-import { useSaveMilestoneGuidance } from '../hooks';
+import { useHideMilestoneGuidance, useSaveMilestoneGuidance } from '../hooks';
 import { ResponseOptionEditor } from './ResponseOptionEditor';
 interface MilestoneGuidanceEditorProps {
   milestone?: MilestoneGuidance;
@@ -36,13 +40,24 @@ export function MilestoneGuidanceEditor({
   );
   const [tags, setTags] = useState(milestone?.tags.join(', ') ?? '');
   const [options, setOptions] = useState<ResponseOptionDraft[]>(() =>
-    (milestone?.response_options ?? [])
+    (milestone
+      ? (milestone.response_options ?? [])
+      : Object.entries(portalCopy.milestones.responses).map(
+          ([value, label], position) => ({
+            id: crypto.randomUUID(),
+            value,
+            label,
+            position,
+            deleted: false,
+          }),
+        )
+    )
       .filter((option) => !option.deleted)
       .map((option) => ({
         id: option.id,
         value: option.value,
         label: option.label,
-        existing: true,
+        existing: Boolean(milestone),
       })),
   );
   const [validation, setValidation] = useState<Record<string, string>>({});
@@ -50,7 +65,10 @@ export function MilestoneGuidanceEditor({
     busy = useRef(false);
   const leave = useUnsavedFormGuard(dirty, busy);
   const save = useSaveMilestoneGuidance();
-  const { showToast } = usePresentationService();
+  const remove = useHideMilestoneGuidance();
+  const [confirming, setConfirming] = useState(false);
+  const pending = save.isPending || remove.isPending || confirming;
+  const { showAlert, showToast } = usePresentationService();
   const dismiss = () => {
     void leave().then((allowed) => {
       if (allowed) onClose();
@@ -61,6 +79,32 @@ export function MilestoneGuidanceEditor({
     setValidation({});
     action();
   };
+  async function hideMilestone() {
+    if (!milestone || busy.current) return;
+    busy.current = true;
+    setConfirming(true);
+    try {
+      if (
+        !(await showAlert({
+          title: copy.hideMilestoneTitle,
+          description: copy.hideMilestoneDescription(milestone.milestone),
+          tone: 'danger',
+          confirmLabel: copy.hideMilestone,
+          cancelLabel: copy.cancel,
+        }))
+      )
+        return;
+      await remove.mutateAsync(milestone.id);
+      dirty.current = false;
+      void showToast({ title: copy.hiddenMilestone, intent: 'success' });
+      onClose();
+    } catch {
+      /* Keep all guidance edits available for recovery. */
+    } finally {
+      busy.current = false;
+      setConfirming(false);
+    }
+  }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy.current) return;
@@ -126,7 +170,7 @@ export function MilestoneGuidanceEditor({
             name="milestone"
             value={name}
             maxLength={500}
-            disabled={save.isPending}
+            disabled={pending}
             {...invalid('milestone')}
             onChange={(event) => change(() => setName(event.target.value))}
           />
@@ -136,8 +180,7 @@ export function MilestoneGuidanceEditor({
             name="information"
             value={information}
             maxLength={20000}
-            rows={6}
-            disabled={save.isPending}
+            disabled={pending}
             {...invalid('information')}
             onChange={(event) =>
               change(() => setInformation(event.target.value))
@@ -149,8 +192,7 @@ export function MilestoneGuidanceEditor({
             name="observation_guidance"
             value={guidance}
             maxLength={20000}
-            rows={4}
-            disabled={save.isPending}
+            disabled={pending}
             {...invalid('observation_guidance')}
             onChange={(event) => change(() => setGuidance(event.target.value))}
           />
@@ -160,7 +202,7 @@ export function MilestoneGuidanceEditor({
             <Input
               name="tags"
               value={tags}
-              disabled={save.isPending}
+              disabled={pending}
               {...invalid('tags')}
               aria-describedby={
                 validation.tags ? 'milestone-validation' : 'milestone-tags-hint'
@@ -185,7 +227,7 @@ export function MilestoneGuidanceEditor({
           />
           <ResponseOptionEditor
             options={options}
-            disabled={save.isPending}
+            disabled={pending}
             validation={validation}
             onChange={(next) => change(() => setOptions(next))}
           />
@@ -199,18 +241,28 @@ export function MilestoneGuidanceEditor({
             {[...new Set(Object.values(validation))].join(' ')}
           </p>
         )}
-        <MutationError error={save.error} />
+        <MutationError error={save.error ?? remove.error} />
         <FormActions variant="inline" sticky={false}>
-          <Button
-            variant="secondary"
-            disabled={save.isPending}
-            onClick={dismiss}
-          >
+          {milestone && (
+            <Button
+              variant="destructive"
+              className="sm:mr-auto"
+              disabled={pending}
+              onClick={() => void hideMilestone()}
+            >
+              {copy.hideMilestone}
+            </Button>
+          )}
+          <Button variant="secondary" disabled={pending} onClick={dismiss}>
             {copy.cancel}
           </Button>
-          <Button type="submit" loading={save.isPending}>
+          <BookmarkButton
+            type="submit"
+            loading={save.isPending}
+            disabled={remove.isPending || confirming}
+          >
             {copy.saveMilestone}
-          </Button>
+          </BookmarkButton>
         </FormActions>
       </form>
     </Modal>

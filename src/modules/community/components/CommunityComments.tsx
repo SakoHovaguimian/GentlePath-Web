@@ -1,76 +1,66 @@
-import { useRef, useState } from 'react';
-import {
-  Badge,
-  Button,
-  Card,
-  EmptyState,
-  QueryBoundary,
-  UiIcon,
-} from '@/components/ui';
-import { useSessionState } from '@/providers/AppProviders';
-import { usePresentationService } from '@/presentation/PresentationProvider';
+import { useState } from 'react';
+import { Badge, EmptyState, QueryBoundary } from '@/components/ui';
 import { MutationError } from '@/modules/portal/components/MutationError';
 import { gentlePathCommunityStrings as copy } from '@/strings';
-import { useCommunityComments, useDeleteCommunityComment } from '../hooks';
+import { useCommunityComments } from '../hooks';
+import { useCommunityCommentActions } from '../useCommunityCommentActions';
 import { useCommunityDirectory } from '../useCommunityDirectory';
 import type { CommunityComment } from '../models/communityComment';
 import type { CommunityReportTarget } from '../models/communityReportTarget';
-import { CommunityIdentity } from './CommunityIdentity';
-import { CommunityReactionButton } from './CommunityReactionButton';
 import { CommunityCommentEditor } from './CommunityCommentEditor';
+import { CommunityCommentCard } from './CommunityCommentCard';
+import { CommunityReplies } from './CommunityReplies';
 import { CommunityPagination } from './CommunityPagination';
 
-interface CommunityCommentsProps {
-  postId: string;
-  count: number;
-  writable: boolean;
-  onReport: (target: CommunityReportTarget) => void;
-}
 export function CommunityComments({
   postId,
   count,
   writable,
   onReport,
-}: CommunityCommentsProps) {
+}: {
+  postId: string;
+  count: number;
+  writable: boolean;
+  onReport: (target: CommunityReportTarget) => void;
+}) {
   const directory = useCommunityDirectory();
   const query = useCommunityComments(postId, {
     limit: 10,
     offset: directory.offset,
+    rootOnly: true,
   });
-  const remove = useDeleteCommunityComment();
+  const remove = useCommunityCommentActions((comment) => {
+    if (
+      !comment.parentCommentId &&
+      query.data?.data.length === 1 &&
+      directory.offset
+    )
+      directory.setOffset(Math.max(0, directory.offset - 10));
+  });
   const [editor, setEditor] = useState<CommunityComment | null>(null);
-  const { session } = useSessionState();
-  const { showAlert, showToast } = usePresentationService();
-  const deleting = useRef(false);
-  async function deleteComment(comment: CommunityComment) {
-    if (deleting.current) return;
-    deleting.current = true;
-    try {
-      if (
-        !(await showAlert({
-          title: copy.deleteCommentTitle,
-          description: copy.deleteCommentDescription,
-          tone: 'danger',
-          confirmLabel: copy.deleteComment,
-          cancelLabel: copy.cancel,
-        }))
-      )
-        return;
-      await remove.mutateAsync(comment.id);
-      void showToast({ title: copy.deletedComment, intent: 'success' });
-    } catch {
-      /* Inline recovery. */
-    } finally {
-      deleting.current = false;
-    }
+  const [replying, setReplying] = useState<CommunityComment | null>(null);
+  const status =
+    query.error && 'status' in query.error
+      ? Number(query.error.status)
+      : undefined;
+  const retain =
+    query.data !== undefined && ![401, 403, 404].includes(Number(status));
+  function report(comment: CommunityComment) {
+    onReport({
+      id: comment.id,
+      targetType: 'post_comment',
+      title: copy.commentSnapshotTitle,
+    });
   }
   return (
     <section
-      className="grid min-w-0 gap-5"
+      className="gp-community-discussion grid min-w-0 gap-5"
       aria-labelledby="community-comments-title"
     >
       <div className="gp-portal-section-heading">
-        <h2 id="community-comments-title">{copy.commentsTitle}</h2>
+        <h2 id="community-comments-title" tabIndex={-1}>
+          {copy.commentsTitle}
+        </h2>
         <Badge>{count}</Badge>
       </div>
       <CommunityCommentEditor
@@ -78,67 +68,37 @@ export function CommunityComments({
         disabled={!writable}
         onSaved={() => directory.setOffset(0)}
       />
-      <MutationError error={remove.error} />
-      <QueryBoundary query={query}>
+      <MutationError error={remove.error ?? (retain ? query.error : null)} />
+      <QueryBoundary query={query} showError={!retain}>
         {(result) => (
           <>
             {result.data.length ? (
-              <div className="grid gap-4">
+              <div className="gp-community-replies">
                 {result.data.map((comment) => (
-                  <Card key={comment.id} className="gp-community-comment">
-                    <CommunityIdentity
-                      author={comment.author}
-                      createdAt={comment.createdAt}
-                      updatedAt={comment.updatedAt}
-                      own={comment.userId === session?.user.id}
+                  <div key={comment.id} className="gp-community-comment-thread">
+                    <CommunityCommentCard
+                      comment={comment}
+                      writable={writable}
+                      busy={remove.isPending}
+                      onEdit={() => setEditor(comment)}
+                      onDelete={() => {
+                        void remove.deleteComment(comment);
+                      }}
+                      onReport={() => report(comment)}
+                      onReply={() => setReplying(comment)}
                     />
-                    <p className="gp-community-body">{comment.body}</p>
-                    <div className="gp-community-post__footer">
-                      <CommunityReactionButton
-                        id={comment.id}
-                        targetType="post_comment"
-                        liked={comment.liked}
-                        count={comment.likeCount}
-                        disabled={!writable}
-                      />
-                      <div className="flex flex-wrap gap-1">
-                        {comment.userId === session?.user.id && (
-                          <>
-                            <Button
-                              variant="ghost"
-                              disabled={!writable || remove.isPending}
-                              onClick={() => setEditor(comment)}
-                            >
-                              {copy.edit}
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              aria-label={copy.deleteComment}
-                              disabled={!writable || remove.isPending}
-                              onClick={() => {
-                                void deleteComment(comment);
-                              }}
-                            >
-                              <UiIcon name="trash" className="size-4" />
-                            </Button>
-                          </>
-                        )}
-                        <Button
-                          variant="ghost"
-                          disabled={!writable}
-                          onClick={() =>
-                            onReport({
-                              id: comment.id,
-                              targetType: 'post_comment',
-                              title: copy.commentSnapshotTitle,
-                            })
-                          }
-                        >
-                          {copy.report}
-                        </Button>
-                      </div>
-                    </div>
-                  </Card>
+                    <CommunityReplies
+                      postId={postId}
+                      parentId={comment.id}
+                      writable={writable}
+                      busy={remove.isPending}
+                      onEdit={setEditor}
+                      onDelete={(reply) => {
+                        void remove.deleteComment(reply);
+                      }}
+                      onReport={report}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (
@@ -156,13 +116,32 @@ export function CommunityComments({
           </>
         )}
       </QueryBoundary>
+      {replying && (
+        <CommunityCommentEditor
+          key={`reply-${replying.id}`}
+          postId={postId}
+          parentCommentId={replying.id}
+          disabled={!writable}
+          onClose={() => setReplying(null)}
+          onSaved={() => {}}
+        />
+      )}
       {editor && (
         <CommunityCommentEditor
           key={editor.id}
           postId={postId}
           comment={editor}
+          disabled={!writable}
           onClose={() => setEditor(null)}
           onSaved={() => {}}
+          onDeleted={() => {
+            if (
+              !editor.parentCommentId &&
+              query.data?.data.length === 1 &&
+              directory.offset
+            )
+              directory.setOffset(Math.max(0, directory.offset - 10));
+          }}
         />
       )}
     </section>

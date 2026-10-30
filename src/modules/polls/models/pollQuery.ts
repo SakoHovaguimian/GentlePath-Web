@@ -25,7 +25,7 @@ export type PollPaging = z.infer<typeof PollPagingSchema>;
 export type PollQuery = z.infer<typeof PollQuerySchema>;
 
 export function pollQueryParams(
-  values: Record<string, string | number | undefined>,
+  values: Record<string, string | number | boolean | undefined>,
 ) {
   const params = new URLSearchParams();
   Object.entries(values).forEach(([key, value]) => {

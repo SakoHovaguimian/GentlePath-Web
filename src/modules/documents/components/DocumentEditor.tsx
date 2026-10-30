@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import {
   Button,
+  BookmarkButton,
   DropZone,
   Field,
   FileInput,
@@ -26,6 +27,7 @@ import {
   validateDocumentFileSelection,
 } from '../services/documentFileValidation';
 import { useUpdateDocument, useUploadDocument } from '../hooks';
+import { documentPreviewUrl } from '../services/documentPreviewUrl';
 
 const noChild = '';
 
@@ -33,11 +35,17 @@ export function DocumentEditor({
   document: existing,
   childrenProfiles,
   childrenError,
+  deleting = false,
+  deleteError,
+  onDelete,
   onClose,
 }: {
   document?: CareDocument;
   childrenProfiles: ChildProfile[];
   childrenError?: Error | null;
+  deleting?: boolean;
+  deleteError?: Error | null;
+  onDelete?: () => Promise<boolean>;
   onClose: () => void;
 }) {
   const [input, setInput] = useState<DocumentMetadataInput>(() => ({
@@ -245,6 +253,22 @@ export function DocumentEditor({
             <p className="m-0 text-xs text-tertiary">
               {copy.immutableFileHint}
             </p>
+            <Button
+              asChild
+              variant="secondary"
+              className="mt-3 justify-self-start"
+              disabled={deleting}
+            >
+              <a
+                href={documentPreviewUrl(existing.id)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={copy.previewLabel(existing.title)}
+              >
+                <UiIcon name="image" className="size-4" />
+                {copy.previewAction}
+              </a>
+            </Button>
           </div>
         )}
         <Field labelText={copy.titleLabel}>
@@ -327,6 +351,7 @@ export function DocumentEditor({
         )}
         <MutationError error={childrenError} />
         <MutationError error={mutation.error} />
+        <MutationError error={deleteError} />
         {cancelled && (
           <p role="status" className="m-0 text-sm text-secondary">
             {copy.cancelledHint}
@@ -346,6 +371,26 @@ export function DocumentEditor({
           </div>
         )}
         <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
+          {existing && onDelete && (
+            <Button
+              variant="destructive"
+              className="me-auto"
+              disabled={mutation.isPending}
+              loading={deleting}
+              onClick={async () => {
+                if (busy.current) return;
+                busy.current = true;
+                try {
+                  if (await onDelete()) dirty.current = false;
+                } finally {
+                  busy.current = false;
+                }
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.deleteAction}
+            </Button>
+          )}
           {!existing && mutation.isPending ? (
             <Button
               variant="secondary"
@@ -356,15 +401,29 @@ export function DocumentEditor({
           ) : (
             <Button
               variant="secondary"
-              disabled={mutation.isPending}
+              disabled={mutation.isPending || deleting}
               onClick={dismiss}
             >
               {copy.cancelAction}
             </Button>
           )}
-          <Button type="submit" loading={mutation.isPending}>
-            {existing ? copy.saveAction : copy.uploadAction}
-          </Button>
+          {existing ? (
+            <BookmarkButton
+              type="submit"
+              loading={mutation.isPending}
+              disabled={deleting}
+            >
+              {copy.saveAction}
+            </BookmarkButton>
+          ) : (
+            <Button
+              type="submit"
+              loading={mutation.isPending}
+              disabled={deleting}
+            >
+              {copy.uploadAction}
+            </Button>
+          )}
         </div>
       </form>
     </Modal>

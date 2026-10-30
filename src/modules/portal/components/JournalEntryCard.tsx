@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { Button, Card, UiIcon } from '@/components/ui';
+import Link from 'next/link';
+import { Card, CardOpenButton, IconMenu, UiIcon } from '@/components/ui';
 import { gentlePathPortalStrings as copy } from '@/strings';
-import type { ChildProfile } from '../models/childProfile';
-import type { JournalEntry } from '../models/journalEntry';
+import type { JournalEntryCardProps } from '../models/journalEntryCardProps';
 import { journalEntryCardId } from '../journalEntryLocation';
 import { journalEmotionGradient } from '../journalEmotionGradient';
 import { JournalEmotions } from './JournalEmotions';
@@ -12,19 +12,16 @@ const numericYear = 'numeric';
 export function JournalEntryCard({
   entry,
   childrenProfiles,
-  focused,
+  focused = false,
   removing,
   onEdit,
   onDelete,
-}: {
-  entry: JournalEntry;
-  childrenProfiles: ChildProfile[];
-  focused: boolean;
-  removing: boolean;
-  onEdit: () => void;
-  onDelete: () => void;
-}) {
+  href,
+  compact = false,
+  headingLevel: Heading = 'h2',
+}: JournalEntryCardProps) {
   const id = journalEntryCardId(entry.id);
+  const child = childrenProfiles.find((child) => child.id === entry.childId);
   useEffect(() => {
     if (!focused) return;
     const frame = requestAnimationFrame(() => {
@@ -40,53 +37,82 @@ export function JournalEntryCard({
       role="article"
       aria-labelledby={`${id}-title`}
       tabIndex={-1}
-      className="gp-journal-card"
-      style={{
-        backgroundImage: `linear-gradient(var(--gp-paper), var(--gp-paper)), ${journalEmotionGradient(entry.emotions)}`,
-      }}
+      className={`gp-journal-card${compact ? ' gp-journal-card--compact' : ''}`}
       data-linked={focused || undefined}
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-xs text-tertiary">
-          {entry.createdAt
-            ? new Date(entry.createdAt).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: numericYear,
-              })
-            : copy.journal.dateUnavailable}
-        </span>
+      <div
+        className="gp-journal-card__header"
+        style={{ backgroundImage: journalEmotionGradient(entry.emotions) }}
+      >
+        <Heading id={`${id}-title`}>
+          {href && !removing ? (
+            <Link
+              href={href}
+              className="ui-card-open gp-journal-card__open"
+              aria-label={copy.journal.openEntry(entry.title)}
+            >
+              {entry.title}
+            </Link>
+          ) : (
+            <CardOpenButton
+              className="gp-journal-card__open"
+              disabled={removing}
+              aria-label={copy.journal.openEntry(entry.title)}
+              onClick={onEdit}
+            >
+              {entry.title}
+            </CardOpenButton>
+          )}
+        </Heading>
+        <div className="gp-journal-card__menu">
+          <IconMenu
+            label={copy.journal.entryActions(entry.title)}
+            disabled={removing}
+            items={[
+              { id: 'edit', icon: 'file', label: copy.common.edit },
+              {
+                id: 'delete',
+                icon: 'trash',
+                label: copy.journal.deleteAction,
+                variant: 'destructive',
+              },
+            ]}
+            onAction={(action) => {
+              if (action === 'edit') onEdit();
+              else onDelete();
+            }}
+          />
+        </div>
       </div>
-      <div className="grid justify-items-start gap-2">
-        {entry.childId && (
+      <p className="gp-journal-card__body">{entry.body}</p>
+      <div className="gp-journal-card__footer">
+        <div className="gp-journal-card__metadata">
           <span className="gp-child-tag">
             <UiIcon name="user" className="size-3.5" />
-            {childrenProfiles.find((child) => child.id === entry.childId)?.name}
+            {entry.childId
+              ? (child?.name ?? copy.journal.relatedChildUnavailable)
+              : copy.journal.personal}
           </span>
-        )}
+          <span className="gp-journal-card__date">
+            <UiIcon name="calendar" className="size-3.5" />
+            {entry.createdAt ? (
+              <time dateTime={entry.createdAt}>
+                {new Date(entry.createdAt).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: numericYear,
+                })}
+              </time>
+            ) : (
+              copy.journal.dateUnavailable
+            )}
+          </span>
+        </div>
         {entry.emotions.length > 0 && (
           <div className="gp-journal-card__tags">
             <JournalEmotions emotions={entry.emotions} />
           </div>
         )}
-      </div>
-      <h2 id={`${id}-title`}>{entry.title}</h2>
-      <p className="m-0 line-clamp-4 flex-1 text-sm leading-7 whitespace-pre-line text-secondary">
-        {entry.body}
-      </p>
-      <div className="mt-2 flex justify-between gap-2 border-t border-secondary pt-3">
-        <Button variant="ghost" onClick={onEdit}>
-          {copy.common.edit}
-          <UiIcon name="arrowRight" className="size-4" />
-        </Button>
-        <Button
-          variant="destructive"
-          disabled={removing}
-          onClick={onDelete}
-          aria-label={copy.journal.deleteAction}
-        >
-          <UiIcon name="trash" className="size-4" />
-        </Button>
       </div>
     </Card>
   );

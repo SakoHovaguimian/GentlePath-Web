@@ -1,12 +1,14 @@
 import { useRef, useState, type FormEvent } from 'react';
 import {
   Button,
+  BookmarkButton,
   Field,
   Input,
   Modal,
   MultiSelect,
   Select,
   TextArea,
+  UiIcon,
 } from '@/components/ui';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
@@ -26,11 +28,17 @@ interface JournalEditorProps {
   entry?: JournalEntry;
   childrenProfiles: ChildProfile[];
   onClose: () => void;
+  onDelete?: () => Promise<boolean>;
+  removing?: boolean;
+  removalError?: Error | null;
 }
 export function JournalEditor({
   entry,
   childrenProfiles,
   onClose,
+  onDelete,
+  removing = false,
+  removalError,
 }: JournalEditorProps) {
   const [input, setInput] = useState<JournalInput>(
     entry
@@ -40,7 +48,12 @@ export function JournalEditor({
           emotions: entry.emotions,
           childId: entry.childId,
         }
-      : { title: String(), body: '', emotions: ['hopeful'], childId: null },
+      : {
+          title: String(),
+          body: '',
+          emotions: ['hopeful'],
+          childId: childrenProfiles[0]?.id ?? null,
+        },
   );
   const presetEmotions = Object.entries(copy.journal.emotions).map(
     ([value, label]) => ({ value, label }),
@@ -60,6 +73,7 @@ export function JournalEditor({
   const dirty = useRef(false);
   const busy = useRef(false);
   const confirmLeave = useUnsavedFormGuard(dirty, busy);
+  const pending = mutation.isPending || removing;
   function change<Key extends keyof JournalInput>(
     key: Key,
     value: JournalInput[Key],
@@ -130,13 +144,12 @@ export function JournalEditor({
               validation.title ? 'journal-validation' : undefined
             }
             onChange={(event) => change('title', event.target.value)}
-            disabled={mutation.isPending}
+            disabled={pending}
           />
         </Field>
         <Field labelText={copy.journal.bodyLabel}>
           <TextArea
             name="body"
-            rows={7}
             value={input.body}
             maxLength={20000}
             placeholder={copy.journal.bodyPlaceholder}
@@ -145,7 +158,7 @@ export function JournalEditor({
               validation.body ? 'journal-validation' : undefined
             }
             onChange={(event) => change('body', event.target.value)}
-            disabled={mutation.isPending}
+            disabled={pending}
           />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -163,14 +176,14 @@ export function JournalEditor({
               aria-describedby={
                 validation.emotions ? 'journal-validation' : undefined
               }
-              disabled={mutation.isPending}
+              disabled={pending}
             />
           </Field>
           <Field labelText={copy.journal.childLabel}>
             <Select
               value={input.childId ?? ''}
               onValueChange={(value) => change('childId', value || null)}
-              disabled={mutation.isPending}
+              disabled={pending}
             >
               <option value={personalJournalId}>{copy.journal.personal}</option>
               {childrenProfiles.map((child) => (
@@ -191,10 +204,34 @@ export function JournalEditor({
           </p>
         )}
         <MutationError error={mutation.error} />
+        <MutationError error={removalError} />
         <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
+          {entry && onDelete && (
+            <Button
+              variant="destructive"
+              className="mr-auto"
+              disabled={pending}
+              onClick={() => {
+                if (busy.current) return;
+                busy.current = true;
+                void onDelete()
+                  .then((deleted) => {
+                    if (!deleted) return;
+                    dirty.current = false;
+                    onClose();
+                  })
+                  .finally(() => {
+                    busy.current = false;
+                  });
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.journal.deleteAction}
+            </Button>
+          )}
           <Button
             variant="secondary"
-            disabled={mutation.isPending}
+            disabled={pending}
             onClick={() => {
               void confirmLeave().then((allowed) => {
                 if (allowed) onClose();
@@ -203,9 +240,13 @@ export function JournalEditor({
           >
             {copy.common.cancel}
           </Button>
-          <Button type="submit" loading={mutation.isPending}>
+          <BookmarkButton
+            type="submit"
+            loading={mutation.isPending}
+            disabled={removing}
+          >
             {copy.journal.publish}
-          </Button>
+          </BookmarkButton>
         </div>
       </form>
     </Modal>

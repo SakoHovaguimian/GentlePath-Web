@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, type FormEvent } from 'react';
 import {
+  BookmarkButton,
   Button,
   Field,
   FormActions,
@@ -134,7 +135,6 @@ export function TipReviewEditor({
             <TextArea
               name="review_notes"
               value={notes}
-              rows={5}
               maxLength={10000}
               disabled={mutation.isPending || confirming}
               aria-invalid={Boolean(validation)}
@@ -170,14 +170,14 @@ export function TipReviewEditor({
           >
             {copy.cancel}
           </Button>
-          <Button
+          <BookmarkButton
             type="submit"
             variant={decision === 'REJECTED' ? 'destructive' : 'primary'}
             loading={mutation.isPending}
             disabled={confirming && !mutation.isPending}
           >
             {copy.saveReview}
-          </Button>
+          </BookmarkButton>
         </FormActions>
       </form>
     </Modal>

@@ -1,9 +1,12 @@
+import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
+import { CommunityAttachments } from './CommunityAttachments';
 import { Badge, Button, Card, NavigationLink, UiIcon } from '@/components/ui';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import type { CommunityPost } from '../models/communityPost';
 import { CommunityIdentity } from './CommunityIdentity';
 import { CommunityReactionButton } from './CommunityReactionButton';
+import { CommunityPostMenu } from './CommunityPostMenu';
 
 interface CommunityPostCardProps {
   post: CommunityPost;
@@ -14,6 +17,7 @@ interface CommunityPostCardProps {
   onEdit: () => void;
   onDelete: () => void;
   onReport: () => void;
+  onHide: () => void;
 }
 export function CommunityPostCard({
   post,
@@ -24,24 +28,46 @@ export function CommunityPostCard({
   onEdit,
   onDelete,
   onReport,
+  onHide,
 }: CommunityPostCardProps) {
   const { confirmNavigation } = useNavigationGuard();
   const href = `/community/${encodeURIComponent(post.id)}?returnTo=${encodeURIComponent(returnTo)}`;
   return (
-    <Card className="gp-community-post">
-      <CommunityIdentity
-        author={post.author}
-        createdAt={post.createdAt}
-        updatedAt={post.updatedAt}
-        own={own}
-      />
+    <Card className="gp-community-post gp-community-post--linked">
+      <div className="gp-community-post__header">
+        <CommunityIdentity
+          author={post.author}
+          createdAt={post.createdAt}
+          updatedAt={post.updatedAt}
+          own={own}
+        />
+        <div className="gp-community-post__control">
+          <CommunityPostMenu
+            contentId={post.id}
+            own={own}
+            writable={writable}
+            busy={busy}
+            onHide={onHide}
+            onReport={onReport}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        </div>
+      </div>
       <div className="gp-community-post__copy">
         <h2>
-          <NavigationLink href={href} beforeNavigate={confirmNavigation}>
+          <NavigationLink
+            className="gp-community-post__link"
+            href={href}
+            beforeNavigate={confirmNavigation}
+          >
             {post.title}
           </NavigationLink>
         </h2>
         <p className="gp-community-post__excerpt">{post.body}</p>
+      </div>
+      <div className="gp-community-post__control">
+        <CommunityAttachments items={post.attachments} />
       </div>
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -50,7 +76,7 @@ export function CommunityPostCard({
           ))}
         </div>
       )}
-      <div className="gp-community-post__footer">
+      <div className="gp-community-post__footer gp-community-post__control">
         <div className="flex flex-wrap items-center gap-2">
           <CommunityReactionButton
             id={post.id}
@@ -66,30 +92,11 @@ export function CommunityPostCard({
             </NavigationLink>
           </Button>
         </div>
-        <div className="flex flex-wrap gap-1">
-          {own && (
-            <>
-              <Button
-                variant="ghost"
-                disabled={!writable || busy}
-                onClick={onEdit}
-              >
-                {copy.edit}
-              </Button>
-              <Button
-                variant="destructive"
-                disabled={!writable || busy}
-                onClick={onDelete}
-                aria-label={copy.deletePost}
-              >
-                <UiIcon name="trash" className="size-4" />
-              </Button>
-            </>
-          )}
-          <Button variant="ghost" disabled={!writable} onClick={onReport}>
-            {copy.report}
-          </Button>
-        </div>
+        <SavedContentButton
+          contentType="POST"
+          contentId={post.id}
+          variant="ghost"
+        />
       </div>
     </Card>
   );

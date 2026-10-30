@@ -171,7 +171,6 @@ export function ReviewedDraftChat({
             ref={transcriptRef}
             value={transcript}
             maxLength={20000}
-            rows={4}
             className="resize-none"
             placeholder={copy.placeholder}
             disabled={blocked}

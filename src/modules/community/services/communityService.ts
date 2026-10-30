@@ -7,6 +7,7 @@ import {
 } from '../models/communityPost';
 import {
   CommunityCommentInputSchema,
+  CommunityCommentUpdateInputSchema,
   CommunityCommentSchema,
   type CommunityCommentInput,
 } from '../models/communityComment';
@@ -23,9 +24,9 @@ import { CommunityCommentPageSchema } from '../models/communityCommentPage';
 import { CommunityPostPageSchema } from '../models/communityPostPage';
 import { CommunityReportPageSchema } from '../models/communityReportPage';
 import {
-  CommunityPagingSchema,
-  type CommunityPaging,
-} from '../models/communityPaging';
+  CommunityCommentQuerySchema,
+  type CommunityCommentQuery,
+} from '../models/communityCommentQuery';
 import {
   CommunityPostQuerySchema,
   type CommunityPostQuery,
@@ -76,11 +77,11 @@ export class CommunityService {
   }
   async comments(
     postId: string,
-    paging: CommunityPaging,
+    paging: CommunityCommentQuery,
     signal?: AbortSignal,
   ) {
     const params = communityQueryParams(
-      validateInput(CommunityPagingSchema, paging),
+      validateInput(CommunityCommentQuerySchema, paging),
     );
     return CommunityCommentPageSchema.parse(
       await this.api.request(`${postPath(postId)}/comments?${params}`, {
@@ -94,7 +95,12 @@ export class CommunityService {
         id ? commentPath(id) : `${postPath(postId)}/comments`,
         {
           method: id ? 'PATCH' : 'POST',
-          body: validateInput(CommunityCommentInputSchema, input),
+          body: validateInput(
+            id
+              ? CommunityCommentUpdateInputSchema
+              : CommunityCommentInputSchema,
+            input,
+          ),
         },
       ),
     );

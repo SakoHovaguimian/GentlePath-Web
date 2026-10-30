@@ -13,6 +13,7 @@ import {
   SplitSection,
   TextArea,
   UiIcon,
+  BookmarkButton,
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
@@ -213,13 +214,14 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
           >
             {copy.backToGuides}
           </Button>
-          <Button
+          <BookmarkButton
+            saved={Boolean(draft.notice) && !draft.dirty}
             type="submit"
             loading={mutations.saveGuide.isPending}
             disabled={busy}
           >
             {copy.saveGuide}
-          </Button>
+          </BookmarkButton>
         </FormActions>
         {guide && (
           <div className="flex flex-wrap justify-between gap-3 border-t border-secondary pt-5">

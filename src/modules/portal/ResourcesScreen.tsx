@@ -37,12 +37,8 @@ export function ResourcesScreen({
   async function toggle(resource: Resource) {
     try {
       await mutation.mutateAsync({ id: resource.id, saved: !resource.saved });
-      void showToast({
-        title: resource.saved
-          ? copy.resources.unsavedToast
-          : copy.resources.savedToast,
-        intent: 'success',
-      });
+      if (!resource.saved)
+        void showToast({ title: copy.resources.savedToast, intent: 'success' });
     } catch {
       /* Inline recovery. */
     }

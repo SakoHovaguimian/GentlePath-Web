@@ -27,6 +27,9 @@ import { TipReviewInputSchema } from '../models/tipReview';
 import { MilestoneAdminQuerySchema } from '../models/milestoneAdminQuery';
 import { getDemoMilestoneAdminState } from './demoMilestoneAdminState';
 import { handleDemoMilestoneObservations } from './handleDemoMilestoneObservations';
+import { milestoneProgressState } from '../models/milestoneProgressState';
+import { MilestoneProgressQuerySchema } from '../models/milestoneProgressQuery';
+import type { MilestoneProgressSummary } from '../models/milestoneProgressSummary';
 export { resetDemoMilestoneAdminState } from './demoMilestoneAdminState';
 const json = (body: unknown, status = 200) =>
   Response.json(body, { status, headers: { 'cache-control': 'no-store' } });
@@ -148,6 +151,21 @@ export async function handleMilestoneAdminRequest(
       (!before || Boolean(value && Date.parse(value) <= Date.parse(before)))
     );
   };
+  const latestObservations = (childId: string) => {
+    const latest = new Map<string, (typeof state.observations)[number]>();
+    for (const observation of state.observations) {
+      if (observation.deleted || observation.child_id !== childId) continue;
+      const previous = latest.get(observation.milestone_id);
+      if (
+        !previous ||
+        observation.observed_at > previous.observed_at ||
+        (observation.observed_at === previous.observed_at &&
+          observation.id > previous.id)
+      )
+        latest.set(observation.milestone_id, observation);
+    }
+    return latest;
+  };
   const page = <T extends { id: string; created_at: string }>(items: T[]) => {
     const input = query();
     const sorted = [...items].sort(
@@ -219,6 +237,44 @@ export async function handleMilestoneAdminRequest(
   }
   if (resource === 'milestone-tools') {
     if (area === 'portal' && method === 'GET' && !action) {
+      if (id === 'progress') {
+        const filter = MilestoneProgressQuerySchema.parse(
+          Object.fromEntries(url.searchParams),
+        );
+        if (
+          !portal.children.some(
+            (child) =>
+              child.id === filter.child_id && child.userId === actor.id,
+          )
+        )
+          throw new OwnershipError();
+        const latest = latestObservations(filter.child_id);
+        const counts: MilestoneProgressSummary['counts'] = {
+          unrecorded: 0,
+          not_yet: 0,
+          emerging: 0,
+          often: 0,
+          stopped: 0,
+          other: 0,
+        };
+        const milestones =
+          context.scenario === 'empty'
+            ? []
+            : state.milestones.filter((item) => milestoneVisible(item.id));
+        for (const milestone of milestones) {
+          const value = milestone.response_options?.find(
+            (option) =>
+              option.id === latest.get(milestone.id)?.response_option_id,
+          )?.value;
+          counts[milestoneProgressState(value)]++;
+        }
+        return json({
+          total: milestones.length,
+          answered: milestones.length - counts.unrecorded,
+          unanswered: counts.unrecorded,
+          counts,
+        } satisfies MilestoneProgressSummary);
+      }
       if (id) {
         const item = state.milestones.find(
           (item) => item.id === id && milestoneVisible(item.id),
@@ -227,16 +283,36 @@ export async function handleMilestoneAdminRequest(
         return json(detailed(item));
       }
       const filter = query();
+      if (
+        filter.child_id &&
+        !portal.children.some(
+          (child) => child.id === filter.child_id && child.userId === actor.id,
+        )
+      )
+        throw new OwnershipError();
+      if (filter.progress && !filter.child_id)
+        throw new ValidationError(copy.validation.invalidQuery);
+      const progress = filter.progress?.split(',');
+      const latest = latestObservations(filter.child_id ?? '');
       return page(
         state.milestones
           .filter(
             (item) =>
               milestoneVisible(item.id) &&
               (!filter.query ||
-                `${item.milestone} ${item.information}`
+                `${item.milestone} ${item.information} ${item.observation_guidance ?? ''}`
                   .toLowerCase()
                   .includes(filter.query.toLowerCase())) &&
               (!filter.tag || item.tags.includes(filter.tag)) &&
+              (!progress ||
+                progress.includes(
+                  milestoneProgressState(
+                    item.response_options?.find(
+                      (option) =>
+                        option.id === latest.get(item.id)?.response_option_id,
+                    )?.value,
+                  ),
+                )) &&
               dateMatches(item.created_at, 'created'),
           )
           .map(detailed),

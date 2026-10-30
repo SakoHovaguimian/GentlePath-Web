@@ -3,6 +3,7 @@ import 'server-only';
 import {
   gentlePathMilestoneAdminStrings as copy,
   gentlePathPortalStrings as portalCopy,
+  gentlePathDemoStrings as demoCopy,
 } from '@/strings';
 import { getDemoPortalState } from '@/services/demo/demoPortalState';
 import { getDemoState } from '@/services/demo/demoState';
@@ -10,6 +11,7 @@ import type { DemoMilestoneAdminState } from '../models/demoMilestoneAdminState'
 const globalState = globalThis as typeof globalThis & {
   gentlePathMilestoneAdminState?: DemoMilestoneAdminState;
 };
+const stoppedResponseValue = 'stopped';
 function createState(): DemoMilestoneAdminState {
   const now = new Date().toISOString();
   const portal = getDemoPortalState();
@@ -18,13 +20,18 @@ function createState(): DemoMilestoneAdminState {
     content_type: 'MILESTONE' as const,
     milestone: item.title,
     information: item.description,
-    observation_guidance: null,
-    tags: [item.category],
+    observation_guidance:
+      demoCopy.milestoneSeeds.find((seed) => seed.title === item.title)
+        ?.guidance ?? null,
+    tags: [
+      ...(demoCopy.milestoneSeeds.find((seed) => seed.title === item.title)
+        ?.tags ?? [item.category]),
+    ],
     created_at: now,
     updated_at: now,
     response_options: Object.entries(portalCopy.milestones.responses).map(
       ([value, label], index) => ({
-        id: crypto.randomUUID(),
+        id: `${item.id}-response-${value}`,
         milestone_id: item.id,
         value,
         label,
@@ -127,8 +134,57 @@ function createState(): DemoMilestoneAdminState {
 }
 export function getDemoMilestoneAdminState() {
   const state = (globalState.gentlePathMilestoneAdminState ??= createState());
-  for (const record of state.milestones)
+  const now = new Date().toISOString();
+  demoCopy.milestoneSeeds.forEach((seed, index) => {
+    const id = `milestone-${index + 1}`;
+    if (
+      state.milestones.some((item) => item.id === id) ||
+      state.hiddenMilestoneIds.has(id)
+    )
+      return;
+    state.milestones.push({
+      id,
+      content_type: 'MILESTONE',
+      milestone: seed.title,
+      information: seed.description,
+      observation_guidance: seed.guidance,
+      tags: [...seed.tags],
+      created_at: now,
+      updated_at: now,
+      response_options: Object.entries(portalCopy.milestones.responses).map(
+        ([value, label], position) => ({
+          id: `${id}-response-${value}`,
+          milestone_id: id,
+          value,
+          label,
+          position,
+          deleted: false,
+          created_at: now,
+          updated_at: now,
+        }),
+      ),
+    });
+  });
+  for (const record of state.milestones) {
     record.tags = normalizeContentTags(record.tags);
+    const options = record.response_options ?? [];
+    if (
+      ['not_yet', 'emerging', 'often'].every((value) =>
+        options.some((option) => option.value === value && !option.deleted),
+      ) &&
+      !options.some((option) => option.value === 'stopped')
+    )
+      options.push({
+        id: `${record.id}-response-stopped`,
+        milestone_id: record.id,
+        value: stoppedResponseValue,
+        label: portalCopy.milestones.responses.stopped,
+        position: Math.max(-1, ...options.map((option) => option.position)) + 1,
+        deleted: false,
+        created_at: now,
+        updated_at: now,
+      });
+  }
   // A running demo may have initialized guidance before the observation module
   // was hot-reloaded. Upgrade only the missing collection and retain all edits.
   state.observations ??= getDemoPortalState().observations.flatMap(

@@ -18,6 +18,7 @@ import { gentlePathCommunityStrings as copy } from '@/strings';
 import { useCommunityPosts, useCommunityStatus } from './hooks';
 import { useCommunityDirectory } from './useCommunityDirectory';
 import { useCommunityPostActions } from './useCommunityPostActions';
+import { useCommunityFeedPreference } from './useCommunityFeedPreference';
 import type { CommunityPost } from './models/communityPost';
 import type { CommunityReportTarget } from './models/communityReportTarget';
 import { CommunityPostCard } from './components/CommunityPostCard';
@@ -45,7 +46,11 @@ export function CommunityScreen() {
   const { confirmNavigation } = useNavigationGuard();
   const [editor, setEditor] = useState<CommunityPost | 'new' | null>(null);
   const [report, setReport] = useState<CommunityReportTarget | null>(null);
-  const remove = useCommunityPostActions();
+  const remove = useCommunityPostActions(() => {
+    if (query.data?.data.length === 1 && directory.offset)
+      directory.setOffset(Math.max(0, directory.offset - 9));
+  });
+  const feedPreference = useCommunityFeedPreference();
   const filtered = Boolean(
     directory.query || directory.tag || directory.scope === 'mine',
   );
@@ -61,20 +66,20 @@ export function CommunityScreen() {
     <CommunityHub
       activeView="posts"
       action={
-          <div className="flex flex-wrap gap-3">
-            <Button asChild variant="secondary">
-              <NavigationLink
-                href="/community/reports"
-                beforeNavigate={confirmNavigation}
-              >
-                {copy.myReports}
-              </NavigationLink>
-            </Button>
-            <Button disabled={!writable} onClick={() => setEditor('new')}>
-              <UiIcon name="plus" />
-              {copy.newPost}
-            </Button>
-          </div>
+        <div className="flex flex-wrap gap-3">
+          <Button asChild variant="secondary">
+            <NavigationLink
+              href="/community/reports"
+              beforeNavigate={confirmNavigation}
+            >
+              {copy.myReports}
+            </NavigationLink>
+          </Button>
+          <Button disabled={!writable} onClick={() => setEditor('new')}>
+            <UiIcon name="plus" />
+            {copy.newPost}
+          </Button>
+        </div>
       }
     >
       {status.data?.enabled === false && (
@@ -122,45 +127,90 @@ export function CommunityScreen() {
         </div>
       )}
       <MutationError error={remove.error} />
+      {feedPreference.hiddenPostIds.length > 0 && (
+        <div className="gp-community-hidden-notice">
+          <p className="m-0 text-sm text-secondary">
+            {copy.hiddenPostsDescription(feedPreference.hiddenPostIds.length)}
+          </p>
+          <Button variant="ghost" onClick={() => feedPreference.restore()}>
+            <UiIcon name="undo" className="size-4" />
+            {copy.showHiddenPosts}
+          </Button>
+        </div>
+      )}
+      {feedPreference.error && (
+        <p role="alert" className="m-0 text-sm text-error-primary">
+          {feedPreference.error}
+        </p>
+      )}
       <QueryBoundary query={query}>
         {(result) => (
           <>
-            {result.data.length ? (
+            {result.data.some(
+              (post) => !feedPreference.hiddenPostIds.includes(post.id),
+            ) ? (
               <div className="gp-community-feed">
-                {result.data.map((post) => (
-                  <CommunityPostCard
-                    key={post.id}
-                    post={post}
-                    own={post.userId === session?.user.id}
-                    writable={writable}
-                    busy={remove.isPending}
-                    returnTo={directory.href}
-                    onEdit={() => setEditor(post)}
-                    onDelete={() => {
-                      void remove.deletePost(post);
-                    }}
-                    onReport={() =>
-                      setReport({
-                        id: post.id,
-                        targetType: 'post',
-                        title: post.title,
-                      })
-                    }
-                  />
-                ))}
+                {result.data
+                  .filter(
+                    (post) => !feedPreference.hiddenPostIds.includes(post.id),
+                  )
+                  .map((post) => (
+                    <CommunityPostCard
+                      key={post.id}
+                      post={post}
+                      own={post.userId === session?.user.id}
+                      writable={writable}
+                      busy={remove.isPending}
+                      returnTo={directory.href}
+                      onEdit={() => setEditor(post)}
+                      onDelete={() => {
+                        void remove.deletePost(post);
+                      }}
+                      onReport={() =>
+                        setReport({
+                          id: post.id,
+                          targetType: 'post',
+                          title: post.title,
+                        })
+                      }
+                      onHide={() => {
+                        feedPreference.hide(post.id);
+                      }}
+                    />
+                  ))}
               </div>
             ) : (
               <EmptyState
-                title={filtered ? copy.noResultsTitle : copy.noPostsTitle}
-                description={filtered ? copy.noResultsHint : copy.noPostsHint}
+                title={
+                  result.data.length
+                    ? copy.hiddenPostsTitle
+                    : filtered
+                      ? copy.noResultsTitle
+                      : copy.noPostsTitle
+                }
+                description={
+                  result.data.length
+                    ? copy.hiddenPostsHint
+                    : filtered
+                      ? copy.noResultsHint
+                      : copy.noPostsHint
+                }
                 action={
                   <Button
-                    disabled={!filtered && !writable}
+                    disabled={!result.data.length && !filtered && !writable}
                     onClick={() =>
-                      filtered ? clearFilters() : setEditor('new')
+                      result.data.length
+                        ? feedPreference.restore()
+                        : filtered
+                          ? clearFilters()
+                          : setEditor('new')
                     }
                   >
-                    {filtered ? copy.clearFilters : copy.newPost}
+                    {result.data.length
+                      ? copy.showHiddenPosts
+                      : filtered
+                        ? copy.clearFilters
+                        : copy.newPost}
                   </Button>
                 }
               />
@@ -178,7 +228,12 @@ export function CommunityScreen() {
         <CommunityPostEditor
           key={editor === 'new' ? 'new' : editor.id}
           post={editor === 'new' ? undefined : editor}
+          writable={writable}
           onClose={() => setEditor(null)}
+          onDeleted={() => {
+            if (query.data?.data.length === 1 && directory.offset)
+              directory.setOffset(Math.max(0, directory.offset - 9));
+          }}
         />
       )}
       {report && (

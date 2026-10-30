@@ -14,6 +14,8 @@ import {
   parseDocumentMetadataRequest,
   parseDocumentUploadRequest,
 } from './parseDocumentUploadRequest';
+import { createDocumentPreviewResponse } from './createDocumentPreviewResponse';
+import { readLiveDocumentPreview } from './readLiveDocumentPreview';
 
 const fileExtensions = {
   'application/pdf': 'pdf',
@@ -62,7 +64,7 @@ export async function handleLiveDocumentVaultRequest(
     .filter(Boolean)
     .map(decodeURIComponent);
   if (area !== 'portal' || resource !== 'documents') return null;
-  if (extra.length || (action && action !== 'download'))
+  if (extra.length || (action && !['download', 'preview'].includes(action)))
     throw new NotFoundError();
   const method = request.method;
   const upstreamPath = `/care-documents${id ? `/${encodeURIComponent(id)}` : ''}`;
@@ -127,6 +129,22 @@ export async function handleLiveDocumentVaultRequest(
     if (!('url' in result))
       throw new ValidationError(copy.validation.downloadDescription);
     return json(result);
+  }
+  if (id && action === 'preview' && method === 'GET') {
+    const metadata = await forward(request, upstreamPath);
+    if (!metadata.ok) return metadata;
+    const document = DocumentTransportSchema.parse(await metadata.json());
+    const response = await forward(request, `${upstreamPath}/download`);
+    if (!response.ok) return response;
+    const download = DocumentDownloadSchema.parse(await response.json());
+    if (!('url' in download))
+      throw new ValidationError(copy.validation.previewDescription);
+    const bytes = await readLiveDocumentPreview(
+      request,
+      document,
+      download.url,
+    );
+    return createDocumentPreviewResponse(request, mapDocument(document), bytes);
   }
   if (id && !action && method === 'GET') {
     const response = await forward(request, upstreamPath);

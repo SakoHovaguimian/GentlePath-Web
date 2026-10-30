@@ -26,6 +26,7 @@ import type { CareDocument } from './models/careDocument';
 import { DocumentEditor } from './components/DocumentEditor';
 import { DocumentCard } from './components/DocumentCard';
 import { startDocumentDownload } from './components/startDocumentDownload';
+import { startDocumentPreview } from './components/startDocumentPreview';
 import '@/modules/portal/styles/portal.css';
 
 const allChildren = '';
@@ -64,7 +65,7 @@ export function DocumentVaultScreen() {
     });
   }
   async function deleteDocument(document: CareDocument) {
-    if (deleteBusy.current) return;
+    if (deleteBusy.current) return false;
     deleteBusy.current = true;
     try {
       const confirmed = await showAlert({
@@ -74,14 +75,17 @@ export function DocumentVaultScreen() {
         confirmLabel: copy.deleteAction,
         cancelLabel: copy.cancelAction,
       });
-      if (!confirmed) return;
+      if (!confirmed) return false;
       await remove.mutateAsync(document.id);
       // Removing a final record cannot strand the directory on an empty page.
       if (query.data?.data.length === 1 && directory.offset > 0)
         directory.setOffset(Math.max(0, directory.offset - 9));
       void showToast({ title: copy.deletedTitle, intent: 'success' });
+      if (editor !== 'new' && editor?.id === document.id) setEditor(null);
+      return true;
     } catch {
       // The shared inline error keeps the document available for another try.
+      return false;
     } finally {
       deleteBusy.current = false;
     }
@@ -190,6 +194,7 @@ export function DocumentVaultScreen() {
                     onDownload={() => {
                       void downloadDocument(document);
                     }}
+                    onPreview={() => startDocumentPreview(document.id)}
                     onEdit={() => setEditor(document)}
                     onDelete={() => {
                       void deleteDocument(document);
@@ -232,6 +237,9 @@ export function DocumentVaultScreen() {
           document={editor === 'new' ? undefined : editor}
           childrenProfiles={children.data ?? []}
           childrenError={children.error}
+          deleting={remove.isPending}
+          deleteError={remove.error}
+          onDelete={editor === 'new' ? undefined : () => deleteDocument(editor)}
           onClose={() => setEditor(null)}
         />
       )}

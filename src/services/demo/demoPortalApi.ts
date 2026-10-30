@@ -9,7 +9,10 @@ import {
   OwnershipError,
   ValidationError,
 } from '@/errors/domainErrors';
-import { ChildProfileInputSchema } from '@/modules/portal/models/childProfile';
+import {
+  ChildProfileInputSchema,
+  ChildProfileUpdateSchema,
+} from '@/modules/portal/models/childProfile';
 import { JournalInputSchema } from '@/modules/portal/models/journalEntry';
 import { ObservationInputSchema } from '@/modules/portal/models/milestone';
 import {
@@ -63,7 +66,10 @@ export async function handleDemoPortalRequest(
     (child) => child.userId === current.id,
   );
   const ownJournals = state.journals.filter(
-    (entry) => entry.userId === current.id,
+    (entry) =>
+      entry.userId === current.id &&
+      (!entry.childId ||
+        ownChildren.some((child) => child.id === entry.childId)),
   );
   const requireOwnChild = (childId: string) => {
     const child = ownChildren.find((child) => child.id === childId);
@@ -120,22 +126,13 @@ export async function handleDemoPortalRequest(
       if (!child) throw new NotFoundError();
       if (method === 'GET') return json(child);
       if (method === 'PATCH') {
-        const body = ChildProfileInputSchema.parse(await input(request));
+        const body = ChildProfileUpdateSchema.parse(await input(request));
         validateChildDate(body.dateOfBirth);
         Object.assign(child, body);
         return json(child);
       }
       if (method === 'DELETE') {
         state.children = state.children.filter((item) => item.id !== child.id);
-        state.observations = state.observations.filter(
-          (observation) => observation.childId !== child.id,
-        );
-        ownJournals
-          .filter((entry) => entry.childId === child.id)
-          .forEach((entry) => {
-            entry.childId = null;
-            entry.updatedAt = new Date().toISOString();
-          });
         return noContent();
       }
     }

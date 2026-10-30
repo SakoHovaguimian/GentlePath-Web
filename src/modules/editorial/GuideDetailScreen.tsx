@@ -134,30 +134,32 @@ function GuideReader({ guide }: { guide: Guide }) {
                 )}
               </div>
             )}
-            <div className="flex flex-wrap justify-between gap-3 border-t border-secondary pt-5">
-              <Button
-                variant="secondary"
-                disabled={index === 0}
-                onClick={() => choose(index - 1)}
-              >
-                <UiIcon name="chevronLeft" />
-                {copy.previousStep}
-              </Button>
-              <Button
-                variant="secondary"
-                disabled={index === items.length - 1}
-                onClick={() => choose(index + 1)}
-              >
-                {copy.nextStep}
-                <UiIcon name="chevronRight" />
-              </Button>
+            <div className="grid gap-5 border-t border-secondary pt-5">
+              {index === items.length - 1 && (
+                <Message
+                  title={copy.lastStepTitle}
+                  description={copy.lastStepHint}
+                />
+              )}
+              <div className="flex flex-wrap justify-between gap-3">
+                <Button
+                  variant="secondary"
+                  disabled={index === 0}
+                  onClick={() => choose(index - 1)}
+                >
+                  <UiIcon name="chevronLeft" />
+                  {copy.previousStep}
+                </Button>
+                <Button
+                  variant="secondary"
+                  disabled={index === items.length - 1}
+                  onClick={() => choose(index + 1)}
+                >
+                  {copy.nextStep}
+                  <UiIcon name="chevronRight" />
+                </Button>
+              </div>
             </div>
-            {index === items.length - 1 && (
-              <Message
-                title={copy.lastStepTitle}
-                description={copy.lastStepHint}
-              />
-            )}
           </Card>
         </div>
       )}

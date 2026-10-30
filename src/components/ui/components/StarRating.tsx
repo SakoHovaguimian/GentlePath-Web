@@ -8,6 +8,7 @@ import styles from './StarRating.module.css';
 export function StarRating({
   value,
   onValueChange,
+  onSelectedClick,
   label,
   valueLabel,
   getOptionLabel,
@@ -61,6 +62,7 @@ export function StarRating({
                 aria-disabled={busy || undefined}
                 onClick={(event) => {
                   if (busy) event.preventDefault();
+                  else if (!disabled && value === option) onSelectedClick?.();
                 }}
                 onKeyDown={(event) => {
                   if (

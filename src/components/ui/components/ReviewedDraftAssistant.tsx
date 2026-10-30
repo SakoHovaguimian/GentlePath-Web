@@ -126,7 +126,6 @@ export function ReviewedDraftAssistant({
           ref={transcriptRef}
           value={transcript}
           maxLength={20000}
-          rows={5}
           className="resize-none"
           placeholder={transcriptPlaceholder}
           disabled={blocked}
@@ -183,7 +182,7 @@ export function ReviewedDraftAssistant({
                   aria-label={field.label}
                   value={review[field.key]}
                   maxLength={field.maxLength}
-                  rows={field.rows ?? 2}
+                  rows={field.rows ?? 1}
                   className="resize-none"
                   disabled={blocked || stale}
                   onChange={(event) =>

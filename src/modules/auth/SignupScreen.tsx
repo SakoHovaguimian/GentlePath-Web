@@ -4,7 +4,6 @@ import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Field, Input, PasswordInput, UiIcon } from '@/components/ui';
 import { SignupInputSchema, type SignupInput } from '@/models/signupInput';
-import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import {
   gentlePathAuthStrings as authCopy,
   gentlePathPortalStrings,
@@ -17,7 +16,6 @@ import { createSession } from './sessionClient';
 
 export function SignupScreen({ redirectTo }: { redirectTo?: string }) {
   const router = useRouter();
-  const { demoMode } = useRuntimeConfig();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -79,7 +77,6 @@ export function SignupScreen({ redirectTo }: { redirectTo?: string }) {
           : '/login'
       }
       footerAction={strings.ui.loginScreen.signIn}
-      mockHint={demoMode ? authCopy.demoSignupHint : undefined}
       variant="signup"
     >
       <form noValidate onSubmit={handleSubmit} className="gp-auth-form">

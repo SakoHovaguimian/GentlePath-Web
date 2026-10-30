@@ -1,19 +1,13 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  Badge,
   Button,
-  Card,
   DirectoryFilters,
   EmptyState,
-  IconTile,
   Page,
   PageHeader,
   QueryBoundary,
-  RecordThumbnail,
-  UiIcon,
 } from '@/components/ui';
 import { gentlePathEditorialStrings as copy } from '@/strings';
 import { useGuides } from './hooks';
@@ -22,6 +16,7 @@ import {
   type EditorialQuery,
 } from './models/editorialQuery';
 import { EditorialPagination } from './components/EditorialPagination';
+import { GuideCard } from './components/GuideCard';
 
 export function GuidesScreen({ query }: { query: EditorialQuery }) {
   const guides = useGuides(query);
@@ -57,46 +52,7 @@ export function GuidesScreen({ query }: { query: EditorialQuery }) {
             {result.data.length ? (
               <div className="grid gap-5 lg:grid-cols-2">
                 {result.data.map((guide) => (
-                  <Card key={guide.id} className="grid content-start gap-5">
-                    <div className="flex items-start gap-4">
-                      {guide.image_url ? (
-                        <RecordThumbnail
-                          src={guide.image_url}
-                          alt={guide.title}
-                        />
-                      ) : (
-                        <IconTile className="size-16">
-                          <UiIcon name="leaf" className="size-7" />
-                        </IconTile>
-                      )}
-                      <div className="grid min-w-0 gap-2">
-                        <Badge intent="brand">
-                          {copy.itemCount(guide.items.length)}
-                        </Badge>
-                        <h2 className="m-0 font-display text-xl font-normal text-primary wrap-anywhere">
-                          <Link
-                            className="hover:text-brand-secondary"
-                            href={`/guides/${guide.id}`}
-                          >
-                            {guide.title}
-                          </Link>
-                        </h2>
-                      </div>
-                    </div>
-                    <p className="m-0 text-sm text-secondary">
-                      {guide.description}
-                    </p>
-                    <Button
-                      asChild
-                      variant="secondary"
-                      className="justify-self-start"
-                    >
-                      <Link href={`/guides/${guide.id}`}>
-                        {copy.openGuide}
-                        <UiIcon name="arrowRight" />
-                      </Link>
-                    </Button>
-                  </Card>
+                  <GuideCard key={guide.id} guide={guide} />
                 ))}
               </div>
             ) : (

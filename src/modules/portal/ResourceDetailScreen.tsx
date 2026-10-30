@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   Badge,
+  BookmarkButton,
   Button,
   Card,
   EmptyState,
@@ -48,13 +49,24 @@ export function ResourceDetailScreen({ id }: { id: string }) {
         const illustration = getResourceArtwork(resource);
         return (
           <Page className="gp-portal-page gp-resource-detail">
+            <div
+              className={`gp-resource-detail__hero${illustration.landscape ? '' : ' gp-resource-detail__hero--cutout'}`}
+            >
+              <Image
+                src={illustration.src}
+                alt={
+                  resource.format === 'guide'
+                    ? copy.resources.guideIllustration
+                    : copy.resources.illustrations[resource.category]
+                }
+                fill
+                sizes="(max-width: 767px) 100vw, 70vw"
+                priority
+              />
+            </div>
             <PageHeader
               title={resource.title}
               description={resource.description}
-              breadcrumbs={[
-                { label: copy.navigation.resources, href: '/resources' },
-                { label: resource.title },
-              ]}
               eyebrow={copy.resources.categories[resource.category]}
               meta={
                 <>
@@ -72,8 +84,8 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                 </>
               }
               action={
-                <Button
-                  variant={resource.saved ? 'destructive' : 'primary'}
+                <BookmarkButton
+                  saved={resource.saved}
                   loading={mutation.isPending}
                   aria-pressed={resource.saved}
                   onClick={async () => {
@@ -82,38 +94,19 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                         id: resource.id,
                         saved: !resource.saved,
                       });
-                      void showToast({
-                        title: resource.saved
-                          ? copy.resources.unsavedToast
-                          : copy.resources.savedToast,
-                        intent: 'success',
-                      });
+                      if (!resource.saved)
+                        void showToast({
+                          title: copy.resources.savedToast,
+                          intent: 'success',
+                        });
                     } catch {
                       /* Inline recovery. */
                     }
                   }}
-                >
-                  <UiIcon name={resource.saved ? 'trash' : 'plus'} />
-                  {resource.saved ? copy.resources.unsave : copy.resources.save}
-                </Button>
+                />
               }
             />
             <MutationError error={mutation.error} />
-            <div
-              className={`gp-resource-detail__hero${illustration.landscape ? '' : ' gp-resource-detail__hero--cutout'}`}
-            >
-              <Image
-                src={illustration.src}
-                alt={
-                  resource.format === 'guide'
-                    ? copy.resources.guideIllustration
-                    : copy.resources.illustrations[resource.category]
-                }
-                fill
-                sizes="(max-width: 767px) 100vw, 70vw"
-                priority
-              />
-            </div>
             <ResourceProvenance resource={resource} resources={resources} />
             <Card className="gp-resource-detail__body">
               <MarkdownContent value={resource.body} />

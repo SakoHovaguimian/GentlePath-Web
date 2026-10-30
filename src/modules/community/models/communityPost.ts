@@ -1,3 +1,4 @@
+import { CommunityAttachmentsSchema } from '@/modules/community/models/communityAttachment';
 import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { gentlePathCommunityStrings as copy } from '@/strings';
@@ -16,6 +17,7 @@ export const CommunityPostInputSchema = z
       .trim()
       .min(1, copy.validation.body)
       .max(20000, copy.validation.body),
+    attachments: CommunityAttachmentsSchema.optional(),
     imageUrl: CommunityPublicUrlSchema.nullable(),
     tags: z
       .array(
@@ -37,6 +39,7 @@ export const CommunityPostInputSchema = z
   })
   .strict();
 export const CommunityPostSchema = CommunityPostInputSchema.extend({
+  attachments: CommunityAttachmentsSchema.default([]),
   id: z.string(),
   userId: z.string().nullable(),
   author: CommunityAuthorSchema.nullable(),

@@ -13,11 +13,12 @@ import {
   Page,
   PageHeader,
   QueryBoundary,
+  Select,
   UiIcon,
 } from '@/components/ui';
-import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
-import { useChildren, useDeleteJournal, useJournals } from './hooks';
+import { useChildren, useJournals } from './hooks';
+import { useJournalRemoval } from './useJournalRemoval';
 import type { JournalEntry } from './models/journalEntry';
 import { JournalEditor } from './components/JournalEditor';
 import { JournalEntryCard } from './components/JournalEntryCard';
@@ -27,6 +28,9 @@ import {
   collectionOffset,
 } from './components/CollectionPagination';
 import './styles/portal.css';
+
+const allJournalEntries = 'all';
+const personalJournalEntries = 'personal';
 
 export function JournalScreen() {
   const focusedEntryId = useSearchParams().get('focus') || null;
@@ -38,10 +42,11 @@ export function JournalScreen() {
 function JournalContent({ focusedEntryId }: { focusedEntryId: string | null }) {
   const query = useJournals();
   const children = useChildren();
-  const remove = useDeleteJournal();
+  const { mutation: remove, deleteEntry } = useJournalRemoval();
   const params = useSearchParams();
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [childFilter, setChildFilter] = useState(allJournalEntries);
   const searchRef = useRef<HTMLInputElement>(null);
   const [offset, setOffset] = useState<number | null>(null);
   const [editor, setEditor] = useState<JournalEntry | 'new' | null>(() =>
@@ -50,29 +55,10 @@ function JournalContent({ focusedEntryId }: { focusedEntryId: string | null }) {
   const linkedEntry = params.get('entry');
   const selected =
     editor ?? query.data?.find((entry) => entry.id === linkedEntry) ?? null;
-  const { showAlert, showToast } = usePresentationService();
   function close() {
     setEditor(null);
     if (params.has('entry') || params.has('new'))
       router.replace('/journal', { scroll: false });
-  }
-  async function deleteEntry(entry: JournalEntry) {
-    if (
-      !(await showAlert({
-        title: copy.journal.deleteTitle,
-        description: copy.journal.deleteDescription,
-        tone: 'danger',
-        confirmLabel: copy.journal.deleteAction,
-        cancelLabel: copy.common.cancel,
-      }))
-    )
-      return;
-    try {
-      await remove.mutateAsync(entry.id);
-      void showToast({ title: copy.journal.deleted, intent: 'success' });
-    } catch {
-      /* Inline recovery. */
-    }
   }
   return (
     <Page className="gp-portal-page gp-journal">
@@ -80,7 +66,10 @@ function JournalContent({ focusedEntryId }: { focusedEntryId: string | null }) {
         title={copy.journal.title}
         description={copy.journal.description}
         action={
-          <Button onClick={() => setEditor('new')}>
+          <Button
+            onClick={() => setEditor('new')}
+            disabled={children.data === undefined}
+          >
             <UiIcon name="plus" />
             {copy.journal.create}
           </Button>
@@ -117,14 +106,53 @@ function JournalContent({ focusedEntryId }: { focusedEntryId: string | null }) {
             </IconButton>
           )}
         </div>
+        <Field
+          labelText={copy.journal.filterLabel}
+          className="gp-journal-child-filter"
+        >
+          <Select
+            value={childFilter}
+            onValueChange={(value) => {
+              setChildFilter(value);
+              setOffset(0);
+            }}
+          >
+            <option value={allJournalEntries}>{copy.journal.allEntries}</option>
+            <option value={personalJournalEntries}>
+              {copy.journal.personal}
+            </option>
+            {(children.data ?? []).map((child) => (
+              <option key={child.id} value={child.id}>
+                {child.name}
+              </option>
+            ))}
+          </Select>
+        </Field>
       </div>
+      {children.isError && (
+        <Message
+          title={copy.journal.profilesUnavailableTitle}
+          description={copy.journal.profilesUnavailableHint}
+          intent="warning"
+          action={
+            <Button variant="secondary" onClick={() => void children.refetch()}>
+              {copy.journal.reloadProfilesAction}
+            </Button>
+          }
+        />
+      )}
       <MutationError error={remove.error} />
       <QueryBoundary query={query}>
         {(entries) => {
-          const filtered = entries.filter((entry) =>
-            `${entry.title} ${entry.body}`
-              .toLocaleLowerCase()
-              .includes(search.toLocaleLowerCase()),
+          const filtered = entries.filter(
+            (entry) =>
+              (childFilter === allJournalEntries ||
+                (childFilter === personalJournalEntries
+                  ? entry.childId === null
+                  : entry.childId === childFilter)) &&
+              `${entry.title} ${entry.body}`
+                .toLocaleLowerCase('en-US')
+                .includes(search.toLocaleLowerCase('en-US')),
           );
           const targetIndex = filtered.findIndex(
             (entry) => entry.id === focusedEntryId,
@@ -179,22 +207,34 @@ function JournalContent({ focusedEntryId }: { focusedEntryId: string | null }) {
                   />
                   <EmptyState
                     title={
-                      search
-                        ? copy.common.noResultsTitle
+                      search || childFilter !== allJournalEntries
+                        ? copy.journal.noResultsTitle
                         : copy.journal.emptyTitle
                     }
                     description={
-                      search
-                        ? copy.common.noResultsHint
+                      search || childFilter !== allJournalEntries
+                        ? copy.journal.noResultsHint
                         : copy.journal.emptyHint
                     }
                     action={
                       <Button
-                        onClick={() =>
-                          search ? setSearch('') : setEditor('new')
+                        disabled={
+                          !search &&
+                          childFilter === allJournalEntries &&
+                          children.data === undefined
                         }
+                        onClick={() => {
+                          if (search || childFilter !== allJournalEntries) {
+                            setSearch('');
+                            setChildFilter(allJournalEntries);
+                            setOffset(0);
+                            searchRef.current?.focus();
+                          } else setEditor('new');
+                        }}
                       >
-                        {search ? copy.common.clear : copy.journal.create}
+                        {search || childFilter !== allJournalEntries
+                          ? copy.journal.clearFiltersAction
+                          : copy.journal.create}
                       </Button>
                     }
                   />
@@ -208,12 +248,17 @@ function JournalContent({ focusedEntryId }: { focusedEntryId: string | null }) {
         <UiIcon name="leaf" className="size-5" />
         {copy.journal.quoteDescription}
       </p>
-      {selected && (
+      {selected && children.data !== undefined && (
         <JournalEditor
           key={selected === 'new' ? 'new' : selected.id}
           entry={selected === 'new' ? undefined : selected}
           childrenProfiles={children.data ?? []}
           onClose={close}
+          onDelete={
+            selected === 'new' ? undefined : () => deleteEntry(selected)
+          }
+          removing={remove.isPending}
+          removalError={remove.error}
         />
       )}
     </Page>

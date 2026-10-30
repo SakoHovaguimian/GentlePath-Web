@@ -28,18 +28,20 @@ export function CommunityHub({
         eyebrow={copy.eyebrow}
         action={action}
       />
-      <SegmentedTabs
-        label={copy.contentViewLabel}
-        value={activeView}
-        tabs={[
-          { value: communityViews.posts, label: copy.postsTitle },
-          { value: communityViews.polls, label: copy.pollsTitle },
-        ]}
-        onValueChange={(view) => {
-          if (view !== activeView)
-            void navigate(view === 'polls' ? '/polls' : '/community');
-        }}
-      />
+      <div className="gp-community-tabs">
+        <SegmentedTabs
+          label={copy.contentViewLabel}
+          value={activeView}
+          tabs={[
+            { value: communityViews.posts, label: copy.postsTitle },
+            { value: communityViews.polls, label: copy.pollsTitle },
+          ]}
+          onValueChange={(view) => {
+            if (view !== activeView)
+              void navigate(view === 'polls' ? '/polls' : '/community');
+          }}
+        />
+      </div>
       {children}
     </Page>
   );

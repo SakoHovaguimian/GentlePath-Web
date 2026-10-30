@@ -6,6 +6,7 @@ import {
   Field,
   FormActions,
   TimezoneSelect,
+  BookmarkButton,
 } from '@/components/ui';
 import { useCurrentTimezone } from '@/components/ui/lib/useCurrentTimezone';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
@@ -134,9 +135,14 @@ export function NotificationTimezoneEditor({
         >
           {copy.discardAction}
         </Button>
-        <Button type="submit" loading={mutation.isPending} disabled={!isDirty}>
+        <BookmarkButton
+          saved={mutation.isSuccess && !isDirty}
+          type="submit"
+          loading={mutation.isPending}
+          disabled={!isDirty}
+        >
           {copy.saveTimezoneAction}
-        </Button>
+        </BookmarkButton>
       </FormActions>
     </form>
   );

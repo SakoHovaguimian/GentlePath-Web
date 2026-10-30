@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Button, Field, Modal, Select, TextArea } from '@/components/ui';
+import {
+  Button,
+  Field,
+  Modal,
+  Select,
+  TextArea,
+  BookmarkButton,
+} from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import {
@@ -70,7 +77,6 @@ export function ReportReview({
           <TextArea
             name="resolutionNote"
             value={input.resolutionNote}
-            rows={4}
             maxLength={2000}
             placeholder={copy.moderation.notePlaceholder}
             aria-invalid={Boolean(validation)}
@@ -123,9 +129,9 @@ export function ReportReview({
           >
             {copy.common.cancel}
           </Button>
-          <Button type="submit" loading={mutation.isPending}>
+          <BookmarkButton type="submit" loading={mutation.isPending}>
             {copy.moderation.save}
-          </Button>
+          </BookmarkButton>
         </div>
       </form>
     </Modal>

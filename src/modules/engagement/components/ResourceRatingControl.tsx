@@ -1,7 +1,6 @@
 'use client';
 import { useId, useRef, useState } from 'react';
 import {
-  Button,
   Card,
   InlineLoading,
   QueryBoundary,
@@ -16,10 +15,11 @@ import { useResourceEngagement, useRateResource } from '../hooks';
 export function ResourceRatingControl({ resourceId }: { resourceId: string }) {
   const hintId = useId();
   const busy = useRef(false);
+  const confirming = useRef(false);
   const [feedback, setFeedback] = useState<'saved' | 'removed' | null>(null);
   const query = useResourceEngagement(resourceId);
   const mutation = useRateResource(resourceId);
-  const { showToast } = usePresentationService();
+  const { showAlert, showToast } = usePresentationService();
   async function rate(rating: number | null) {
     if (busy.current) return;
     busy.current = true;
@@ -36,6 +36,23 @@ export function ResourceRatingControl({ resourceId }: { resourceId: string }) {
       /* Inline recovery. */
     } finally {
       busy.current = false;
+    }
+  }
+  async function clearRating() {
+    if (busy.current || mutation.isPending || confirming.current) return;
+    confirming.current = true;
+    try {
+      if (
+        await showAlert({
+          title: copy.removeRatingTitle,
+          description: copy.removeRatingDescription,
+          confirmLabel: copy.removeRatingConfirm,
+          cancelLabel: copy.keepRating,
+        })
+      )
+        await rate(null);
+    } finally {
+      confirming.current = false;
     }
   }
   return (
@@ -76,20 +93,8 @@ export function ResourceRatingControl({ resourceId }: { resourceId: string }) {
                   onValueChange={(value) => {
                     void rate(value);
                   }}
+                  onSelectedClick={() => void clearRating()}
                 />
-                {data.rating !== null && (
-                  <Button
-                    variant="destructive"
-                    loading={mutation.isPending && mutation.variables === null}
-                    disabled={mutation.isPending}
-                    onClick={() => {
-                      void rate(null);
-                    }}
-                  >
-                    <UiIcon name="trash" className="size-4" />
-                    {copy.removeRating}
-                  </Button>
-                )}
               </div>
               <p id={hintId} className="m-0 text-xs text-tertiary">
                 {copy.ratingKeyboardHint}

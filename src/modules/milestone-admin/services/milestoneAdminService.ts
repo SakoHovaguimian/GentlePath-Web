@@ -24,20 +24,31 @@ import {
   type MilestoneObservationInput,
 } from '../models/milestoneObservation';
 import type { MilestoneObservationQuery } from '../models/milestoneObservationQuery';
+import { MilestoneProgressSummarySchema } from '../models/milestoneProgressSummary';
 
 export class MilestoneAdminService {
   constructor(private readonly api: ApiClientInterface) {}
   async milestones(query: MilestoneAdminQuery, signal?: AbortSignal) {
-    const { query: search, tag, limit, offset } = query;
+    const { query: search, tag, limit, offset, child_id, progress } = query;
     const params = milestoneAdminQueryParams({
       query: search,
       tag,
       limit,
       offset,
       milestone_id: '',
+      child_id,
+      progress,
     });
     return milestoneAdminPageSchema(MilestoneGuidanceSchema).parse(
       await this.api.request(`/portal/milestone-tools?${params}`, { signal }),
+    );
+  }
+  async progressSummary(childId: string, signal?: AbortSignal) {
+    const params = new URLSearchParams({ child_id: childId });
+    return MilestoneProgressSummarySchema.parse(
+      await this.api.request(`/portal/milestone-tools/progress?${params}`, {
+        signal,
+      }),
     );
   }
   async milestone(id: string, signal?: AbortSignal) {

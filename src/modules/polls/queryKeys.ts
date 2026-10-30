@@ -1,4 +1,5 @@
-import type { PollPaging, PollQuery } from './models/pollQuery';
+import type { CommunityCommentQuery } from '@/modules/community/models/communityCommentQuery';
+import type { PollQuery } from './models/pollQuery';
 
 export const pollQueryKeys = {
   all: ['polls'] as const,
@@ -6,6 +7,6 @@ export const pollQueryKeys = {
   list: (query: PollQuery) => ['polls', 'list', query] as const,
   detail: (id: string) => ['polls', 'detail', id] as const,
   ballot: (id: string) => ['polls', 'ballot', id] as const,
-  comments: (id: string, paging: PollPaging) =>
+  comments: (id: string, paging: CommunityCommentQuery) =>
     ['polls', 'comments', id, paging] as const,
 };

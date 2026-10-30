@@ -1,16 +1,13 @@
 'use client';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   Button,
-  DataPanel,
   EmptyState,
-  Field,
   Page,
   PageHeader,
   QueryBoundary,
-  Select,
 } from '@/components/ui';
 import {
   gentlePathPortalStrings as copy,
@@ -25,11 +22,20 @@ import { useMilestoneDirectory } from '@/modules/milestone-admin/useMilestoneDir
 import { MilestoneDirectoryFilters } from '@/modules/milestone-admin/components/MilestoneDirectoryFilters';
 import { MilestonePagination } from '@/modules/milestone-admin/components/MilestonePagination';
 import { MilestoneCard } from './components/MilestoneCard';
+import { ChildProfilePicker } from './components/ChildProfilePicker';
+import { MilestoneDetailsModal } from './components/MilestoneDetailsModal';
+import { MilestoneProgressOverview } from './components/MilestoneProgressOverview';
+import type { MilestoneGuidance } from '@/modules/milestone-admin/models/milestoneGuidance';
+import type { MilestoneDetailsSection } from './models/milestoneDetailsSection';
 import './styles/portal.css';
 function MilestoneList({ childId }: { childId: string }) {
   const directory = useMilestoneDirectory(9);
-  const query = useMilestoneGuidance(directory.query);
+  const query = useMilestoneGuidance({ ...directory.query, child_id: childId });
   const choices = useMilestoneChoices();
+  const [details, setDetails] = useState<{
+    milestone: MilestoneGuidance;
+    section: MilestoneDetailsSection;
+  } | null>(null);
   useEffect(() => {
     if (
       query.data &&
@@ -42,26 +48,16 @@ function MilestoneList({ childId }: { childId: string }) {
       });
   }, [query.data, query.isFetching, directory]);
   return (
-    <DataPanel
-      busy={query.isFetching}
-      busyLabel={milestoneCopy.loadingMilestones}
-      toolbar={
+    <div className="grid min-w-0 gap-5" aria-busy={query.isFetching}>
+      <MilestoneProgressOverview childId={childId} />
+      <div className="gp-milestone-filters">
         <MilestoneDirectoryFilters
           query={directory.query}
           tags={choices.data?.flatMap((milestone) => milestone.tags)}
           onChange={directory.update}
+          progress
         />
-      }
-      footer={
-        query.data && (
-          <MilestonePagination
-            page={query.data}
-            busy={query.isFetching}
-            onNavigate={(offset) => directory.update({ offset })}
-          />
-        )
-      }
-    >
+      </div>
       <QueryBoundary
         query={query}
         loadingMessage={milestoneCopy.loadingMilestones}
@@ -69,12 +65,13 @@ function MilestoneList({ childId }: { childId: string }) {
       >
         {(page) =>
           page.data.length ? (
-            <div className="gp-milestone-grid p-4 sm:p-6">
+            <div className="gp-milestone-grid">
               {page.data.map((milestone) => (
                 <MilestoneCard
                   key={`${childId}:${milestone.id}`}
                   milestone={milestone}
                   childId={childId}
+                  onOpen={(section) => setDetails({ milestone, section })}
                 />
               ))}
             </div>
@@ -82,21 +79,32 @@ function MilestoneList({ childId }: { childId: string }) {
             <EmptyState
               variant="plain"
               title={
-                directory.query.query || directory.query.tag
+                directory.query.query ||
+                directory.query.tag ||
+                directory.query.progress
                   ? milestoneCopy.noResultsTitle
                   : copy.common.emptyTitle
               }
               description={
-                directory.query.query || directory.query.tag
+                directory.query.query ||
+                directory.query.tag ||
+                directory.query.progress
                   ? milestoneCopy.noResultsDescription
                   : copy.common.emptyHint
               }
               action={
-                directory.query.query || directory.query.tag ? (
+                directory.query.query ||
+                directory.query.tag ||
+                directory.query.progress ? (
                   <Button
                     variant="secondary"
                     onClick={() =>
-                      directory.update({ query: '', tag: '', offset: 0 })
+                      directory.update({
+                        query: '',
+                        tag: '',
+                        progress: '',
+                        offset: 0,
+                      })
                     }
                   >
                     {milestoneCopy.resetFilters}
@@ -107,7 +115,22 @@ function MilestoneList({ childId }: { childId: string }) {
           )
         }
       </QueryBoundary>
-    </DataPanel>
+      {query.data && (
+        <MilestonePagination
+          page={query.data}
+          busy={query.isFetching}
+          onNavigate={(offset) => directory.update({ offset })}
+        />
+      )}
+      {details && (
+        <MilestoneDetailsModal
+          milestone={details.milestone}
+          childId={childId}
+          initialSection={details.section}
+          onClose={() => setDetails(null)}
+        />
+      )}
+    </div>
   );
 }
 export function MilestonesScreen() {
@@ -119,7 +142,6 @@ export function MilestonesScreen() {
       <PageHeader
         title={copy.milestones.title}
         description={copy.milestones.description}
-        eyebrow={copy.navigation.milestones}
       />
       <QueryBoundary query={children}>
         {(profiles) => {
@@ -128,28 +150,13 @@ export function MilestonesScreen() {
             profiles[0]?.id;
           return childId ? (
             <>
-              <div className="gp-milestone-context">
-                <Field
-                  labelText={copy.milestones.childLabel}
-                  className="w-full max-w-sm"
-                >
-                  <Select
-                    value={childId}
-                    onValueChange={(value) =>
-                      directory.update({ child: value, offset: 0 })
-                    }
-                  >
-                    {profiles.map((child) => (
-                      <option key={child.id} value={child.id}>
-                        {child.name}
-                      </option>
-                    ))}
-                  </Select>
-                </Field>
-                <p className="gp-portal-footnote">
-                  {copy.milestones.privacyHint}
-                </p>
-              </div>
+              <ChildProfilePicker
+                profiles={profiles}
+                value={childId}
+                onValueChange={(value) =>
+                  directory.update({ child: value, offset: 0 })
+                }
+              />
               <MilestoneList key={childId} childId={childId} />
             </>
           ) : (

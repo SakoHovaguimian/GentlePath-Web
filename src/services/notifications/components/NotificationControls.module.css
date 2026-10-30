@@ -1,3 +1,18 @@
+.disableButton {
+  background: color-mix(
+    in srgb,
+    var(--color-text-error-primary) 15%,
+    transparent
+  );
+}
+.disableButton:hover {
+  background: color-mix(
+    in srgb,
+    var(--color-text-error-primary) 20%,
+    transparent
+  );
+}
+
 .permissionCard {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

@@ -1,8 +1,10 @@
+import { CommunityAttachmentsSchema } from '@/modules/community/models/communityAttachment';
 import { z } from 'zod';
 import { PollSelectionModeSchema } from '../../models/pollSelectionMode';
 import { PollAuthorTransportSchema } from './pollAuthorTransport';
 import { PollOptionTransportSchema } from './pollOptionTransport';
 export const PollTransportSchema = z.object({
+  attachments: CommunityAttachmentsSchema.optional(),
   id: z.string().uuid(),
   user_id: z.string().uuid().nullable(),
   title: z.string(),

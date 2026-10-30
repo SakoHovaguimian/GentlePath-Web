@@ -24,6 +24,7 @@ import { PollCard } from './components/PollCard';
 import { PollEditor } from './components/PollEditor';
 import '@/modules/portal/styles/portal.css';
 import './styles/polls.css';
+import '@/modules/community/styles/community.css';
 
 const mineScope = 'mine';
 const anyMode = '';
@@ -65,10 +66,10 @@ export function PollsScreen() {
     <CommunityHub
       activeView="polls"
       action={
-          <Button disabled={!writable} onClick={() => setEditor('new')}>
-            <UiIcon name="plus" />
-            {copy.newPoll}
-          </Button>
+        <Button disabled={!writable} onClick={() => setEditor('new')}>
+          <UiIcon name="plus" />
+          {copy.newPoll}
+        </Button>
       }
     >
       <QueryBoundary query={status}>
@@ -200,6 +201,10 @@ export function PollsScreen() {
           writable={writable}
           onClose={() => setEditor(null)}
           onSaved={editor === 'new' ? () => directory.setOffset(0) : undefined}
+          onDeleted={() => {
+            if (query.data?.data.length === 1 && directory.offset)
+              directory.setOffset(Math.max(0, directory.offset - 25));
+          }}
         />
       )}
     </CommunityHub>

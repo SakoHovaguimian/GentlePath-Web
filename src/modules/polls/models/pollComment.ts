@@ -4,6 +4,7 @@ import { PollAuthorSchema } from './pollAuthor';
 
 export const PollCommentInputSchema = z
   .object({
+    parentCommentId: z.string().min(1).nullable().optional(),
     body: z
       .string()
       .trim()
@@ -11,9 +12,13 @@ export const PollCommentInputSchema = z
       .max(20000, copy.validation.commentDescription),
   })
   .strict();
+export const PollCommentUpdateInputSchema = PollCommentInputSchema.omit({
+  parentCommentId: true,
+});
 export const PollCommentSchema = z.object({
   id: z.string().uuid(),
   pollId: z.string().uuid(),
+  parentCommentId: z.string().uuid().nullable().default(null),
   userId: z.string().uuid().nullable(),
   author: PollAuthorSchema.nullable(),
   body: z.string(),

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   Button,
+  BookmarkButton,
   Field,
   FormActions,
   InlineLoading,
@@ -171,15 +172,20 @@ function DevSettingsForm({ settings }: { settings: DemoSettings }) {
           </SplitSection>
         </SectionStack>
         <FormActions sticky={false}>
-          <Button
+          <BookmarkButton
             type="submit"
+            saved={
+              !dirty &&
+              mutation.isSuccess &&
+              mutation.variables?.kind === 'update'
+            }
             disabled={!dirty || mutation.isPending}
             loading={
               mutation.isPending && mutation.variables?.kind === 'update'
             }
           >
             {copy.applyAction}
-          </Button>
+          </BookmarkButton>
         </FormActions>
       </form>
       {mutation.isError && (

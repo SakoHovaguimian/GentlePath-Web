@@ -18,6 +18,7 @@ import {
   parseDocumentUploadRequest,
 } from '../server/parseDocumentUploadRequest';
 import { getDemoDocumentVaultState } from './documentVaultDemoState';
+import { createDocumentPreviewResponse } from '../server/createDocumentPreviewResponse';
 
 const json = (body: unknown, status = 200) =>
   Response.json(body, {
@@ -48,7 +49,7 @@ export async function handleDocumentVaultRequest(
       !user.deleted,
   );
   if (!session.demo || !current) throw new AuthError();
-  if (extra.length || (action && action !== 'download'))
+  if (extra.length || (action && !['download', 'preview'].includes(action)))
     throw new NotFoundError();
   const state = getDemoDocumentVaultState();
   const ownChildren = getDemoPortalState().children.filter(
@@ -153,6 +154,12 @@ export async function handleDocumentVaultRequest(
       sizeBytes: document.metadata.sizeBytes,
       contentBase64: document.contentBase64,
     });
+  if (action === 'preview' && method === 'GET')
+    return createDocumentPreviewResponse(
+      request,
+      document.metadata,
+      Buffer.from(document.contentBase64, 'base64'),
+    );
   if (!action && method === 'GET') return json(document.metadata);
   if (!action && method === 'PATCH') {
     const metadata = await parseDocumentMetadataRequest(request);

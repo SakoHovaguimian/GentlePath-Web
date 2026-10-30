@@ -1,12 +1,19 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryKey,
+} from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
 import type { ChildProfileInput } from './models/childProfile';
 import type { JournalInput } from './models/journalEntry';
 import type { ObservationInput } from './models/milestone';
 import { portalQueryKeys as keys } from './queryKeys';
 import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
+import { documentVaultQueryKeys } from '@/modules/documents/hooks';
+import { milestoneAdminKeys } from '@/modules/milestone-admin/queryKeys';
 
 export function usePortalOverview() {
   const { portalService: service } = useServiceContainer();
@@ -46,6 +53,7 @@ export function useMilestones(childId: string) {
 }
 function usePortalMutation<TInput, TResult>(
   mutationFn: (input: TInput) => Promise<TResult>,
+  relatedKeys: readonly QueryKey[] = [],
 ) {
   const cache = useQueryClient();
   return useMutation({
@@ -54,6 +62,7 @@ function usePortalMutation<TInput, TResult>(
       Promise.all([
         cache.invalidateQueries({ queryKey: keys.all }),
         cache.invalidateQueries({ queryKey: engagementQueryKeys.all }),
+        ...relatedKeys.map((queryKey) => cache.invalidateQueries({ queryKey })),
       ]),
   });
 }
@@ -66,7 +75,10 @@ export function useSaveChild() {
 }
 export function useDeleteChild() {
   const { portalService: service } = useServiceContainer();
-  return usePortalMutation((id: string) => service.deleteChild(id));
+  return usePortalMutation(
+    (id: string) => service.deleteChild(id),
+    [documentVaultQueryKeys.all, milestoneAdminKeys.all],
+  );
 }
 export function useSaveJournal() {
   const { portalService: service } = useServiceContainer();

@@ -13,6 +13,7 @@ import {
   SectionStack,
   SplitSection,
   UiIcon,
+  BookmarkButton,
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
@@ -262,13 +263,14 @@ export function ResourceEditor({
           >
             {copy.backToResources}
           </Button>
-          <Button
+          <BookmarkButton
+            saved={Boolean(draft.notice) && !draft.dirty}
             type="submit"
             loading={mutations.saveResource.isPending}
             disabled={busy}
           >
             {copy.saveResource}
-          </Button>
+          </BookmarkButton>
         </FormActions>
         {resource && (
           <div className="flex flex-wrap justify-between gap-3 border-t border-secondary pt-5">

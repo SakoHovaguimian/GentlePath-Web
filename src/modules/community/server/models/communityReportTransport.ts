@@ -1,3 +1,4 @@
+import { CommunityAttachmentsSchema } from '@/modules/community/models/communityAttachment';
 import { z } from 'zod';
 import { CommunityAuthorTransportSchema } from './communityAuthorTransport';
 
@@ -28,6 +29,7 @@ export const CommunityReportTransportSchema = z.object({
     content_type: kind,
     title: z.string().nullable(),
     body: z.string().nullable(),
+    attachments: CommunityAttachmentsSchema.optional(),
     tags: z.array(z.string()).optional(),
     image_url: z.string().nullable().optional(),
     description: z.string().nullable().optional(),

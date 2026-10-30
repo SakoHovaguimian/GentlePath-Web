@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, type FormEvent } from 'react';
 import {
+  BookmarkButton,
   Button,
   Field,
   FormActions,
@@ -14,7 +15,7 @@ import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import { FamilyTipInputSchema, type FamilyTip } from '../models/familyTip';
 import type { MilestoneGuidance } from '../models/milestoneGuidance';
-import { useSaveFamilyTip } from '../hooks';
+import { useDeleteFamilyTip, useSaveFamilyTip } from '../hooks';
 const emptyMilestoneChoice = '';
 interface FamilyTipEditorProps {
   tip?: FamilyTip;
@@ -37,7 +38,10 @@ export function FamilyTipEditor({
     busy = useRef(false);
   const leave = useUnsavedFormGuard(dirty, busy);
   const save = useSaveFamilyTip();
-  const { showToast } = usePresentationService();
+  const remove = useDeleteFamilyTip();
+  const [confirming, setConfirming] = useState(false);
+  const pending = save.isPending || remove.isPending || confirming;
+  const { showAlert, showToast } = usePresentationService();
   const dismiss = () => {
     void leave().then((allowed) => {
       if (allowed) onClose();
@@ -48,6 +52,32 @@ export function FamilyTipEditor({
     setValidation({});
     action();
   };
+  async function deleteTip() {
+    if (!tip || busy.current) return;
+    busy.current = true;
+    setConfirming(true);
+    try {
+      if (
+        !(await showAlert({
+          title: copy.deleteTipTitle,
+          description: copy.deleteTipDescription,
+          tone: 'danger',
+          confirmLabel: copy.deleteTip,
+          cancelLabel: copy.cancel,
+        }))
+      )
+        return;
+      await remove.mutateAsync(tip.id);
+      dirty.current = false;
+      void showToast({ title: copy.tipDeleted, intent: 'success' });
+      onClose();
+    } catch {
+      /* Keep the submission and edits available for recovery. */
+    } finally {
+      busy.current = false;
+      setConfirming(false);
+    }
+  }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy.current) return;
@@ -100,7 +130,7 @@ export function FamilyTipEditor({
             <Select
               name="milestone_id"
               value={milestoneId}
-              disabled={Boolean(tip) || save.isPending}
+              disabled={Boolean(tip) || pending}
               aria-invalid={Boolean(validation.milestone_id)}
               aria-describedby={
                 validation.milestone_id
@@ -131,9 +161,8 @@ export function FamilyTipEditor({
           <TextArea
             name="message"
             value={message}
-            rows={8}
             maxLength={20000}
-            disabled={save.isPending}
+            disabled={pending}
             aria-invalid={Boolean(validation.message)}
             aria-describedby={validation.message ? 'tip-validation' : undefined}
             onChange={(event) => change(() => setMessage(event.target.value))}
@@ -151,18 +180,28 @@ export function FamilyTipEditor({
             {Object.values(validation).join(' ')}
           </p>
         )}
-        <MutationError error={save.error} />
+        <MutationError error={save.error ?? remove.error} />
         <FormActions variant="inline" sticky={false}>
-          <Button
-            variant="secondary"
-            onClick={dismiss}
-            disabled={save.isPending}
-          >
+          {tip && (
+            <Button
+              variant="destructive"
+              className="sm:mr-auto"
+              disabled={pending}
+              onClick={() => void deleteTip()}
+            >
+              {copy.deleteTip}
+            </Button>
+          )}
+          <Button variant="secondary" onClick={dismiss} disabled={pending}>
             {copy.cancel}
           </Button>
-          <Button type="submit" loading={save.isPending}>
+          <BookmarkButton
+            type="submit"
+            loading={save.isPending}
+            disabled={remove.isPending || confirming}
+          >
             {tip ? copy.saveTip : copy.submitTip}
-          </Button>
+          </BookmarkButton>
         </FormActions>
       </form>
     </Modal>

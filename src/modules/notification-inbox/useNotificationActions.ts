@@ -62,6 +62,8 @@ export function useNotificationActions(filters: NotificationInboxFilters) {
             : { scope: 'ALL', read: value },
         ),
       ),
+    markAllRead: () =>
+      void perform(() => readBulk.mutateAsync({ scope: 'ALL', read: true })),
     archiveItem: (item: NotificationInboxItem) =>
       void perform(
         () => archive.mutateAsync(item.id),

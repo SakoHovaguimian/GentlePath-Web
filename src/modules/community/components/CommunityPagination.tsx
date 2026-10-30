@@ -7,12 +7,14 @@ interface CommunityPaginationProps {
   page: DirectoryPage;
   count: number;
   busy: boolean;
+  label?: string;
   onNavigate: (offset: number) => void;
 }
 export function CommunityPagination({
   page,
   count,
   busy,
+  label = copy.pagination,
   onNavigate,
 }: CommunityPaginationProps) {
   useEffect(() => {
@@ -23,7 +25,7 @@ export function CommunityPagination({
       page={page}
       count={count}
       busy={busy}
-      label={copy.pagination}
+      label={label}
       range={copy.range}
       onNavigate={onNavigate}
     />

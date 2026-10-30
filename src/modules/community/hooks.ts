@@ -2,11 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
-import { adminQueryKeys } from '@/modules/portal/queryKeys';
+import { adminQueryKeys, portalQueryKeys } from '@/modules/portal/queryKeys';
+import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
 import type { CommunityPostInput } from './models/communityPost';
 import type { CommunityCommentInput } from './models/communityComment';
 import type { CommunityReportInput } from './models/communityReport';
-import type { CommunityPaging } from './models/communityPaging';
+import type { CommunityCommentQuery } from './models/communityCommentQuery';
 import type { CommunityPostQuery } from './models/communityPostQuery';
 import type { CommunityReportQuery } from './models/communityReportQuery';
 import { communityQueryKeys as keys } from './queryKeys';
@@ -32,7 +33,10 @@ export function useCommunityPost(id: string) {
     queryFn: ({ signal }) => service.post(id, signal),
   });
 }
-export function useCommunityComments(id: string, paging: CommunityPaging) {
+export function useCommunityComments(
+  id: string,
+  paging: CommunityCommentQuery,
+) {
   const { communityService: service } = useServiceContainer();
   return useQuery({
     queryKey: keys.comments(id, paging),
@@ -55,6 +59,8 @@ function useCommunityMutation<TInput, TResult>(
     onSuccess: async () => {
       await Promise.all([
         cache.invalidateQueries({ queryKey: keys.all }),
+        cache.invalidateQueries({ queryKey: engagementQueryKeys.all }),
+        cache.invalidateQueries({ queryKey: portalQueryKeys.overview }),
         cache.invalidateQueries({ queryKey: adminQueryKeys.reports }),
         cache.invalidateQueries({ queryKey: adminQueryKeys.overview }),
       ]);

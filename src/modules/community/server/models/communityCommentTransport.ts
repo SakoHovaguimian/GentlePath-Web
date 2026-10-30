@@ -6,6 +6,7 @@ export const CommunityCommentTransportSchema = z.object({
   content_type: z.literal('POST_COMMENT'),
   user_id: z.string().nullable(),
   post_id: z.string(),
+  parent_comment_id: z.string().nullable().optional(),
   body: z.string(),
   author: CommunityAuthorTransportSchema.nullish(),
   likes_count: z.number().int().nonnegative().optional(),

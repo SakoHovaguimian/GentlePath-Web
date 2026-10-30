@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, type FormEvent } from 'react';
 import {
+  BookmarkButton,
   Button,
   Field,
   FormActions,
@@ -18,7 +19,10 @@ import {
   MilestoneObservationInputSchema,
   type MilestoneObservation,
 } from '../models/milestoneObservation';
-import { useSaveMilestoneObservation } from '../hooks';
+import {
+  useDeleteMilestoneObservation,
+  useSaveMilestoneObservation,
+} from '../hooks';
 import {
   observationInstant,
   observationLocalDateTime,
@@ -29,12 +33,14 @@ interface MilestoneObservationEditorProps {
   milestone: MilestoneGuidance;
   observation?: MilestoneObservation;
   onClose: () => void;
+  onDeleted?: () => void;
 }
 export function MilestoneObservationEditor({
   childId,
   milestone,
   observation,
   onClose,
+  onDeleted,
 }: MilestoneObservationEditorProps) {
   const activeOptions = (milestone.response_options ?? []).filter(
     (option) => !option.deleted,
@@ -60,7 +66,10 @@ export function MilestoneObservationEditor({
     busy = useRef(false);
   const leave = useUnsavedFormGuard(dirty, busy);
   const save = useSaveMilestoneObservation();
-  const { showToast } = usePresentationService();
+  const remove = useDeleteMilestoneObservation();
+  const [confirming, setConfirming] = useState(false);
+  const pending = save.isPending || remove.isPending || confirming;
+  const { showAlert, showToast } = usePresentationService();
   const dismiss = () => {
     void leave().then((allowed) => {
       if (allowed) onClose();
@@ -71,6 +80,33 @@ export function MilestoneObservationEditor({
     setValidation({});
     action();
   };
+  async function deleteObservation() {
+    if (!observation || busy.current) return;
+    busy.current = true;
+    setConfirming(true);
+    try {
+      if (
+        !(await showAlert({
+          title: copy.observationDeleteTitle,
+          description: copy.observationDeleteDescription,
+          tone: 'danger',
+          confirmLabel: copy.observationDelete,
+          cancelLabel: copy.cancel,
+        }))
+      )
+        return;
+      await remove.mutateAsync(observation.id);
+      dirty.current = false;
+      onDeleted?.();
+      void showToast({ title: copy.observationDeleted, intent: 'success' });
+      onClose();
+    } catch {
+      /* Keep the observation and draft available for recovery. */
+    } finally {
+      busy.current = false;
+      setConfirming(false);
+    }
+  }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy.current) return;
@@ -134,7 +170,7 @@ export function MilestoneObservationEditor({
           <Select
             name="response_option_id"
             value={response}
-            disabled={save.isPending}
+            disabled={pending}
             aria-invalid={Boolean(validation.response_option_id)}
             aria-describedby={
               validation.response_option_id
@@ -172,7 +208,7 @@ export function MilestoneObservationEditor({
             step={1}
             value={observedAt}
             max={observationLocalDateTime(new Date().toISOString())}
-            disabled={save.isPending}
+            disabled={pending}
             aria-invalid={Boolean(validation.observed_at)}
             aria-describedby={
               validation.observed_at ? 'observation-validation' : undefined
@@ -186,9 +222,9 @@ export function MilestoneObservationEditor({
           <TextArea
             name="notes"
             value={notes}
-            rows={5}
             maxLength={20000}
-            disabled={save.isPending}
+            disabled={pending}
+            autoGrow
             aria-invalid={Boolean(validation.notes)}
             aria-describedby={
               validation.notes ? 'observation-validation' : undefined
@@ -210,18 +246,28 @@ export function MilestoneObservationEditor({
             {Object.values(validation).join(' ')}
           </p>
         )}
-        <MutationError error={save.error} />
+        <MutationError error={save.error ?? remove.error} />
         <FormActions variant="inline" sticky={false}>
-          <Button
-            variant="secondary"
-            onClick={dismiss}
-            disabled={save.isPending}
-          >
+          {observation && (
+            <Button
+              variant="destructive"
+              className="sm:mr-auto"
+              disabled={pending}
+              onClick={() => void deleteObservation()}
+            >
+              {copy.observationDelete}
+            </Button>
+          )}
+          <Button variant="secondary" onClick={dismiss} disabled={pending}>
             {copy.cancel}
           </Button>
-          <Button type="submit" loading={save.isPending}>
+          <BookmarkButton
+            type="submit"
+            loading={save.isPending}
+            disabled={remove.isPending || confirming}
+          >
             {copy.observationSave}
-          </Button>
+          </BookmarkButton>
         </FormActions>
       </form>
     </Modal>

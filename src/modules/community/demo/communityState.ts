@@ -18,6 +18,7 @@ function createCommunityState(): DemoCommunityState {
     id: `community-post-${index + 1}`,
     userId: users[index % users.length].id,
     imageUrl: null,
+    attachments: [],
     createdAt: daysAgo(index + 1),
     updatedAt: daysAgo(index + 1),
     deleted: false,
@@ -27,6 +28,8 @@ function createCommunityState(): DemoCommunityState {
     copy.demo.comments.slice(0, postIndex % 2 ? 1 : 3).map((body, index) => ({
       id: `community-comment-${postIndex + 1}-${index + 1}`,
       postId: post.id,
+      parentCommentId:
+        index === 2 ? `community-comment-${postIndex + 1}-1` : null,
       userId: users[(postIndex + index + 1) % users.length].id,
       body,
       createdAt: daysAgo(postIndex + 0.25 + index / 10),
@@ -52,8 +55,11 @@ function createCommunityState(): DemoCommunityState {
 export function getDemoCommunityState(): DemoCommunityState {
   const state = (globalCommunity.gentlePathCommunityState ??=
     createCommunityState());
-  for (const record of state.posts)
+  for (const record of state.posts) {
     record.tags = normalizeContentTags(record.tags);
+    record.attachments ??= [];
+  }
+  for (const comment of state.comments) comment.parentCommentId ??= null;
   return state;
 }
 

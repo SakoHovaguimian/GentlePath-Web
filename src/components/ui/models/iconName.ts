@@ -26,6 +26,7 @@ export type IconName =
   | 'plus'
   | 'close'
   | 'menu'
+  | 'moreVertical'
   | 'check'
   | 'chevronRight'
   | 'chevronDown'

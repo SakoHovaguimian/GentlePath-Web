@@ -1,9 +1,16 @@
 'use client';
 
-import { Button, Card, InitialsAvatar, UiIcon } from '@/components/ui';
+import {
+  Card,
+  CardOpenButton,
+  IconMenu,
+  InitialsAvatar,
+  UiIcon,
+} from '@/components/ui';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import type { ChildProfile } from '../models/childProfile';
 import { formatChildAge, formatChildBirthDate } from '../formatChildAge';
+import { childSupportQuestions } from '../childSupportQuestions';
 
 interface FamilyProfileCardProps {
   child: ChildProfile;
@@ -18,25 +25,50 @@ export function FamilyProfileCard({
   onOpen,
   onRemove,
 }: FamilyProfileCardProps) {
+  const summaryQuestion = childSupportQuestions.find(
+    ({ key }) => child.supportDetails[key],
+  );
+  const summary = summaryQuestion
+    ? child.supportDetails[summaryQuestion.key]
+    : child.supportNotes;
   return (
     <Card className="gp-family-card">
       <div className="gp-family-card__header">
         <InitialsAvatar name={child.name} />
-      </div>
-      <div className="grid gap-2">
-        <h2>
-          <Button
-            variant="ghost"
-            className="gp-family-card__open"
-            onClick={onOpen}
-            aria-label={copy.family.openProfile(child.name)}
-          >
-            {child.name}
-          </Button>
-        </h2>
-        <p className="gp-family-card__age">
-          {formatChildAge(child.dateOfBirth)}
-        </p>
+        <div className="grid min-w-0 flex-1 gap-1.5">
+          <h2>
+            <CardOpenButton
+              className="gp-family-card__open"
+              disabled={removing}
+              onClick={onOpen}
+              aria-label={copy.family.openProfile(child.name)}
+            >
+              {child.name}
+            </CardOpenButton>
+          </h2>
+          <p className="gp-family-card__age">
+            {formatChildAge(child.dateOfBirth)}
+          </p>
+        </div>
+        <div className="gp-family-card__menu">
+          <IconMenu
+            label={copy.family.profileActions(child.name)}
+            disabled={removing}
+            items={[
+              { id: 'edit', icon: 'file', label: copy.common.edit },
+              {
+                id: 'remove',
+                icon: 'trash',
+                label: copy.family.deleteAction,
+                variant: 'destructive',
+              },
+            ]}
+            onAction={(action) => {
+              if (action === 'edit') onOpen();
+              else onRemove();
+            }}
+          />
+        </div>
       </div>
       <div className="gp-family-card__birth">
         <UiIcon name="calendar" className="size-4" />
@@ -49,26 +81,18 @@ export function FamilyProfileCard({
           </time>
         </span>
       </div>
-      <p className="gp-family-card__notes">
-        {child.supportNotes || copy.family.noNotesHint}
-      </p>
-      <div className="gp-family-card__footer">
-        <span
-          className="flex items-center gap-2 text-sm font-semibold text-brand-secondary"
-          aria-hidden="true"
-        >
-          {copy.family.profileAction}
-          <UiIcon name="arrowRight" className="size-4" />
-        </span>
-        <Button
-          variant="destructive"
-          className="relative z-10 size-11 shrink-0 px-0"
-          disabled={removing}
-          aria-label={copy.family.removeProfile(child.name)}
-          onClick={onRemove}
-        >
-          <UiIcon name="trash" className="size-4" />
-        </Button>
+      <div className="gp-family-card__summary">
+        <UiIcon name={summaryQuestion?.icon ?? 'leaf'} className="size-5" />
+        <div className="grid min-w-0 gap-1.5">
+          <p className="gp-family-card__question">
+            {summaryQuestion
+              ? copy.family.questions[summaryQuestion.key].label
+              : copy.family.notesLabel}
+          </p>
+          <p className="gp-family-card__notes">
+            {summary || copy.family.noNotesHint}
+          </p>
+        </div>
       </div>
     </Card>
   );

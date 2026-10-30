@@ -43,6 +43,7 @@ export function getDemoPollState(): DemoPollState {
       selectionMode: item.selectionMode,
       votingLocked: index === 0,
       tags: [],
+      attachments: [],
       options: item.choices.map((text, position) => ({
         id: crypto.randomUUID(),
         text,
@@ -55,6 +56,7 @@ export function getDemoPollState(): DemoPollState {
       hidden: false,
     }));
     const createdAt = new Date(now - 3600000).toISOString();
+    const rootCommentId = crypto.randomUUID();
     globalPolls.gentlePathPollState = {
       polls,
       ballots: [
@@ -69,8 +71,9 @@ export function getDemoPollState(): DemoPollState {
       ],
       comments: [copy.demo.commentOne, copy.demo.commentTwo].map(
         (body, index) => ({
-          id: crypto.randomUUID(),
+          id: index === 0 ? rootCommentId : crypto.randomUUID(),
           pollId: polls[0].id,
+          parentCommentId: index === 0 ? null : rootCommentId,
           userId: accounts[index + 1].id,
           body,
           createdAt,
@@ -82,8 +85,12 @@ export function getDemoPollState(): DemoPollState {
       commentLikes: new Map(),
     };
   }
-  for (const record of globalPolls.gentlePathPollState.polls)
+  for (const record of globalPolls.gentlePathPollState.polls) {
     record.tags = normalizeContentTags(record.tags);
+    record.attachments ??= [];
+  }
+  for (const comment of globalPolls.gentlePathPollState.comments)
+    comment.parentCommentId ??= null;
   return globalPolls.gentlePathPollState;
 }
 export function resetDemoPollState() {

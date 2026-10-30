@@ -60,13 +60,15 @@ Local DM Sans is the body/control face and local Lora the editorial display face
 
 Page → one PageHeader → purposeful work surfaces. The shell header supplies context, not a second title. Desktop uses a fixed 17.5rem forest sidebar from 64rem; navigation scrolls independently above the account. The sidebar has no promotional/care-note card. Below 64rem use the shared full-screen navigation with safe areas, Escape, focus trap, and restoration.
 
-Family, journal, Small Steps, document, and community screens move directly from the compact colored page header to their controls and content, without a second promotional banner. My Path retains its “Your Path Is Your Own.” illustrated hero.
+Family, journal, Milestones, document, and community screens move directly from the compact colored page header to their controls and content, without a second promotional banner. My Path places its “Your Path Is Your Own.” illustrated hero below the For Your Family tools. Recent reflections reuse the journal's gradient headers, bordered cards, metadata divider, and overflow actions in a compact variant.
 
-Directories reuse shared filtering/paging and responsive record patterns; wide tables own a labeled horizontal scroller. Long forms scroll naturally, with actions sticky only where space permits. Community combines Posts/Polls through the shared segmented controller. Inbox content uses separated ivory cards and a clear unread hierarchy instead of a dense tinted wall. Parallel staff work cards stretch content and align their CTAs.
+Directories reuse shared filtering/paging and responsive record patterns; wide tables own a labeled horizontal scroller. Long forms scroll naturally, with actions sticky only where space permits. Community combines Posts/Polls through prominent editorial tabs with an animated selection marker. Inbox content uses separated ivory cards and a clear unread hierarchy instead of a dense tinted wall. Parallel staff work cards stretch content and align their CTAs.
 
 ## Elevation & Depth
 
 Borders and surface contrast carry structure. Reuse theme-owned card, shell, and overlay shadows. Primary actions retain the established restrained accent treatment; ordinary fields/records do not acquire arbitrary gradients or shadows.
+
+Recoverable error states use a quiet paper panel with the neutral border, a small amber warning icon, editorial title, and a compact forest retry action. Keep red emphasis for destructive actions and field validation. Query and route errors share this presentation, with natural-width actions that wrap alongside the copy.
 
 ## Shapes
 
@@ -78,21 +80,26 @@ Import shared owners from `@/components/ui`. Their runtime path is theme tokens 
 
 Use StarRating/RatingSummary for resource feedback, ReactionButton for confirmed heart reactions, and Accordion for animated disclosures. Dropdown triggers retain their layout width; popups size to the longest option, at least the trigger width, clamped to the viewport. See the [canonical map](docs/UI_SYSTEM.md#canonical-ui-map).
 
+Family birthday fields use shared DatePicker with a forest/accent calendar popup and typed date segments. Other existing date/time fields retain native pickers. CardOpenButton owns stretched card actions without the transform used for ordinary pressed buttons, so the full card remains the target.
+
 Motion uses shared 90/140/200/240ms interaction tokens and a 520ms reaction celebration token. Device and saved reduced motion suppress CSS/JavaScript movement while state, focus, and placement still update. Keep interactions purposeful: FAQ open/close, star feedback, heart confirmation, and reordering, rather than continuous decoration.
+
+Record cards have a single semantic details/editor entry surface and a top-right vertical ellipsis for secondary actions. Bookmark saves keep the icon and label close together and use a filled bookmark with Saved after confirmation. Confirmed bookmark saves share the bounded particle burst across modules. Family cards pair a larger avatar with the name and calendar age, followed by a concise support-answer preview. Reflection cards use a translucent feeling-gradient header and a full border, with date, child, and feeling tokens together below the divider. Milestones uses independent cards, child tokens, and a segmented overview of answered and unanswered milestones. Guided Steps and Family Tips keep independent cards with divider actions and a prominent trailing save. Community uses one discussion per row and shares vote/result bars between poll cards and readers. Confirmed community actions may use a brief shared confetti burst, suppressed by reduced motion.
 
 ## Illustrations And Fonts
 
 Original PNG illustrations and bundled fonts came from the supplied product reference. The three `*-v2.png` botanical scenes were generated for GentlePath. Keep the files as maintained assets; generation transcripts and interface screenshots are not runtime dependencies.
 
-| Asset Group                                                                                                     | Use                                                   |
-| --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `public/gentlepath/brand-mark.svg`                                                                              | Shared brand identity                                 |
-| `winding-path`, `care-notes`, `care-folder`, `caregiver-community`, `growing-together`, `parent-and-child` PNGs | Existing product illustrations                        |
-| `path-landscape-v2.png`                                                                                         | Sunlit landscape for public/auth/family/admin regions |
-| `reading-garden-v2.png`                                                                                         | Journal, reading, and resource regions                |
-| `community-garden-v2.png`                                                                                       | Community/communication regions                       |
-| `off-the-path.png`                                                                                              | Watercolor garden and signpost for the root 404 screen |
-| `public/gentlepath/fonts/`                                                                                      | Local DM Sans and Lora; no font network dependency    |
+| Asset Group                                                                                                     | Use                                                                   |
+| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `public/gentlepath/brand-mark.svg`                                                                              | Shared brand identity                                                 |
+| `winding-path`, `care-notes`, `care-folder`, `caregiver-community`, `growing-together`, `parent-and-child` PNGs | Existing product illustrations                                        |
+| `path-landscape-v2.png`                                                                                         | Sunlit landscape for public/family/admin regions                      |
+| `parent-and-child.png`                                                                                          | Welcome/sign-up story illustration with a quiet shared drawing moment |
+| `reading-garden-v2.png`                                                                                         | Journal, reading, and resource regions                                |
+| `community-garden-v2.png`                                                                                       | Community/communication regions                                       |
+| `off-the-path.png`                                                                                              | Watercolor garden and signpost for the root 404 screen                |
+| `public/gentlepath/fonts/`                                                                                      | Local DM Sans and Lora; no font network dependency                    |
 
 All PNG names above are under `public/gentlepath/`. Use responsive images and catalog alt text. Never embed phone/UI reference mockups as the product interface.
 

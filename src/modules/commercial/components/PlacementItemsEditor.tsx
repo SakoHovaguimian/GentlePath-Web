@@ -11,6 +11,7 @@ import {
   Message,
   ReorderableList,
   Switch,
+  BookmarkButton,
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
@@ -50,6 +51,7 @@ export function PlacementItemsEditor({ placement }: PlacementItemsEditorProps) {
   );
   const change = (id: string, values: Partial<PlacementItemDraft>) => {
     dirty.current = true;
+    save.reset();
     setItems((current) =>
       current.map((item) => (item.id === id ? { ...item, ...values } : item)),
     );
@@ -100,6 +102,7 @@ export function PlacementItemsEditor({ placement }: PlacementItemsEditorProps) {
     )
       return;
     dirty.current = true;
+    save.reset();
     setItems((current) => current.filter((row) => row.id !== item.id));
   }
   return (
@@ -132,6 +135,7 @@ export function PlacementItemsEditor({ placement }: PlacementItemsEditorProps) {
               }
               onClick={() => {
                 dirty.current = true;
+                save.reset();
                 setItems((current) => [
                   ...current,
                   {
@@ -158,6 +162,7 @@ export function PlacementItemsEditor({ placement }: PlacementItemsEditorProps) {
               downLabel={() => copy.moveDown}
               onMove={(id, targetId) => {
                 dirty.current = true;
+                save.reset();
                 setItems((current) => {
                   const next = [...current];
                   const from = next.findIndex((item) => item.id === id);
@@ -246,9 +251,13 @@ export function PlacementItemsEditor({ placement }: PlacementItemsEditorProps) {
           <MutationError error={save.error} />
         </FormSection>
         <FormActions sticky={false}>
-          <Button type="submit" loading={save.isPending}>
+          <BookmarkButton
+            type="submit"
+            saved={save.isSuccess}
+            loading={save.isPending}
+          >
             {copy.saveItems}
-          </Button>
+          </BookmarkButton>
         </FormActions>
       </form>
     </Card>

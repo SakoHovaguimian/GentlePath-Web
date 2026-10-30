@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, IconButton, UiIcon } from '@/components/ui';
+import { useState } from 'react';
+import { BookmarkButton, Button, IconButton, UiIcon } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { strings } from '@/strings';
 import { ShowcaseSection } from './ShowcaseSection';
@@ -17,6 +18,7 @@ const variants = [
 
 export function ButtonsShowcase() {
   const presentation = usePresentationService();
+  const [saved, setSaved] = useState(false);
   async function preview(destructive = false) {
     if (
       destructive &&
@@ -62,6 +64,13 @@ export function ButtonsShowcase() {
             <ButtonRow key={state} state={state} preview={preview} />
           ))}
         </div>
+      </div>
+      <div className="grid justify-items-start gap-3">
+        <h3 className="m-0 text-sm font-semibold text-primary">
+          {copy.bookmarks}
+        </h3>
+        <p className="m-0 text-sm text-secondary">{copy.bookmarksHint}</p>
+        <BookmarkButton saved={saved} onClick={() => setSaved(!saved)} />
       </div>
     </ShowcaseSection>
   );

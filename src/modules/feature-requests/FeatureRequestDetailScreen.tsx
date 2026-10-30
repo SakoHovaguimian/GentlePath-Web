@@ -11,6 +11,7 @@ import {
   ErrorState,
   Field,
   Input,
+  BookmarkButton,
 } from '@/components/ui';
 import {
   useDeleteFeatureRequest,
@@ -100,7 +101,9 @@ export function FeatureRequestDetailScreen({
           />
         </Field>
         <div className="flex flex-wrap gap-3">
-          <Button
+          <BookmarkButton
+            saved={updateMutation.isSuccess && message === null}
+            loading={updateMutation.isPending}
             type="submit"
             disabled={
               updateMutation.isPending ||
@@ -108,10 +111,8 @@ export function FeatureRequestDetailScreen({
               !currentMessage.trim()
             }
           >
-            {updateMutation.isPending
-              ? strings.common.saving
-              : strings.ui.featureRequestDetailScreen.saveChanges}
-          </Button>
+            {strings.ui.featureRequestDetailScreen.saveChanges}
+          </BookmarkButton>
           <Button
             type="button"
             variant="destructive"

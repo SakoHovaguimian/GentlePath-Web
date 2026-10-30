@@ -4,6 +4,7 @@ export const ObservationResponseSchema = z.enum([
   'not_yet',
   'emerging',
   'often',
+  'stopped',
 ]);
 export const ObservationInputSchema = z.object({
   response: ObservationResponseSchema,

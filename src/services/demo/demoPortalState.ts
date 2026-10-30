@@ -4,6 +4,7 @@ import { users } from './demoFixtures';
 import type { Resource } from '@/modules/portal/models/resource';
 import type { DemoPortalState } from './models/demoPortalState';
 import { JournalEmotionSchema } from '@/modules/portal/models/journalEmotion';
+import { ChildSupportDetailsSchema } from '@/modules/portal/models/childSupportDetails';
 
 const globalPortal = globalThis as typeof globalThis & {
   gentlePathPortalState?: DemoPortalState;
@@ -34,7 +35,11 @@ function createPortalState(): DemoPortalState {
       userId: user.id,
       name: copy.childName,
       dateOfBirth: '2020-06-15',
-      supportNotes: copy.childNotes,
+      gender: null,
+      supportNotes: '',
+      supportDetails: ChildSupportDetailsSchema.parse({
+        comfortStrategies: copy.childNotes,
+      }),
     })),
     journals: users.flatMap((user, userIndex) =>
       copy.journalSeeds.map((seed, index) => ({
@@ -100,6 +105,12 @@ function createPortalState(): DemoPortalState {
 export function getDemoPortalState(): DemoPortalState {
   const state = (globalPortal.gentlePathPortalState ??= createPortalState());
   // Upgrade retained development records without resetting private drafts or edits.
+  for (const child of state.children) {
+    child.gender ??= null;
+    child.supportDetails = ChildSupportDetailsSchema.parse(
+      child.supportDetails ?? {},
+    );
+  }
   for (const entry of state.journals) {
     if (Array.isArray(entry.emotions)) continue;
     const legacyEmotion = JournalEmotionSchema.safeParse(

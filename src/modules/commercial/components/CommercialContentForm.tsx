@@ -13,6 +13,7 @@ import {
   Select,
   Switch,
   TextArea,
+  BookmarkButton,
 } from '@/components/ui';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
@@ -20,6 +21,7 @@ import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathCommercialStrings as copy } from '@/strings';
 import { MutationError } from '@/modules/portal/components/MutationError';
 import { useCommercialMutation } from '../hooks';
+import { useCommercialDelete } from '../useCommercialDelete';
 import {
   commercialCreateSchemas,
   commercialUpdateSchemas,
@@ -37,11 +39,13 @@ interface CommercialContentFormProps {
   entity: CommercialEntity;
   record?: CommercialRecord;
   onSaved?: () => void;
+  onDeleted?: () => void;
 }
 export function CommercialContentForm({
   entity,
   record,
   onSaved,
+  onDeleted,
 }: CommercialContentFormProps) {
   const fields = commercialFormFields[entity].filter(
     (field) => !(record ? field.createOnly : field.editOnly),
@@ -91,7 +95,16 @@ export function CommercialContentForm({
   const save = useCommercialMutation((service, input: unknown) =>
     service.save(entity, input, record?.id),
   );
+  const remove = useCommercialDelete({
+    entity,
+    record,
+    dirty,
+    busy,
+    onDeleted: () => onDeleted?.(),
+  });
+  const pending = save.isPending || remove.isPending;
   const update = (key: string, value: string | boolean | string[]) => {
+    save.reset();
     dirty.current = true;
     setValues((current) => ({ ...current, [key]: value }));
     setErrors((current) => ({ ...current, [key]: '' }));
@@ -179,7 +192,7 @@ export function CommercialContentForm({
               const value = values[field.key];
               const error = errors[field.key];
               const disabled =
-                save.isPending ||
+                pending ||
                 (field.key === 'action_value' &&
                   values.action_type === 'COPY_DISCOUNT_CODE');
               const attrs = {
@@ -225,7 +238,6 @@ export function CommercialContentForm({
                 control = (
                   <TextArea
                     {...attrs}
-                    rows={5}
                     maxLength={field.max}
                     value={String(value)}
                     onChange={(event) => update(field.key, event.target.value)}
@@ -338,20 +350,38 @@ export function CommercialContentForm({
         />
       )}
       <MutationError error={save.error} />
+      <MutationError error={remove.error} />
       <FormActions sticky={false}>
+        {record && onDeleted && (
+          <Button
+            type="button"
+            variant="destructive"
+            className="mr-auto"
+            disabled={pending}
+            loading={remove.isPending}
+            onClick={() => void remove.destroy()}
+          >
+            {copy.delete}
+          </Button>
+        )}
         <Button
           type="button"
           variant="secondary"
-          disabled={save.isPending}
+          disabled={pending}
           onClick={() => {
             void navigate(destination);
           }}
         >
           {copy.cancel}
         </Button>
-        <Button type="submit" loading={save.isPending}>
+        <BookmarkButton
+          type="submit"
+          saved={save.isSuccess}
+          loading={save.isPending}
+          disabled={remove.isPending}
+        >
           {record ? copy.save : copy.create}
-        </Button>
+        </BookmarkButton>
       </FormActions>
     </form>
   );

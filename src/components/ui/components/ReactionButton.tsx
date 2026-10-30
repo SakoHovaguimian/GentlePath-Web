@@ -7,7 +7,7 @@ import type { ReactionButtonProps } from '../models/reactionButtonProps';
 import { Button } from './Button';
 import { UiIcon } from './UiIcon';
 
-const particles = Array.from({ length: 6 }, (_, index) => index);
+const particles = Array.from({ length: 14 }, (_, index) => index);
 
 export function ReactionButton({
   liked,
@@ -73,8 +73,9 @@ export function ReactionButton({
         .querySelectorAll('[data-reaction-particle]')
         .forEach((particle, index) => {
           const angle = (index / particles.length) * Math.PI * 2;
-          const x = Math.cos(angle) * 24;
-          const y = Math.sin(angle) * 24;
+          const distance = 36 + (index % 3) * 12;
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
           animations.push(
             particle.animate(
               [
@@ -85,7 +86,7 @@ export function ReactionButton({
                   offset: 0.35,
                 },
                 {
-                  transform: `translate(${x}px, ${y}px) scale(0.3)`,
+                  transform: `translate(${x}px, ${y + 12}px) scale(0.3) rotate(${index * 37}deg)`,
                   opacity: 0,
                 },
               ],
@@ -140,7 +141,10 @@ export function ReactionButton({
           <span
             key={particle}
             data-reaction-particle
-            className="absolute top-1/2 left-1/2 -mt-0.5 -ml-0.5 size-1 rounded-full bg-current opacity-0"
+            className={cn(
+              'absolute top-1/2 left-1/2 -mt-0.5 -ml-0.5 bg-current opacity-0',
+              particle % 2 ? 'h-1.5 w-1 rounded-xs' : 'size-1.5 rounded-full',
+            )}
           />
         ))}
       </span>

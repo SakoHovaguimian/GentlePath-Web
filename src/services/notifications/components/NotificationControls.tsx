@@ -58,6 +58,7 @@ export function NotificationControls({
       {enabled && (
         <Button
           variant="destructive"
+          className={styles.disableButton}
           disabled={busy}
           loading={busy}
           onClick={() => void apply(realtime.disableNotifications)}

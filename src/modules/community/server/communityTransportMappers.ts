@@ -24,6 +24,11 @@ export function mapCommunityPost(
     title: value.title,
     body: value.body,
     imageUrl: value.image_url,
+    attachments: value.attachments?.length
+      ? value.attachments
+      : value.image_url
+        ? [{ kind: 'IMAGE', url: value.image_url, description: value.title }]
+        : [],
     tags: value.tags,
     author: author(value.author),
     liked,
@@ -42,6 +47,7 @@ export function mapCommunityComment(
     userId: value.user_id,
     postId: value.post_id,
     body: value.body,
+    parentCommentId: value.parent_comment_id ?? null,
     author: author(value.author),
     liked,
     likeCount: value.likes_count ?? 0,
@@ -72,6 +78,7 @@ export function mapCommunityReport(value: CommunityReportTransport) {
       body: snapshot.body,
       tags: snapshot.tags,
       imageUrl: snapshot.image_url,
+      attachments: snapshot.attachments,
       description: snapshot.description,
       parentId: snapshot.parent_id,
       author: author(snapshot.author),

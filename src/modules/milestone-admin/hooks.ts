@@ -31,6 +31,14 @@ export function useMilestoneChoices() {
     queryFn: ({ signal }) => service.milestoneChoices(signal),
   });
 }
+export function useMilestoneProgressSummary(childId: string) {
+  const { milestoneAdminService: service } = useServiceContainer();
+  return useQuery({
+    queryKey: keys.progress(childId),
+    queryFn: ({ signal }) => service.progressSummary(childId, signal),
+    enabled: Boolean(childId),
+  });
+}
 export function useFamilyTips(
   scope: 'approved' | 'mine' | 'review',
   query: MilestoneAdminQuery,

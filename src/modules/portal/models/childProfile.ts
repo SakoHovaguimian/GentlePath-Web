@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { gentlePathPortalStrings as copy } from '@/strings';
+import { ChildSupportDetailsSchema } from './childSupportDetails';
+import { ChildGenderSchema } from './childGender';
 
 export const ChildProfileInputSchema = z.object({
   name: z.string().trim().min(1, copy.validation.childName).max(100),
@@ -13,7 +15,18 @@ export const ChildProfileInputSchema = z.object({
         Date.parse(value) <= Date.now(),
       copy.validation.birthDate,
     ),
-  supportNotes: z.string().trim().max(2000).default(''),
+  gender: ChildGenderSchema.nullable().default(null),
+  supportNotes: z
+    .string()
+    .trim()
+    .max(2000, copy.family.answerLimit)
+    .default(''),
+  supportDetails: ChildSupportDetailsSchema.default(() =>
+    ChildSupportDetailsSchema.parse({}),
+  ),
+});
+export const ChildProfileUpdateSchema = ChildProfileInputSchema.extend({
+  gender: ChildGenderSchema.nullable().optional(),
 });
 export const ChildProfileSchema = ChildProfileInputSchema.extend({
   id: z.string(),

@@ -32,7 +32,6 @@ export function MetadataField({
           error={error}
         >
           <TextArea
-            rows={6}
             value={value}
             maxLength={20000}
             disabled={disabled}

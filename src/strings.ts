@@ -6095,8 +6095,9 @@ export const strings = {
     },
     queryBoundary: {
       error: 'Error',
-      somethingWentWrong: 'Something Went Wrong',
+      somethingWentWrong: 'Unable To Load This',
       tryAgain: 'Try Again',
+      loadFailureDescription: 'Please try again in a moment.',
       // @sentence-case: Supporting prose.
       youNeedToBeLoggedInToViewThis:
         'You need to be logged in to view this content.',
@@ -6116,7 +6117,7 @@ export const strings = {
     states: {
       empty: 'Empty',
       error: 'Error',
-      retry: 'Retry',
+      retry: 'Try Again',
     },
     toastStack: {
       dismissToast: (title: string) => `Dismiss ${title} Toast`,
@@ -6847,6 +6848,9 @@ export const strings = {
     reducedMotionHint:
       'System Reduce Motion removes movement and keeps state changes immediate.',
     buttons: 'Buttons',
+    bookmarks: 'Bookmarks',
+    bookmarksHint:
+      'Save to see the confirmed bookmark state and celebration. Select it again to unsave.',
     buttonsHint:
       'Action hierarchy and interactive states. Hover or use Tab to inspect.',
     variants: {
@@ -6983,7 +6987,7 @@ export const strings = {
     paymentDetailsHint: 'Enter payment and billing information.',
     feedback: 'Feedback / System States',
     feedbackHint: 'Messages, overlays, and validation.',
-    emptyStates: 'Empty States',
+    emptyStates: 'Empty And Error States',
     emptyStatesHint:
       'Dotted outline cards fill empty sections. Embedded states share their existing surface.',
     emptyStandalone: 'Standalone Section',
@@ -7519,36 +7523,162 @@ export const gentlePathDemoStrings = {
       description:
         'Notice moments when your child invites someone into something they enjoy.',
       category: 'Connection',
+      tags: ['Connection', 'Shared Interests'],
+      guidance:
+        'Notice an invitation in any form: bringing an object, showing a picture, making a sound, using words, or staying nearby. Record what felt like an invitation to you.',
     },
     {
       title: 'Expressing A Preference',
       description:
         'Notice any way your child shows what they want, like, or need.',
       category: 'Communication',
+      tags: ['Communication', 'Choices'],
+      guidance:
+        'A preference may be communicated through movement, gesture, signs, pictures, an AAC device, or speech. Note the choice and how it was expressed.',
     },
     {
       title: 'Finding A Familiar Comfort',
       description:
         'Notice the people, places, or activities that help your child feel settled.',
-      category: 'Everyday Life',
+      category: 'Sensory Comfort',
+      tags: ['Sensory Comfort', 'Everyday Life'],
+      guidance:
+        'Describe the setting and the familiar support your child chose. Comfort can look different from one day to the next.',
     },
     {
       title: 'Trying Something In Their Own Way',
       description:
         'Notice exploration at your child’s pace, with whatever support feels helpful.',
-      category: 'Exploration',
+      category: 'Play And Exploration',
+      tags: ['Play And Exploration', 'New Experiences'],
+      guidance:
+        'Observe how your child approached something unfamiliar, including watching, touching, moving closer, or choosing to pause. Include any support they welcomed.',
     },
     {
       title: 'Moving Between Activities',
       description:
         'Notice what helps a transition feel more predictable or comfortable.',
       category: 'Everyday Life',
+      tags: ['Everyday Life', 'Transitions'],
+      guidance:
+        'Record which activities were involved, any preparation you offered, and how your child communicated readiness or a need for more time.',
     },
     {
       title: 'Enjoying Time Together',
       description:
         'Notice a shared moment that feels comfortable and connected.',
       category: 'Connection',
+      tags: ['Connection', 'Shared Activities'],
+      guidance:
+        'Shared time may include parallel play, quiet company, movement, reading, or conversation. Describe what made the moment feel comfortable for your child.',
+    },
+    {
+      title: 'Choosing Between Two Things',
+      description:
+        'Notice your child choosing an activity, object, food, or place from available options.',
+      category: 'Communication',
+      tags: ['Communication', 'Choices', 'Everyday Life'],
+      guidance:
+        'Note the options and the way your child showed their choice. A clear refusal or choosing neither is also useful information.',
+    },
+    {
+      title: 'Asking For Help',
+      description:
+        'Notice how your child lets someone know they would like support.',
+      category: 'Communication',
+      tags: ['Communication', 'Support'],
+      guidance:
+        'Record the situation and the signal your child used, such as bringing an object, reaching toward someone, using a picture, or asking with words.',
+    },
+    {
+      title: 'Asking For A Break',
+      description:
+        'Notice your child communicating that they need a pause, space, or a different activity.',
+      category: 'Self-Advocacy',
+      tags: ['Self-Advocacy', 'Communication', 'Sensory Comfort'],
+      guidance:
+        'Notice requests in any form, including moving away or using an agreed signal. Record the request and which response helped.',
+    },
+    {
+      title: 'Showing A Boundary',
+      description:
+        'Notice your child communicating no, stop, enough, or not now.',
+      category: 'Self-Advocacy',
+      tags: ['Self-Advocacy', 'Boundaries'],
+      guidance:
+        'Describe the signal and how you responded. You can note whether your child repeated or changed their signal when their boundary was acknowledged.',
+    },
+    {
+      title: 'Returning To A Favorite Activity',
+      description:
+        'Notice your child finding or asking for something they enjoy doing again.',
+      category: 'Play And Exploration',
+      tags: ['Play And Exploration', 'Shared Interests'],
+      guidance:
+        'Record what drew your child back and whether they wanted company, materials, or space to enjoy the activity independently.',
+    },
+    {
+      title: 'Exploring Alongside Someone',
+      description:
+        'Notice your child playing or exploring near another person in a way that feels comfortable.',
+      category: 'Connection',
+      tags: ['Connection', 'Play And Exploration'],
+      guidance:
+        'Observe nearby or parallel activity without requiring shared toys, conversation, or eye contact. Note the setting and the amount of space your child preferred.',
+    },
+    {
+      title: 'Joining A Familiar Routine',
+      description:
+        'Notice your child taking part in one piece of an everyday routine.',
+      category: 'Everyday Life',
+      tags: ['Everyday Life', 'Routines'],
+      guidance:
+        'Record the part they chose to join, such as picking a book, carrying a towel, or putting an item away, and any help they wanted.',
+    },
+    {
+      title: 'Getting Ready In Their Own Way',
+      description:
+        'Notice participation in dressing, washing, or another personal care activity.',
+      category: 'Everyday Life',
+      tags: ['Everyday Life', 'Personal Care'],
+      guidance:
+        'Describe one concrete moment and the supports or choices that made it more comfortable. Participation can include communicating a preference or asking for help.',
+    },
+    {
+      title: 'Finding A Comfortable Sensory Support',
+      description:
+        'Notice your child choosing a sound, texture, movement, or space that feels helpful.',
+      category: 'Sensory Comfort',
+      tags: ['Sensory Comfort', 'Self-Advocacy'],
+      guidance:
+        'Record what your child selected and the surrounding setting. Follow their preferences and note when the same support feels different.',
+    },
+    {
+      title: 'Noticing A Body Need',
+      description:
+        'Notice your child communicating tiredness, hunger, thirst, discomfort, or another body need.',
+      category: 'Self-Advocacy',
+      tags: ['Self-Advocacy', 'Body Awareness'],
+      guidance:
+        'Describe the signal you noticed and how the need was communicated or supported. Keep the note specific to the moment rather than inferring a cause.',
+    },
+    {
+      title: 'Sharing A Back-And-Forth Moment',
+      description:
+        'Notice a comfortable exchange of sounds, gestures, messages, movement, or play.',
+      category: 'Connection',
+      tags: ['Connection', 'Communication', 'Shared Activities'],
+      guidance:
+        'Record how each person joined the exchange and any pauses your child needed. The exchange does not need to use spoken words.',
+    },
+    {
+      title: 'Making Room For A Small Change',
+      description:
+        'Notice what happens when a familiar activity includes a small change.',
+      category: 'Everyday Life',
+      tags: ['Everyday Life', 'Transitions', 'New Experiences'],
+      guidance:
+        'Describe the change, any preparation or support, and your child’s response. Asking to keep things familiar is useful to record too.',
     },
   ],
   reportSeeds: [
@@ -7822,8 +7952,8 @@ export const gentlePathPortalStrings = {
   navigation: {
     home: 'My Path',
     journal: 'My Journal',
-    resources: 'Resource Library',
-    milestones: 'Small Steps',
+    resources: 'Resources',
+    milestones: 'Milestones',
     family: 'My Family',
     saved: 'Saved Content',
     blog: 'Stories And Insights',
@@ -7904,7 +8034,7 @@ export const gentlePathPortalStrings = {
     journalHint: 'Moments you have made space for',
     saved: 'Saved Content',
     savedHint: 'Helpful things to return to',
-    observations: 'Small Steps Noticed',
+    observations: 'Milestones Noticed',
     observationHint: 'At your child’s own pace',
     children: 'Family Profiles',
     childHint: 'Care that stays personal',
@@ -7919,7 +8049,7 @@ export const gentlePathPortalStrings = {
       'A thought, a small win, a difficult day. Your first reflection starts with you.',
     familyTitle: 'Made For Your Family',
     familyHint:
-      'Add a child’s profile to connect reflections and small steps to their own journey.',
+      'Add a child’s profile to connect reflections and milestones to their own journey.',
     familyAction: 'Meet Your Family',
     quoteDescription:
       'There is no one right pace. There is only your family’s pace.',
@@ -7948,8 +8078,21 @@ export const gentlePathPortalStrings = {
       labels.join(', '),
     untitledTitle: 'Untitled Reflection',
     dateUnavailable: 'Date Unavailable',
-    childLabel: 'Connect To A Child',
-    personal: 'Just For Me',
+    childLabel: 'Related Child',
+    personal: 'Personal Entry',
+    filterLabel: 'Entries For',
+    allEntries: 'All Entries',
+    entryActions: (title: string) => `Actions For ${title}`,
+    openEntry: (title: string) => `Open Reflection ${title}`,
+    relatedChildUnavailable: 'Related Child',
+    profilesUnavailableTitle: 'Family Profiles Unavailable',
+    profilesUnavailableHint:
+      'Try loading your family profiles again before creating a reflection.',
+    reloadProfilesAction: 'Reload Profiles',
+    clearFiltersAction: 'Clear Filters',
+    noResultsTitle: 'No Matching Reflections',
+    noResultsHint:
+      'Try another search or choose a different child to find a reflection.',
     publish: 'Save Reflection',
     created: 'Reflection Saved',
     updated: 'Reflection Updated',
@@ -7971,7 +8114,7 @@ export const gentlePathPortalStrings = {
     },
   },
   resources: {
-    title: 'A Little Clarity, Close By',
+    title: 'Resources',
     collectionsTitle: 'Browse Collections',
     collectionAction: 'Explore Collection',
     // @sentence-case: Supporting descriptions for resource collection cards.
@@ -7985,13 +8128,15 @@ export const gentlePathPortalStrings = {
     savedDescription:
       'The helpful things you chose to keep, ready when you need them.',
     searchPlaceholder: 'Search resources, guides, and everyday support…',
-    save: 'Save Resource',
-    unsave: 'Remove From Saved',
+    save: 'Save',
+    unsave: 'Saved',
+    actionsLabel: (title: string) => `Actions For ${title}`,
+    open: 'View Resource',
     savedToast: 'Resource Saved',
     unsavedToast: 'Resource Removed',
     emptySavedTitle: 'Keep Something Helpful Close',
     emptySavedHint:
-      'Save a guide or article from the resource library and you will find it here.',
+      'Save a guide or article from Resources and you will find it here.',
     explore: 'Explore Resources',
     detailHint:
       'A practical starting point for your family. Adapt these ideas to your own needs.',
@@ -8026,44 +8171,91 @@ export const gentlePathPortalStrings = {
     formDescription: 'These details stay in your private family space.',
     nameLabel: 'Child’s Name',
     birthDateLabel: 'Date Of Birth',
-    notesLabel: 'What Helps Them Feel Supported?',
+    genderLabel: 'Gender',
+    genderPlaceholder: 'Choose A Gender (Optional)',
+    genders: {
+      FEMALE: 'Female',
+      MALE: 'Male',
+      NON_BINARY: 'Nonbinary',
+      OTHER: 'Another Gender',
+      PREFER_NOT_TO_SAY: 'Prefer Not To Say',
+    },
+    supportTitle: 'The Little Things That Help',
+    supportHint:
+      'Answer the questions that feel useful. You can leave any of these details blank and update them whenever you need.',
+    notesLabel: 'Anything Else To Keep In Mind?',
     notesPlaceholder:
-      'Their favorite comforts, ways of communicating, or things to keep in mind…',
+      'Other details that help you care for them in your own way…',
+    questions: {
+      allergies: {
+        label: 'Allergies And Dietary Needs',
+        placeholder:
+          'Food, medication, or environmental allergies and dietary needs…',
+      },
+      communication: {
+        label: 'How Do They Like To Communicate?',
+        placeholder:
+          'Words, gestures, pictures, or other ways they express themselves…',
+      },
+      sensoryNeeds: {
+        label: 'What Sensory Needs Should You Keep In Mind?',
+        placeholder:
+          'Sounds, lighting, textures, or environments they enjoy or find difficult…',
+      },
+      comfortStrategies: {
+        label: 'What Helps Them Feel Calm And Supported?',
+        placeholder:
+          'Favorite comforts, calming activities, or ways to offer reassurance…',
+      },
+      dailyRoutines: {
+        label: 'Which Routines Work Well For Them?',
+        placeholder:
+          'Helpful routines for mornings, meals, sleep, or changes in plans…',
+      },
+    },
+    // @sentence-case: Validation guidance for free-form support answers.
+    answerLimit: 'Keep each answer within 2,000 characters.',
     save: 'Save Profile',
     created: 'Family Profile Saved',
     deleteTitle: 'Remove This Child Profile?',
     deleteDescription:
-      'Their observations will be removed. Linked journal entries will be kept as personal reflections.',
+      'This profile and its linked observations, journal entries, and documents will no longer be available. Personal entries and documents without this child will stay available. You cannot undo this here.',
     deleteAction: 'Remove Profile',
     deleted: 'Family Profile Removed',
     emptyTitle: 'Every Journey Is Personal',
     emptyHint:
-      'Add your first child profile to start noticing small steps and keeping their reflections together.',
+      'Add your first child profile to start noticing milestones and keeping their reflections together.',
     birthDate: (date: string) => `Born ${date}`,
     openProfile: (name: string) => `Open Profile For ${name}`,
     removeProfile: (name: string) => `Remove Profile For ${name}`,
+    profileActions: (name: string) => `Actions For ${name}`,
     profileAction: 'View Profile',
     noNotesHint: 'Add the little things that help them feel supported.',
-    // @preserve-case: Compact age units use conventional lowercase abbreviations.
-    age: (years: number, months: number) => `${years} yr ${months} mo`,
+    age: (years: number, months: number) =>
+      years === 0
+        ? `${months} ${months === 1 ? 'Month' : 'Months'} Old`
+        : months === 0
+          ? `${years} ${years === 1 ? 'Year' : 'Years'} Old`
+          : `${years} ${years === 1 ? 'Year' : 'Years'} And ${months} ${months === 1 ? 'Month' : 'Months'} Old`,
   },
   milestones: {
-    title: 'Every Small Step Matters',
+    title: 'Milestones',
     description:
       'Notice moments of connection and growth. These observations are personal reflections, never a checklist or assessment.',
-    childLabel: 'Notice Steps For',
+    childLabel: 'Milestones For',
     chooseChild: 'Choose A Child',
     addChildTitle: 'Start With Your Family',
-    addChildHint: 'Add a child profile before recording their small steps.',
+    addChildHint: 'Add a child profile before recording their milestones.',
     responseLabel: 'What Have You Noticed?',
     record: 'Record Observation',
-    updated: 'Small Step Recorded',
+    updated: 'Milestone Recorded',
     lastObserved: (date: string) => `Last Noticed ${date}`,
     notObserved: 'Ready When You Are',
     responses: {
       not_yet: 'Not Yet',
       emerging: 'Beginning To Notice',
       often: 'Happening Often',
+      stopped: 'Stopped',
     },
     privacyHint:
       'Only you can see your child’s observations. There are no scores or comparisons.',
@@ -8189,6 +8381,7 @@ export const gentlePathPortalStrings = {
   // @sentence-case: Complete form-validation messages.
   validation: {
     childName: 'Enter your child’s name, using up to 100 characters.',
+    childGender: 'Choose a gender from the list or leave it blank.',
     birthDate: 'Enter a valid date of birth that is not in the future.',
     title: 'Give your reflection a title between 1 and 160 characters.',
     body: 'Write a reflection between 1 and 20,000 characters.',
@@ -8205,15 +8398,13 @@ export const gentlePathPortalStrings = {
       'GentlePath is temporarily undergoing maintenance. Please check back a little later.',
   },
   auth: {
-    eyebrow: 'A Thoughtful Way Forward',
+    eyebrow: 'A Little Clarity. A Lot Of Care.',
     title: 'Welcome Back',
     description:
-      'Sign in to your family’s space. A little clarity, a lot of care.',
-    signupTitle: 'Find Your Own Gentle Path',
+      'Your family’s moments, helpful resources, and a community that understands. Pick up wherever you are.',
+    signupTitle: 'Your Family. Your Pace.',
     signupDescription:
-      'Create a private family space for reflections, resources, and the steps that matter to you.',
-    demoHint:
-      'Explore a sample family space. Every demo account uses password123.',
+      'Make space for the everyday moments, the questions, and the small steps that matter to your family.',
     demoRoleLabel: 'Explore As',
     demoRoles: {
       user: 'Family Member',
@@ -8386,19 +8577,18 @@ export const gentlePathAuthStrings = {
   restoreDemoAction: 'Return To Demo Workspace',
   demoRestoreErrorDescription:
     'The demo workspace could not be restored. Please try again.',
-  loginStoryTitle: 'A Familiar Place To Find Your Feet.',
+  loginStoryTitle: 'Every Little Moment Belongs Here.',
   loginStoryDescription:
-    'Your reflections, your family, and the helpful things you’ve kept. Ready when you are.',
-  signupStoryTitle: 'Every Family Finds Their Own Way.',
+    'Notice what helps. Keep what matters. Find support for the way your family moves through the world.',
+  signupStoryTitle: 'Room To Grow, In Your Own Way.',
   signupStoryDescription:
-    'Make a little room for reflection, clarity, and the moments that matter to your family.',
+    'A thoughtful home for parents and caregivers navigating autism, with room for reflection and connection at every step.',
   storyArtAlt:
     'A parent listening to their child share a drawing, surrounded by soft green leaves',
   firstNamePlaceholder: 'Your first name',
   lastNamePlaceholder: 'Your last name',
   emailPlaceholder: 'you@example.com',
   passwordHint: 'Use at least 8 characters for your password.',
-  demoSignupHint: 'Your demo account and changes stay in this local demo.',
   demoRoleHint:
     'Choose a sample account to explore. You can edit the email and password below.',
   // @preserve-case: Sample account credentials are displayed and must retain their exact spelling.
@@ -8409,6 +8599,13 @@ export const gentlePathAuthStrings = {
   },
   // @preserve-case: Demo credential; casing must stay exact.
   demoPassword: 'password123',
+} as const;
+
+export const datePickerStrings = {
+  openCalendar: (label: string) => `Open Calendar For ${label}`,
+  previousMonth: 'Previous Month',
+  nextMonth: 'Next Month',
+  clearDate: 'Clear Date',
 } as const;
 
 export const gentlePathBlogBuilderStrings = {
@@ -8636,7 +8833,9 @@ export const gentlePathDocumentStrings = {
   cancelAction: 'Cancel',
   cancelUploadAction: 'Cancel Upload',
   editAction: 'Edit Details',
+  actionsLabel: (title: string) => `Actions For ${title}`,
   downloadAction: 'Download',
+  previewAction: 'Show Preview',
   deleteAction: 'Delete Document',
   deleteTitle: 'Delete This Document?',
   deleteDescription: (title: string) =>
@@ -8669,6 +8868,7 @@ export const gentlePathDocumentStrings = {
     `${format} · ${size}`,
   uploadedDescription: (date: string) => `Added ${date}`,
   downloadLabel: (title: string) => `Download ${title}`,
+  previewLabel: (title: string) => `Show Preview Of ${title} In A New Tab`,
   editLabel: (title: string) => `Edit Details For ${title}`,
   deleteLabel: (title: string) => `Delete ${title}`,
   fileSizeDescription: (bytes: number) =>
@@ -8711,6 +8911,8 @@ export const gentlePathDocumentStrings = {
       'This document is unavailable. It may have been deleted or its linked family profile removed.',
     downloadDescription:
       'The download could not be prepared. Try again from your document vault.',
+    previewDescription:
+      'The preview could not be prepared. Try again from your document vault.',
     uploadDescription:
       'The upload did not finish. Your file and details are still here; check your vault before retrying.',
     tooLargeDescription:
@@ -8753,6 +8955,19 @@ export const gentlePathCommunityStrings = {
   myReports: 'My Reports',
   back: 'Back To Community',
   postTitle: 'Community Post',
+  postActions: 'Post Actions',
+  commentActions: 'Comment Actions',
+  hidePost: 'Hide Post',
+  postHidden: 'Post Hidden',
+  postHiddenDescription: 'This post is hidden from your feed on this device.',
+  undoHide: 'Undo',
+  showHiddenPosts: 'Show Hidden Posts',
+  hiddenPostsTitle: 'These Posts Are Hidden',
+  hiddenPostsHint: 'Show your hidden posts to bring these conversations back.',
+  hiddenPostsDescription: (count: number) =>
+    `${count} ${count === 1 ? 'post is' : 'posts are'} hidden on this device.`,
+  hideErrorDescription:
+    'We could not save your feed preference. Allow browser storage and try again.',
   search: 'Search Posts',
   searchPlaceholder: 'Search stories and questions',
   clear: 'Clear Search',
@@ -8793,6 +9008,33 @@ export const gentlePathCommunityStrings = {
   tagsLabel: 'Tags',
   tagsPlaceholder: 'For example: routines, school, small wins',
   tagsHint: 'Separate tags with commas. Add up to 30 distinct tags.',
+  attachmentsTitle: 'Images, Videos, And Links',
+  attachmentsHint:
+    'Add up to 10 permanent public HTTPS links. Include a short description for each item.',
+  addAttachment: 'Add Media Or Link',
+  videoAttachmentHint:
+    'Use a direct video file, a youtu.be or YouTube Shorts link, or a Vimeo link. Supported players load when you choose.',
+  attachmentKind: 'Type',
+  attachmentUrl: 'Public URL',
+  attachmentDescription: 'Description',
+  attachmentDescriptionPlaceholder: 'Describe this image, video, or link',
+  attachmentKinds: { IMAGE: 'Image', VIDEO: 'Video', LINK: 'Link' },
+  attachmentItem: (index: number) => `Attachment ${index}`,
+  removeAttachment: (index: number) => `Remove Attachment ${index}`,
+  openAttachment: 'Open Attachment',
+  openAttachmentDescription: (description: string) =>
+    `Open Attachment: ${description}`,
+  unavailableMedia: 'Preview Unavailable',
+  unavailableMediaHint: 'Open the original link to view this attachment.',
+  reply: 'Reply',
+  replyLabel: 'Your Reply',
+  replyPlaceholder: 'Add a thoughtful reply…',
+  postReply: 'Post Reply',
+  replyPosted: 'Reply Posted',
+  repliesTitle: 'Replies',
+  replyDescription:
+    'Reply directly to this comment. Replies stay one level deep.',
+  repliesPagination: 'Reply Pages',
   imageLabel: 'Public Image URL',
   imagePlaceholder: 'https://example.com/image.jpg',
   imageHint:
@@ -8803,10 +9045,10 @@ export const gentlePathCommunityStrings = {
   createdPost: 'Post Published',
   updatedPost: 'Post Updated',
   like: 'Like',
-  unlike: 'Unlike',
-  // @title-case: Accessible name for the like/unlike action and its count.
+  liked: 'Liked',
+  // @title-case: Accessible name for the like state and its count.
   likeDescription: (count: number, liked: boolean) =>
-    `${liked ? 'Unlike' : 'Like'}; ${count} ${count === 1 ? 'Like' : 'Likes'}`,
+    `${liked ? 'Liked' : 'Like'}; ${count} ${count === 1 ? 'Like' : 'Likes'}`,
   // @sentence-case: Supporting count of community contributions.
   likes: (count: number) => `${count} ${count === 1 ? 'like' : 'likes'}`,
   // @title-case: Navigable comment-count action.
@@ -8825,7 +9067,7 @@ export const gentlePathCommunityStrings = {
   deleteComment: 'Delete Comment',
   deleteCommentTitle: 'Delete This Comment?',
   deleteCommentDescription:
-    'Your comment will leave this conversation. Existing reports will keep their original record.',
+    'Your comment and its replies will leave this conversation. Existing reports will keep their original record.',
   deletedComment: 'Comment Deleted',
   noCommentsTitle: 'Be The First To Reply',
   noCommentsHint:
@@ -8891,6 +9133,9 @@ export const gentlePathCommunityStrings = {
     title: 'Enter a title between 1 and 500 characters.',
     body: 'Enter a post between 1 and 20,000 characters.',
     comment: 'Enter a comment between 1 and 20,000 characters.',
+    attachmentDescription: 'Add a description between 1 and 500 characters.',
+    attachments: 'Add up to 10 images, videos, or links.',
+    replyParent: 'Reply to a visible top-level comment in this conversation.',
     tags: 'Use up to 30 distinct tags with 1 to 100 characters each.',
     imageUrl:
       'Use a permanent public HTTPS URL without credentials, a query, a fragment, or a private document path.',
@@ -8935,6 +9180,10 @@ export const gentlePathCommunityStrings = {
 export const gentlePathPollStrings = {
   title: 'Polls',
   detailTitle: 'Community Poll',
+  pollActions: 'Poll Actions',
+  commentActions: 'Comment Actions',
+  viewDiscussion: 'View Discussion',
+  unavailableTitle: 'Poll Unavailable',
   expired: 'Voting Closed',
   expires: 'Voting Ends',
   // @sentence-case: Expired polls remain readable and allow removing an existing ballot.
@@ -8996,7 +9245,7 @@ export const gentlePathPollStrings = {
   dragOption: (number: number) => `Drag Option ${number} To Reorder`,
   lockedTitle: 'Voting Has Started',
   lockedDescription:
-    'To keep recorded votes meaningful, the question, description, selection mode, and option text stay fixed after the first ballot. You can still update tags and reorder choices.',
+    'To keep recorded votes meaningful, the question, description, selection mode, and option text stay fixed after the first ballot. You can still update tags and reorder choices. Shared attachments stay fixed with the question.',
   conflictTitle: 'The Poll Has Changed',
   conflictDescription:
     'A ballot may have arrived while you were editing. Your draft is preserved. Keep the original question and options, or create a new poll.',
@@ -9004,15 +9253,15 @@ export const gentlePathPollStrings = {
   singleHint: 'Choose one option. You can update or remove your vote later.',
   multipleHint:
     'Choose one or more options. You can update or remove your vote later.',
-  vote: 'Save Vote',
+  vote: 'Cast Vote',
   updateVote: 'Update Vote',
   removeVote: 'Remove Vote',
   removeVoteTitle: 'Remove Your Vote?',
   removeVoteDescription:
     'Your choices will be removed from this poll. You can vote again while the poll is available.',
-  voteSaved: 'Vote Saved',
+  voteSaved: 'Vote Cast',
   voteRemoved: 'Vote Removed',
-  voted: 'Vote Recorded',
+  voted: 'Vote Cast',
   resultsTitle: 'Results',
   resultsHint:
     'Counts reflect participating active accounts. In multiple-choice polls, percentages can add up to more than 100%.',
@@ -9022,6 +9271,7 @@ export const gentlePathPollStrings = {
     `${count.toLocaleString('en-US')} ${count === 1 ? 'Comment' : 'Comments'}`,
   resultCount: (count: number, percent: number) =>
     `${count.toLocaleString('en-US')} (${percent.toLocaleString('en-US')}%)`,
+  resultPercentage: (percent: number) => `${percent.toLocaleString('en-US')}%`,
   selected: 'Your Choice',
   noVotesTitle: 'No Votes Yet',
   noVotesHint: 'Be the first to share your perspective.',
@@ -9035,11 +9285,11 @@ export const gentlePathPollStrings = {
   deleteComment: 'Delete Comment',
   deleteCommentTitle: 'Delete This Comment?',
   deleteCommentDescription:
-    'Your comment will be removed from this discussion.',
+    'Your comment and its replies will be removed from this discussion.',
   commentSaved: 'Comment Saved',
   commentDeleted: 'Comment Deleted',
   like: 'Like',
-  unlike: 'Unlike',
+  liked: 'Liked',
   likes: (count: number) =>
     `${count.toLocaleString('en-US')} ${count === 1 ? 'Like' : 'Likes'}`,
   authorFallback: 'Community Member',
@@ -9113,6 +9363,7 @@ export const gentlePathPollStrings = {
 };
 
 export const gentlePathEditorialStrings = {
+  guideActionsLabel: (title: string) => `Actions For ${title}`,
   guidesTitle: 'Guided Steps',
   guidesDescription:
     'Practical ideas, one step at a time. Explore at your own pace and choose what fits your family.',
@@ -9374,6 +9625,40 @@ export const gentlePathEditorialStrings = {
 };
 
 export const gentlePathMilestoneAdminStrings = {
+  overview: {
+    title: 'Your Milestone Answers',
+    description:
+      'Your latest answers across all milestones, at your child’s own pace. Filters only change the cards below.',
+    total: (count: number) =>
+      `${count} ${count === 1 ? 'Milestone' : 'Milestones'}`,
+    answered: 'Answered',
+    unanswered: 'Unanswered',
+    legend: 'Milestone Answer Counts',
+    categoryCount: (label: string, count: number) => `${label}: ${count}`,
+    // @sentence-case: Accessible progress announcement and supporting states.
+    status: (answered: number, unanswered: number, total: number) =>
+      `${answered} answered and ${unanswered} unanswered across ${total} milestones.`,
+    loading: 'Loading Milestone Answers…',
+    emptyHint: 'Milestones will appear here when they are available.',
+  },
+  progressLabel: 'Progress',
+  allProgressStates: 'All Progress States',
+  clearProgress: 'Clear Progress Filter',
+  progressSelection: (count: number) => `${count} Progress States`,
+  progressStates: {
+    unrecorded: 'Not Recorded',
+    not_yet: 'Not Yet',
+    emerging: 'Beginning To Notice',
+    often: 'Happening Often',
+    stopped: 'Stopped',
+    other: 'Other Response',
+  },
+  statusRecorded: 'Progress Recorded',
+  milestoneActions: 'Milestone Actions',
+  openMilestone: (name: string) => `Open ${name}`,
+  saveMilestoneToLibrary: 'Save Milestone',
+  unsaveMilestone: 'Remove From Saved',
+  detailsNavigation: 'Milestone Details',
   recordShortAction: 'Record',
   historyShortAction: 'History',
   firstObservationHint: 'A small moment worth remembering.',
@@ -9564,6 +9849,8 @@ export const gentlePathMilestoneAdminStrings = {
     `${count} approved ${count === 1 ? 'tip' : 'tips'}`,
   milestoneCaption: 'Milestone Guidance Directory',
   tipCaption: 'Family Tip Submissions',
+  tipActions: 'Tip Actions',
+  openTip: (milestone: string) => `Read Tip For ${milestone}`,
   statuses: { PENDING: 'Pending', APPROVED: 'Approved', REJECTED: 'Rejected' },
   // @sentence-case: Complete field and server validation messages.
   validation: {
@@ -9624,7 +9911,8 @@ export const gentlePathEngagementStrings = {
   },
   save: 'Save',
   saved: 'Saved',
-  unsave: 'Remove From Saved',
+  unsave: 'Unsave',
+  actionsLabel: (title: string) => `Actions For ${title}`,
   savedTitle: 'Content Saved',
   removedTitle: 'Content Removed',
   removeSavedTitle: 'Remove Saved Content?',
@@ -9670,7 +9958,12 @@ export const gentlePathEngagementStrings = {
   ratingRemovedDescription:
     'Your rating has been removed. You can choose another at any time.',
   ratingKeyboardHint:
-    'Choose a star from 1 to 5. Use the arrow keys to change your selection.',
+    'Choose a star from 1 to 5. Use the arrow keys to change your selection. Select your current star again to clear your rating.',
+  removeRatingTitle: 'Clear Your Rating?',
+  removeRatingDescription:
+    'Are you sure? Your rating will be cleared, and you can choose another at any time.',
+  removeRatingConfirm: 'Clear Rating',
+  keepRating: 'Keep Rating',
   ratingAverageLabel: (average: number) => average.toFixed(1),
   ratingCountLabel: (count: number) =>
     `${count.toLocaleString('en-US')} ${count === 1 ? 'Rating' : 'Ratings'}`,
@@ -9683,7 +9976,7 @@ export const gentlePathEngagementStrings = {
   removeRating: 'Remove My Rating',
   invalidRatingDescription: 'Choose a whole-number rating from 1 to 5.',
   like: 'Like',
-  unlike: 'Unlike',
+  unlike: 'Liked',
   likesLabel: (count: number) => `${count} ${count === 1 ? 'Like' : 'Likes'}`,
   signIn: 'Sign In To Like Or Save',
   signInDescription:
@@ -10230,7 +10523,7 @@ export const gentlePathNotificationInboxStrings = {
   oldestOption: 'Oldest First',
   markReadAction: 'Mark Read',
   markUnreadAction: 'Mark Unread',
-  markAllReadAction: 'Mark All Read',
+  markAllReadAction: 'Mark All As Read',
   markAllUnreadAction: 'Mark All Unread',
   markMatchingReadAction: 'Mark Matching Read',
   markMatchingUnreadAction: 'Mark Matching Unread',

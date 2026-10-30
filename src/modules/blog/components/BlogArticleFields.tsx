@@ -113,7 +113,6 @@ export function BlogArticleFields({
             id="blog-description"
             value={form.description}
             maxLength={350}
-            rows={3}
             disabled={disabled}
             placeholder={copy.descriptionPlaceholder}
             aria-invalid={Boolean(errors.description)}

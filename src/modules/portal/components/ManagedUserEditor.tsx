@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Button,
+  BookmarkButton,
   Field,
   InitialsAvatar,
   Modal,
@@ -124,14 +125,13 @@ export function ManagedUserEditor({
           >
             {copy.common.cancel}
           </Button>
-          <Button
+          <BookmarkButton
             type="submit"
-            variant={restrictsAccess ? 'destructive' : 'primary'}
             loading={mutation.isPending}
             disabled={role === user.role && enabled === !user.disabled}
           >
             {copy.people.save}
-          </Button>
+          </BookmarkButton>
         </div>
       </form>
     </Modal>

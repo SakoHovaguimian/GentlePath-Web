@@ -1,3 +1,4 @@
+import { CommunityAttachmentsSchema } from '@/modules/community/models/communityAttachment';
 import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { gentlePathPollStrings as copy } from '@/strings';
@@ -17,6 +18,7 @@ export const PollInputSchema = z
       .trim()
       .min(1, copy.validation.messageDescription)
       .max(20000, copy.validation.messageDescription),
+    attachments: CommunityAttachmentsSchema.optional(),
     selectionMode: PollSelectionModeSchema,
     tags: z
       .array(
@@ -46,6 +48,7 @@ export const PollInputSchema = z
   })
   .strict();
 export const PollSchema = z.object({
+  attachments: CommunityAttachmentsSchema.default([]),
   id: z.string().uuid(),
   userId: z.string().uuid().nullable(),
   title: z.string(),

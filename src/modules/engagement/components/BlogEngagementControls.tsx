@@ -9,7 +9,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { Button, ReactionButton, UiIcon } from '@/components/ui';
+import { BookmarkButton, Button, ReactionButton } from '@/components/ui';
 import { createQueryClient } from '@/lib/client/queryClient';
 import { createPublicEngagementService } from '@/publicClientContainer';
 import { DomainError } from '@/errors/domainErrors';
@@ -107,8 +107,8 @@ function ArticleActions({
         >
           {query.data ? copy.likesLabel(query.data.likesCount) : null}
         </span>
-        <Button
-          variant={query.data?.saved ? 'secondary' : 'primary'}
+        <BookmarkButton
+          saved={query.data?.saved ?? false}
           loading={query.isPending || save.isPending}
           disabled={!query.data || (busy && !save.isPending)}
           aria-pressed={query.data?.saved ?? false}
@@ -120,13 +120,7 @@ function ArticleActions({
               /* Inline recovery. */
             }
           }}
-        >
-          <UiIcon
-            name={query.data?.saved ? 'check' : 'pin'}
-            className="size-4"
-          />
-          {query.data?.saved ? copy.unsave : copy.save}
-        </Button>
+        />
         {query.isError && (
           <Button variant="secondary" onClick={() => void query.refetch()}>
             {copy.retry}

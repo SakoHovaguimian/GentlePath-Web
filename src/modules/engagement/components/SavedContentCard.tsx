@@ -3,17 +3,15 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
-import { Badge, Card, IconButton, UiIcon } from '@/components/ui';
+import { Badge, BookmarkButton, Card, IconMenu, UiIcon } from '@/components/ui';
 import { gentlePathEngagementStrings as copy } from '@/strings';
 import { MutationError } from '@/modules/portal/components/MutationError';
-import { usePresentationService } from '@/presentation/PresentationProvider';
 import type { SavedContent } from '../models/savedContent';
 import { useSetSavedContent } from '../hooks';
 import styles from '../SavedContent.module.css';
 
 export function SavedContentCard({ item }: { item: SavedContent }) {
   const mutation = useSetSavedContent();
-  const { showAlert, showToast } = usePresentationService();
   const busy = useRef(false);
   const title = item.target?.title || copy.untitled;
   const href = item.target
@@ -25,22 +23,11 @@ export function SavedContentCard({ item }: { item: SavedContent }) {
     if (busy.current) return;
     busy.current = true;
     try {
-      if (
-        !(await showAlert({
-          title: copy.removeSavedTitle,
-          description: copy.removeSavedDescription(title),
-          confirmLabel: copy.removeSavedAction,
-          cancelLabel: copy.keepSavedAction,
-          tone: 'danger',
-        }))
-      )
-        return;
       await mutation.mutateAsync({
         contentType: item.contentType,
         contentId: item.contentId,
         saved: false,
       });
-      void showToast({ title: copy.removedTitle, intent: 'success' });
     } catch {
       /* Keep the card and show inline recovery. */
     } finally {
@@ -52,15 +39,29 @@ export function SavedContentCard({ item }: { item: SavedContent }) {
     <Card className={styles.card}>
       <div className={styles.top}>
         <span className={styles.type}>{copy.types[item.contentType]}</span>
-        <IconButton
-          variant="destructive"
-          className={styles.bookmark}
-          label={copy.removeSavedLabel(title)}
-          loading={mutation.isPending}
-          onClick={() => void remove()}
-        >
-          <UiIcon name="bookmark" fill="currentColor" className="size-5" />
-        </IconButton>
+        <div className="flex items-center gap-1">
+          <BookmarkButton
+            saved
+            variant="ghost"
+            className={styles.bookmark}
+            aria-label={copy.removeSavedLabel(title)}
+            loading={mutation.isPending}
+            onClick={() => void remove()}
+          />
+          <IconMenu
+            label={copy.actionsLabel(title)}
+            disabled={mutation.isPending}
+            items={[
+              {
+                id: 'unsave',
+                label: copy.unsave,
+                icon: 'bookmark',
+                selected: true,
+              },
+            ]}
+            onAction={() => void remove()}
+          />
+        </div>
       </div>
       <div className={styles.content}>
         <h2>

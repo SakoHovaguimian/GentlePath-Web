@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import type { Route } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Button,
   Card,
@@ -14,11 +15,18 @@ import {
 } from '@/components/ui';
 import { useSessionState } from '@/providers/AppProviders';
 import { gentlePathPortalStrings as copy } from '@/strings';
-import { useJournals, usePortalOverview, useResources } from './hooks';
+import {
+  useChildren,
+  useJournals,
+  usePortalOverview,
+  useResources,
+} from './hooks';
+import { useJournalRemoval } from './useJournalRemoval';
 import { CommercialServing } from '@/modules/commercial/components/CommercialServing';
 import { WeeklyActivity } from './components/WeeklyActivity';
 import { ResourceCard } from './components/ResourceCard';
-import { JournalEmotions } from './components/JournalEmotions';
+import { JournalEntryCard } from './components/JournalEntryCard';
+import { MutationError } from './components/MutationError';
 import './styles/portal.css';
 
 export function FamilyDashboardScreen() {
@@ -26,6 +34,9 @@ export function FamilyDashboardScreen() {
   const overview = usePortalOverview();
   const journals = useJournals();
   const resources = useResources();
+  const children = useChildren();
+  const router = useRouter();
+  const { mutation: remove, deleteEntry } = useJournalRemoval();
   return (
     <Page className="gp-portal-page gp-home">
       <PageHeader
@@ -41,31 +52,6 @@ export function FamilyDashboardScreen() {
           </Button>
         }
       />
-      <section className="gp-home-hero">
-        <div className="gp-home-hero__copy">
-          <span className="gp-home-hero__eyebrow">
-            <UiIcon name="leaf" className="size-4" />
-            {copy.navigation.workspace}
-          </span>
-          <h2>{copy.home.heroTitle}</h2>
-          <p>{copy.home.heroDescription}</p>
-          <Button asChild>
-            <Link href="/resources">
-              {copy.home.heroAction}
-              <UiIcon name="arrowRight" />
-            </Link>
-          </Button>
-        </div>
-        <div className="gp-home-hero__art">
-          <Image
-            src="/gentlepath/path-landscape-v2.png"
-            alt={copy.home.heroAlt}
-            fill
-            sizes="(max-width: 767px) 100vw, 55vw"
-            priority
-          />
-        </div>
-      </section>
       <QueryBoundary query={overview}>
         {(data) => (
           <>
@@ -124,6 +110,31 @@ export function FamilyDashboardScreen() {
                 ))}
               </div>
             </section>
+            <section className="gp-home-hero">
+              <div className="gp-home-hero__copy">
+                <span className="gp-home-hero__eyebrow">
+                  <UiIcon name="leaf" className="size-4" />
+                  {copy.navigation.workspace}
+                </span>
+                <h2>{copy.home.heroTitle}</h2>
+                <p>{copy.home.heroDescription}</p>
+                <Button asChild>
+                  <Link href="/resources">
+                    {copy.home.heroAction}
+                    <UiIcon name="arrowRight" />
+                  </Link>
+                </Button>
+              </div>
+              <div className="gp-home-hero__art">
+                <Image
+                  src="/gentlepath/path-landscape-v2.png"
+                  alt={copy.home.heroAlt}
+                  fill
+                  sizes="(max-width: 767px) 100vw, 55vw"
+                  priority
+                />
+              </div>
+            </section>
             <div className="gp-home-middle">
               <section className="grid content-start gap-5">
                 <div className="gp-portal-section-heading">
@@ -135,38 +146,25 @@ export function FamilyDashboardScreen() {
                     </Link>
                   </Button>
                 </div>
+                <MutationError error={remove.error} />
                 <QueryBoundary query={journals}>
                   {(entries) =>
                     entries.length ? (
                       <div className="gp-journal-preview-list">
                         {entries.slice(0, 3).map((entry) => (
-                          <Link
-                            href={`/journal?entry=${entry.id}`}
+                          <JournalEntryCard
                             key={entry.id}
-                            className="gp-journal-preview"
-                          >
-                            <div className="grid min-w-0 gap-2">
-                              <span className="text-xs text-tertiary">
-                                {entry.createdAt
-                                  ? new Date(
-                                      entry.createdAt,
-                                    ).toLocaleDateString('en-US', {
-                                      month: 'short',
-                                      day: 'numeric',
-                                    })
-                                  : copy.journal.dateUnavailable}
-                              </span>
-                              <h3 className="m-0 font-medium text-primary">
-                                {entry.title}
-                              </h3>
-                              <p className="m-0 line-clamp-1 text-sm text-secondary">
-                                {entry.body}
-                              </p>
-                            </div>
-                            <div className="gp-journal-card__tags">
-                              <JournalEmotions emotions={entry.emotions} />
-                            </div>
-                          </Link>
+                            entry={entry}
+                            childrenProfiles={children.data ?? []}
+                            href={`/journal?entry=${entry.id}`}
+                            compact
+                            headingLevel="h3"
+                            removing={remove.isPending}
+                            onEdit={() =>
+                              router.push(`/journal?entry=${entry.id}`)
+                            }
+                            onDelete={() => void deleteEntry(entry)}
+                          />
                         ))}
                       </div>
                     ) : (

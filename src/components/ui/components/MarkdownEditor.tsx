@@ -106,8 +106,7 @@ export function MarkdownEditor({
               .filter(Boolean)
               .join(' ')}
             aria-invalid={invalid}
-            rows={18}
-            className="min-h-96 resize-none font-mono leading-relaxed"
+            className="font-mono leading-relaxed"
             value={value}
             maxLength={maxLength}
             disabled={disabled}
@@ -122,7 +121,7 @@ export function MarkdownEditor({
           role="region"
           aria-label={copy.preview}
           tabIndex={0}
-          className="min-h-96 min-w-0 rounded-lg border border-secondary bg-primary p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="min-h-11 min-w-0 rounded-lg border border-secondary bg-primary p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         >
           {value.trim() ? (
             <MarkdownContent value={value} />

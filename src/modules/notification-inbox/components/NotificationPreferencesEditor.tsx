@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useState, type FormEvent } from 'react';
-import { Button, FormActions } from '@/components/ui';
+import { Button, FormActions, BookmarkButton } from '@/components/ui';
 import { Switch } from '@/components/ui/components/Switch';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
@@ -122,9 +122,14 @@ export function NotificationPreferencesEditor({
         >
           {copy.discardAction}
         </Button>
-        <Button type="submit" loading={mutation.isPending} disabled={!isDirty}>
+        <BookmarkButton
+          saved={mutation.isSuccess && !isDirty}
+          type="submit"
+          loading={mutation.isPending}
+          disabled={!isDirty}
+        >
           {copy.savePreferencesAction}
-        </Button>
+        </BookmarkButton>
       </FormActions>
     </form>
   );

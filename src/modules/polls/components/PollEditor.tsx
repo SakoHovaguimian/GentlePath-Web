@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react';
 import {
+  BookmarkButton,
   Button,
   Field,
   FormSection,
@@ -19,19 +20,24 @@ import { PollInputSchema, type Poll, type PollInput } from '../models/poll';
 import type { PollOptionDraft } from '../models/pollOptionDraft';
 import { PollSelectionModeSchema } from '../models/pollSelectionMode';
 import { useSavePoll } from '../hooks';
+import { usePollActions } from '../usePollActions';
+import { CommunityAttachmentsEditor } from '@/modules/community/components/CommunityAttachmentsEditor';
 
 export function PollEditor({
   poll,
   writable,
   onClose,
   onSaved,
+  onDeleted,
 }: {
   poll?: Poll;
   writable: boolean;
   onClose: () => void;
   onSaved?: () => void;
+  onDeleted?: () => void;
 }) {
   const [input, setInput] = useState<Omit<PollInput, 'options'>>({
+    attachments: poll?.attachments ?? [],
     title: poll?.title ?? '',
     message: poll?.message ?? '',
     selectionMode: poll?.selectionMode ?? 'SINGLE',
@@ -56,11 +62,16 @@ export function PollEditor({
   const busy = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
   const confirmLeave = useUnsavedFormGuard(dirty, busy);
+  const remove = usePollActions(() => {
+    dirty.current = false;
+    onClose();
+    onDeleted?.();
+  });
   const { showToast } = usePresentationService();
   const locked = Boolean(
     poll && (poll.votingLocked || poll.participantsCount > 0),
   );
-  const disabled = mutation.isPending || !writable;
+  const disabled = mutation.isPending || remove.isPending || !writable;
   function change<Key extends keyof typeof input>(
     key: Key,
     value: (typeof input)[Key],
@@ -105,7 +116,9 @@ export function PollEditor({
       const name =
         path[0] === 'options'
           ? `option-${typeof path[1] === 'number' ? path[1] : 0}`
-          : String(path[0]);
+          : path[0] === 'attachments'
+            ? `attachment-${path[2] === 'description' ? 'description' : 'url'}-${typeof path[1] === 'number' ? path[1] : 0}`
+            : String(path[0]);
       formRef.current?.querySelector<HTMLElement>(`[name="${name}"]`)?.focus();
       return;
     }
@@ -158,7 +171,6 @@ export function PollEditor({
         <Field labelText={copy.messageLabel}>
           <TextArea
             name="message"
-            rows={5}
             maxLength={20000}
             value={input.message}
             disabled={disabled || locked}
@@ -298,6 +310,12 @@ export function PollEditor({
             {copy.tagsHint}
           </p>
         </div>
+        <CommunityAttachmentsEditor
+          value={input.attachments ?? []}
+          disabled={disabled || locked}
+          error={validation.attachments}
+          onChange={(value) => change('attachments', value)}
+        />
         {Object.values(validation).some(Boolean) && (
           <p
             id="poll-validation"
@@ -318,23 +336,37 @@ export function PollEditor({
             </p>
           </div>
         ) : (
-          <MutationError error={mutation.error} />
+          <MutationError error={mutation.error ?? remove.error} />
         )}
         <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
+          {poll && (
+            <Button
+              variant="destructive"
+              className="mr-auto"
+              loading={remove.isPending}
+              disabled={mutation.isPending || !writable}
+              onClick={() => {
+                void remove.deletePoll(poll);
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.deletePoll}
+            </Button>
+          )}
           <Button
             variant="secondary"
-            disabled={mutation.isPending}
+            disabled={mutation.isPending || remove.isPending}
             onClick={close}
           >
             {copy.cancel}
           </Button>
-          <Button
+          <BookmarkButton
             type="submit"
             loading={mutation.isPending}
-            disabled={!writable}
+            disabled={!writable || remove.isPending}
           >
             {poll ? copy.save : copy.newPoll}
-          </Button>
+          </BookmarkButton>
         </div>
       </form>
     </Modal>

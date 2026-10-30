@@ -88,6 +88,9 @@ export function CommercialEditorScreen({
                 entity={entity}
                 record={record}
                 onSaved={() => setEditing(false)}
+                onDeleted={() => {
+                  router.push(`/admin/commercial?tab=${entity}` as Route);
+                }}
               />
             ) : (
               <>

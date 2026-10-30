@@ -97,7 +97,6 @@ export function GuideItemsEditor({
                 error={errors[`${prefix}.description`]}
               >
                 <TextArea
-                  rows={6}
                   value={item.description}
                   maxLength={20000}
                   disabled={disabled}

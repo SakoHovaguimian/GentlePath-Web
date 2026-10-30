@@ -1,8 +1,9 @@
 'use client';
-import { DirectoryFilters, Field, Select } from '@/components/ui';
+import { DirectoryFilters, Field, MultiSelect, Select } from '@/components/ui';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import type { MilestoneAdminQuery } from '../models/milestoneAdminQuery';
 import { TipApprovalStatusSchema } from '../models/tipApprovalStatus';
+import { MilestoneProgressStateSchema } from '../models/milestoneProgressState';
 const allMilestonesChoice = '';
 const allTagsChoice = '';
 interface MilestoneDirectoryFiltersProps {
@@ -12,6 +13,7 @@ interface MilestoneDirectoryFiltersProps {
   statuses?: boolean;
   milestones?: Array<{ id: string; milestone: string }>;
   tags?: string[];
+  progress?: boolean;
 }
 export function MilestoneDirectoryFilters({
   query,
@@ -20,6 +22,7 @@ export function MilestoneDirectoryFilters({
   statuses = false,
   milestones,
   tags = [],
+  progress = false,
 }: MilestoneDirectoryFiltersProps) {
   return (
     <DirectoryFilters
@@ -46,6 +49,24 @@ export function MilestoneDirectoryFilters({
       }}
       additionalFilters={
         <>
+          {progress && (
+            <Field labelText={copy.progressLabel}>
+              <MultiSelect
+                value={query.progress?.split(',') ?? []}
+                options={MilestoneProgressStateSchema.options.map((value) => ({
+                  value,
+                  label: copy.progressStates[value],
+                }))}
+                label={copy.progressLabel}
+                placeholder={copy.allProgressStates}
+                selectionLabel={copy.progressSelection}
+                clearLabel={copy.clearProgress}
+                onValueChange={(values) =>
+                  onChange({ progress: values.join(','), offset: 0 })
+                }
+              />
+            </Field>
+          )}
           {milestones && (
             <Field labelText={copy.milestoneLabel}>
               <Select

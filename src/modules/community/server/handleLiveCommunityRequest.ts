@@ -3,11 +3,14 @@ import { PlatformAvailabilityTransportSchema } from '@/modules/portal/models/pla
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '@/errors/domainErrors';
 import { CommunityPostInputSchema } from '../models/communityPost';
-import { CommunityCommentInputSchema } from '../models/communityComment';
+import {
+  CommunityCommentInputSchema,
+  CommunityCommentUpdateInputSchema,
+} from '../models/communityComment';
 import { CommunityReactionInputSchema } from '../models/communityReaction';
 import { CommunityReportInputSchema } from '../models/communityReport';
 import { ReportResolutionSchema } from '@/modules/portal/models/moderationReport';
-import { CommunityPagingSchema } from '../models/communityPaging';
+import { CommunityCommentQuerySchema } from '../models/communityCommentQuery';
 import { CommunityPostQuerySchema } from '../models/communityPostQuery';
 import { CommunityReportQuerySchema } from '../models/communityReportQuery';
 import { communityQueryParams } from '../communityQueryParams';
@@ -166,6 +169,9 @@ export async function handleLiveCommunityRequest(
             title: body.title,
             body: body.body,
             image_url: body.imageUrl,
+            ...(body.attachments !== undefined
+              ? { attachments: body.attachments }
+              : {}),
             tags: body.tags,
           },
         );
@@ -190,6 +196,9 @@ export async function handleLiveCommunityRequest(
               title: body.title,
               body: body.body,
               image_url: body.imageUrl,
+              ...(body.attachments !== undefined
+                ? { attachments: body.attachments }
+                : {}),
               tags: body.tags,
             },
           );
@@ -202,8 +211,14 @@ export async function handleLiveCommunityRequest(
       }
       if (id && action === 'comments') {
         if (method === 'GET') {
-          const paging = CommunityPagingSchema.parse(rawQuery);
-          const params = communityQueryParams({ ...paging, post_id: id });
+          const paging = CommunityCommentQuerySchema.parse(rawQuery);
+          const params = communityQueryParams({
+            limit: paging.limit,
+            offset: paging.offset,
+            post_id: id,
+            parent_comment_id: paging.parentCommentId,
+            root_only: paging.rootOnly,
+          });
           const page = await read(
             pageSchema(CommunityCommentTransportSchema),
             `/post-comments?${params}`,
@@ -219,7 +234,11 @@ export async function handleLiveCommunityRequest(
             CommunityCommentTransportSchema,
             '/post-comments',
             'POST',
-            { post_id: id, body: body.body },
+            {
+              post_id: id,
+              body: body.body,
+              parent_comment_id: body.parentCommentId ?? null,
+            },
           );
           return json(mapCommunityComment(comment, false), 201);
         }
@@ -228,7 +247,7 @@ export async function handleLiveCommunityRequest(
     if (resource === 'comments' && id && !action) {
       const targetPath = `/post-comments/${encodeURIComponent(id)}`;
       if (method === 'PATCH') {
-        const body = CommunityCommentInputSchema.parse(await readInput());
+        const body = CommunityCommentUpdateInputSchema.parse(await readInput());
         const comment = await read(
           CommunityCommentTransportSchema,
           targetPath,

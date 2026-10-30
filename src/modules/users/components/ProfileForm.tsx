@@ -1,6 +1,12 @@
 'use client';
 import { useRef, useState } from 'react';
-import { Button, Card, Field, Input, FormActions } from '@/components/ui';
+import {
+  Card,
+  Field,
+  Input,
+  FormActions,
+  BookmarkButton,
+} from '@/components/ui';
 import type { User } from '@/models';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
@@ -19,6 +25,10 @@ export function ProfileForm({ user }: { user: User }) {
   const dirty = useRef(false);
   const busy = useRef(false);
   useUnsavedFormGuard(dirty, busy);
+  function edited() {
+    dirty.current = true;
+    mutation.reset();
+  }
   return (
     <Card className="grid gap-5">
       <form
@@ -60,7 +70,7 @@ export function ProfileForm({ user }: { user: User }) {
               value={firstName}
               autoComplete="given-name"
               onChange={(event) => {
-                dirty.current = true;
+                edited();
                 setFirstName(event.target.value);
               }}
             />
@@ -71,7 +81,7 @@ export function ProfileForm({ user }: { user: User }) {
               value={lastName}
               autoComplete="family-name"
               onChange={(event) => {
-                dirty.current = true;
+                edited();
                 setLastName(event.target.value);
               }}
             />
@@ -93,7 +103,7 @@ export function ProfileForm({ user }: { user: User }) {
             value={phoneNumber}
             autoComplete="tel"
             onChange={(event) => {
-              dirty.current = true;
+              edited();
               setPhoneNumber(event.target.value);
             }}
           />
@@ -104,7 +114,7 @@ export function ProfileForm({ user }: { user: User }) {
             type="date"
             value={dateOfBirth}
             onChange={(event) => {
-              dirty.current = true;
+              edited();
               setDateOfBirth(event.target.value);
             }}
           />
@@ -115,7 +125,8 @@ export function ProfileForm({ user }: { user: User }) {
           </p>
         )}
         <FormActions variant="plain">
-          <Button
+          <BookmarkButton
+            saved={mutation.isSuccess}
             loading={mutation.isPending}
             type="submit"
             disabled={
@@ -123,7 +134,7 @@ export function ProfileForm({ user }: { user: User }) {
             }
           >
             {strings.ui.profileScreen.saveProfile}
-          </Button>
+          </BookmarkButton>
         </FormActions>
       </form>
     </Card>

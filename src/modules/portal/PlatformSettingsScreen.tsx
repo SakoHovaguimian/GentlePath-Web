@@ -3,13 +3,13 @@
 import { useRef, useState } from 'react';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import {
-  Button,
   Card,
   FormActions,
   PageHeader,
   QueryBoundary,
   Switch,
   UiIcon,
+  BookmarkButton,
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
@@ -122,6 +122,7 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
                     };
                     dirty.current =
                       JSON.stringify(next) !== JSON.stringify(initial);
+                    mutation.reset();
                     setSettings(next);
                   }}
                 />
@@ -131,14 +132,15 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
       </Card>
       <MutationError error={mutation.error} />
       <FormActions sticky={false}>
-        <Button
+        <BookmarkButton
+          saved={mutation.isSuccess}
           type="submit"
           variant="primary"
           loading={mutation.isPending}
           disabled={JSON.stringify(settings) === JSON.stringify(initial)}
         >
           {copy.common.save}
-        </Button>
+        </BookmarkButton>
       </FormActions>
     </form>
   );

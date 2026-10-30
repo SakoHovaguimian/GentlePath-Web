@@ -33,6 +33,7 @@ export function NotificationInboxScreen() {
     query: filters.query,
     category: filters.category,
   });
+  const allCounts = useNotificationCounts();
   const filtered = Object.values(filters).some((value) => value !== undefined);
   const searched = Boolean(filters.query || filters.category);
   const actions = useNotificationActions(filters);
@@ -59,14 +60,25 @@ export function NotificationInboxScreen() {
           />
         }
         action={
-          <NavigationLink
-            href="/settings/notifications"
-            beforeNavigate={confirmNavigation}
-            className={buttonClassName('secondary')}
-          >
-            <UiIcon name="settings" />
-            {copy.settingsAction}
-          </NavigationLink>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="secondary"
+              loading={actions.busy}
+              disabled={!allCounts.data?.unreadCount || allCounts.isError}
+              onClick={actions.markAllRead}
+            >
+              <UiIcon name="check" className="size-4" />
+              {copy.markAllReadAction}
+            </Button>
+            <NavigationLink
+              href="/settings/notifications"
+              beforeNavigate={confirmNavigation}
+              className={buttonClassName('ghost')}
+            >
+              <UiIcon name="settings" />
+              {copy.settingsAction}
+            </NavigationLink>
+          </div>
         }
       />
       <NotificationControls variant="inbox" />

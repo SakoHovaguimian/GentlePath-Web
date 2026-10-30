@@ -29,6 +29,9 @@ import { CommunityReactionButton } from './components/CommunityReactionButton';
 import { CommunityPostEditor } from './components/CommunityPostEditor';
 import { CommunityReportDialog } from './components/CommunityReportDialog';
 import { CommunityComments } from './components/CommunityComments';
+import { CommunityPostMenu } from './components/CommunityPostMenu';
+import { CommunityAttachments } from './components/CommunityAttachments';
+import { useCommunityFeedPreference } from './useCommunityFeedPreference';
 import '@/modules/portal/styles/portal.css';
 import './styles/community.css';
 
@@ -110,41 +113,13 @@ function CommunityPostDetail({
   const writable = status.data?.enabled === true;
   const [editing, setEditing] = useState(false);
   const [report, setReport] = useState<CommunityReportTarget | null>(null);
+  const feedPreference = useCommunityFeedPreference();
+  const { confirmNavigation } = useNavigationGuard();
   const remove = useCommunityPostActions(() => {
     router.push(returnTo as Route);
   });
   return (
     <>
-      <PageHeader
-        title={post.title}
-        eyebrow={copy.title}
-        action={
-          <>
-            <SavedContentButton contentType="POST" contentId={post.id} />
-            {own ? (
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="secondary"
-                  disabled={!writable || remove.isPending}
-                  onClick={() => setEditing(true)}
-                >
-                  {copy.editPost}
-                </Button>
-                <Button
-                  variant="destructive"
-                  disabled={!writable || remove.isPending}
-                  onClick={() => {
-                    void remove.deletePost(post);
-                  }}
-                >
-                  <UiIcon name="trash" className="size-4" />
-                  {copy.deletePost}
-                </Button>
-              </div>
-            ) : null}
-          </>
-        }
-      />
       {status.data?.enabled === false && (
         <Card role="status" className="grid gap-2 bg-secondary_subtle p-5">
           <h2 className="m-0 text-base font-semibold">{copy.pausedTitle}</h2>
@@ -152,49 +127,80 @@ function CommunityPostDetail({
         </Card>
       )}
       <MutationError error={remove.error ?? status.error} />
-      <Card className="gp-community-post gp-community-post--detail">
-        <CommunityIdentity
-          author={post.author}
-          createdAt={post.createdAt}
-          updatedAt={post.updatedAt}
-          own={own}
-        />
-        <p className="gp-community-body">{post.body}</p>
-        {post.imageUrl && (
-          <Button asChild variant="secondary" className="justify-self-start">
-            <a href={post.imageUrl} target="_blank" rel="noopener noreferrer">
-              <UiIcon name="link" className="size-4" />
-              {copy.openImage}
-            </a>
-          </Button>
-        )}
-        {post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <Badge key={tag}>{tag}</Badge>
-            ))}
+      {feedPreference.error && (
+        <p role="alert" className="m-0 text-sm text-error-primary">
+          {feedPreference.error}
+        </p>
+      )}
+      <article className="gp-community-thread" aria-label={post.title}>
+        <div className="gp-community-thread__opening">
+          <div className="gp-community-post__header">
+            <CommunityIdentity
+              author={post.author}
+              createdAt={post.createdAt}
+              updatedAt={post.updatedAt}
+              own={own}
+            />
+            <CommunityPostMenu
+              contentId={post.id}
+              own={own}
+              writable={writable}
+              busy={remove.isPending}
+              onEdit={() => setEditing(true)}
+              onDelete={() => {
+                void remove.deletePost(post);
+              }}
+              onReport={() =>
+                setReport({
+                  id: post.id,
+                  targetType: 'post',
+                  title: post.title,
+                })
+              }
+              onHide={() => {
+                void Promise.resolve(confirmNavigation()).then((allowed) => {
+                  if (allowed && feedPreference.hide(post.id))
+                    router.push(returnTo as Route);
+                });
+              }}
+            />
           </div>
-        )}
-        <div className="gp-community-post__footer">
-          <CommunityReactionButton
-            id={post.id}
-            targetType="post"
-            liked={post.liked}
-            count={post.likeCount}
-            disabled={!writable}
-          />
-          <Button
-            variant="ghost"
-            disabled={!writable}
-            onClick={() =>
-              setReport({ id: post.id, targetType: 'post', title: post.title })
-            }
-          >
-            <UiIcon name="warning" className="size-4" />
-            {copy.reportPost}
-          </Button>
+          <PageHeader title={post.title} eyebrow={copy.postTitle} />
         </div>
-      </Card>
+        <div className="gp-community-thread__content">
+          <p className="gp-community-body">{post.body}</p>
+          <CommunityAttachments items={post.attachments} />
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <Badge key={tag}>{tag}</Badge>
+              ))}
+            </div>
+          )}
+          <div className="gp-community-post__footer">
+            <div className="flex flex-wrap items-center gap-2">
+              <CommunityReactionButton
+                id={post.id}
+                targetType="post"
+                liked={post.liked}
+                count={post.likeCount}
+                disabled={!writable}
+              />
+              <Button asChild variant="ghost">
+                <a href="#community-comments-title">
+                  <UiIcon name="chat" className="size-4" />
+                  {copy.commentsCount(post.commentCount)}
+                </a>
+              </Button>
+            </div>
+            <SavedContentButton
+              contentType="POST"
+              contentId={post.id}
+              variant="ghost"
+            />
+          </div>
+        </div>
+      </article>
       <CommunityComments
         postId={post.id}
         count={post.commentCount}
@@ -202,7 +208,12 @@ function CommunityPostDetail({
         onReport={setReport}
       />
       {editing && (
-        <CommunityPostEditor post={post} onClose={() => setEditing(false)} />
+        <CommunityPostEditor
+          post={post}
+          writable={writable}
+          onClose={() => setEditing(false)}
+          onDeleted={() => router.push(returnTo as Route)}
+        />
       )}
       {report && (
         <CommunityReportDialog

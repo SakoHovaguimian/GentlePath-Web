@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Badge,
   Button,
-  Card,
-  DataPanel,
   DataTable,
   EmptyState,
   Message,
@@ -17,7 +15,6 @@ import {
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { MutationError } from '@/modules/portal/components/MutationError';
-import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import styles from '@/modules/portal/Admin.module.css';
 import {
@@ -32,6 +29,10 @@ import { MilestoneDirectoryFilters } from './components/MilestoneDirectoryFilter
 import { MilestonePagination } from './components/MilestonePagination';
 import { FamilyTipEditor } from './components/FamilyTipEditor';
 import { FamilyTipReader } from './components/FamilyTipReader';
+import { FamilyTipCard } from './components/FamilyTipCard';
+import { FamilyTipsDirectory } from './components/FamilyTipsDirectory';
+import { useSessionState } from '@/providers/AppProviders';
+import '@/modules/portal/styles/portal.css';
 import { TipReviewEditor } from './components/TipReviewEditor';
 const approvedScope = 'approved';
 const ownScope = 'mine';
@@ -40,6 +41,7 @@ interface FamilyTipsScreenProps {
 }
 export function FamilyTipsScreen({ staff = false }: FamilyTipsScreenProps) {
   const directory = useMilestoneDirectory();
+  const { session } = useSessionState();
   const scope = staff ? 'review' : directory.scope;
   const query = useFamilyTips(scope, {
     ...directory.query,
@@ -186,7 +188,8 @@ export function FamilyTipsScreen({ staff = false }: FamilyTipsScreenProps) {
       <MutationError error={remove.error} />
       <QueryBoundary query={milestones} loadingMessage={copy.loadingMilestones}>
         {(choices) => (
-          <DataPanel
+          <FamilyTipsDirectory
+            staff={staff}
             busy={query.isFetching}
             busyLabel={copy.loadingTips}
             toolbar={
@@ -212,7 +215,7 @@ export function FamilyTipsScreen({ staff = false }: FamilyTipsScreenProps) {
             <QueryBoundary
               query={query}
               loadingMessage={copy.loadingTips}
-              inset
+              inset={staff}
             >
               {(page) =>
                 !page.data.length ? (
@@ -322,54 +325,26 @@ export function FamilyTipsScreen({ staff = false }: FamilyTipsScreenProps) {
                     ]}
                   />
                 ) : (
-                  <div className="grid min-w-0 gap-4 p-4 lg:grid-cols-2 sm:p-6">
+                  <div className="grid min-w-0 gap-5 lg:grid-cols-2">
                     {page.data.map((tip) => (
-                      <Card
+                      <FamilyTipCard
                         key={tip.id}
-                        className="flex min-w-0 flex-col gap-4 shadow-none"
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-3">
-                          {status(tip)}
-                          <time
-                            className="text-xs text-tertiary"
-                            dateTime={tip.created_at}
-                          >
-                            {formatMilestoneDate(tip.created_at)}
-                          </time>
-                        </div>
-                        <h2 className="m-0 font-display text-xl font-normal text-primary wrap-anywhere">
-                          {name(tip.milestone_id)}
-                        </h2>
-                        <p className="m-0 line-clamp-5 flex-1 whitespace-pre-wrap text-sm leading-7 text-secondary wrap-anywhere">
-                          {tip.message}
-                        </p>
-                        <p className="m-0 text-xs text-tertiary">
-                          {tip.author
-                            ? copy.authorName(
-                                tip.author.first_name,
-                                tip.author.last_name,
-                              )
-                            : copy.unavailableAuthor}
-                        </p>
-                        {tip.review?.review_notes && (
-                          <p className="m-0 line-clamp-3 border-l-2 border-secondary pl-3 text-sm text-secondary wrap-anywhere">
-                            {tip.review.review_notes}
-                          </p>
+                        tip={tip}
+                        milestone={name(tip.milestone_id)}
+                        owned={Boolean(
+                          tip.user_id && tip.user_id === session?.user.id,
                         )}
-                        {actions(tip)}
-                        {scope === 'approved' && (
-                          <SavedContentButton
-                            contentType="TIP"
-                            contentId={tip.id}
-                          />
-                        )}
-                      </Card>
+                        busy={remove.isPending || confirming}
+                        onRead={() => setReader(tip)}
+                        onEdit={() => setEditor(tip)}
+                        onDelete={() => void deleteTip(tip)}
+                      />
                     ))}
                   </div>
                 )
               }
             </QueryBoundary>
-          </DataPanel>
+          </FamilyTipsDirectory>
         )}
       </QueryBoundary>
       {editor && milestones.data && (

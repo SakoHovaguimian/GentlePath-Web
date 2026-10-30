@@ -24,7 +24,7 @@ export function CommunityReactionButton({
     <div className="grid gap-2">
       <ReactionButton
         liked={liked}
-        label={liked ? copy.unlike : copy.like}
+        label={liked ? copy.liked : copy.like}
         count={count}
         loading={mutation.isPending}
         disabled={disabled}

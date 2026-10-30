@@ -12,21 +12,17 @@ import {
   TextArea,
 } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
-import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { MutationError } from '@/modules/portal/components/MutationError';
 import { gentlePathCommercialStrings as copy } from '@/strings';
 import { useCommercialMutation } from '../hooks';
+import { useCommercialDelete } from '../useCommercialDelete';
 import type {
   CommercialEntity,
   CommercialRecord,
 } from '../models/commercialEntity';
 import { DiscountOfferVerificationSchema } from '../models/discountOfferVerification';
-import {
-  commercialName,
-  localDateTime,
-  isoDateTime,
-} from './commercialFormFields';
+import { localDateTime, isoDateTime } from './commercialFormFields';
 interface CommercialLifecycleProps {
   entity: CommercialEntity;
   record: CommercialRecord;
@@ -38,7 +34,6 @@ export function CommercialLifecycle({
   onDeleted,
 }: CommercialLifecycleProps) {
   const { showAlert, showToast } = usePresentationService();
-  const { confirmNavigation } = useNavigationGuard();
   const [notes, setNotes] = useState('');
   const [decision, setDecision] = useState('APPROVED');
   const [invalid, setInvalid] = useState('');
@@ -62,9 +57,13 @@ export function CommercialLifecycle({
       enabled,
     ),
   );
-  const remove = useCommercialMutation((service) =>
-    service.remove(entity, record.id),
-  );
+  const remove = useCommercialDelete({
+    entity,
+    record,
+    dirty,
+    busy,
+    onDeleted,
+  });
   const pending = review.isPending || enable.isPending || remove.isPending;
   const status =
     'status' in record
@@ -143,32 +142,6 @@ export function CommercialLifecycle({
       busy.current = false;
     }
   }
-  async function destroy() {
-    if (!(await confirmNavigation())) return;
-    if (
-      busy.current ||
-      !(await showAlert({
-        title: copy.deleteTitle,
-        description: copy.deleteDescription(commercialName(record)),
-        confirmLabel: copy.delete,
-        cancelLabel: copy.cancel,
-        tone: 'danger',
-      }))
-    )
-      return;
-    busy.current = true;
-    try {
-      await remove.mutateAsync(undefined);
-      dirty.current = false;
-      void showToast({ title: copy.deletedTitle, intent: 'success' });
-      busy.current = false;
-      onDeleted();
-    } catch {
-      /* Inline recovery. */
-    } finally {
-      busy.current = false;
-    }
-  }
   return (
     <Card>
       <FormSection
@@ -213,7 +186,6 @@ export function CommercialLifecycle({
                 ref={notesInput}
                 value={notes}
                 maxLength={10000}
-                rows={3}
                 disabled={pending}
                 aria-invalid={Boolean(invalid)}
                 aria-describedby={
@@ -274,7 +246,7 @@ export function CommercialLifecycle({
             disabled={pending}
             loading={remove.isPending}
             onClick={() => {
-              void destroy();
+              void remove.destroy();
             }}
           >
             {copy.delete}

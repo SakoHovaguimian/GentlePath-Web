@@ -1,10 +1,14 @@
 'use client';
 
+import type { CommunityCommentQuery } from '@/modules/community/models/communityCommentQuery';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
+import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
+import { portalQueryKeys } from '@/modules/portal/queryKeys';
 import type { PollInput } from './models/poll';
 import type { PollCommentInput } from './models/pollComment';
-import type { PollPaging, PollQuery } from './models/pollQuery';
+import type { PollQuery } from './models/pollQuery';
 import { pollQueryKeys as keys } from './queryKeys';
 
 export function usePollStatus() {
@@ -35,7 +39,7 @@ export function usePollBallot(id: string) {
     queryFn: ({ signal }) => service.ballot(id, signal),
   });
 }
-export function usePollComments(id: string, paging: PollPaging) {
+export function usePollComments(id: string, paging: CommunityCommentQuery) {
   const { pollService: service } = useServiceContainer();
   return useQuery({
     queryKey: keys.comments(id, paging),
@@ -46,7 +50,13 @@ function usePollMutation<T, R>(mutationFn: (input: T) => Promise<R>) {
   const cache = useQueryClient();
   return useMutation({
     mutationFn,
-    onSuccess: () => cache.invalidateQueries({ queryKey: keys.all }),
+    onSuccess: async () => {
+      await Promise.all([
+        cache.invalidateQueries({ queryKey: keys.all }),
+        cache.invalidateQueries({ queryKey: engagementQueryKeys.all }),
+        cache.invalidateQueries({ queryKey: portalQueryKeys.overview }),
+      ]);
+    },
   });
 }
 export function useSavePoll() {

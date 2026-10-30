@@ -19,7 +19,7 @@ export function PollCommentReaction({
     <div className="grid gap-2">
       <ReactionButton
         liked={comment.liked}
-        label={comment.liked ? copy.unlike : copy.like}
+        label={comment.liked ? copy.liked : copy.like}
         count={comment.likesCount}
         countLabel={copy.likes(comment.likesCount)}
         loading={mutation.isPending}
