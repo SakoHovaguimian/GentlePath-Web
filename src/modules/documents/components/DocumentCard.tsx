@@ -47,10 +47,7 @@ export function DocumentCard({
       <div className="flex min-w-0 flex-wrap items-center gap-2">
         <Badge intent="brand">{copy.categories[document.documentType]}</Badge>
         <Badge intent={document.childId ? 'purple' : 'neutral'}>
-          <UiIcon
-            name={document.childId ? 'user' : 'lock'}
-            className="size-3.5"
-          />
+          {document.childId && <UiIcon name="user" className="size-3.5" />}
           {document.childId
             ? (childName ?? copy.childLabel)
             : copy.personalLabel}

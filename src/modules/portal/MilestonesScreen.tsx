@@ -11,7 +11,6 @@ import {
   PageHeader,
   QueryBoundary,
   Select,
-  UiIcon,
 } from '@/components/ui';
 import {
   gentlePathPortalStrings as copy,
@@ -155,7 +154,6 @@ export function MilestonesScreen() {
                   </Select>
                 </Field>
                 <p className="gp-portal-footnote">
-                  <UiIcon name="lock" className="size-5" />
                   {copy.milestones.privacyHint}
                 </p>
               </div>

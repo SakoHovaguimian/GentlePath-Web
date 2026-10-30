@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 const numericYear = 'numeric';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
-  Badge,
   Button,
   Card,
   EmptyState,
@@ -74,7 +73,6 @@ export function JournalScreen() {
       <PageHeader
         title={copy.journal.title}
         description={copy.journal.description}
-        eyebrow={copy.common.private}
         action={
           <Button onClick={() => setEditor('new')}>
             <UiIcon name="plus" />
@@ -120,10 +118,6 @@ export function JournalScreen() {
             </IconButton>
           )}
         </div>
-        <Badge intent="brand">
-          <UiIcon name="lock" className="size-3.5" />
-          {copy.common.private}
-        </Badge>
       </div>
       <MutationError error={remove.error} />
       <QueryBoundary query={query}>
@@ -151,7 +145,6 @@ export function JournalScreen() {
                           year: numericYear,
                         })}
                       </span>
-                      <UiIcon name="lock" className="size-4 text-tertiary" />
                     </div>
                     <div className="gp-journal-card__tags">
                       {entry.childId && (

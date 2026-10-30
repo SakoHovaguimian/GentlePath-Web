@@ -151,7 +151,7 @@ export function AdminDashboardScreen() {
               </Card>
               <Card className={styles.workCard} data-tone="sage">
                 <span className={styles.roundIcon}>
-                  <UiIcon name="lock" />
+                  <UiIcon name="checklist" />
                 </span>
                 <h2>{copy.admin.moderation}</h2>
                 <p>{copy.admin.moderationHint}</p>
@@ -181,9 +181,6 @@ export function AdminDashboardScreen() {
         )}
       </QueryBoundary>
       <aside className={styles.privacyNote}>
-        <span className={styles.roundIcon} data-tone="clay">
-          <UiIcon name="lock" />
-        </span>
         <div>
           <h2>{copy.admin.privacyTitle}</h2>
           <p>{copy.admin.privacyHint}</p>

@@ -80,10 +80,7 @@ export function ManagedUsersScreen() {
         />
       </div>
       {!canEdit && (
-        <p className={styles.readOnly}>
-          <UiIcon name="lock" />
-          {copy.people.readOnlyHint}
-        </p>
+        <p className={styles.readOnly}>{copy.people.readOnlyHint}</p>
       )}
       <DataPanel
         className={styles.directoryPanel}

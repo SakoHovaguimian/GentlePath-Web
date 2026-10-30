@@ -47,7 +47,6 @@ export function FamilyScreen() {
       <PageHeader
         title={copy.family.title}
         description={copy.family.description}
-        eyebrow={copy.common.private}
         action={
           <Button onClick={() => setEditor('new')}>
             <UiIcon name="plus" />

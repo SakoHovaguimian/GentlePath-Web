@@ -48,7 +48,6 @@ export type IconName =
   | 'info'
   | 'warning'
   | 'mail'
-  | 'lock'
   | 'code'
   | 'refresh'
   | 'clock'

@@ -41,7 +41,7 @@ export function ModerationScreen() {
           eyebrow={copy.navigation.admin}
           icon={
             <span className={styles.roundIcon} data-tone="lilac">
-              <UiIcon name="lock" />
+              <UiIcon name="checklist" />
             </span>
           }
         />

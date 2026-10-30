@@ -22,10 +22,6 @@ export function FamilyProfileCard({
     <Card className="gp-family-card">
       <div className="gp-family-card__header">
         <InitialsAvatar name={child.name} />
-        <span className="gp-family-card__private">
-          <UiIcon name="lock" className="size-4" />
-          {copy.common.private}
-        </span>
       </div>
       <div className="grid gap-2">
         <h2>

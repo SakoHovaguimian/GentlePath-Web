@@ -79,7 +79,6 @@ const paths: Record<IconName, string> = {
   info: 'M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Zm9-1v6m0-10h.01',
   warning: 'm12 3 10 18H2L12 3Zm0 6v5m0 3h.01',
   mail: 'M3 5h18v14H3V5Zm0 0 9 8 9-8',
-  lock: 'M5 10h14v11H5V10Zm3 0V7a4 4 0 0 1 8 0v3M12 14v3',
   code: 'm8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18',
   refresh:
     'M20 11a8 8 0 0 0-14.9-3.9M4 4v4h4m-4 5a8 8 0 0 0 14.9 3.9M20 20v-4h-4',

@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
-  Badge,
   Button,
   DirectoryFilters,
   DirectoryPagination,
@@ -108,7 +107,6 @@ export function DocumentVaultScreen() {
       <PageHeader
         title={copy.title}
         description={copy.description}
-        eyebrow={copy.privateLabel}
         action={
           <Button onClick={() => setEditor('new')}>
             <UiIcon name="plus" />
@@ -167,17 +165,13 @@ export function DocumentVaultScreen() {
             </Field>
           }
         />
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <Badge intent="brand">
-            <UiIcon name="lock" className="size-3.5" />
-            {copy.privateLabel}
-          </Badge>
-          {filtered && (
+        {filtered && (
+          <div>
             <Button variant="ghost" onClick={clearFilters}>
               {copy.clearFiltersAction}
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       <MutationError error={remove.error} />
       <MutationError error={downloadError} />
@@ -238,10 +232,7 @@ export function DocumentVaultScreen() {
           </div>
         )}
       </QueryBoundary>
-      <p className="m-0 flex items-start gap-2 text-sm text-tertiary">
-        <UiIcon name="lock" className="mt-0.5 size-4" />
-        {copy.privacyDescription}
-      </p>
+      <p className="m-0 text-sm text-tertiary">{copy.privacyDescription}</p>
       {editor && (
         <DocumentEditor
           key={editor === 'new' ? 'new' : editor.id}

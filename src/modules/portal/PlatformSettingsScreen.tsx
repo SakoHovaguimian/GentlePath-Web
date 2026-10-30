@@ -58,7 +58,7 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
       key: 'resourceReviewRequired' as const,
       label: copy.system.review,
       description: copy.system.reviewDescription,
-      icon: 'lock' as const,
+      icon: 'checklist' as const,
       tone: 'clay',
     },
   ];

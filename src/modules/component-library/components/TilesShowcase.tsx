@@ -25,7 +25,7 @@ const tiles: {
   { key: 'liquids', icon: 'layers', selected: true },
   { key: 'hardCandies', icon: 'user', selected: true },
   { key: 'preRolls', icon: 'settings' },
-  { key: 'jello', icon: 'lock', disabled: true },
+  { key: 'jello', icon: 'info', disabled: true },
 ];
 
 export function TilesShowcase() {

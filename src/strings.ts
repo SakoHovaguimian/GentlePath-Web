@@ -7839,7 +7839,6 @@ export const gentlePathPortalStrings = {
       'No items match these filters. Clear your search or choose another topic.',
     errorTitle: 'Your Changes Could Not Be Saved',
     errorHint: 'Please try again. Your entries are still here.',
-    private: 'Private To You',
     close: 'Close',
     pagination: 'Page Navigation',
     range: (from: number, to: number, total: number) =>
@@ -8538,7 +8537,6 @@ export const gentlePathDocumentStrings = {
   title: 'Document Vault',
   description:
     'Keep the paperwork that supports your family together, and find it when you need it.',
-  privateLabel: 'Your Private Workspace',
   bannerTitle: 'A Little Less Searching. A Little More Peace Of Mind.',
   bannerDescription:
     'Care plans, school reports, and the documents you want close by. Organized in your own family space.',

@@ -91,7 +91,7 @@ export function portalNavigation(
     {
       href: '/admin/moderation',
       label: copy.navigation.moderation,
-      icon: <UiIcon name="lock" />,
+      icon: <UiIcon name="checklist" />,
     },
     {
       href: '/admin/guides',

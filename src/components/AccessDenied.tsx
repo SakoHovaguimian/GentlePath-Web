@@ -7,7 +7,7 @@ export function AccessDenied() {
     <div className="grid gap-7">
       <PageHeader title={copy.access.title} />
       <EmptyState
-        icon="lock"
+        icon="warning"
         title={copy.access.title}
         description={copy.access.description}
         action={
