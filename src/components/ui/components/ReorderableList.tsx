@@ -5,9 +5,11 @@ import { useReorderDrag } from '../useReorderDrag';
 import { ListGroup } from './ListRow';
 import { IconButton } from './IconButton';
 import { UiIcon } from './UiIcon';
+import { cn } from '../lib/cn';
 import { useListMotion } from '../lib/useListMotion';
 
 interface ReorderableListProps<T extends { id: string }> {
+  variant?: 'list' | 'cards';
   items: T[];
   disabled: boolean;
   label: string;
@@ -26,6 +28,7 @@ interface ReorderableListProps<T extends { id: string }> {
 // Pointer handles support mouse, pen, and touch; arrows provide a keyboard alternative.
 export function ReorderableList<T extends { id: string }>({
   items,
+  variant = 'list',
   disabled,
   label,
   handleLabel,
@@ -53,14 +56,27 @@ export function ReorderableList<T extends { id: string }>({
     });
   }
   return (
-    <ListGroup ordered label={label} listRef={listRef}>
+    <ListGroup
+      ordered
+      label={label}
+      listRef={listRef}
+      className={
+        variant === 'cards'
+          ? 'gap-4 divide-y-0 overflow-visible rounded-none border-0 bg-transparent'
+          : undefined
+      }
+    >
       {items.map((item, index) => (
         <li
           key={item.id}
           data-motion-key={item.id}
           data-reordering={Boolean(reorder.drag) || undefined}
           data-dragging={reorder.drag?.id === item.id || undefined}
-          className="ui-reorder-row relative"
+          className={cn(
+            'ui-reorder-row relative',
+            variant === 'cards' &&
+              'rounded-xl border border-secondary bg-primary',
+          )}
           style={{ translate: `0 ${reorder.offset(item.id)}px` }}
         >
           {renderItem(

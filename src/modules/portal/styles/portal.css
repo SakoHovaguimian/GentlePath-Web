@@ -424,6 +424,13 @@
   border-top-color: var(--gp-sunlight);
 }
 
+.gp-journal-card[data-linked],
+.gp-journal-card:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 4px;
+  scroll-margin-block: 6rem;
+}
+
 .gp-journal-card h2 {
   margin: 0;
   font-family: var(--font-display);

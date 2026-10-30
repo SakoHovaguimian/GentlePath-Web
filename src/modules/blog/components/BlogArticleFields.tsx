@@ -1,11 +1,17 @@
 'use client';
 
 import Image from 'next/image';
-import { Field, Input, Select, SplitSection, TextArea } from '@/components/ui';
+import { Button, Field, Input, SplitSection, TextArea } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
 import type { BlogMutationInput } from '../models/blogArticle';
-import { BlogCategorySchema } from '../models/blogCategory';
-import { BlogCoverSchema, blogCoverAssets } from '../models/blogCover';
+import {
+  BlogCoverSchema,
+  blogCoverSource,
+  BlogCoverPresetSchema,
+} from '../models/blogCover';
+import { useBlogOptions } from '../hooks';
+import { BlogTopicField } from './BlogTopicField';
+import { BlogCoverField } from './BlogCoverField';
 import type { BlogFormErrors } from '../models/blogFormErrors';
 import styles from '../../portal/Admin.module.css';
 
@@ -14,12 +20,15 @@ export function BlogArticleFields({
   errors,
   disabled,
   onChangeAction,
+  onUploadStateChangeAction,
 }: {
   form: BlogMutationInput;
   errors: BlogFormErrors;
   disabled: boolean;
   onChangeAction: (form: BlogMutationInput) => void;
+  onUploadStateChangeAction: (busy: boolean) => void;
 }) {
+  const options = useBlogOptions();
   const update = <Key extends keyof BlogMutationInput>(
     key: Key,
     value: BlogMutationInput[Key],
@@ -131,55 +140,62 @@ export function BlogArticleFields({
         </Field>
         {error('author')}
       </div>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field labelText={copy.categoryLabel}>
-          <Select
-            id="blog-category"
+      {options.isError && (
+        <div className="grid gap-2">
+          <p className="m-0 text-sm text-error-primary">
+            {copy.optionsErrorHint}
+          </p>
+          <Button
+            variant="ghost"
+            className="justify-self-start"
+            onClick={() => void options.refetch()}
+          >
+            {copy.retryOptions}
+          </Button>
+        </div>
+      )}
+      <div className="grid items-start gap-5 sm:grid-cols-2">
+        <div className="grid min-w-0 gap-1.5">
+          <BlogTopicField
             value={form.category}
+            categories={options.data?.categories ?? []}
             disabled={disabled}
-            onValueChange={(value) => {
-              const category = BlogCategorySchema.safeParse(value).data;
-              if (category) update('category', category);
-            }}
-          >
-            {BlogCategorySchema.options.map((value) => (
-              <option key={value} value={value}>
-                {copy.categories[value]}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field labelText={copy.coverLabel}>
-          <Select
-            id="blog-cover"
+            invalid={Boolean(errors.category)}
+            onChange={(value) => update('category', value)}
+          />
+          {error('category')}
+        </div>
+        <div className="grid min-w-0 gap-1.5">
+          <BlogCoverField
             value={form.cover}
+            covers={options.data?.covers ?? []}
             disabled={disabled}
-            onValueChange={(value) => {
-              const cover = BlogCoverSchema.safeParse(value).data;
-              if (cover) update('cover', cover);
-            }}
-          >
-            {BlogCoverSchema.options.map((value) => (
-              <option key={value} value={value}>
-                {copy.coverOptions[value]}
-              </option>
-            ))}
-          </Select>
-        </Field>
+            invalid={Boolean(errors.cover)}
+            onChange={(value) => update('cover', value)}
+            onUploadStateChange={onUploadStateChangeAction}
+          />
+          {error('cover')}
+        </div>
       </div>
-      <div className={styles.editorCover} data-cover={form.cover}>
-        <Image
-          src={blogCoverAssets[form.cover]}
-          alt={copy.decorativeAlt}
-          width={180}
-          height={140}
-          sizes="120px"
-        />
-        <p>
-          <span>{copy.coverLabel}</span>
-          {copy.coverOptions[form.cover]}
-        </p>
-      </div>
+      <p className="m-0 text-xs text-tertiary">{copy.reusableOptionsHint}</p>
+      {BlogCoverSchema.safeParse(form.cover).success && (
+        <div className={styles.editorCover} data-cover={form.cover}>
+          <Image
+            src={blogCoverSource(form.cover)}
+            unoptimized
+            alt={copy.decorativeAlt}
+            width={180}
+            height={140}
+            sizes="120px"
+          />
+          <p>
+            <span>{copy.coverLabel}</span>
+            {BlogCoverPresetSchema.safeParse(form.cover).success
+              ? copy.coverOptions[form.cover as keyof typeof copy.coverOptions]
+              : copy.customCover}
+          </p>
+        </div>
+      )}
     </SplitSection>
   );
 }

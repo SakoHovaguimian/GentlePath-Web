@@ -151,6 +151,18 @@ export class DemoApiClient {
     if (resource === 'portal' || resource === 'admin')
       return handleDemoPortalRequest(request, path, trustedSession, context);
     if (resource === 'blog') {
+      if (
+        context.scenario === 'empty' &&
+        method === 'GET' &&
+        id === '_options'
+      ) {
+        // Authenticate the options read even when its visible result is empty.
+        await handleDemoBlogRequest(request, path, trustedSession.user);
+        return Response.json(
+          { categories: [], covers: [] },
+          { headers: { 'cache-control': 'no-store' } },
+        );
+      }
       const response = await handleDemoBlogRequest(
         request,
         path,

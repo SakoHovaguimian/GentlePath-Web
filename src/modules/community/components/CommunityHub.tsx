@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { Page, PageHeader, SegmentedTabs } from '@/components/ui';
-import { PortalBanner } from '@/modules/portal/components/PortalBanner';
 import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import type { CommunityView } from '../models/communityView';
@@ -28,13 +27,6 @@ export function CommunityHub({
         description={copy.description}
         eyebrow={copy.eyebrow}
         action={action}
-      />
-      <PortalBanner
-        title={copy.bannerTitle}
-        description={copy.bannerDescription}
-        image="/gentlepath/community-garden-v2.png"
-        tone="lilac"
-        landscape
       />
       <SegmentedTabs
         label={copy.contentViewLabel}

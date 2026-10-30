@@ -87,7 +87,7 @@ export function StarRating({
           ))}
         </div>
         <span
-          className="min-w-24 text-sm font-semibold text-utility-warning-700"
+          className="min-w-24 text-sm font-semibold text-(--color-rating-active)"
           aria-hidden="true"
         >
           {valueLabel}

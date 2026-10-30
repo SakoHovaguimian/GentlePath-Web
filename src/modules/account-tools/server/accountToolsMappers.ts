@@ -1,8 +1,6 @@
 import type { AccountDeviceTransport } from './models/accountDeviceTransport';
 import type { NotificationDeliveryTransport } from './models/notificationDeliveryTransport';
 import type { NotificationAttemptTransport } from './models/notificationAttemptTransport';
-import type { AIUsageTransport } from './models/aiUsageTransport';
-import type { AIUsageEventInput } from '../models/aiUsageEvent';
 
 export function mapAccountDevice(value: AccountDeviceTransport) {
   return {
@@ -35,31 +33,5 @@ export function mapNotificationAttempt(value: NotificationAttemptTransport) {
     outcome: value.outcome,
     retryable: value.retryable,
     error: value.error,
-  };
-}
-export function mapAIUsage(value: AIUsageTransport) {
-  return {
-    id: value.id,
-    userId: value.user_id ?? null,
-    context: value.ai_context_type,
-    inputTokens: value.input_tokens ?? null,
-    outputTokens: value.output_tokens ?? null,
-    totalTokens: value.total_tokens ?? null,
-    metadata: value.metadata ?? null,
-    error: value.error ?? null,
-    deleted: value.deleted ?? false,
-    createdAt: value.created_at,
-    updatedAt: value.updated_at,
-  };
-}
-export function aiUsageInputTransport(input: AIUsageEventInput) {
-  return {
-    user_id: input.userId,
-    ai_context_type: input.context,
-    input_tokens: input.inputTokens,
-    output_tokens: input.outputTokens,
-    total_tokens: input.totalTokens,
-    metadata: input.metadata,
-    error: input.error,
   };
 }

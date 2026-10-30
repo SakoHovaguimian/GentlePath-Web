@@ -7,6 +7,13 @@ import type { BlogQuery } from './models/blogQuery';
 import { blogQueryKeys } from './queryKeys';
 import { adminQueryKeys } from '@/modules/portal/queryKeys';
 
+export function useBlogOptions() {
+  const { blogService } = useServiceContainer();
+  return useQuery({
+    queryKey: blogQueryKeys.options,
+    queryFn: ({ signal }) => blogService.options(false, signal),
+  });
+}
 export function useBlogArticles(query: BlogQuery) {
   const { blogService } = useServiceContainer();
   return useQuery({

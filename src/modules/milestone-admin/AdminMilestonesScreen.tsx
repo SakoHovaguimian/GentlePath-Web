@@ -118,11 +118,6 @@ export function AdminMilestonesScreen() {
           title={copy.milestonesTitle}
           description={copy.milestonesDescription}
           eyebrow={copy.milestonesEyebrow}
-          icon={
-            <span className={styles.roundIcon}>
-              <UiIcon name="leaf" />
-            </span>
-          }
           action={
             <Button onClick={() => setEditor('new')}>
               <UiIcon name="plus" />

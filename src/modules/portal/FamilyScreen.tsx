@@ -15,7 +15,6 @@ import { useChildren, useDeleteChild } from './hooks';
 import type { ChildProfile } from './models/childProfile';
 import { ChildProfileEditor } from './components/ChildProfileEditor';
 import { MutationError } from './components/MutationError';
-import { PortalBanner } from './components/PortalBanner';
 import { FamilyProfileCard } from './components/FamilyProfileCard';
 import './styles/portal.css';
 
@@ -53,13 +52,6 @@ export function FamilyScreen() {
             {copy.family.create}
           </Button>
         }
-      />
-      <PortalBanner
-        title={copy.family.bannerTitle}
-        description={copy.family.bannerDescription}
-        image="/gentlepath/community-garden-v2.png"
-        tone="lilac"
-        landscape
       />
       <MutationError error={remove.error} />
       <QueryBoundary query={query}>

@@ -173,6 +173,7 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
           </SplitSection>
           <SplitSection
             id="guide-steps"
+            bare
             title={copy.itemsTitle}
             description={copy.itemsDescription}
           >

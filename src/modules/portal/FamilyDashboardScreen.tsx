@@ -87,7 +87,7 @@ export function FamilyDashboardScreen() {
                     value: data.savedCount,
                     hint: copy.home.savedHint,
                     href: '/saved',
-                    icon: 'layers' as const,
+                    icon: 'bookmark' as const,
                     tone: 'sunlight',
                   },
                   {

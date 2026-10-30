@@ -81,6 +81,7 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
     null,
   );
   const resolvedOverlayId = useRef<string | null>(null);
+  const alertReturnFocusRef = useRef<HTMLElement | null>(null);
   const [motionConfig, setMotionConfig] =
     useState<PresentationMotionConfig>(defaultMotion);
   const queueRef = useRef<OverlayQueueItem[]>([]);
@@ -302,6 +303,8 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
       {children}
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
       <AlertModal
+        key={alert?.id}
+        restoreFocusRef={alertReturnFocusRef}
         open={activeOverlay?.kind === 'alert'}
         title={alert?.title ?? ''}
         description={alert?.description ?? ''}

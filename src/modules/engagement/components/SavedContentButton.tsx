@@ -43,7 +43,11 @@ export function SavedContentButton({
           }
         }}
       >
-        <UiIcon name={saved ? 'trash' : 'pin'} className="size-4" />
+        <UiIcon
+          name="bookmark"
+          fill={saved ? 'currentColor' : 'none'}
+          className="size-4"
+        />
         {saved ? copy.unsave : copy.save}
       </Button>
       {query.isError && (

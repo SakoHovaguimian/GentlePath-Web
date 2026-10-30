@@ -14,6 +14,7 @@ export type IconName =
   | 'leaf'
   | 'gift'
   | 'pin'
+  | 'bookmark'
   | 'wifi'
   | 'home'
   | 'store'

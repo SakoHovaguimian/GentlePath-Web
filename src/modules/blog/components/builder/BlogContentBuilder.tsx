@@ -11,6 +11,7 @@ import {
 } from '../../models/blogContentType';
 import { createBlogContent } from '../../content/createBlogContent';
 import { BlogBlockFields } from './BlogBlockFields';
+import { BlogBlockPreview } from './BlogBlockPreview';
 import styles from '../../Blog.module.css';
 
 interface BlogContentBuilderProps {
@@ -182,8 +183,13 @@ export function BlogContentBuilder({
               disabled={disabled}
               onClick={() => add(type)}
             >
-              <span>{copy.types[type]}</span>
-              <span>{copy.typeDescriptions[type]}</span>
+              <BlogBlockPreview type={type} />
+              <span className={styles.builderPaletteCopy}>
+                <span>{copy.types[type]}</span>
+                <span className={styles.builderPaletteDescription}>
+                  {copy.typeDescriptions[type]}
+                </span>
+              </span>
             </Button>
           ))}
         </div>

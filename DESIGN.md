@@ -48,17 +48,19 @@ Light roles are oat canvas, paper panels, forest actions, deep green ink, and mu
 
 Dark mode and alternate accents use the existing semantic aliases in theme.css. Selection/hover fill follows the current surface and accent: light/dark selection 8%/14%, emphasized 14%/22%, hover 5%/8%. Do not copy these constants into screens.
 
-Gold resource ratings use the existing warning/gold utility palette with readable text; a rating is not a warning banner. Selected heart reactions use the shared destructive/red palette. Destructive/removal actions use the canonical transparent variant with red text/icons and no border or fill. Promotional artwork may use authored colors; disclosures and controls keep themed contrast.
+Resource ratings use semantic rating tokens: forest filled stars, muted green empty outlines, and a sage hover/focus surface. Summary scores share the same palette on cards and detail headers; rating panels use the neutral border. These aliases follow light/dark brand roles independently of warning colors. Selected heart reactions use the shared destructive/red palette. Destructive/removal actions use the canonical transparent variant with red text/icons and no border or fill. Promotional artwork may use authored colors; disclosures and controls keep themed contrast.
 
 ## Typography
 
-Local DM Sans is the body/control face and local Lora the editorial display face. PageHeader is regular-weight Lora, 32px narrow/40px desktop; sections use 24px/28px. Body is 18px/28px, controls 16px/24px, and captions/badges at least 14px/20px. Use named rem-based utilities and preserve wrapping. Technical values use system monospace.
+Local DM Sans is the body/control face and local Lora the editorial display face. PageHeader is regular-weight Lora, 24px narrow/32px desktop on a compact colored surface without a leading icon; sections use 24px/28px. Body is 18px/28px, controls 16px/24px, and captions/badges at least 14px/20px. Use named rem-based utilities and preserve wrapping. Technical values use system monospace.
 
 [Copy casing](docs/STRINGS.md#copy-casing) distinguishes Title Case labels/actions from sentence-case prose. Every authored string and alt description lives in `src/strings.ts`.
 
 ## Layout
 
 Page → one PageHeader → purposeful work surfaces. The shell header supplies context, not a second title. Desktop uses a fixed 17.5rem forest sidebar from 64rem; navigation scrolls independently above the account. The sidebar has no promotional/care-note card. Below 64rem use the shared full-screen navigation with safe areas, Escape, focus trap, and restoration.
+
+Family, journal, Small Steps, document, and community screens move directly from the compact colored page header to their controls and content, without a second promotional banner. My Path retains its “Your Path Is Your Own.” illustrated hero.
 
 Directories reuse shared filtering/paging and responsive record patterns; wide tables own a labeled horizontal scroller. Long forms scroll naturally, with actions sticky only where space permits. Community combines Posts/Polls through the shared segmented controller. Inbox content uses separated ivory cards and a clear unread hierarchy instead of a dense tinted wall. Parallel staff work cards stretch content and align their CTAs.
 
@@ -74,7 +76,7 @@ Fields use 12px corners, cards/dialogs 20px, actions the shared capsule radius, 
 
 Import shared owners from `@/components/ui`. Their runtime path is theme tokens → shared styles/components → domain screens. Preference services and providers own saved appearance values; the Appearance screen exposes two illustrated Light/Dark choice tiles, with no accent or motion selectors. ThemeScript applies validated values before hydration.
 
-Use StarRating/RatingSummary for gold resource feedback, ReactionButton for confirmed heart reactions, and Accordion for animated disclosures. Dropdown triggers retain their layout width; popups size to the longest option, at least the trigger width, clamped to the viewport. See the [canonical map](docs/UI_SYSTEM.md#canonical-ui-map).
+Use StarRating/RatingSummary for resource feedback, ReactionButton for confirmed heart reactions, and Accordion for animated disclosures. Dropdown triggers retain their layout width; popups size to the longest option, at least the trigger width, clamped to the viewport. See the [canonical map](docs/UI_SYSTEM.md#canonical-ui-map).
 
 Motion uses shared 90/140/200/240ms interaction tokens and a 520ms reaction celebration token. Device and saved reduced motion suppress CSS/JavaScript movement while state, focus, and placement still update. Keep interactions purposeful: FAQ open/close, star feedback, heart confirmation, and reordering, rather than continuous decoration.
 

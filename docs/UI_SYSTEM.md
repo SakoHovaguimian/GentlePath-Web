@@ -14,16 +14,16 @@ Import from `@/components/ui`; inspect `/dev-settings/components` before adding 
 | Scrollbar      | globals.css and theme tokens                            | This Guide + DESIGN | document/table/chat/overlay, engine fallbacks                      | visible/usable, forced colors, narrow layout           |
 | Toast          | PresentationProvider                                    | This Guide + DESIGN | success/info/warning/error                                         | live region; critical errors also inline               |
 | CRUD           | domain services, query hooks, guarded navigation        | This Guide + DESIGN | lifecycle from owning product contract                             | full demo flow and recovery                            |
-| Rating         | StarRating/RatingSummary                                | This Guide + DESIGN | native 1–5 radios and aggregate summary                            | hover/focus, keyboard, pending/rollback, gold contrast |
+| Rating         | StarRating/RatingSummary                                | This Guide + DESIGN | native 1–5 radios and aggregate summary                            | hover/focus, keyboard, pending/rollback, theme contrast |
 | Reactions      | ReactionButton                                          | This Guide + DESIGN | pressed/count, outlined/filled heart                               | confirmed animation, errors, reduced motion            |
 | Disclosure     | Accordion                                               | This Guide + DESIGN | accessible multi-open FAQ, retained answers                        | open/close motion, keyboard, reduced motion            |
 | Reordering     | ReorderableList                                         | This Guide + DESIGN | pointer, handle arrows, explicit move controls                     | stable IDs/content, focus, narrow layout               |
 
 ## Compose A Screen
 
-Use Page → one PageHeader → work surfaces. Directories use DirectoryFilters/DirectoryMultiFilters, DataPanel/DataTable where appropriate, and DirectoryPagination. Supply stable keys and visible record links. Use MobileRecordRow for compact summaries; a wide table without one owns a labeled focusable horizontal scroller. Do not put long forms in table-sized frames.
+Use Page → one PageHeader → work surfaces. PageHeader keeps a compact sage surface by default; owning intro wrappers can supply lilac or sunlight through `--page-header-tint`. Header icons are omitted; title, supporting copy, and actions remain together. Directories use DirectoryFilters/DirectoryMultiFilters, DataPanel/DataTable where appropriate, and DirectoryPagination. Supply stable keys and visible record links. Use MobileRecordRow for compact summaries; a wide table without one owns a labeled focusable horizontal scroller. Do not put long forms in table-sized frames.
 
-Settings/forms use SplitSection, SectionStack, Field, and FormActions. Other canonical owners include Button/IconButton, UiIcon/IconTile, badges/chips, QueryBoundary/EmptyState, Modal/AlertModal/SheetPanel, Markdown/media controls, Stepper, and persistent segmented panels. Optional reviewed assistance stays callback-driven; no generation, microphone request, or save occurs automatically.
+Settings/forms use SplitSection, SectionStack, Field, and FormActions. Light/Dark previews use the fixed target palette tokens, independent of the current active theme. Other canonical owners include Button/IconButton, UiIcon/IconTile, badges/chips, QueryBoundary/EmptyState, Modal/AlertModal/SheetPanel, Markdown/media controls, Stepper, and persistent segmented panels. Optional reviewed assistance stays callback-driven; no generation, microphone request, or save occurs automatically.
 
 ## Navigation And Async State
 
@@ -39,7 +39,7 @@ Show initial loading, background refresh, empty/no-results, and recoverable erro
 
 Button loading preserves dimensions and accessible name. Badge/Chip content and UiIcon keep icons inline with text; do not add block wrappers that stack a leading icon over its label. Every icon-only action needs an accessible name.
 
-Use `variant="destructive"` for delete, remove, archive, unpublish, discard, and disabling/reducing access. It renders red text/icons on a transparent surface without a border or selection stroke; keyboard focus remains visible. Conditional save/unlike controls use destructive colors only in the removal state. Confirm consequential actions through PresentationProvider with danger tone, object/scope/consequence, and the safe action initially focused. Do not style ordinary filter clearing or cancellation as destructive.
+Use `variant="destructive"` for delete, remove, archive, unpublish, discard, and disabling/reducing access. It renders red text/icons on a transparent surface without a border or selection stroke; keyboard focus remains visible. Conditional save/unlike controls use destructive colors only in the removal state. General Save Changes actions retain the primary variant; platform-impact warnings belong to the confirmation. Saved library cards use a filled bookmark at the top right and confirm before removing the saved link. Confirm consequential actions through PresentationProvider with danger tone, object/scope/consequence, and the safe action initially focused. Do not style ordinary filter clearing or cancellation as destructive.
 
 Select/MultiSelect keep the trigger's authored width. The popup uses the longest option's intrinsic width, at least the trigger width, capped inside the viewport; wrap only when the viewport requires it. Preserve selected/disabled/highlight/focus states, visible scrolling, typeahead, and keyboard selection. Address/timezone/compact-segmented choices use this same owner.
 
@@ -47,9 +47,11 @@ Date of birth is date-only and serialized at UTC midnight; observations/schedule
 
 ## Layers, Focus, And Motion
 
-Use Modal for composed forms and PresentationProvider for queued confirmations, sheets, and toasts. Honor Escape, focus trap/restoration, safe areas, and reachable actions in long content. Modal supports initialFocusRef. React Aria popups portal inside the modal's focus scope; Escape closes the popup before its parent. Higher confirmation layers must not dismiss/reopen the underlying dialog. Dirty guards share one pending discard decision.
+Help FAQs use the shared Accordion with the plum tone: hover and expanded titles are purple, with the same measured panel animation and reduced-motion behavior. Notification inbox records use compact linked titles, explicit read toggles, and unboxed destructive archive icons.
 
-Segmented choices use native radio semantics; more than two choices become Select below 600px. Persistent SegmentedPanels keep inactive drafts mounted/hidden/inert. Stepper eligibility and current/completed state belong to the caller; orientation does not change state. Reordering preserves handle focus after moves, including Safari.
+Use Modal for composed forms and PresentationProvider for queued confirmations, sheets, and toasts. Consecutive alerts start with the safe action focused and preserve the original workflow trigger for restoration. Honor Escape, focus trap/restoration, safe areas, and reachable actions in long content. Modal supports initialFocusRef. React Aria popups portal inside the modal's focus scope; Escape closes the popup before its parent. Higher confirmation layers must not dismiss/reopen the underlying dialog. Dirty guards share one pending discard decision.
+
+Segmented choices use native radio semantics; more than two choices become Select below 600px. Persistent SegmentedPanels keep inactive drafts mounted/hidden/inert. Stepper eligibility and current/completed state belong to the caller; orientation does not change state. Reordering preserves handle focus after moves, including Safari. ReorderableList supports separate card rows; guide steps use this variant inside a bare SplitSection to avoid nested panels.
 
 Shared motion CSS/helpers read theme timing and device/saved reduced-motion preferences. React Aria DisclosurePanel owns measured open/close height and exit timing. Rating/reaction feedback uses their shared owners. Do not introduce per-screen timing constants or animate when reduced motion is active.
 

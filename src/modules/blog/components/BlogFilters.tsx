@@ -2,7 +2,7 @@
 
 import { DirectoryFilters, Field, Select } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
-import { BlogCategorySchema } from '../models/blogCategory';
+import { blogCategoryPresets, blogCategoryLabel } from '../models/blogCategory';
 import { BlogStatusSchema } from '../models/blogStatus';
 import type { BlogQuery } from '../models/blogQuery';
 
@@ -12,10 +12,12 @@ export function BlogFilters({
   query,
   onChangeAction,
   admin = false,
+  categories = [],
 }: {
   query: BlogQuery;
   onChangeAction: (query: BlogQuery) => void;
   admin?: boolean;
+  categories?: string[];
 }) {
   return (
     <DirectoryFilters
@@ -29,9 +31,15 @@ export function BlogFilters({
           offset: 0,
         })
       }
-      statuses={BlogCategorySchema.options.map((value) => ({
+      statuses={[
+        ...new Set([
+          ...blogCategoryPresets,
+          ...categories,
+          ...(query.category ? [query.category] : []),
+        ]),
+      ].map((value) => ({
         value,
-        label: copy.categories[value],
+        label: blogCategoryLabel(value),
       }))}
       copy={{
         search: copy.searchLabel,

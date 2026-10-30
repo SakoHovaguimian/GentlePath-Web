@@ -1,8 +1,9 @@
+import { blogCategoryLabel } from '../models/blogCategory';
 import Image from 'next/image';
 import { MarkdownContent } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
 import type { BlogArticle } from '../models/blogArticle';
-import { blogCoverAssets } from '../models/blogCover';
+import { blogCoverSource } from '../models/blogCover';
 import styles from '../Blog.module.css';
 import { BlogDate } from './BlogDate';
 import { BlogContentReader } from './BlogContentReader';
@@ -21,7 +22,9 @@ export function BlogArticleReader({
     <article className={styles.reader}>
       <header className={styles.readerHeader}>
         <p className={styles.topic}>
-          {preview ? copy.draftPreviewLabel : copy.categories[article.category]}
+          {preview
+            ? copy.draftPreviewLabel
+            : blogCategoryLabel(article.category)}
         </p>
         <h1>{article.title || copy.unsavedPreviewTitle}</h1>
         <p className={styles.readerDescription}>{article.description}</p>
@@ -49,7 +52,8 @@ export function BlogArticleReader({
       <div className={styles.readerCover} data-cover={article.cover}>
         <Image
           priority
-          src={blogCoverAssets[article.cover]}
+          src={blogCoverSource(article.cover)}
+          unoptimized
           width={1000}
           height={600}
           alt={copy.coverAlt(article.title)}

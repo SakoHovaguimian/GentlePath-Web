@@ -5984,6 +5984,19 @@ export const strings = {
   },
   notifications: {
     title: 'Browser Notifications',
+    keepOff: 'Keep Notifications Off',
+    checkAgain: 'Check Again',
+    decisionTitle: 'Choose Your Browser Notifications',
+    decisionDescription:
+      'Get a gentle heads-up for new messages and helpful updates, even when you are away from this page. Choose what works for you.',
+    offTitle: 'Browser Notifications Are Off',
+    // @sentence-case: Browser notification status explanations.
+    loading: 'Checking your browser notification settings…',
+    // @sentence-case: Browser notification status explanations.
+    undecided:
+      'Choose whether this browser can receive chat and workspace alerts. Your inbox is always available here.',
+    // @sentence-case: Browser notification status explanations.
+    off: 'You can still read every update in your inbox. Enable browser notifications whenever you want alerts outside this page.',
     enable: 'Enable Notifications',
     disable: 'Disable Notifications',
     enabled: 'Notifications Enabled',
@@ -7546,6 +7559,21 @@ export const gentlePathDemoStrings = {
 } as const;
 
 export const gentlePathBlogStrings = {
+  // @sentence-case: Topic validation message.
+  invalidTopic: 'Enter a topic between 2 and 80 characters.',
+  addTopic: 'Add Topic',
+  newTopicLabel: 'New Topic',
+  useTopic: 'Use Topic',
+  cancelTopic: 'Cancel',
+  addCover: 'Add Cover Illustration',
+  customCover: 'Custom Illustration',
+  coverFromArticle: (title: string) => `Illustration From ${title}`,
+  reusableOptionsHint:
+    'Save this article to make its new topic and cover available to other articles.',
+  optionsErrorHint:
+    'Saved topics and covers could not be loaded. Your current choices are still available.',
+  retryOptions: 'Retry Saved Choices',
+
   decorativeAlt: '',
   publicTitle: 'Articles & Stories',
   publicEyebrow: 'The GentlePath Journal',
@@ -7798,6 +7826,11 @@ export const gentlePathPortalStrings = {
     appearance: 'Appearance',
     profile: 'My Profile',
     public: 'Visit GentlePath',
+    leaveAdminTitle: 'Leave Administration?',
+    leaveAdminDescription:
+      'You are about to leave the administration experience and open your personal family space.',
+    leaveAdminAction: 'Open My Path',
+    stayInAdminAction: 'Stay In Administration',
     workspace: 'Your Family Space',
     adminWorkspace: 'Platform Workspace',
     sidebarTitle: 'A Little Space For You',
@@ -7883,8 +7916,9 @@ export const gentlePathPortalStrings = {
   },
   journal: {
     title: 'My Journal',
-    bannerTitle: 'Small Moments Matter',
-    bannerDescription: 'Write what feels worth keeping.',
+    unavailableTitle: 'Reflection Unavailable',
+    unavailableHint:
+      'This reflection may have been removed or is no longer available to your account.',
     quoteDescription: 'There’s no right way to reflect.',
     description:
       'A private place for the everyday moments, big feelings, and little things worth remembering.',
@@ -7968,9 +8002,6 @@ export const gentlePathPortalStrings = {
   },
   family: {
     title: 'Your Family, Your Way',
-    bannerTitle: 'Keep Their Story Close',
-    bannerDescription:
-      'The small details that make your child who they are, together in one private place.',
     description:
       'A space for each child and the details that help you care in your own way.',
     create: 'Add A Child',
@@ -8002,9 +8033,6 @@ export const gentlePathPortalStrings = {
   },
   milestones: {
     title: 'Every Small Step Matters',
-    bannerTitle: 'Growth Has Its Own Rhythm',
-    bannerDescription:
-      'Make room for the things you notice, in the moments that feel right.',
     description:
       'Notice moments of connection and growth. These observations are personal reflections, never a checklist or assessment.',
     childLabel: 'Notice Steps For',
@@ -8332,7 +8360,6 @@ export const gentlePathWorkspaceStrings = {
     editorial: 'Guides And Resources',
     milestoneAdmin: 'Milestones And Tips',
     commercial: 'Sponsors And Campaigns',
-    aiUsage: 'AI Usage',
     help: 'Help And Policies',
   },
 } as const;
@@ -8537,9 +8564,6 @@ export const gentlePathDocumentStrings = {
   title: 'Document Vault',
   description:
     'Keep the paperwork that supports your family together, and find it when you need it.',
-  bannerTitle: 'A Little Less Searching. A Little More Peace Of Mind.',
-  bannerDescription:
-    'Care plans, school reports, and the documents you want close by. Organized in your own family space.',
   privacyDescription:
     'Documents are private to your account. Platform staff do not gain access to your family documents through their role.',
   uploadAction: 'Upload Document',
@@ -8682,9 +8706,6 @@ export const gentlePathCommunityStrings = {
   description:
     'Share everyday experiences, ask questions, and connect with other parents.',
   eyebrow: 'Growing Together',
-  bannerTitle: 'A Place To Be Understood',
-  bannerDescription:
-    'Small wins and honest questions both belong here. Share what feels right for you.',
   newPost: 'New Post',
   myReports: 'My Reports',
   back: 'Back To Community',
@@ -9563,6 +9584,12 @@ export const gentlePathEngagementStrings = {
   unsave: 'Remove From Saved',
   savedTitle: 'Content Saved',
   removedTitle: 'Content Removed',
+  removeSavedTitle: 'Remove Saved Content?',
+  removeSavedDescription: (title: string) =>
+    `Remove “${title}” from your saved content? This only removes it from your library.`,
+  removeSavedAction: 'Remove',
+  keepSavedAction: 'Keep Saved',
+  removeSavedLabel: (title: string) => `Remove ${title} From Saved`,
   saveDescription: 'Saved content is private to your account.',
   emptyTitle: 'Your Library Starts Here',
   emptyDescription:
@@ -9663,7 +9690,7 @@ export const gentlePathAccountToolsStrings = {
       'Profile changes are available from your profile. Your sign-in email is managed separately.',
     operationsTitle: 'Operational Tools',
     operationsHint:
-      'Authorized platform operators can inspect delivery history and maintain the AI usage ledger.',
+      'Authorized platform operators can inspect notification delivery history.',
     devicesTitle: 'Devices And Access',
     devicesHint:
       'Manage the devices that receive your notifications and find account support.',
@@ -9760,53 +9787,6 @@ export const gentlePathAccountToolsStrings = {
       UNKNOWN: 'Unknown',
     },
   },
-  aiUsage: {
-    title: 'AI Usage',
-    description:
-      'Inspect and maintain recorded platform AI usage events. Editing a record changes the usage ledger; it does not run an AI request.',
-    accessHint:
-      'AI usage records are limited to authorized platform operators. The live service also verifies the configured operator allowlist.',
-    newAction: 'Add Usage Record',
-    newTitle: 'Add AI Usage Record',
-    editTitle: 'Edit AI Usage Record',
-    formDescription:
-      'Record the context and measured usage. Leave unknown token counts blank rather than estimating them.',
-    searchLabel: 'Search Usage Records',
-    searchPlaceholder: 'Search context, user ID, metadata, or error',
-    activeOption: 'Active Records',
-    deletedOption: 'Deleted Records',
-    emptyTitle: 'No AI Usage Records',
-    emptyHint:
-      'Usage records appear when the server records an AI operation. Authorized operators can also add a record.',
-    contextLabel: 'AI Context',
-    contextPlaceholder: 'Enter the recorded operation context',
-    userLabel: 'User ID',
-    userPlaceholder: 'Optional user UUID; leave blank for system usage',
-    inputLabel: 'Input Tokens',
-    outputLabel: 'Output Tokens',
-    totalLabel: 'Total Tokens',
-    tokensColumn: 'Tokens',
-    metadataLabel: 'Metadata JSON',
-    metadataHint:
-      'Use a JSON object. Leave blank when no metadata was recorded. Do not enter credentials or private family notes.',
-    metadataPlaceholder: 'Enter a JSON object',
-    errorLabel: 'Recorded Error',
-    errorPlaceholder: 'Optional recorded error',
-    inspectAction: 'View Record',
-    recordTitle: 'AI Usage Record',
-    detailsDescription: 'Recorded values from the platform usage ledger.',
-    createdTitle: 'Usage Record Added',
-    updatedTitle: 'Usage Record Updated',
-    deletedTitle: 'Usage Record Deleted',
-    deleteTitle: 'Delete Usage Record?',
-    deleteDescription: (context: string) =>
-      `Delete the usage record for ${context}? This hides the record from the active ledger. It does not undo the AI operation.`,
-    deleteAction: 'Delete Usage Record',
-    deletedHint:
-      'Deleted records are available for inspection. This interface does not restore them.',
-    contextFilterLabel: 'Exact AI Context',
-    applyFiltersAction: 'Apply Filters',
-  },
   help: {
     title: 'Help And Legal Information',
     description:
@@ -9844,10 +9824,6 @@ export const gentlePathAccountToolsStrings = {
     dateRange: 'Choose an end date on or after the start date.',
   },
   demo: {
-    // @preserve-case: Illustrative demo records preserve source-like data.
-    usageContext: 'reviewed_resource_summary',
-    // @preserve-case: Illustrative demo records preserve source-like data.
-    usageMetadata: { model: 'illustrative-demo-model', source: 'demo' },
     // @sentence-case: Illustrative operational record.
     skippedReason:
       'Push delivery was skipped because notifications were disabled in this illustrative example.',
@@ -10155,6 +10131,13 @@ export const gentlePathCommercialStrings = {
 } as const;
 
 export const gentlePathNotificationInboxStrings = {
+  archiveItemLabel: (title: string) => `Archive ${title}`,
+  readItemLabel: (title: string, read: boolean) =>
+    read ? `Mark ${title} Unread` : `Mark ${title} Read`,
+  inboxSetupLabel: (unread?: number) =>
+    unread === undefined
+      ? 'Notifications, Browser Setup Needs A Decision'
+      : `Notifications, ${unread} Unread, Browser Setup Needs A Decision`,
   title: 'Notifications',
   description:
     'Updates and conversations from your GentlePath workspace, gathered in one place.',
@@ -10291,10 +10274,10 @@ export const gentlePathNotificationInboxStrings = {
   demo: {
     activityTitle: 'A Moment To Reflect',
     activityBody:
-      'Your family journal is ready whenever you want to capture a small win or a difficult moment.',
+      'Return to a recent reflection and the small moment you chose to keep.',
     mentionTitle: 'A Conversation Worth Returning To',
     mentionBody:
-      'An illustrative mention from the community. Explore the conversations in your local demo workspace.',
+      'Return to a conversation in your local demo community.',
     tagTitle: 'Everyday Routines',
     tagBody:
       'Find a resource about building gentler transitions into your day.',

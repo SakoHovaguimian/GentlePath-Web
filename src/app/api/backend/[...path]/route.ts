@@ -9,6 +9,7 @@ import {
   AuthError,
   OwnershipError,
   ValidationError,
+  NotFoundError,
 } from '@/errors/domainErrors';
 import { strings } from '@/strings';
 import { errorResponse, trustedMutation } from '@/services/api/routeSafety';
@@ -24,6 +25,14 @@ async function handle(
     if (!trustedMutation(request))
       throw new OwnershipError(strings.errors.untrusted);
     const { path } = await context.params;
+    if (
+      path[0] === 'ai-usage-events' ||
+      path[0] === 'ai-usage' ||
+      (path[0] === 'admin' &&
+        path[1] === 'account-tools' &&
+        path[2] === 'ai-usage')
+    )
+      throw new NotFoundError();
     if (
       path.some(
         (segment) =>

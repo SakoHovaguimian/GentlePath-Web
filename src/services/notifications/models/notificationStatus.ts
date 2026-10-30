@@ -1,2 +1,8 @@
 export type NotificationStatus =
-  'available' | 'enabled' | 'denied' | 'unsupported' | 'unconfigured' | 'demo';
+  | 'loading'
+  | 'undecided'
+  | 'off'
+  | 'enabled'
+  | 'denied'
+  | 'unsupported'
+  | 'unconfigured';

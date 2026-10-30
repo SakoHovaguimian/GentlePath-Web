@@ -11,6 +11,7 @@ import {
   BlogRevisionInputSchema,
   type BlogArticle,
 } from '@/modules/blog/models/blogArticle';
+import { blogCategoryLabel } from '@/modules/blog/models/blogCategory';
 import { BlogQuerySchema } from '@/modules/blog/models/blogQuery';
 import { getDemoBlogState } from './demoBlogState';
 import { uploadDemoBlogImage } from './demoBlogMedia';
@@ -46,6 +47,24 @@ export async function handleDemoBlogRequest(
   )
     return uploadDemoBlogImage(request);
   const articles = getDemoBlogState();
+  if (id === '_options' && !action && request.method === 'GET') {
+    const visible = articles.filter(
+      (article) => !isPublic || article.status === 'published',
+    );
+    return json({
+      categories: [
+        ...new Set(visible.map((article) => article.category)),
+      ].sort(),
+      covers: [
+        ...new Map(
+          visible.map((article) => [
+            article.cover,
+            { value: article.cover, title: article.title },
+          ]),
+        ).values(),
+      ],
+    });
+  }
   const input = () =>
     request.json().catch(() => {
       throw new ValidationError(copy.invalidInput);
@@ -73,7 +92,7 @@ export async function handleDemoBlogRequest(
             article.content.length
               ? blogContentText(article.content)
               : article.body,
-            copy.categories[article.category],
+            blogCategoryLabel(article.category),
           ].some((value) => value.toLocaleLowerCase('en-US').includes(search)),
       )
       .sort(

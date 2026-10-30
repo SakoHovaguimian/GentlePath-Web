@@ -15,8 +15,15 @@ export default async function BlogPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const query = blogQueryFromSearch(await searchParams);
-  const page = await publicBlogService.listPublic(query);
+  const [page, options] = await Promise.all([
+    publicBlogService.listPublic(query),
+    publicBlogService.options(true),
+  ]);
   return (
-    <PublicBlogScreen page={page} query={{ ...query, offset: page.offset }} />
+    <PublicBlogScreen
+      categories={options.categories}
+      page={page}
+      query={{ ...query, offset: page.offset }}
+    />
   );
 }

@@ -44,3 +44,19 @@ body:has(.ui-floating-assistant) .ui-page {
     scroll-margin-block: 14rem;
   }
 }
+
+/* Page context keeps its colored surface while using a compact title/action row. */
+.ui-page-header {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-xl);
+  background: var(--page-header-tint, var(--gp-sage));
+}
+.ui-page-header h1 {
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.2;
+}
+@media (max-width: 540px) {
+  .ui-page-header {
+    padding: 1rem;
+  }
+}

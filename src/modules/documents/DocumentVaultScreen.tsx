@@ -20,7 +20,6 @@ import { gentlePathDocumentStrings as copy } from '@/strings';
 import { useChildren } from '@/modules/portal/hooks';
 import { usePortalDirectory } from '@/modules/portal/usePortalDirectory';
 import { MutationError } from '@/modules/portal/components/MutationError';
-import { PortalBanner } from '@/modules/portal/components/PortalBanner';
 import { useDeleteDocument, useDocuments, useDownloadDocument } from './hooks';
 import { DocumentTypeSchema } from './models/documentType';
 import type { CareDocument } from './models/careDocument';
@@ -113,12 +112,6 @@ export function DocumentVaultScreen() {
             {copy.uploadAction}
           </Button>
         }
-      />
-      <PortalBanner
-        title={copy.bannerTitle}
-        description={copy.bannerDescription}
-        image="/gentlepath/care-notes.png"
-        tone="lilac"
       />
       <div className="grid gap-4">
         <DirectoryFilters

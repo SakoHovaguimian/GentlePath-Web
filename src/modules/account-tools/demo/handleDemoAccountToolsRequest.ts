@@ -17,8 +17,6 @@ import {
   type AccountToolsPaging,
 } from '../models/accountToolsPaging';
 import { NotificationDeliveryQuerySchema } from '../models/notificationDeliveryQuery';
-import { AIUsageQuerySchema } from '../models/aiUsageQuery';
-import { AIUsageEventInputSchema } from '../models/aiUsageEvent';
 import { LegalContextSchema } from '../models/legalInformation';
 import { getDemoAccountToolsState } from './accountToolsState';
 
@@ -182,62 +180,6 @@ export async function handleDemoAccountToolsRequest(
             AccountToolsPagingSchema.strict().parse(rawQuery),
           ),
         );
-      }
-    }
-    if (resource === 'ai-usage' && !action) {
-      if (!id && method === 'GET') {
-        const query = AIUsageQuerySchema.parse(rawQuery);
-        const search = query.query.toLowerCase();
-        const rows = state.aiUsage.filter(
-          (event) =>
-            event.deleted === (query.deleted === 'true') &&
-            (!query.userId ||
-              (query.userId === 'system'
-                ? event.userId === null
-                : event.userId === query.userId)) &&
-            (!query.context || event.context === query.context) &&
-            [
-              event.id,
-              event.userId ?? '',
-              event.context,
-              event.error ?? '',
-              JSON.stringify(event.metadata),
-            ].some((value) => value.toLowerCase().includes(search)),
-        );
-        return json(page(rows, query));
-      }
-      if (!id && method === 'POST') {
-        const input = AIUsageEventInputSchema.parse(await readInput());
-        const now = new Date().toISOString();
-        const record = {
-          ...input,
-          id: crypto.randomUUID(),
-          deleted: false,
-          createdAt: now,
-          updatedAt: now,
-        };
-        state.aiUsage.unshift(record);
-        return json(record, 201);
-      }
-      if (id) {
-        z.string().uuid().parse(id);
-        const record = state.aiUsage.find(
-          (event) => event.id === id && !event.deleted,
-        );
-        if (!record) throw new NotFoundError();
-        if (method === 'PATCH') {
-          Object.assign(
-            record,
-            AIUsageEventInputSchema.parse(await readInput()),
-            { updatedAt: new Date().toISOString() },
-          );
-          return json(record);
-        }
-        if (method === 'DELETE') {
-          record.deleted = true;
-          record.updatedAt = new Date().toISOString();
-          return noContent();
-        }
       }
     }
   }

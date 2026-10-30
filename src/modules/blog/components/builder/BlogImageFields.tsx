@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Field,
@@ -10,13 +9,12 @@ import {
   Message,
   UiIcon,
 } from '@/components/ui';
-import { useServiceContainer } from '@/providers/AppProviders';
-import { DomainError } from '@/errors/domainErrors';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
 import type { BlogImage } from '../../models/blogImage';
 import { BlogImageUrlSchema } from '../../models/blogContentUrl';
 import { blogImageMimeTypes } from '../../models/blogMedia';
 import styles from '../../Blog.module.css';
+import { useBlogImageUpload } from '../../useBlogImageUpload';
 
 interface BlogImageFieldsProps {
   image: BlogImage;
@@ -36,37 +34,13 @@ export function BlogImageFields({
   onChangeAction,
   onUploadStateChangeAction,
 }: BlogImageFieldsProps) {
-  const { blogService } = useServiceContainer();
-  const picker = useRef<HTMLInputElement>(null);
-  const controller = useRef<AbortController | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [failure, setFailure] = useState('');
-  useEffect(() => () => controller.current?.abort(), []);
-  const upload = async (file?: File) => {
-    if (!file || disabled || uploading) return;
-    controller.current = new AbortController();
-    setUploading(true);
-    onUploadStateChangeAction(true);
-    setFailure('');
-    try {
-      const media = await blogService.uploadImage(
-        file,
-        controller.current.signal,
-      );
-      onChangeAction({ ...image, src: media.url });
-    } catch (error) {
-      if (!controller.current.signal.aborted)
-        setFailure(
-          error instanceof DomainError
-            ? error.message
-            : copy.uploadErrorDescription,
-        );
-    } finally {
-      setUploading(false);
-      onUploadStateChangeAction(false);
-      if (picker.current) picker.current.value = '';
-    }
-  };
+  const { picker, uploading, failure, setFailure, upload } = useBlogImageUpload(
+    {
+      disabled,
+      onUploaded: (url) => onChangeAction({ ...image, src: url }),
+      onUploadStateChange: onUploadStateChangeAction,
+    },
+  );
   const validImage = BlogImageUrlSchema.safeParse(image.src).success;
   return (
     <div className="grid min-w-0 gap-4" aria-busy={uploading}>

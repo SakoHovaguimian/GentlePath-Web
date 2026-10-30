@@ -2290,13 +2290,23 @@
 
 /* GentlePath brand roles: the supplied iOS references own the visual identity. */
 :root {
+  --gp-light-oat: #faf8f2;
+  --gp-light-paper: #fffdf8;
+  --gp-light-sage: #e0ecd9;
+  --gp-light-lilac: #ece2f6;
+  --gp-light-sidebar: #174e46;
+  --gp-dark-oat: #14231f;
+  --gp-dark-paper: #1b2e27;
+  --gp-dark-sage: #2b4237;
+  --gp-dark-lilac: #393246;
+  --gp-dark-sidebar: #113b33;
   --gp-forest: #174e46;
   --gp-forest-hover: #103e37;
   --gp-on-forest: #fffdf7;
-  --gp-sage: #e0ecd9;
-  --gp-oat: #faf8f2;
-  --gp-paper: #fffdf8;
-  --gp-lilac: #ece2f6;
+  --gp-sage: var(--gp-light-sage);
+  --gp-oat: var(--gp-light-oat);
+  --gp-paper: var(--gp-light-paper);
+  --gp-lilac: var(--gp-light-lilac);
   --gp-plum: #67517d;
   --gp-sunlight: #f8dc94;
   --gp-clay: #f1ddcf;
@@ -2304,9 +2314,12 @@
   --gp-muted: #53625b;
   --gp-border: #d9dfd5;
   --gp-leaf: #78a18a;
+  --color-rating-active: var(--gp-forest);
+  --color-rating-inactive: var(--gp-muted);
+  --color-rating-surface: color-mix(in srgb, var(--gp-sage) 60%, var(--gp-paper));
   --gp-shadow: 0 6px 24px rgb(37 61 54 / 3.5%);
   --gp-menu-shadow: 0 14px 28px rgb(37 61 54 / 8%);
-  --dashboard-sidebar-bg: #174e46;
+  --dashboard-sidebar-bg: var(--gp-light-sidebar);
   --dashboard-sidebar-foreground: #fffdf7;
   --dashboard-sidebar-muted: #c4dcd0;
   --dashboard-sidebar-divider: #3d6b5f;
@@ -2326,10 +2339,10 @@
   --gp-forest: #b4cebd;
   --gp-forest-hover: #cbe0cf;
   --gp-on-forest: #14231f;
-  --gp-sage: #2b4237;
-  --gp-oat: #14231f;
-  --gp-paper: #1b2e27;
-  --gp-lilac: #393246;
+  --gp-sage: var(--gp-dark-sage);
+  --gp-oat: var(--gp-dark-oat);
+  --gp-paper: var(--gp-dark-paper);
+  --gp-lilac: var(--gp-dark-lilac);
   --gp-plum: #d1bcdf;
   --gp-sunlight: #4d4229;
   --gp-clay: #4e3d34;
@@ -2339,7 +2352,7 @@
   --gp-leaf: #a4b69c;
   --gp-shadow: 0 6px 24px rgb(0 0 0 / 8%);
   --gp-menu-shadow: 0 14px 28px rgb(0 0 0 / 22%);
-  --dashboard-sidebar-bg: #113b33;
+  --dashboard-sidebar-bg: var(--gp-dark-sidebar);
   --dashboard-sidebar-hover: #204e42;
   --dashboard-sidebar-care-background: #204e42;
 }

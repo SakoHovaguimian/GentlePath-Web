@@ -2,15 +2,14 @@
 
 import Image from 'next/image';
 import { useRef, useState } from 'react';
-const numericYear = 'numeric';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Button,
-  Card,
   EmptyState,
   IconButton,
   Input,
   Field,
+  Message,
   Page,
   PageHeader,
   QueryBoundary,
@@ -21,8 +20,8 @@ import { gentlePathPortalStrings as copy } from '@/strings';
 import { useChildren, useDeleteJournal, useJournals } from './hooks';
 import type { JournalEntry } from './models/journalEntry';
 import { JournalEditor } from './components/JournalEditor';
+import { JournalEntryCard } from './components/JournalEntryCard';
 import { MutationError } from './components/MutationError';
-import { PortalBanner } from './components/PortalBanner';
 import {
   CollectionPagination,
   collectionOffset,
@@ -30,6 +29,13 @@ import {
 import './styles/portal.css';
 
 export function JournalScreen() {
+  const focusedEntryId = useSearchParams().get('focus') || null;
+  return (
+    <JournalContent key={focusedEntryId} focusedEntryId={focusedEntryId} />
+  );
+}
+
+function JournalContent({ focusedEntryId }: { focusedEntryId: string | null }) {
   const query = useJournals();
   const children = useChildren();
   const remove = useDeleteJournal();
@@ -37,7 +43,7 @@ export function JournalScreen() {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const searchRef = useRef<HTMLInputElement>(null);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState<number | null>(null);
   const [editor, setEditor] = useState<JournalEntry | 'new' | null>(() =>
     params.get('new') === 'true' ? 'new' : null,
   );
@@ -80,13 +86,6 @@ export function JournalScreen() {
           </Button>
         }
       />
-      <PortalBanner
-        title={copy.journal.bannerTitle}
-        description={copy.journal.bannerDescription}
-        image="/gentlepath/reading-garden-v2.png"
-        tone="lilac"
-        landscape
-      />
       <div className="gp-journal-toolbar">
         <div className="gp-journal-search">
           <Field labelText={copy.common.search}>
@@ -127,94 +126,81 @@ export function JournalScreen() {
               .toLocaleLowerCase()
               .includes(search.toLocaleLowerCase()),
           );
-          const start = collectionOffset(offset, filtered.length);
-          return filtered.length ? (
+          const targetIndex = filtered.findIndex(
+            (entry) => entry.id === focusedEntryId,
+          );
+          const initialOffset =
+            targetIndex < 0 ? 0 : Math.floor(targetIndex / 9) * 9;
+          const start = collectionOffset(
+            offset ?? initialOffset,
+            filtered.length,
+          );
+          const unavailable =
+            focusedEntryId &&
+            !entries.some((entry) => entry.id === focusedEntryId);
+          return (
             <>
-              <div className="gp-journal-grid">
-                {filtered.slice(start, start + 9).map((entry) => (
-                  <Card
-                    key={entry.id}
-                    className="gp-journal-card"
-                    data-emotion={entry.emotion}
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-xs text-tertiary">
-                        {new Date(entry.createdAt).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: numericYear,
-                        })}
-                      </span>
-                    </div>
-                    <div className="gp-journal-card__tags">
-                      {entry.childId && (
-                        <span className="gp-child-tag">
-                          <UiIcon name="user" className="size-3.5" />
-                          {
-                            children.data?.find(
-                              (child) => child.id === entry.childId,
-                            )?.name
-                          }
-                        </span>
-                      )}
-                      <span className="gp-emotion" data-emotion={entry.emotion}>
-                        {copy.journal.emotions[entry.emotion]}
-                      </span>
-                    </div>
-                    <h2>{entry.title}</h2>
-                    <p className="m-0 line-clamp-4 flex-1 text-sm leading-7 whitespace-pre-line text-secondary">
-                      {entry.body}
-                    </p>
-                    <div className="mt-2 flex justify-between gap-2 border-t border-secondary pt-3">
-                      <Button variant="ghost" onClick={() => setEditor(entry)}>
-                        {copy.common.edit}
-                        <UiIcon name="arrowRight" className="size-4" />
-                      </Button>
+              {unavailable && (
+                <Message
+                  title={copy.journal.unavailableTitle}
+                  description={copy.journal.unavailableHint}
+                  intent="warning"
+                />
+              )}
+              {filtered.length ? (
+                <>
+                  <div className="gp-journal-grid">
+                    {filtered.slice(start, start + 9).map((entry) => (
+                      <JournalEntryCard
+                        key={entry.id}
+                        entry={entry}
+                        childrenProfiles={children.data ?? []}
+                        focused={offset === null && entry.id === focusedEntryId}
+                        removing={remove.isPending}
+                        onEdit={() => setEditor(entry)}
+                        onDelete={() => void deleteEntry(entry)}
+                      />
+                    ))}
+                  </div>
+                  <CollectionPagination
+                    total={filtered.length}
+                    offset={start}
+                    onNavigate={setOffset}
+                  />
+                </>
+              ) : (
+                <div className="grid gap-4">
+                  <Image
+                    src="/gentlepath/care-notes.png"
+                    alt={copy.common.decorativeAlt}
+                    width={160}
+                    height={160}
+                    className="mx-auto"
+                  />
+                  <EmptyState
+                    title={
+                      search
+                        ? copy.common.noResultsTitle
+                        : copy.journal.emptyTitle
+                    }
+                    description={
+                      search
+                        ? copy.common.noResultsHint
+                        : copy.journal.emptyHint
+                    }
+                    action={
                       <Button
-                        variant="destructive"
-                        disabled={remove.isPending}
-                        onClick={() => {
-                          void deleteEntry(entry);
-                        }}
-                        aria-label={copy.journal.deleteAction}
+                        onClick={() =>
+                          search ? setSearch('') : setEditor('new')
+                        }
                       >
-                        <UiIcon name="trash" className="size-4" />
+                        {search ? copy.common.clear : copy.journal.create}
                       </Button>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-              <CollectionPagination
-                total={filtered.length}
-                offset={start}
-                onNavigate={setOffset}
-              />
+                    }
+                  />
+                </div>
+              )}
             </>
-          ) : (
-            <div className="grid gap-4">
-              <Image
-                src="/gentlepath/care-notes.png"
-                alt={copy.common.decorativeAlt}
-                width={160}
-                height={160}
-                className="mx-auto"
-              />
-              <EmptyState
-                title={
-                  search ? copy.common.noResultsTitle : copy.journal.emptyTitle
-                }
-                description={
-                  search ? copy.common.noResultsHint : copy.journal.emptyHint
-                }
-                action={
-                  <Button
-                    onClick={() => (search ? setSearch('') : setEditor('new'))}
-                  >
-                    {search ? copy.common.clear : copy.journal.create}
-                  </Button>
-                }
-              />
-            </div>
           );
         }}
       </QueryBoundary>

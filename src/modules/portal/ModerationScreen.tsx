@@ -39,11 +39,6 @@ export function ModerationScreen() {
           title={copy.moderation.title}
           description={copy.moderation.description}
           eyebrow={copy.navigation.admin}
-          icon={
-            <span className={styles.roundIcon} data-tone="lilac">
-              <UiIcon name="checklist" />
-            </span>
-          }
         />
       </div>
       <Card className="p-4 sm:p-5">

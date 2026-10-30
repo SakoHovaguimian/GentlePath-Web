@@ -15,6 +15,7 @@ const paths: Record<IconName, string> = {
   upload: 'M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6',
   download: 'M12 3v13m-5-5 5 5 5-5M4 15v6h16v-6',
   gift: 'M3 8h18v4H3V8Zm2 4v9h14v-9M12 8v13M12 8H7.5A2.5 2.5 0 1 1 10 5.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 5.5L12 8Z',
+  bookmark: 'M6 3h12v18l-6-4-6 4V3Z',
   pin: 'M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0ZM9 10a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z',
   wifi: 'M3 8a14 14 0 0 1 18 0M6 12a9 9 0 0 1 12 0M9 16a4.5 4.5 0 0 1 6 0M12 20h.01',
   bold: 'M6 4h7a4 4 0 0 1 0 8H6V4Zm0 8h8a4 4 0 0 1 0 8H6v-8Z',

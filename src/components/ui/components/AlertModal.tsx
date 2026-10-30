@@ -2,7 +2,7 @@
 
 import { labels, strings } from '@/strings';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useRef, type CSSProperties, type ReactNode } from 'react';
+import { useRef, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { Button } from './Button';
 import { cn } from '../lib/cn';
 
@@ -45,6 +45,7 @@ interface AlertModalProps {
   details?: ReactNode;
   motionEnabled?: boolean;
   motionDurationMs?: number;
+  restoreFocusRef?: RefObject<HTMLElement | null>;
 }
 
 export function AlertModal({
@@ -60,8 +61,10 @@ export function AlertModal({
   details,
   motionEnabled = true,
   motionDurationMs = 240,
+  restoreFocusRef,
 }: AlertModalProps) {
-  const returnFocusRef = useRef<HTMLElement | null>(null);
+  const localReturnFocusRef = useRef<HTMLElement | null>(null);
+  const returnFocusRef = restoreFocusRef ?? localReturnFocusRef;
   return (
     <Dialog.Root
       open={open}
@@ -87,10 +90,14 @@ export function AlertModal({
           role="alertdialog"
           data-motion={motionEnabled ? undefined : 'off'}
           onOpenAutoFocus={() => {
-            returnFocusRef.current =
-              document.activeElement instanceof HTMLElement
-                ? document.activeElement
-                : null;
+            const focused = document.activeElement;
+            // Consecutive confirmations share the original workflow trigger.
+            if (
+              focused instanceof HTMLElement &&
+              focused !== document.body &&
+              !focused.closest('[role="alertdialog"]')
+            )
+              returnFocusRef.current = focused;
           }}
           onCloseAutoFocus={(event) => {
             event.preventDefault();

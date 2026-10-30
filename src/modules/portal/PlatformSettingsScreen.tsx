@@ -133,7 +133,7 @@ function PlatformSettingsForm({ initial }: { initial: PlatformSettings }) {
       <FormActions sticky={false}>
         <Button
           type="submit"
-          variant={destructive ? 'destructive' : 'primary'}
+          variant="primary"
           loading={mutation.isPending}
           disabled={JSON.stringify(settings) === JSON.stringify(initial)}
         >
@@ -152,11 +152,6 @@ export function PlatformSettingsScreen() {
           title={copy.system.title}
           description={copy.system.description}
           eyebrow={copy.navigation.role.superadmin}
-          icon={
-            <span className={styles.roundIcon}>
-              <UiIcon name="settings" />
-            </span>
-          }
         />
       </div>
       <QueryBoundary query={query}>

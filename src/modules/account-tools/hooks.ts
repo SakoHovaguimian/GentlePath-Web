@@ -5,8 +5,6 @@ import { useServiceContainer } from '@/providers/AppProviders';
 import type { AccountDeviceQuery } from './models/accountDeviceQuery';
 import type { AccountToolsPaging } from './models/accountToolsPaging';
 import type { NotificationDeliveryQuery } from './models/notificationDeliveryQuery';
-import type { AIUsageQuery } from './models/aiUsageQuery';
-import type { AIUsageEventInput } from './models/aiUsageEvent';
 import type { AccountDeletion } from './models/accountDeletion';
 import type { LegalContext } from './models/legalInformation';
 import { accountToolsQueryKeys as keys } from './queryKeys';
@@ -30,13 +28,6 @@ export function useDeliveryAttempts(id: string, paging: AccountToolsPaging) {
   return useQuery({
     queryKey: keys.attempts(id, paging),
     queryFn: ({ signal }) => service.deliveryAttempts(id, paging, signal),
-  });
-}
-export function useAIUsage(query: AIUsageQuery) {
-  const { accountToolsService: service } = useServiceContainer();
-  return useQuery({
-    queryKey: keys.aiUsage(query),
-    queryFn: ({ signal }) => service.aiUsage(query, signal),
   });
 }
 export function useLegalInformation(context: LegalContext) {
@@ -63,17 +54,6 @@ function useAccountToolsMutation<T, R>(mutationFn: (input: T) => Promise<R>) {
 export function useRemoveAccountDevice() {
   const { accountToolsService: service } = useServiceContainer();
   return useAccountToolsMutation((id: string) => service.removeDevice(id));
-}
-export function useSaveAIUsage() {
-  const { accountToolsService: service } = useServiceContainer();
-  return useAccountToolsMutation(
-    ({ input, id }: { input: AIUsageEventInput; id?: string }) =>
-      service.saveAIUsage(input, id),
-  );
-}
-export function useDeleteAIUsage() {
-  const { accountToolsService: service } = useServiceContainer();
-  return useAccountToolsMutation((id: string) => service.deleteAIUsage(id));
 }
 export function useDeleteAccount() {
   const { accountToolsService: service } = useServiceContainer();

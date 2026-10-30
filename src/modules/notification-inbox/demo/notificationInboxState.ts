@@ -1,5 +1,8 @@
 import 'server-only';
 import { getDemoState } from '@/services/demo/demoState';
+import { getDemoPortalState } from '@/services/demo/demoPortalState';
+import { getDemoCommunityState } from '@/modules/community/demo/communityState';
+import { journalEntryLocation } from '@/modules/portal/journalEntryLocation';
 import { gentlePathNotificationInboxStrings as copy } from '@/strings';
 import { NotificationCategorySchema } from '../models/notificationCategory';
 import { NotificationChannelSchema } from '../models/notificationChannel';
@@ -20,35 +23,45 @@ export function defaultNotificationPreferences(): NotificationPreference[] {
   );
 }
 export function getDemoNotificationInboxState(): DemoNotificationInboxState {
+  const portal = getDemoPortalState();
+  const post = getDemoCommunityState().posts.find(
+    (item) => !item.deleted && !item.hidden,
+  );
+  const resource = portal.resources[0];
   if (!globalInbox.gentlePathNotificationInboxState) {
     const now = Date.now();
-    const templates = [
-      {
-        category: 'ACTIVITY' as const,
-        title: copy.demo.activityTitle,
-        body: copy.demo.activityBody,
-        destination: '/journal',
-      },
-      {
-        category: 'MENTION' as const,
-        title: copy.demo.mentionTitle,
-        body: copy.demo.mentionBody,
-        destination: '/community',
-      },
-      {
-        category: 'TAG' as const,
-        title: copy.demo.tagTitle,
-        body: copy.demo.tagBody,
-        destination: '/resources',
-      },
-      {
-        category: 'PRODUCT_UPDATE' as const,
-        title: copy.demo.updateTitle,
-        body: copy.demo.updateBody,
-        destination: '/dashboard',
-      },
-    ];
     const notifications = getDemoState().users.flatMap((user) => {
+      const journal = portal.journals.find((entry) => entry.userId === user.id);
+      const templates = [
+        {
+          category: 'ACTIVITY' as const,
+          title: copy.demo.activityTitle,
+          body: copy.demo.activityBody,
+          destination: journal ? journalEntryLocation(journal.id) : null,
+        },
+        {
+          category: 'MENTION' as const,
+          title: copy.demo.mentionTitle,
+          body: copy.demo.mentionBody,
+          destination: post
+            ? `/community/${encodeURIComponent(post.id)}`
+            : null,
+        },
+        {
+          category: 'TAG' as const,
+          title: copy.demo.tagTitle,
+          body: copy.demo.tagBody,
+          destination: resource
+            ? `/resources/${encodeURIComponent(resource.id)}`
+            : null,
+        },
+        {
+          category: 'PRODUCT_UPDATE' as const,
+          title: copy.demo.updateTitle,
+          body: copy.demo.updateBody,
+          destination: '/dashboard',
+        },
+      ];
       const visible: DemoInboxNotification[] = templates.map(
         (template, index) => {
           const instant = new Date(
@@ -100,6 +113,24 @@ export function getDemoNotificationInboxState(): DemoNotificationInboxState {
       preferences: new Map(),
       settings: new Map(),
     };
+  }
+  // Upgrade section-only demo links retained by a running development process.
+  // Concrete links stay attached to their original record even after deletion.
+  for (const item of globalInbox.gentlePathNotificationInboxState
+    .notifications) {
+    if (item.destination === '/journal' && item.category === 'ACTIVITY') {
+      const journal = portal.journals.find(
+        (entry) => entry.userId === item.userId,
+      );
+      item.destination = journal ? journalEntryLocation(journal.id) : null;
+    } else if (item.destination === '/community' && item.category === 'MENTION')
+      item.destination = post
+        ? `/community/${encodeURIComponent(post.id)}`
+        : null;
+    else if (item.destination === '/resources' && item.category === 'TAG')
+      item.destination = resource
+        ? `/resources/${encodeURIComponent(resource.id)}`
+        : null;
   }
   return globalInbox.gentlePathNotificationInboxState;
 }

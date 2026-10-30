@@ -12,8 +12,6 @@ import { AccountDeviceQuerySchema } from '../models/accountDeviceQuery';
 import { AccountToolsPagingSchema } from '../models/accountToolsPaging';
 import { accountToolsPageSchema } from '../models/accountToolsPage';
 import { NotificationDeliveryQuerySchema } from '../models/notificationDeliveryQuery';
-import { AIUsageQuerySchema } from '../models/aiUsageQuery';
-import { AIUsageEventInputSchema } from '../models/aiUsageEvent';
 import {
   LegalContextSchema,
   LegalItemSchema,
@@ -23,13 +21,10 @@ import { accountToolsQueryParams } from '../accountToolsQueryParams';
 import { AccountDeviceTransportSchema } from './models/accountDeviceTransport';
 import { NotificationDeliveryTransportSchema } from './models/notificationDeliveryTransport';
 import { NotificationAttemptTransportSchema } from './models/notificationAttemptTransport';
-import { AIUsageTransportSchema } from './models/aiUsageTransport';
 import {
   mapAccountDevice,
   mapNotificationDelivery,
   mapNotificationAttempt,
-  mapAIUsage,
-  aiUsageInputTransport,
 } from './accountToolsMappers';
 
 class UpstreamResponse extends Error {
@@ -190,45 +185,6 @@ export async function handleLiveAccountToolsRequest(
             data: result.data.map(mapNotificationAttempt),
             page: result.page,
           });
-        }
-      }
-      if (resource === 'ai-usage' && !action) {
-        const upstreamPath = `/ai-usage-events${id ? `/${encodeURIComponent(z.string().uuid().parse(id))}` : ''}`;
-        if (!id && method === 'GET') {
-          const query = AIUsageQuerySchema.parse(
-            Object.fromEntries(url.searchParams),
-          );
-          const params = accountToolsQueryParams({
-            query: query.query,
-            user_id: query.userId,
-            ai_usage_type: query.context,
-            deleted: query.deleted,
-            limit: query.limit,
-            offset: query.offset,
-          });
-          const result = await read(
-            accountToolsPageSchema(AIUsageTransportSchema),
-            `${upstreamPath}?${params}`,
-          );
-          return json({ data: result.data.map(mapAIUsage), page: result.page });
-        }
-        if ((!id && method === 'POST') || (id && method === 'PATCH')) {
-          const input = AIUsageEventInputSchema.parse(await readInput());
-          const existing = id
-            ? await read(AIUsageTransportSchema, upstreamPath)
-            : undefined;
-          const body = { ...existing, ...aiUsageInputTransport(input) };
-          const value = await read(
-            AIUsageTransportSchema,
-            upstreamPath,
-            id ? 'PUT' : 'POST',
-            body,
-          );
-          return json(mapAIUsage(value), id ? 200 : 201);
-        }
-        if (id && method === 'DELETE') {
-          await call(upstreamPath, 'DELETE');
-          return noContent();
         }
       }
     }

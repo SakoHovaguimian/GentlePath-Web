@@ -1,5 +1,7 @@
 'use client';
 
+import { blogCategoryLabel } from './models/blogCategory';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -19,18 +21,19 @@ import {
   gentlePathBlogStrings as copy,
   gentlePathPortalStrings as portalCopy,
 } from '@/strings';
-import { useBlogArticles } from './hooks';
+import { useBlogArticles, useBlogOptions } from './hooks';
 import { formatBlogDate } from './formatBlogDate';
 import { BlogFilters } from './components/BlogFilters';
 import { BlogPagination } from './components/BlogPagination';
 import { blogQueryParams, type BlogQuery } from './models/blogQuery';
 import type { BlogArticle } from './models/blogArticle';
-import { blogCoverAssets } from './models/blogCover';
+import { blogCoverSource } from './models/blogCover';
 import styles from '../portal/Admin.module.css';
 
 export function AdminBlogScreen({ query }: { query: BlogQuery }) {
   const router = useRouter();
   const articles = useBlogArticles(query);
+  const options = useBlogOptions();
   const navigate = (next: BlogQuery) =>
     router.push(`/admin/blog?${blogQueryParams(next)}`, { scroll: false });
   const filtered = Boolean(query.query || query.category || query.status);
@@ -42,7 +45,7 @@ export function AdminBlogScreen({ query }: { query: BlogQuery }) {
   const thumbnail = (article: BlogArticle) => (
     <span className={styles.articleThumbnail} data-cover={article.cover}>
       <RecordThumbnail
-        src={blogCoverAssets[article.cover]}
+        src={blogCoverSource(article.cover)}
         alt={copy.decorativeAlt}
       />
     </span>
@@ -54,11 +57,6 @@ export function AdminBlogScreen({ query }: { query: BlogQuery }) {
           title={copy.adminTitle}
           description={copy.adminDescription}
           eyebrow={portalCopy.navigation.publishing}
-          icon={
-            <span className={styles.roundIcon} data-tone="lilac">
-              <UiIcon name="file" />
-            </span>
-          }
           action={
             <Button asChild>
               <Link href="/admin/blog/new">
@@ -71,7 +69,14 @@ export function AdminBlogScreen({ query }: { query: BlogQuery }) {
       </div>
       <DataPanel
         className={styles.directoryPanel}
-        toolbar={<BlogFilters admin query={query} onChangeAction={navigate} />}
+        toolbar={
+          <BlogFilters
+            admin
+            categories={options.data?.categories}
+            query={query}
+            onChangeAction={navigate}
+          />
+        }
         busy={articles.isFetching}
         busyLabel={copy.adminLoading}
         footer={
@@ -105,7 +110,7 @@ export function AdminBlogScreen({ query }: { query: BlogQuery }) {
                         {article.title}
                       </Link>
                     }
-                    description={copy.categories[article.category]}
+                    description={blogCategoryLabel(article.category)}
                     summary={
                       <dl className="m-0 flex flex-wrap gap-x-2 gap-y-1 text-xs text-tertiary">
                         <dt>{copy.updatedColumn}</dt>
@@ -153,7 +158,7 @@ export function AdminBlogScreen({ query }: { query: BlogQuery }) {
                   {
                     key: 'category',
                     header: copy.topicColumn,
-                    render: (article) => copy.categories[article.category],
+                    render: (article) => blogCategoryLabel(article.category),
                   },
                   {
                     key: 'updatedAt',

@@ -8,7 +8,6 @@ export function PageHeader({
   description,
   descriptionAction,
   eyebrow,
-  icon,
   action,
   breadcrumbs,
   meta,
@@ -20,7 +19,6 @@ export function PageHeader({
   description?: string;
   descriptionAction?: ReactNode;
   eyebrow?: string;
-  icon?: ReactNode;
   action?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   meta?: ReactNode;
@@ -30,14 +28,13 @@ export function PageHeader({
 }) {
   const Heading = headingLevel;
   return (
-    <header className="ui-page-header @container grid min-w-0 gap-4">
+    <header className="ui-page-header @container grid min-w-0 gap-3">
       {breadcrumbs && breadcrumbs.length > 1 && (
         <Breadcrumbs items={breadcrumbs} onNavigate={onNavigate} />
       )}
       <div className="flex min-w-0 flex-wrap items-start justify-between gap-x-8 gap-y-4">
         <div className="flex min-w-0 flex-1 basis-88 items-start gap-4">
-          {icon}
-          <div className="grid min-w-0 gap-2">
+          <div className="grid min-w-0 gap-1">
             {eyebrow && (
               <p className="m-0 text-xs font-semibold text-brand-secondary">
                 {eyebrow}

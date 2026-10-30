@@ -25,6 +25,8 @@ class PublicBlogApiClient implements ApiClientInterface {
       await simulateDemoRequest(context);
       if (context.scenario === 'empty') {
         const url = new URL(path, 'http://portal.internal');
+        if (url.pathname === '/public/blog/_options')
+          return { categories: [], covers: [] } as T;
         if (url.pathname !== '/public/blog')
           throw new NotFoundError(copy.missingArticle);
         const query = BlogQuerySchema.parse(

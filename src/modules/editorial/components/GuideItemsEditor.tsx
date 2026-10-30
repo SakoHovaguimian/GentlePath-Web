@@ -33,6 +33,7 @@ export function GuideItemsEditor({
   return (
     <div className="grid min-w-0 gap-4" id="editorial-items">
       <ReorderableList
+        variant="cards"
         items={items}
         disabled={disabled}
         label={copy.itemsTitle}

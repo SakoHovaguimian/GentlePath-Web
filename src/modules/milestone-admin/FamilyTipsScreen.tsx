@@ -146,14 +146,6 @@ export function FamilyTipsScreen({ staff = false }: FamilyTipsScreenProps) {
         <PageHeader
           title={staff ? copy.reviewTitle : copy.tipsTitle}
           description={staff ? copy.reviewDescription : copy.tipsDescription}
-          icon={
-            <span
-              className={styles.roundIcon}
-              data-tone={staff ? 'lilac' : 'sunlight'}
-            >
-              <UiIcon name="leaf" />
-            </span>
-          }
           action={
             !staff && (
               <Button

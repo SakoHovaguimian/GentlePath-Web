@@ -42,7 +42,7 @@
   width: 2.25rem;
   height: 2.25rem;
   fill: none;
-  stroke: var(--color-utility-warning-600);
+  stroke: var(--color-rating-inactive);
   stroke-width: 1.5;
   transition:
     fill var(--motion-duration-fast) var(--motion-ease-out),
@@ -50,8 +50,8 @@
 }
 
 .choice[data-filled] .star {
-  fill: var(--color-warning-400);
-  stroke: var(--color-utility-warning-700);
+  fill: var(--color-rating-active);
+  stroke: var(--color-rating-active);
 }
 
 .choice[data-selected] .star {
@@ -61,7 +61,7 @@
 .input:focus-visible + .surface {
   outline: 2px solid var(--color-border-brand);
   outline-offset: 2px;
-  background: var(--color-utility-warning-50);
+  background: var(--color-rating-surface);
 }
 
 .choice:has(.input:disabled),
@@ -75,7 +75,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .choice:hover:not(:has(.input:disabled)) .surface {
-    background: var(--color-utility-warning-50);
+    background: var(--color-rating-surface);
     scale: 1.06;
   }
 }

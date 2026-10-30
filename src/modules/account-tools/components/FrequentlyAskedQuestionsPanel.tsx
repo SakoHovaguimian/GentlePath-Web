@@ -1,5 +1,5 @@
 import {
-  Card,
+  Accordion,
   EmptyState,
   Message,
   PageSection,
@@ -29,18 +29,18 @@ export function FrequentlyAskedQuestionsPanel() {
                 id={`faq-${index}`}
                 title={section.title}
               >
-                <Card className="divide-y divide-secondary py-0 sm:py-0">
-                  {section.sections.map((faq, faqIndex) => (
-                    <article key={faqIndex} className="grid gap-2 py-5">
-                      <h3 className="m-0 text-base font-semibold text-primary wrap-anywhere">
-                        {faq.question}
-                      </h3>
-                      <p className="m-0 whitespace-pre-line text-sm text-secondary wrap-anywhere">
+                <Accordion
+                  tone="plum"
+                  items={section.sections.map((faq, faqIndex) => ({
+                    id: `faq-${index}-${faqIndex}`,
+                    title: faq.question,
+                    content: (
+                      <p className="m-0 whitespace-pre-line leading-relaxed wrap-anywhere">
                         {faq.answer}
                       </p>
-                    </article>
-                  ))}
-                </Card>
+                    ),
+                  }))}
+                />
               </PageSection>
             ))
           ) : (

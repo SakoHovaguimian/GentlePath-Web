@@ -21,12 +21,6 @@ import {
   type NotificationDeliveryQuery,
 } from '../models/notificationDeliveryQuery';
 import {
-  AIUsageEventSchema,
-  AIUsageEventInputSchema,
-  type AIUsageEventInput,
-} from '../models/aiUsageEvent';
-import { AIUsageQuerySchema, type AIUsageQuery } from '../models/aiUsageQuery';
-import {
   LegalInformationSchema,
   LegalContextSchema,
   type LegalContext,
@@ -77,30 +71,6 @@ export class AccountToolsService {
         { signal },
       ),
     );
-  }
-  async aiUsage(query: AIUsageQuery, signal?: AbortSignal) {
-    return accountToolsPageSchema(AIUsageEventSchema).parse(
-      await this.api.request(
-        `${admin}/ai-usage?${accountToolsQueryParams(validateInput(AIUsageQuerySchema, query))}`,
-        { signal },
-      ),
-    );
-  }
-  async saveAIUsage(input: AIUsageEventInput, id?: string) {
-    return AIUsageEventSchema.parse(
-      await this.api.request(
-        `${admin}/ai-usage${id ? `/${encodeURIComponent(id)}` : ''}`,
-        {
-          method: id ? 'PATCH' : 'POST',
-          body: validateInput(AIUsageEventInputSchema, input),
-        },
-      ),
-    );
-  }
-  async deleteAIUsage(id: string) {
-    await this.api.request(`${admin}/ai-usage/${encodeURIComponent(id)}`, {
-      method: 'DELETE',
-    });
   }
   async legal(context: LegalContext, signal?: AbortSignal) {
     return LegalInformationSchema.parse(

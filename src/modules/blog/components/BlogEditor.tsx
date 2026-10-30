@@ -260,11 +260,6 @@ export function BlogEditor({
         <PageHeader
           title={article ? copy.editTitle : copy.newTitle}
           description={copy.formDescription}
-          icon={
-            <span className={adminStyles.roundIcon} data-tone="lilac">
-              <UiIcon name="file" />
-            </span>
-          }
           onNavigate={(href) => void navigate(href)}
           breadcrumbs={[
             { label: copy.adminTitle, href: '/admin/blog' },
@@ -296,6 +291,7 @@ export function BlogEditor({
       >
         <SectionStack>
           <BlogArticleFields
+            onUploadStateChangeAction={setUploading}
             form={form}
             errors={errors}
             disabled={busy}

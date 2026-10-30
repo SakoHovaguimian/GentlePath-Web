@@ -42,3 +42,34 @@
 :global(html[data-motion='reduced']) .icon {
   transition: none;
 }
+
+.plum .trigger {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+.plum .trigger:hover,
+.plum .item[data-expanded] .trigger {
+  color: var(--gp-plum);
+}
+.plum .item[data-expanded] {
+  border-color: color-mix(
+    in srgb,
+    var(--gp-plum) 35%,
+    var(--color-border-secondary)
+  );
+}
+.plum .item {
+  transition:
+    border-color var(--motion-duration-base) var(--motion-ease-out),
+    box-shadow var(--motion-duration-base) var(--motion-ease-out);
+}
+@media (hover: hover) {
+  .plum .item:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--gp-plum) 35%,
+      var(--color-border-secondary)
+    );
+  }
+}

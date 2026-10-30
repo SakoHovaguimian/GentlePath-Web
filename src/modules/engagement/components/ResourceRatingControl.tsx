@@ -39,7 +39,7 @@ export function ResourceRatingControl({ resourceId }: { resourceId: string }) {
     }
   }
   return (
-    <Card className="grid gap-5 border-utility-warning-200">
+    <Card className="grid gap-5">
       <div className="grid gap-2">
         <h2 className="m-0 font-display text-2xl font-normal text-primary">
           {copy.ratingTitle}

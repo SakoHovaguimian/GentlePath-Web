@@ -1,6 +1,7 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
+import { usePresentationService } from '@/presentation/PresentationProvider';
 import { usePathname } from 'next/navigation';
 import type { AppSession } from '@/models';
 import { AppShell, Badge } from '@/components/ui';
@@ -22,11 +23,37 @@ export function ProtectedShell({
   initialSession: AppSession;
 }) {
   const { confirmNavigation } = useNavigationGuard();
+  const { showAlert } = usePresentationService();
+  const exitPrompt = useRef<Promise<boolean> | null>(null);
   const pathname = usePathname();
   const { session } = useSessionState();
   const current = session ?? initialSession;
   const adminArea =
     pathname.startsWith('/admin') || pathname.startsWith('/superadmin');
+
+  function beforeNavigate(href: string) {
+    const allowed = confirmNavigation();
+    if (!adminArea || href !== '/dashboard') return allowed;
+    const confirmExit = () => {
+      if (!exitPrompt.current) {
+        const prompt = showAlert({
+          title: copy.navigation.leaveAdminTitle,
+          description: copy.navigation.leaveAdminDescription,
+          tone: 'warning',
+          confirmLabel: copy.navigation.leaveAdminAction,
+          cancelLabel: copy.navigation.stayInAdminAction,
+        });
+        exitPrompt.current = prompt;
+        void prompt.finally(() => {
+          exitPrompt.current = null;
+        });
+      }
+      return exitPrompt.current;
+    };
+    return typeof allowed === 'boolean'
+      ? allowed && confirmExit()
+      : allowed.then((result) => (result ? confirmExit() : false));
+  }
 
   return (
     <>
@@ -52,7 +79,7 @@ export function ProtectedShell({
           adminArea ? copy.navigation.adminGroup : copy.navigation.familyGroup
         }
         activePath={pathname}
-        onBeforeNavigate={confirmNavigation}
+        onBeforeNavigate={beforeNavigate}
       >
         {children}
       </AppShell>

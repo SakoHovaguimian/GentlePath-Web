@@ -25,7 +25,6 @@ import { useMilestoneDirectory } from '@/modules/milestone-admin/useMilestoneDir
 import { MilestoneDirectoryFilters } from '@/modules/milestone-admin/components/MilestoneDirectoryFilters';
 import { MilestonePagination } from '@/modules/milestone-admin/components/MilestonePagination';
 import { MilestoneCard } from './components/MilestoneCard';
-import { PortalBanner } from './components/PortalBanner';
 import './styles/portal.css';
 function MilestoneList({ childId }: { childId: string }) {
   const directory = useMilestoneDirectory(9);
@@ -121,12 +120,6 @@ export function MilestonesScreen() {
         title={copy.milestones.title}
         description={copy.milestones.description}
         eyebrow={copy.navigation.milestones}
-      />
-      <PortalBanner
-        title={copy.milestones.bannerTitle}
-        description={copy.milestones.bannerDescription}
-        image="/gentlepath/path-landscape-v2.png"
-        landscape
       />
       <QueryBoundary query={children}>
         {(profiles) => {

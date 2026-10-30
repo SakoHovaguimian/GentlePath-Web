@@ -2,7 +2,7 @@
   display: inline-flex;
   max-width: 100%;
   align-items: center;
-  color: var(--color-utility-warning-700);
+  color: var(--color-rating-active);
   font-size: var(--text-sm);
   line-height: var(--text-sm--line-height);
 }
@@ -23,7 +23,7 @@
 }
 
 .outline {
-  stroke: var(--color-utility-warning-600);
+  stroke: var(--color-rating-inactive);
 }
 
 .fill {
@@ -34,6 +34,6 @@
 }
 
 .filled {
-  fill: var(--color-warning-400);
-  stroke: var(--color-utility-warning-700);
+  fill: var(--color-rating-active);
+  stroke: var(--color-rating-active);
 }

@@ -55,14 +55,6 @@ export function AccountSettings() {
                   {copy.deliveries.title}
                 </NavigationLink>
               </Button>
-              <Button asChild variant="secondary">
-                <NavigationLink
-                  beforeNavigate={confirmNavigation}
-                  href="/admin/ai-usage"
-                >
-                  {copy.aiUsage.title}
-                </NavigationLink>
-              </Button>
             </div>
           </SplitSection>
         )}

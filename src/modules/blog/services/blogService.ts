@@ -17,6 +17,7 @@ import {
   BlogRevisionInputSchema,
   type BlogMutationInput,
 } from '../models/blogArticle';
+import { BlogOptionsSchema } from '../models/blogOptions';
 import { BlogPageSchema } from '../models/blogPage';
 import {
   BlogQuerySchema,
@@ -26,6 +27,14 @@ import {
 
 export class BlogService {
   constructor(private readonly api: ApiClientInterface) {}
+  async options(publishedOnly = false, signal?: AbortSignal) {
+    return BlogOptionsSchema.parse(
+      await this.api.request<unknown>(
+        publishedOnly ? '/public/blog/_options' : '/blog/_options',
+        { signal },
+      ),
+    );
+  }
   async list(query: BlogQuery, signal?: AbortSignal) {
     const params = blogQueryParams(validateInput(BlogQuerySchema, query));
     return BlogPageSchema.parse(

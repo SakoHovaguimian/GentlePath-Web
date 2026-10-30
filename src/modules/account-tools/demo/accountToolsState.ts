@@ -99,34 +99,6 @@ export function getDemoAccountToolsState(): DemoAccountToolsState {
           ],
         ],
       ]),
-      aiUsage: [
-        {
-          id: crypto.randomUUID(),
-          userId: accounts[0]?.id ?? null,
-          context: copy.demo.usageContext,
-          inputTokens: 240,
-          outputTokens: 88,
-          totalTokens: 328,
-          metadata: { ...copy.demo.usageMetadata },
-          error: null,
-          deleted: false,
-          createdAt: now,
-          updatedAt: now,
-        },
-        {
-          id: crypto.randomUUID(),
-          userId: null,
-          context: copy.demo.usageContext,
-          inputTokens: 120,
-          outputTokens: 40,
-          totalTokens: 160,
-          metadata: { ...copy.demo.usageMetadata },
-          error: null,
-          deleted: false,
-          createdAt: before,
-          updatedAt: before,
-        },
-      ],
     };
   }
   return globalAccountTools.gentlePathAccountToolsState;

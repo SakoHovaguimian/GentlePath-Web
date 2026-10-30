@@ -13,6 +13,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import { useServiceContainer, useSessionState } from '@/providers/AppProviders';
 import { usePresentationService } from '@/presentation/PresentationProvider';
+import { NotificationPreferenceService } from '@/services/notifications/notificationPreferenceService';
 import { WebNotificationService } from '@/services/notifications/webNotificationService';
 import type { NotificationStatus } from '@/services/notifications/models/notificationStatus';
 import { RealtimeEventSchema } from './models/realtimeEvent';
@@ -35,25 +36,49 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
   );
   const [notificationStatus, setNotificationStatus] =
     useState<NotificationStatus>(
-      config.demoMode
-        ? 'demo'
-        : config.messaging
-          ? 'available'
-          : 'unconfigured',
+      config.demoMode || config.messaging ? 'loading' : 'unconfigured',
     );
+  const userId = session?.user.id;
+  const preference = useMemo(
+    () =>
+      userId
+        ? new NotificationPreferenceService(userId, config.demoMode)
+        : null,
+    [userId, config.demoMode],
+  );
+  const notificationOperation = useRef(false);
+  const [notificationPending, setNotificationPending] = useState(false);
+  async function updateNotifications(action: () => Promise<void>) {
+    if (notificationOperation.current) return;
+    notificationOperation.current = true;
+    setNotificationPending(true);
+    try {
+      await action();
+    } finally {
+      notificationOperation.current = false;
+      setNotificationPending(false);
+    }
+  }
   const seen = useRef(new Set<string>());
   const stopNotifications = useRef<(() => void) | null>(null);
+  const notificationGeneration = useRef(0);
+  const stopNotificationListener = useCallback(() => {
+    notificationGeneration.current += 1;
+    const stop = stopNotifications.current;
+    stopNotifications.current = null;
+    stop?.();
+  }, []);
   const stopSocket = useRef<(() => void) | null>(null);
   const notifications = useMemo(
     () =>
-      !config.demoMode && config.messaging && session
+      !config.demoMode && config.messaging && preference
         ? new WebNotificationService(
             container.apiClient,
             config.messaging,
-            session.user.id,
+            preference,
           )
         : null,
-    [config.demoMode, config.messaging, container, session],
+    [config.demoMode, config.messaging, container, preference],
   );
   const receive = useCallback(
     (input: unknown) => {
@@ -99,8 +124,9 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     [presentation, queryClient],
   );
   const startNotifications = useCallback(async () => {
-    stopNotifications.current?.();
-    stopNotifications.current =
+    stopNotificationListener();
+    const generation = notificationGeneration.current;
+    const stop =
       (await notifications?.listen((payload) => {
         try {
           if (payload.data?.portal_event)
@@ -109,7 +135,12 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
           /* Ignore malformed external events. */
         }
       })) || null;
-  }, [notifications, receive]);
+    if (generation !== notificationGeneration.current) {
+      stop?.();
+      return;
+    }
+    stopNotifications.current = stop;
+  }, [notifications, receive, stopNotificationListener]);
   useEffect(() => {
     const socketUrl = config.socketUrl;
     if (config.demoMode || !socketUrl || !session?.user.id) return;
@@ -183,42 +214,107 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     session?.user.id,
   ]);
   useEffect(() => {
-    if (!notifications) return;
+    if (!preference) return;
     let disposed = false;
-    void notifications
-      .status()
-      .then(async (value) => {
+    const refresh = async () => {
+      try {
+        if (notificationOperation.current) return;
+        const value = config.demoMode
+          ? preference.getChoice()
+          : notifications
+            ? await notifications.status()
+            : 'unconfigured';
         if (disposed) return;
         setNotificationStatus(value);
-        await startNotifications();
-        if (disposed) stopNotifications.current?.();
-      })
-      .catch(() => {
-        if (!disposed) setNotificationStatus('available');
-      });
+        if (
+          value === 'enabled' &&
+          notifications &&
+          !stopNotifications.current
+        ) {
+          await startNotifications();
+          if (disposed) {
+            stopNotificationListener();
+          }
+        } else if (value !== 'enabled') {
+          stopNotificationListener();
+        }
+      } catch {
+        if (!disposed) setNotificationStatus('unconfigured');
+      }
+    };
+    const onFocus = () => {
+      void refresh();
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') void refresh();
+    };
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === preference.storageKey || event.key === null)
+        void refresh();
+    };
+    void refresh();
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('storage', onStorage);
     return () => {
       disposed = true;
-      stopNotifications.current?.();
+      stopNotificationListener();
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('storage', onStorage);
     };
-  }, [notifications, startNotifications]);
+  }, [
+    config.demoMode,
+    notifications,
+    preference,
+    startNotifications,
+    stopNotificationListener,
+  ]);
   const value: RealtimeContextValue = {
     status,
     notificationStatus,
-    enableNotifications: async () => {
-      if (notifications) {
-        setNotificationStatus(await notifications.enable());
-        await startNotifications();
-      }
-    },
-    disableNotifications: async () => {
-      stopNotifications.current?.();
-      await notifications?.disable();
-      setNotificationStatus('available');
-    },
+    notificationPending,
+    enableNotifications: () =>
+      updateNotifications(async () => {
+        if (config.demoMode && preference) {
+          preference.saveChoice('enabled');
+          setNotificationStatus('enabled');
+        } else if (notifications) {
+          setNotificationStatus(await notifications.enable());
+          await startNotifications();
+        }
+      }),
+    disableNotifications: () =>
+      updateNotifications(async () => {
+        stopNotificationListener();
+        if (config.demoMode && preference) {
+          preference.saveChoice('off');
+          setNotificationStatus('off');
+        } else if (notifications) {
+          try {
+            await notifications.disable();
+          } finally {
+            setNotificationStatus(await notifications.status());
+          }
+        }
+      }),
+    refreshNotifications: () =>
+      updateNotifications(async () => {
+        if (config.demoMode && preference)
+          setNotificationStatus(preference.getChoice());
+        else if (notifications) {
+          setNotificationStatus(await notifications.status());
+          await startNotifications();
+        }
+      }),
     prepareForLogout: async (options = {}) => {
       stopSocket.current?.();
-      stopNotifications.current?.();
-      await notifications?.disable({ skipBackend: options.accountDeleted });
+      stopNotificationListener();
+      await notifications?.disable({
+        skipBackend: options.accountDeleted,
+        preference: options.accountDeleted ? 'forget' : 'preserve',
+      });
+      if (config.demoMode && options.accountDeleted) preference?.forgetChoice();
     },
     simulateAlert: () => {
       if (config.demoMode)

@@ -22,6 +22,7 @@ import { useNotificationDirectory } from './useNotificationDirectory';
 import { useNotificationActions } from './useNotificationActions';
 import { NotificationRecord } from './components/NotificationRecord';
 import { NotificationInboxToolbar } from './components/NotificationInboxToolbar';
+import { NotificationControls } from '@/services/notifications/components/NotificationControls';
 import { NotificationInboxSummary } from './components/NotificationInboxSummary';
 
 export function NotificationInboxScreen() {
@@ -68,6 +69,7 @@ export function NotificationInboxScreen() {
           </NavigationLink>
         }
       />
+      <NotificationControls variant="inbox" />
       <div className="grid min-w-0 gap-6">
         <NotificationInboxToolbar
           query={directory.query}

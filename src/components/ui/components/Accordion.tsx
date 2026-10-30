@@ -14,12 +14,14 @@ import styles from './Accordion.module.css';
 /** React Aria owns keyboard interaction, expanded state, labels, and panel lifecycle. */
 export function Accordion({
   items,
+  tone = 'brand',
   className,
   itemClassName,
   headingLevel = 'h3',
   allowsMultipleExpanded = true,
 }: {
   items: readonly AccordionItem[];
+  tone?: 'brand' | 'plum';
   className?: string;
   itemClassName?: string;
   headingLevel?: 'h2' | 'h3' | 'h4';
@@ -29,7 +31,11 @@ export function Accordion({
   return (
     <DisclosureGroup
       allowsMultipleExpanded={allowsMultipleExpanded}
-      className={cn('ui-accordion grid min-w-0 gap-3', className)}
+      className={cn(
+        'ui-accordion grid min-w-0 gap-3',
+        tone === 'plum' && styles.plum,
+        className,
+      )}
     >
       {items.map((item) => (
         <Disclosure

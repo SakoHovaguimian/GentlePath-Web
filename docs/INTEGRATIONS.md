@@ -38,6 +38,8 @@ Preserve each owning contract's page envelope: older portal services use arrays 
 
 **Retained live gaps:** the family adapter currently bridges only `GET /portal/children` to paged `/child-profiles`, with empty support notes because that backend model has no such field. Other legacy portal family writes/journals/overview, generic dashboard tools, and platform/user administration contracts must be implemented or explicitly adapted before claiming live support. Inspect `PortalService`, `AdminService`, and the registered adapters. The family UI uses the new milestone-observation service; the old fixed-enum milestone methods are compatibility APIs.
 
+The web portal does not expose the AI usage ledger. Its former facade and canonical ledger proxy paths return 404; the sibling API retains its internal ledger.
+
 Protected core backend routes now require a verified Firebase email. Account provisioning remains identity-only and self-profile reads support unverified account recovery; public article/legal reads remain public.
 
 The backend has no matching community/maintenance platform-policy endpoint. Live community/poll availability reports enabled and relies on actual backend authorization. Demo switches do not configure a production platform. The moderation bridge currently reads the newest 100 reports, groups In Review under Open in the staff UI, and submits `hide_target=false`; it is not a complete historical queue/hiding workflow.
@@ -50,13 +52,15 @@ Live chat maps canonical `/chat-messages` HTTP pages and strict message writes t
 
 Every Socket.IO connection/reconnection obtains a single-use ticket through `/api/backend/realtime/tickets`; the handshake sends `auth: {ticket}`, never a Firebase bearer. `rt:message` envelopes must pass [RealtimeMessageSchema](../src/services/realtime/models/realtimeMessage.ts). On connect, clients subscribe to the known `community` and `chat` channels through strict `rt:command` SUBSCRIBE envelopes. Clients cannot publish EVENT hints or join private rooms. Community hints invalidate post/poll queries; chat hints invalidate chat; private notification hints invalidate the inbox. Firebase/active-account status is revalidated by the server before delivery. Foreground delivery deduplicates event IDs. Existing FCM `portal_event` and demo notification payloads retain [RealtimeEventSchema](../src/services/realtime/models/realtimeEvent.ts) for safe title/body toast compatibility. Unmount/logout removes listeners and disconnects. SDK imports are deferred until needed.
 
-Appearance owns the explicit Enable Notifications action. Neither login, inbox rendering, nor timezone detection requests permission. Saved opt-in restores only for that account. Firebase web identifiers configure `/firebase-messaging-sw.js`; FCM tokens register with `/devices`. Disable removes registration and deletes the token. Device removal affects notification registration, not login sessions.
+The inbox and Appearance share browser notification controls. Only an explicit Enable Notifications action requests permission; login, inbox rendering, and timezone detection never do. Per-user browser choices distinguish undecided/enabled/off and use separate demo preference keys. Focus/storage refreshes reconcile browser permission changes. The inbox offers an undecided choice or an off warning, and the bell adds one setup alert until a decision is made, separately from unread inbox counts.
+
+Firebase web identifiers configure `/firebase-messaging-sw.js`; FCM tokens register with `/devices`. Disable removes registration and deletes the token. Logout revokes registration while preserving the choice; account deletion forgets the choice. Device removal affects notification registration, not login sessions.
 
 Send data-only FCM messages whose `data.portal_event` encodes the notification event. Foreground messages share validation/deduplication; background messages display safe title/body and use the event ID as their tag. The current background click destination is same-origin `/chat`. Never include credentials, HTML, or arbitrary external destinations. Delivery pruning and retries belong to the backend.
 
 ## Analytics And Consent
 
-Amplitude loads only after explicit acceptance and never initializes in demo mode. Essential-only and accept actions are equally reachable; Appearance can change consent. Same-tab events and storage events synchronize the preference.
+Amplitude loads only after explicit acceptance and never initializes in demo mode. The shared consent prompt offers essential-only and accept actions. Appearance does not expose analytics preferences. Same-tab events and storage events synchronize the preference.
 
 Autocapture/default tracking are disabled. Current `screen_view` events omit queries/fragments, normalize UUID path segments, and attach no identity, email, form text, raw error, or token. Revocation immediately gates tracking, opts out/resets the SDK, and clears its storage; it cannot recall transmitted events. Analytics consent and browser notification permission are independent.
 
@@ -64,10 +68,9 @@ Commercial aggregate metrics use their own strict contract and never attach priv
 
 ## Live Deployment Boundary
 
-Read the sibling API's own AGENTS.md and maintained contracts before backend changes. Deploy its required structured-blog and tag-normalization migrations against the intended database through the normal release process; web builds do not apply migrations. Operator delivery/AI tools additionally require the backend external-ID allowlist.
+Read the sibling API's own AGENTS.md and maintained contracts before backend changes. Deploy its required structured-blog and tag-normalization migrations against the intended database through the normal release process; web builds do not apply migrations. Operator delivery tools additionally require the backend external-ID allowlist.
 
 Configured staging must verify real database transactions/visibility, Firebase provisioning/refresh/authorization, private/public storage and retention, tickets/broadcasts, push/email delivery, consent, and provider behavior. A passing demo/build establishes none of these external integrations. Follow [verification](VERIFICATION.md); never run migration/seed/provider writes as a routine smoke check.
-
 
 ### Managed Accounts And Platform Availability
 

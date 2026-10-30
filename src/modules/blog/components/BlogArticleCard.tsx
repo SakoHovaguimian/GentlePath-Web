@@ -1,9 +1,10 @@
+import { blogCategoryLabel } from '../models/blogCategory';
 import Image from 'next/image';
 import Link from 'next/link';
 import { UiIcon } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
 import type { BlogArticle } from '../models/blogArticle';
-import { blogCoverAssets } from '../models/blogCover';
+import { blogCoverSource } from '../models/blogCover';
 import styles from '../Blog.module.css';
 import { BlogDate } from './BlogDate';
 
@@ -25,7 +26,8 @@ export function BlogArticleCard({
         data-cover={article.cover}
       >
         <Image
-          src={blogCoverAssets[article.cover]}
+          src={blogCoverSource(article.cover)}
+          unoptimized
           alt={copy.decorativeAlt}
           width={640}
           height={480}
@@ -33,7 +35,7 @@ export function BlogArticleCard({
         />
       </Link>
       <div className={styles.cardCopy}>
-        <p className={styles.topic}>{copy.categories[article.category]}</p>
+        <p className={styles.topic}>{blogCategoryLabel(article.category)}</p>
         <Heading>
           <Link href={`/blog/${article.slug}`}>{article.title}</Link>
         </Heading>

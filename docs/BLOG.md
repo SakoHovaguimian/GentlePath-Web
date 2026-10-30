@@ -2,6 +2,14 @@
 
 Public `/blog` and `/blog/[slug]` render published articles without authentication. The server reader emits text/headings/links/images before hydration; optional account likes/saves do not block anonymous reading. Staff use `/admin/blog/*` for drafts, add/reorder blocks, private unsaved preview, saving, and publication. The dominant Preview action is available at both ends of the editor.
 
+## Topics And Cover Illustrations
+
+Article Details offers Add Topic and Add Cover Illustration. A new topic accepts 2–80 characters; custom covers use the existing public image upload pipeline or a validated permanent HTTPS image URL. Six bundled illustrations and the original topic keys remain compatible. New choices become reusable when the article is saved; they are derived from visible saved articles, so deleting the last article using a custom choice removes it from the chooser.
+
+`GET /blog/_options` returns staff-visible saved topics and covers; `GET /public/blog/_options` returns published-only choices. Public topic filters never expose draft-only topics or titles. The editor retains its current choices when loading saved options fails and offers Retry Saved Choices. Uploads block saving/navigation and preserve the draft on failure.
+
+The API migration `20261029180000_blog_custom_topics_covers` widens the existing category/cover columns to 80/2,000 characters. Apply it through the API deployment process before using custom topics/covers live; local demo operation does not require a database.
+
 ## Content Contract
 
 `content: Content[]` is ordered by array position. Every block has a stable UUID, a discriminant, and typed metadata:
@@ -34,7 +42,7 @@ Public `/blog` and `/blog/[slug]` render published articles without authenticati
 
 Independent block schemas in [blog models](../src/modules/blog/models/) validate the editor, service, and demo. Preserve IDs through edits/reorder. Current bounds include 100 unique blocks and 250,000 structured UTF-8 bytes; text/image/list limits live in those schemas. Missing image descriptions prevent save.
 
-The builder supports plus palette, pointer drag, handle Arrow Up/Down, explicit move controls, removal confirmation, and current-form preview. Shared guards preserve dirty/busy writing; uploads block save/navigation until settled. Preview never mounts engagement controls or publishes anything.
+The builder uses aligned miniature previews for every block type and supports plus palette, pointer drag, handle Arrow Up/Down, explicit move controls, removal confirmation, and current-form preview. Shared guards preserve dirty/busy writing; uploads block save/navigation until settled. Preview never mounts engagement controls or publishes anything.
 
 ## Rendering And Embeds
 
@@ -54,14 +62,15 @@ A valid article needs at least one complete block or a valid legacy body. Metada
 
 Staff `BlogService` follows the authenticated domain/proxy path. Public SSR uses its server-only published service without reading/refreshing a session.
 
-| Endpoint                                   | Behavior                                                       |
-| ------------------------------------------ | -------------------------------------------------------------- |
-| `GET/POST /blog`                           | Staff paging/create draft                                      |
-| `GET/PATCH/DELETE /blog/:id`               | Staff read/save/delete with revision                           |
-| `POST /blog/:id/publish` or `/unpublish`   | Revision-checked publication                                   |
-| `GET /public/blog` or `/public/blog/:slug` | Published-only list/detail; drafts/missing return 404          |
-| `GET /public/blog/id/:id`                  | Resolve a published UUID to its canonical slug for app actions |
-| `POST /blog/media/upload`                  | Web facade forwarding to `/media/upload-media`                 |
+| Endpoint                                        | Behavior                                                       |
+| ----------------------------------------------- | -------------------------------------------------------------- |
+| `GET /blog/_options` or `/public/blog/_options` | Reusable choices from staff-visible or published articles      |
+| `GET/POST /blog`                                | Staff paging/create draft                                      |
+| `GET/PATCH/DELETE /blog/:id`                    | Staff read/save/delete with revision                           |
+| `POST /blog/:id/publish` or `/unpublish`        | Revision-checked publication                                   |
+| `GET /public/blog` or `/public/blog/:slug`      | Published-only list/detail; drafts/missing return 404          |
+| `GET /public/blog/id/:id`                       | Resolve a published UUID to its canonical slug for app actions |
+| `POST /blog/media/upload`                       | Web facade forwarding to `/media/upload-media`                 |
 
 Lists accept query/category, staff status, limit/offset, and return `{data,total,limit,offset}`. Search includes block text. Filter/page pushes create browser history. Public Next routes are GET-only under `/api/public/blog`.
 

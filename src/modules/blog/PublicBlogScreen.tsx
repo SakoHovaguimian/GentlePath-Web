@@ -18,9 +18,11 @@ import styles from './Blog.module.css';
 export function PublicBlogScreen({
   page,
   query,
+  categories,
 }: {
   page: BlogPage;
   query: BlogQuery;
+  categories: string[];
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -57,7 +59,11 @@ export function PublicBlogScreen({
         aria-busy={isPending}
       >
         <div className={styles.filters}>
-          <BlogFilters query={query} onChangeAction={navigate} />
+          <BlogFilters
+            categories={categories}
+            query={query}
+            onChangeAction={navigate}
+          />
         </div>
         {page.data.length ? (
           <div className={styles.articleGrid}>

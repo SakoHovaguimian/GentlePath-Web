@@ -169,7 +169,7 @@ export function AdminDashboardScreen() {
                   <h2>{copy.admin.settings}</h2>
                   <p>{copy.admin.settingsHint}</p>
                 </div>
-                <Button asChild>
+                <Button asChild variant="secondary">
                   <Link href="/admin/settings">
                     {copy.admin.configure}
                     <UiIcon name="settings" />

@@ -45,11 +45,6 @@ export function portalNavigation(
       icon: <UiIcon name="folder" />,
     },
     {
-      href: '/saved',
-      label: navigationCopy.saved,
-      icon: <UiIcon name="checklist" />,
-    },
-    {
       href: '/guides',
       label: navigationCopy.guides,
       icon: <UiIcon name="leaf" />,
@@ -115,18 +110,15 @@ export function portalNavigation(
             label: copy.navigation.system,
             icon: <UiIcon name="settings" />,
           },
-          {
-            href: '/admin/ai-usage',
-            label: navigationCopy.aiUsage,
-            icon: <UiIcon name="code" />,
-          },
         ]
       : []),
   ];
   return [
     ...(adminArea && canManageContent(role)
-      ? [...administration, family[0]]
-      : [...family, ...(canManageContent(role) ? [administration[0]] : [])]),
+      ? [administration[0], family[0], ...administration.slice(1)]
+      : canManageContent(role)
+        ? [administration[0], ...family]
+        : family),
     {
       href: '/help',
       label: navigationCopy.help,

@@ -22,6 +22,8 @@ Use the development server for local HTTP. Production previews set Secure cookie
 
 [demoRuntime](../src/services/demo/demoRuntime.ts) owns the effective runtime and request simulation. A validated HTTP-only preferences cookie may override the environment only in an allowed developer/demo server. Containers, auth, sessions, public article reads, proxying, and Messaging configuration use the same decision; React receives only public config/session data.
 
+Demo browser push choices use a separate per-user browser preference. The inbox decision card, off warning, and one setup alert can be exercised without requesting OS permission or initializing Firebase; enabling is simulated. Choices persist independently of server-record reset. Demo inbox records link to the account’s own seeded reflection and concrete community/resource detail pages. Running processes upgrade legacy section-only fixture destinations without resetting records or read/archive state.
+
 Changing mode through developer settings clears the old mode's session and requires sign-in. The gated `POST /api/dev-settings/demo` recovery action returns to demo/Populated with zero latency and clears the session; it accepts no identity/role and does not authenticate anyone. Production live returns 404.
 
 Normal requests have no artificial delay. Explicit saved latency remains effective until changed; a development route's first compilation is separate from simulated delay and production performance.

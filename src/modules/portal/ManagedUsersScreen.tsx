@@ -72,11 +72,6 @@ export function ManagedUsersScreen() {
           title={copy.people.title}
           description={copy.people.description}
           eyebrow={copy.navigation.admin}
-          icon={
-            <span className={styles.roundIcon}>
-              <UiIcon name="user" />
-            </span>
-          }
         />
       </div>
       {!canEdit && (

@@ -4,20 +4,20 @@ GentlePath combines a private family workspace, shared community/editorial conte
 
 ## Routes And Owners
 
-| Surface                               | Routes                                                                                                         | Source Owner                                           |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Public site and journal               | `/`, `/blog`, `/blog/[slug]`                                                                                   | `modules/landing`, `modules/blog`                      |
-| Family and reflections                | `/dashboard`, `/family`, `/journal`                                                                            | `modules/portal`                                       |
-| Private documents                     | `/documents`                                                                                                   | `modules/documents`                                    |
-| Resources and guides                  | `/resources/*`, `/guides/*`, `/admin/resources/*`, `/admin/guides/*`                                           | `modules/portal`, `modules/editorial`                  |
-| Ratings, likes, saves                 | Reader actions, `/saved`, `/saved/[id]`                                                                        | `modules/engagement`                                   |
-| Community Posts/Polls                 | `/community`, `/community/[id]`, `/community/reports`, `/polls`, `/polls/[id]`                                 | `modules/community`, `modules/polls`                   |
-| Milestones and tips                   | `/milestones`, `/tips`, `/admin/milestones`, `/admin/tips`                                                     | `modules/milestone-admin`, portal milestone components |
-| Family discounts and commercial tools | `/discounts/*`, `/admin/commercial/*`                                                                          | `modules/commercial`                                   |
-| Inbox and preferences                 | `/notifications`, `/settings/notifications`                                                                    | `modules/notification-inbox`                           |
-| Account and operations                | `/profile`, `/settings/account`, `/settings/devices`, `/settings/delivery-history`, `/admin/ai-usage`, `/help` | `modules/users`, `modules/account-tools`               |
-| Platform administration               | `/admin`, `/admin/users`, `/admin/moderation`, `/admin/settings`, `/superadmin`                                | `modules/portal`                                       |
-| Existing utility/specimen flows       | `/feature-requests/*`, `/chat`, `/users/*`, `/experience`, `/dev-settings/*`                                   | matching modules; developer routes are runtime-gated   |
+| Surface                               | Routes                                                                                      | Source Owner                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Public site and journal               | `/`, `/blog`, `/blog/[slug]`                                                                | `modules/landing`, `modules/blog`                      |
+| Family and reflections                | `/dashboard`, `/family`, `/journal`                                                         | `modules/portal`                                       |
+| Private documents                     | `/documents`                                                                                | `modules/documents`                                    |
+| Resources and guides                  | `/resources/*`, `/guides/*`, `/admin/resources/*`, `/admin/guides/*`                        | `modules/portal`, `modules/editorial`                  |
+| Ratings, likes, saves                 | Reader actions, `/saved`, `/saved/[id]`                                                     | `modules/engagement`                                   |
+| Community Posts/Polls                 | `/community`, `/community/[id]`, `/community/reports`, `/polls`, `/polls/[id]`              | `modules/community`, `modules/polls`                   |
+| Milestones and tips                   | `/milestones`, `/tips`, `/admin/milestones`, `/admin/tips`                                  | `modules/milestone-admin`, portal milestone components |
+| Family discounts and commercial tools | `/discounts/*`, `/admin/commercial/*`                                                       | `modules/commercial`                                   |
+| Inbox and preferences                 | `/notifications`, `/settings/notifications`                                                 | `modules/notification-inbox`                           |
+| Account and operations                | `/profile`, `/settings/account`, `/settings/devices`, `/settings/delivery-history`, `/help` | `modules/users`, `modules/account-tools`               |
+| Platform administration               | `/admin`, `/admin/users`, `/admin/moderation`, `/admin/settings`, `/superadmin`             | `modules/portal`                                       |
+| Existing utility/specimen flows       | `/feature-requests/*`, `/chat`, `/users/*`, `/experience`, `/dev-settings/*`                | matching modules; developer routes are runtime-gated   |
 
 All paths above are under `src/`. Navigation is composed in [portalNavigation](../src/modules/portal/portalNavigation.tsx). Community has one sidebar entry and a shared Posts/Polls segmented switch; `/polls` remains the stable poll route and return destination.
 
@@ -26,12 +26,12 @@ All paths above are under `src/`. Navigation is composed in [portalNavigation](.
 - Public users read landing/published articles. Account actions require authentication without blocking public article reading.
 - Every signed-in role owns its own children, journals, documents, observations, preferences, devices, and saved pivots. Admin/SuperAdmin do not gain access to another family's private records.
 - Staff author reviewed resources/guides/blogs, administer milestones/commercial content, and review public reports/tips. Author-only post/comment/poll/tip edits remain author-only for staff too.
-- SuperAdmin additionally controls platform/account permissions. Delivery and AI ledgers also require the live backend's external-ID allowlist; role alone is insufficient. Self/final-active-SuperAdmin safeguards apply.
+- SuperAdmin additionally controls platform/account permissions. Delivery tools also require the live backend's external-ID allowlist; role alone is insufficient. Self/final-active-SuperAdmin safeguards apply.
 - No AI inference, clinical assessment, family-sharing, payments, billing, or data-erasure workflow is implied by the existing screens.
 
 ## Family Records And Documents
 
-Family profile cards open the child editor from their main surface, with a separate removal control. Cards display the date of birth and completed calendar age in years/months. Small Steps cards summarize guidance and the latest private observation, with compact Record/History actions and separate guidance, tips, and save controls.
+Family profile cards open the child editor from their main surface, with a separate removal control. Cards display the date of birth and completed calendar age in years/months. Saved library cards open their content from the card surface; their filled bookmark opens a removal confirmation. Small Steps cards summarize guidance and the latest private observation, with compact Record/History actions and separate guidance, tips, and save controls.
 
 Private journal search/drafts stay out of URLs and browser storage. Child references must belong to the current account. Demo child removal deletes related observations and detaches journal links while retaining journal text. Check the actual backend family contract before changing lifecycle behavior.
 
@@ -95,21 +95,21 @@ Metrics are daily submitted aggregate impressions/clicks/code copies, not unique
 
 `NotificationInboxService` maps `/portal/notification-inbox/*` to `/notifications` and `/user-settings`. Only the account's published, in-app-enabled, non-archived/non-expired records are visible. Opening/following an update never implicitly marks read. All/Unread/Read, search, category, order, and page state remain explicit and shareable.
 
-Counts ignore the selected read-status filter; the shell bell counts the entire account. Bulk actions state whether they affect all or filtered records across pages. Archive has no promised restore/Undo and uses destructive confirmation/styling. Only supported same-origin destinations become actions.
+Counts ignore the selected read-status filter; the shell bell counts the entire account. Bulk actions state whether they affect all or filtered records across pages. Archive has no promised restore/Undo and uses destructive confirmation/styling. Only supported same-origin destinations become actions. Record-specific updates carry the target detail URL, rather than a directory URL. Journal links use `/journal?focus=<entry-id>`: the owned collection selects the containing page, scrolls to and focuses the matching card, and reports unavailable/foreign IDs without opening another reflection. Existing `/journal?entry=<id>` editor links remain separate. General workspace updates can still open the dashboard.
 
-Category/channel preferences apply to future notifications and are separate from FCM/browser authorization. Effective scheduling timezone is explicit override → last detected browser zone → UTC. Nonblocking detection records only the last zone and cannot replace an override. Displayed dates still use browser timezone. Appearance remains the owner of browser push opt-in.
+Category/channel preferences apply to future notifications and are separate from FCM/browser authorization. Effective scheduling timezone is explicit override → last detected browser zone → UTC. Nonblocking detection records only the last zone and cannot replace an override. Displayed dates still use browser timezone. The inbox and Appearance share browser push controls. An unanswered browser choice adds one setup alert to the header bell independently of unread counts. Choosing enabled or off removes that setup alert; off/blocked browsers show an inline warning while keeping the inbox readable. Demo choices are simulated without browser permission requests or Messaging initialization.
 
 ## Account And Operational Tools
 
-The sidebar account footer opens `/profile`, which combines the profile form, device management entry point, operator tools when authorized, and account deletion. `/settings/account` renders the same combined screen for existing links. Notifications are reached through the header; Account And Devices, Notifications, Developer Settings, and Stories And Insights are absent from sidebar navigation. Developer and public blog routes remain available directly.
+The sidebar account footer opens `/profile`, which combines the profile form, device management entry point, operator tools when authorized, and account deletion. `/settings/account` renders the same combined screen for existing links. Saved Content is reached from the My Path dashboard, rather than the sidebar. Staff navigation places My Path immediately after Administration; opening it from the admin experience first checks dirty forms, then confirms leaving administration. Notifications are reached through the header; Account And Devices, Notifications, Developer Settings, and Stories And Insights are absent from sidebar navigation. Developer and public blog routes remain available directly.
 
 Appearance offers two side-by-side Light/Dark choices and browser notification controls. Accent and motion selectors and the analytics settings section are not shown. Device reduced-motion preferences and the existing consent-gated analytics service remain in effect.
 
-`AccountToolsService` maps account/devices/Help to existing users/devices/system endpoints; operator delivery/attempt and AI ledger tools map to their dedicated APIs. Pass trusted current identity and role through the proxy. Never return device tokens, provider identifiers, delivery destinations, or leases to the browser.
+`AccountToolsService` maps account/devices/Help to existing users/devices/system endpoints; operator delivery/attempt tools map to their dedicated APIs. Pass trusted current identity and role through the proxy. Never return device tokens, provider identifiers, delivery destinations, or leases to the browser.
 
 Account deletion verifies typed current email plus acknowledgement. It soft-deletes access; it does not erase uploaded objects, database history, or Firebase identity. Clear the encrypted cookie, queries/session, sockets, and local push state on success without another authenticated request. Device removal deactivates that notification registration and does not revoke a sign-in session.
 
-AI usage is an operational ledger, not AI generation; deletion is soft and Deleted Records permits inspection, not invented restoration. Delivery/AI tools require SuperAdmin and the backend allowlist. Production legal/FAQ text comes from the API; demo samples remain clearly illustrative and do not establish policy/retention commitments.
+AI usage ledger screens, CRUD services, demo fixtures, and portal proxy access are removed. Delivery tools require SuperAdmin and the backend allowlist. Production legal/FAQ text comes from the API; demo samples remain clearly illustrative and do not establish policy/retention commitments.
 
 ## Demo And Live Boundary
 
