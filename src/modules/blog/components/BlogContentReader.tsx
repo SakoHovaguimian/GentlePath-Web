@@ -1,12 +1,18 @@
 import Image from 'next/image';
 import { MarkdownContent } from '@/components/ui';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
-import { BlogContentSchema, type BlogContent } from '../models/blogContent';
-import type { BlogImage } from '../models/blogImage';
+import {
+  BlogReadableContentSchema,
+  type BlogReadableContent,
+} from '../models/blogReadableContent';
+import type { StoredBlogContent } from '../models/storedBlogContent';
+import { BlogContentSchema } from '../models/blogContent';
+import type { BlogReadableImage } from '../models/blogImage';
 import { BlogEmbeddedMedia } from './BlogEmbeddedMedia';
+import { canRenderBlogContent } from '../content/canRenderBlogContent';
 import styles from '../Blog.module.css';
 
-function ContentImage({ image }: { image: BlogImage }) {
+function ContentImage({ image }: { image: BlogReadableImage }) {
   return (
     <figure className={styles.contentFigure}>
       <Image
@@ -22,7 +28,7 @@ function ContentImage({ image }: { image: BlogImage }) {
     </figure>
   );
 }
-function ContentBlock({ block }: { block: BlogContent }) {
+function ContentBlock({ block }: { block: BlogReadableContent }) {
   switch (block.contentType) {
     case 'header':
       return <h2>{block.metaData.text}</h2>;
@@ -109,19 +115,43 @@ function ContentBlock({ block }: { block: BlogContent }) {
       return <BlogEmbeddedMedia metaData={block.metaData} />;
   }
 }
-export function BlogContentReader({ content }: { content: BlogContent[] }) {
+export function BlogContentReader({
+  content,
+}: {
+  content: StoredBlogContent[];
+}) {
   return (
     <div className={styles.structuredContent}>
-      {content.map((block) => {
-        const parsed = BlogContentSchema.safeParse(block);
-        return parsed.success ? (
-          <div key={block.id} data-content-type={block.contentType}>
-            <ContentBlock block={parsed.data} />
+      {content.map((block, index) => {
+        const parsed = BlogReadableContentSchema.safeParse(block);
+        const renderable = parsed.success && canRenderBlogContent(parsed.data);
+        const writable = BlogContentSchema.safeParse(block);
+        const additionalData =
+          !writable.success &&
+          writable.error.issues.some(
+            (issue) => issue.code === 'unrecognized_keys',
+          );
+        return (
+          <div
+            key={`${block.id}-${index}`}
+            data-content-type={block.contentType}
+          >
+            {parsed.success && renderable && (
+              <ContentBlock block={parsed.data} />
+            )}
+            {(!renderable || additionalData) && (
+              <>
+                <p className="text-tertiary">
+                  {renderable
+                    ? copy.savedBlockAdditionalDescription
+                    : copy.savedBlockUnavailableDescription}
+                </p>
+                <pre className="whitespace-pre-wrap wrap-anywhere">
+                  {JSON.stringify(block, null, 2)}
+                </pre>
+              </>
+            )}
           </div>
-        ) : (
-          <p key={block.id} className="text-tertiary">
-            {copy.invalidBlock}
-          </p>
         );
       })}
     </div>

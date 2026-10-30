@@ -6,8 +6,8 @@ import {
   Badge,
   Button,
   Field,
+  TextArea,
   FormActions,
-  MarkdownEditor,
   Message,
   Modal,
   Page,
@@ -29,7 +29,7 @@ import { DomainError } from '@/errors/domainErrors';
 import {
   BlogMutationInputSchema,
   type BlogArticle,
-  type BlogMutationInput,
+  type BlogArticleDraft,
 } from '../models/blogArticle';
 import type { BlogFormErrors } from '../models/blogFormErrors';
 import { useBlogMutations } from '../hooks';
@@ -39,16 +39,16 @@ import styles from '../Blog.module.css';
 import adminStyles from '../../portal/Admin.module.css';
 
 const empty = '';
-const articleInput = (article: BlogArticle): BlogMutationInput => ({
+const articleInput = (article: BlogArticle): BlogArticleDraft => ({
   title: article.title,
   slug: article.slug,
   description: article.description,
-  body: article.body,
   content: article.content,
   category: article.category,
   cover: article.cover,
   author: article.author,
   revision: article.revision,
+  ...(article.body === undefined ? {} : { body: article.body }),
 });
 export function BlogEditor({
   initialArticle,
@@ -61,14 +61,13 @@ export function BlogEditor({
   const { session } = useSessionState();
   const mutations = useBlogMutations();
   const [article, setArticle] = useState(initialArticle);
-  const [form, setForm] = useState<BlogMutationInput>(() =>
+  const [form, setForm] = useState<BlogArticleDraft>(() =>
     initialArticle
       ? articleInput(initialArticle)
       : {
           title: empty,
           slug: '',
           description: empty,
-          body: '',
           content: [],
           author: session?.user.firstName
             ? `${session.user.firstName} ${session.user.lastName}`.trim()
@@ -84,6 +83,14 @@ export function BlogEditor({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [hasHistoricalContent] = useState(() =>
+    Boolean(
+      initialArticle &&
+      !BlogMutationInputSchema.safeParse(articleInput(initialArticle)).success,
+    ),
+  );
+  const needsRepair =
+    hasHistoricalContent && !BlogMutationInputSchema.safeParse(form).success;
   const dirty = JSON.stringify(form) !== baseline;
   const dirtyRef = useRef(dirty);
   const busyRef = useRef(false);
@@ -94,7 +101,7 @@ export function BlogEditor({
   }, [dirty, busy]);
   useUnsavedFormGuard(dirtyRef, busyRef, copy.discardDescription);
 
-  const updateForm = (next: BlogMutationInput) => {
+  const updateForm = (next: BlogArticleDraft) => {
     dirtyRef.current = JSON.stringify(next) !== baseline;
     setForm(next);
     setNotice('');
@@ -109,6 +116,11 @@ export function BlogEditor({
     setFailure('');
   };
   const validate = () => {
+    if (form.body !== undefined) {
+      setErrors({ content: builderCopy.legacyConversionRequired });
+      document.getElementById('blog-legacy-body')?.focus();
+      return null;
+    }
     const result = BlogMutationInputSchema.safeParse(form);
     if (result.success) {
       setErrors({});
@@ -116,8 +128,11 @@ export function BlogEditor({
     }
     const next: BlogFormErrors = {};
     for (const issue of result.error.issues) {
-      const key = issue.path[0] as keyof BlogMutationInput;
-      next[key] = issue.message;
+      const key = issue.path[0] as keyof BlogArticleDraft;
+      next[key] =
+        issue.code === 'unrecognized_keys'
+          ? builderCopy.unsupportedStoredFields
+          : issue.message;
     }
     setErrors(next);
     setFailure('');
@@ -174,8 +189,9 @@ export function BlogEditor({
     if (!article) router.replace(`/admin/blog/${saved.id}`);
   };
   const changePublication = async () => {
-    if (busy || !validate()) return;
+    if (busy) return;
     const publishing = article?.status !== 'published';
+    if ((publishing || dirty) && !validate()) return;
     setConfirming(true);
     try {
       const confirmed = await presentation.showAlert({
@@ -230,6 +246,7 @@ export function BlogEditor({
       await mutations.remove.mutateAsync({
         id: article.id,
         revision: article.revision,
+        ...(article.body === undefined ? {} : { body: article.body }),
       });
       dirtyRef.current = false;
       busyRef.current = false;
@@ -289,6 +306,13 @@ export function BlogEditor({
           void save();
         }}
       >
+        {needsRepair && (
+          <Message
+            title={builderCopy.repairTitle}
+            description={builderCopy.repairDescription}
+            intent="warning"
+          />
+        )}
         <SectionStack>
           <BlogArticleFields
             onUploadStateChangeAction={setUploading}
@@ -302,55 +326,58 @@ export function BlogEditor({
             title={builderCopy.title}
             description={builderCopy.description}
           >
-            {form.content.length === 0 && form.body.trim() ? (
-              <div className="grid gap-4">
+            {form.body !== undefined && (
+              <div className="grid min-w-0 gap-4">
                 <Message
                   title={builderCopy.legacyTitle}
                   description={builderCopy.legacyDescription}
                 />
-                <Field labelText={copy.contentLabel}>
-                  <MarkdownEditor
-                    id="blog-body"
+                <Field labelText={builderCopy.legacyBodyLabel}>
+                  <TextArea
+                    id="blog-legacy-body"
                     value={form.body}
-                    maxLength={50000}
-                    disabled={busy}
-                    onValueChange={(body) => updateForm({ ...form, body })}
+                    rows={8}
+                    readOnly
+                    aria-describedby="blog-legacy-description"
                   />
                 </Field>
+                <p
+                  id="blog-legacy-description"
+                  className="m-0 text-sm text-tertiary"
+                >
+                  {builderCopy.legacyConversionRequired}
+                </p>
                 <Button
                   variant="secondary"
                   disabled={busy}
-                  onClick={() =>
+                  onClick={() => {
+                    const { body, ...canonical } = form;
+                    if (body === undefined) return;
                     updateForm({
-                      ...form,
-                      body: '',
+                      ...canonical,
                       content: [
+                        ...form.content,
                         {
                           id: crypto.randomUUID(),
                           contentType: 'section',
-                          metaData: {
-                            title: empty,
-                            body: form.body,
-                            format: 'markdown',
-                          },
+                          metaData: { title: empty, body, format: 'markdown' },
                         },
                       ],
-                    })
-                  }
+                    });
+                  }}
                 >
                   <UiIcon name="layers" />
                   {builderCopy.convert}
                 </Button>
               </div>
-            ) : (
-              <BlogContentBuilder
-                content={form.content}
-                disabled={busy}
-                showErrors={Boolean(errors.content)}
-                onUploadStateChangeAction={setUploading}
-                onChangeAction={(content) => updateForm({ ...form, content })}
-              />
             )}
+            <BlogContentBuilder
+              content={form.content}
+              disabled={busy}
+              showErrors={Boolean(errors.content) || needsRepair}
+              onUploadStateChangeAction={setUploading}
+              onChangeAction={(content) => updateForm({ ...form, content })}
+            />
             {errors.content && (
               <p
                 id="blog-content-error"

@@ -12,7 +12,7 @@ All sample accounts use `password123`:
 | `admin@gentlepath.demo`      | Admin         |
 | `superadmin@gentlepath.demo` | SuperAdmin    |
 
-Signup creates an ordinary demo account. Roles and disabled/deleted status are rechecked against current server records; browser fields cannot grant permissions. Developer role switching signs in a trusted seed identity and clears the previous account's client state.
+Signup creates an ordinary demo account and an immediate session without email verification. Roles and disabled/deleted status are rechecked against current server records; browser fields cannot grant permissions. Developer role switching signs in a trusted seed identity and clears the previous account's client state. Blog fixtures store Markdown in canonical sections; new writes reject retired body-only payloads and unknown fields, and public slug/UUID reads expose published articles only.
 
 `/dev-settings` and `/dev-settings/components` are available in development or an explicitly enabled demo server. Production live mode hides them and ignores demo preference cookies. Developer mutations require an authenticated session and same-origin checks; role switching/reset additionally require effective demo mode.
 
@@ -49,7 +49,7 @@ All active identities, including staff, own only their private records. Child li
 
 Explicit latency is bounded to 0–5,000ms and applies to reads/writes. Apply simulation once at the shared dispatcher; domain handlers implement meaningful empty responses without corrupting stored state. Pending work must finish or fail, not spin forever.
 
-Demo platform flags can block registration/community writes/member maintenance access while staff retain recovery access. Those switches do not establish a live policy endpoint; [integration limits](INTEGRATIONS.md) are explicit.
+Demo platform flags can block registration/community writes/member maintenance access while staff retain recovery access. Those switches affect only the isolated demo; production policies use the API's canonical platform settings/status contracts described in [integrations](INTEGRATIONS.md).
 
 ## Extend And Verify
 

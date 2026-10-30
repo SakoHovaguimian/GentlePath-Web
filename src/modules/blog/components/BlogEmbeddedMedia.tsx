@@ -4,13 +4,13 @@ import { useId, useState } from 'react';
 import { Button } from '@/components/ui';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
 import { resolveBlogEmbed } from '../content/resolveBlogEmbed';
-import type { BlogEmbedContent } from '../models/blogEmbedContent';
+import type { BlogReadableContent } from '../models/blogReadableContent';
 import styles from '../Blog.module.css';
 
 export function BlogEmbeddedMedia({
   metaData,
 }: {
-  metaData: BlogEmbedContent['metaData'];
+  metaData: Extract<BlogReadableContent, { contentType: 'embed' }>['metaData'];
 }) {
   const player = resolveBlogEmbed(metaData.url);
   const titleId = useId();
@@ -42,11 +42,7 @@ export function BlogEmbeddedMedia({
             </Button>
           )}
           <Button asChild variant="ghost">
-            <a
-              href={metaData.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={metaData.url} target="_blank" rel="noopener noreferrer">
               {copy.openEmbed}
             </a>
           </Button>

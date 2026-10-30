@@ -1,10 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, IconButton, ReorderableList, UiIcon } from '@/components/ui';
+import {
+  Accordion,
+  Button,
+  IconButton,
+  ReorderableList,
+  UiIcon,
+} from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
-import { BlogContentSchema, type BlogContent } from '../../models/blogContent';
+import { BlogContentSchema } from '../../models/blogContent';
+import { BlogReadableContentSchema } from '../../models/blogReadableContent';
+import type { StoredBlogContent } from '../../models/storedBlogContent';
 import {
   BlogContentTypeSchema,
   type BlogContentType,
@@ -15,10 +23,10 @@ import { BlogBlockPreview } from './BlogBlockPreview';
 import styles from '../../Blog.module.css';
 
 interface BlogContentBuilderProps {
-  content: BlogContent[];
+  content: StoredBlogContent[];
   disabled: boolean;
   showErrors: boolean;
-  onChangeAction: (content: BlogContent[]) => void;
+  onChangeAction: (content: StoredBlogContent[]) => void;
   onUploadStateChangeAction: (busy: boolean) => void;
 }
 export function BlogContentBuilder({
@@ -43,7 +51,7 @@ export function BlogContentBuilder({
       )?.focus();
     });
   };
-  const remove = async (block: BlogContent) => {
+  const remove = async (block: StoredBlogContent) => {
     const confirmed = await presentation.showAlert({
       title: copy.removeTitle,
       description: copy.removeDescription,
@@ -85,6 +93,12 @@ export function BlogContentBuilder({
               ? BlogContentSchema.safeParse(block)
               : null;
             const invalid = result && !result.success;
+            const readable = BlogReadableContentSchema.safeParse(block);
+            const unsupported =
+              invalid &&
+              result.error.issues.some(
+                (issue) => issue.code === 'unrecognized_keys',
+              );
             return (
               <div
                 id={`blog-block-${block.id}`}
@@ -118,32 +132,60 @@ export function BlogContentBuilder({
                     invalid ? `blog-block-${block.id}-error` : undefined
                   }
                 >
-                  <BlogBlockFields
-                    block={block}
-                    disabled={disabled}
-                    errorPaths={
-                      invalid
-                        ? result.error.issues.map((issue) =>
-                            issue.path.slice(1).join('.'),
-                          )
-                        : []
-                    }
-                    onUploadStateChangeAction={onUploadStateChangeAction}
-                    onChangeAction={(next) =>
-                      onChangeAction(
-                        content.map((item) =>
-                          item.id === block.id ? next : item,
-                        ),
-                      )
-                    }
-                  />
+                  {readable.success ? (
+                    <BlogBlockFields
+                      block={readable.data}
+                      disabled={disabled}
+                      errorPaths={
+                        invalid
+                          ? result.error.issues.map((issue) =>
+                              issue.path.slice(1).join('.'),
+                            )
+                          : []
+                      }
+                      onUploadStateChangeAction={onUploadStateChangeAction}
+                      onChangeAction={(next) =>
+                        onChangeAction(
+                          content.map((item) =>
+                            item.id === block.id ? next : item,
+                          ),
+                        )
+                      }
+                    />
+                  ) : (
+                    <p className="m-0 text-sm text-tertiary">
+                      {copy.savedBlockUnavailableDescription}
+                    </p>
+                  )}
+                  {(!readable.success || unsupported) && (
+                    <Accordion
+                      items={[
+                        {
+                          id: `saved-${block.id}`,
+                          title: copy.savedBlockDataLabel,
+                          content: (
+                            <>
+                              <pre className="whitespace-pre-wrap wrap-anywhere text-sm">
+                                {JSON.stringify(block, null, 2)}
+                              </pre>
+                              <p className="m-0 text-sm text-tertiary">
+                                {copy.replaceSavedBlockDescription}
+                              </p>
+                            </>
+                          ),
+                        },
+                      ]}
+                    />
+                  )}
                   {invalid && (
                     <p
                       id={`blog-block-${block.id}-error`}
                       role="alert"
                       className="m-0 text-sm text-error-primary"
                     >
-                      {result.error.issues[0]?.message || copy.invalidBlock}
+                      {unsupported
+                        ? copy.unsupportedStoredFields
+                        : result.error.issues[0]?.message || copy.invalidBlock}
                     </p>
                   )}
                 </div>

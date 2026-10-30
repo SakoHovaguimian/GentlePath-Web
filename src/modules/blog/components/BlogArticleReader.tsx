@@ -36,10 +36,9 @@ export function BlogArticleReader({
               Math.max(
                 1,
                 Math.ceil(
-                  (article.content.length
-                    ? blogContentText(article.content)
-                    : article.body
-                  ).split(/\s+/).length / 200,
+                  `${blogContentText(article.content)} ${article.body ?? ''}`.split(
+                    /\s+/,
+                  ).length / 200,
                 ),
               ),
             )}
@@ -63,10 +62,11 @@ export function BlogArticleReader({
       <div className={styles.readerBody}>
         {article.content.length ? (
           <BlogContentReader content={article.content} />
-        ) : article.body.trim() ? (
-          <MarkdownContent value={article.body} headingContext="article" />
-        ) : (
+        ) : !article.body?.trim() ? (
           <p>{copy.previewEmpty}</p>
+        ) : null}
+        {article.body?.trim() && (
+          <MarkdownContent value={article.body} headingContext="article" />
         )}
       </div>
     </article>

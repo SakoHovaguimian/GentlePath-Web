@@ -4,6 +4,7 @@ import { BlogCategorySchema } from './blogCategory';
 import { BlogCoverSchema } from './blogCover';
 import { BlogStatusSchema } from './blogStatus';
 import { BlogContentsSchema } from './blogContent';
+import { StoredBlogContentsSchema } from './storedBlogContent';
 import { gentlePathBlogBuilderStrings as builderCopy } from '@/strings';
 
 const BlogArticleFieldsSchema = z.object({
@@ -14,23 +15,19 @@ const BlogArticleFieldsSchema = z.object({
     .min(3, copy.invalidSlug)
     .max(100, copy.invalidSlug)
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, copy.invalidSlug),
-  title: z
-    .string()
-    .trim()
-    .min(3, copy.invalidTitle)
-    .max(140, copy.invalidTitle),
+  title: z.string().min(1, copy.invalidTitle).max(500, copy.invalidTitle),
   description: z
     .string()
-    .trim()
-    .min(20, copy.invalidDescription)
-    .max(350, copy.invalidDescription),
+    .min(1, copy.invalidDescription)
+    .max(20000, copy.invalidDescription),
   author: z
     .string()
     .trim()
     .min(2, copy.invalidAuthor)
     .max(100, copy.invalidAuthor),
-  body: z.string().trim().max(50000, copy.invalidBody).default(''),
-  content: BlogContentsSchema.default([]),
+  content: StoredBlogContentsSchema.default([]),
+  // Older deployed responses may still include writing awaiting migration.
+  body: z.string().max(50000, copy.invalidBody).optional(),
   category: BlogCategorySchema,
   cover: BlogCoverSchema,
   status: BlogStatusSchema,
@@ -39,24 +36,31 @@ const BlogArticleFieldsSchema = z.object({
   publishedAt: z.string().datetime().nullable(),
   revision: z.number().int().min(1),
 });
-const hasArticleContent = (article: { body: string; content: unknown[] }) =>
-  article.content.length > 0 || article.body.trim().length >= 40;
-export const BlogArticleSchema = BlogArticleFieldsSchema.refine(
-  hasArticleContent,
-  { message: builderCopy.invalidContent, path: ['content'] },
-);
+export const BlogArticleSchema = BlogArticleFieldsSchema;
 export const BlogMutationInputSchema = BlogArticleFieldsSchema.pick({
   slug: true,
   title: true,
   description: true,
   author: true,
-  body: true,
-  content: true,
   category: true,
   cover: true,
 })
-  .extend({ revision: z.number().int().min(1).optional() })
-  .refine(hasArticleContent, {
+  .extend({
+    title: z
+      .string()
+      .trim()
+      .min(3, copy.invalidTitle)
+      .max(140, copy.invalidTitle),
+    description: z
+      .string()
+      .trim()
+      .min(20, copy.invalidDescription)
+      .max(350, copy.invalidDescription),
+    content: BlogContentsSchema,
+    revision: z.number().int().min(1).optional(),
+  })
+  .strict()
+  .refine((article) => article.content.length > 0, {
     message: builderCopy.invalidContent,
     path: ['content'],
   });
@@ -65,3 +69,14 @@ export const BlogRevisionInputSchema = z.object({
 });
 export type BlogArticle = z.infer<typeof BlogArticleSchema>;
 export type BlogMutationInput = z.infer<typeof BlogMutationInputSchema>;
+export type BlogArticleDraft = Pick<
+  BlogArticle,
+  | 'slug'
+  | 'title'
+  | 'description'
+  | 'author'
+  | 'content'
+  | 'category'
+  | 'cover'
+  | 'body'
+> & { revision?: number };

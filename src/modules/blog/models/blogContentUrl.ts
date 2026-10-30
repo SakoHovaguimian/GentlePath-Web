@@ -40,13 +40,17 @@ export const BlogContentUrlSchema = z
   .trim()
   .max(2000, copy.invalidUrl)
   .refine(isPublicHttpsUrl, copy.invalidUrl);
+export function isBlogImageUrl(value: string): boolean {
+  return (
+    isPublicImageUrl(value) ||
+    /^\/api\/public\/blog-media\/[0-9a-f-]{36}$/.test(value)
+  );
+}
 export const BlogImageUrlSchema = z
   .string()
   .trim()
   .max(2000, copy.invalidImageUrl)
-  .refine(
-    (value) =>
-      isPublicImageUrl(value) ||
-      /^\/api\/public\/blog-media\/[0-9a-f-]{36}$/.test(value),
-    copy.invalidImageUrl,
-  );
+  .refine(isBlogImageUrl, copy.invalidImageUrl);
+
+// Editors retain incomplete and older values; the reader checks URLs before use.
+export const BlogReadableContentUrlSchema = z.string();

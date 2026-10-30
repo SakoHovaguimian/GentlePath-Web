@@ -89,16 +89,16 @@ export async function handleDemoBlogRequest(
             article.title,
             article.description,
             article.author,
-            article.content.length
-              ? blogContentText(article.content)
-              : article.body,
+            blogContentText(article.content),
+            article.body ?? '',
             blogCategoryLabel(article.category),
           ].some((value) => value.toLocaleLowerCase('en-US').includes(search)),
       )
       .sort(
         (a, b) =>
           Date.parse(isPublic ? b.publishedAt || b.updatedAt : b.updatedAt) -
-          Date.parse(isPublic ? a.publishedAt || a.updatedAt : a.updatedAt),
+            Date.parse(isPublic ? a.publishedAt || a.updatedAt : a.updatedAt) ||
+          b.id.localeCompare(a.id),
       );
     const offset = rows.length
       ? Math.min(
@@ -130,11 +130,16 @@ export async function handleDemoBlogRequest(
     articles.unshift(article);
     return json(article, 201);
   }
+  const publicIdentifier = isPublic && id === 'id' ? action : id;
   const article = articles.find((item) =>
-    isPublic ? item.slug === id && item.status === 'published' : item.id === id,
+    isPublic
+      ? (item.slug === publicIdentifier || item.id === publicIdentifier) &&
+        item.status === 'published'
+      : item.id === id,
   );
   if (!article) throw new NotFoundError(copy.missingArticle);
-  if (request.method === 'GET' && !action) return json(article);
+  if (request.method === 'GET' && (!action || (isPublic && id === 'id')))
+    return json(article);
   if (!isPublic && request.method === 'PATCH' && !action) {
     const body = BlogMutationInputSchema.parse(await input());
     checkRevision(article, body.revision);
@@ -157,6 +162,17 @@ export async function handleDemoBlogRequest(
       article,
       BlogRevisionInputSchema.parse(await input()).revision,
     );
+    if (action === 'publish')
+      BlogMutationInputSchema.parse({
+        slug: article.slug,
+        title: article.title,
+        description: article.description,
+        author: article.author,
+        category: article.category,
+        cover: article.cover,
+        content: article.content,
+        revision: article.revision,
+      });
     const now = new Date().toISOString();
     Object.assign(article, {
       status: action === 'publish' ? 'published' : 'draft',

@@ -43,8 +43,14 @@ const covers: BlogCover[] = [
 export function createDemoBlogArticles(): BlogArticle[] {
   return copy.fixtures.map((fixture, index) => {
     const date = new Date(Date.UTC(2026, 9, 22 - index * 3, 12)).toISOString();
+    const { body: markdown, ...fields } = fixture;
+    const legacySection = {
+      id: `b2000000-0000-4000-8000-${String(index + 10).padStart(12, '0')}`,
+      contentType: 'section',
+      metaData: { title: empty, body: markdown, format: 'markdown' },
+    };
     return BlogArticleSchema.parse({
-      ...fixture,
+      ...fields,
       content:
         index === 0
           ? [
@@ -93,8 +99,9 @@ export function createDemoBlogArticles(): BlogArticle[] {
                 contentType: 'footer',
                 metaData: { text: builderCopy.demo.footer },
               },
+              legacySection,
             ]
-          : [],
+          : [legacySection],
       id: `b1000000-0000-4000-8000-${String(index + 1).padStart(12, '0')}`,
       slug: slugs[index],
       category: categories[index],

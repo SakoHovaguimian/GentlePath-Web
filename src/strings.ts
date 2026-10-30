@@ -8479,10 +8479,31 @@ export const gentlePathBlogBuilderStrings = {
   invalidContent: 'Add at least one complete content block before saving.',
   // @sentence-case: Validation feedback.
   invalidBlock: 'Complete the required fields in this block before saving.',
+  repairTitle: 'Review Saved Article',
+  repairDescription:
+    'This article contains older values that need attention before saving or publishing. Your original writing is retained. Review the title, introduction, and highlighted blocks; shorten or split text to meet the current limits.',
+  // @sentence-case: Bounded saved-content validation.
+  invalidStoredContent: 'This saved block exceeds the supported data limits.',
+  // @sentence-case: Prevent loss of unknown saved fields.
+  unsupportedStoredFields:
+    'This block includes older fields that cannot be saved by the current editor. Review its saved data, add a replacement block, then explicitly remove the original when its writing is preserved.',
+  savedBlockDataLabel: 'View Saved Block Data',
+  savedBlockUnavailableDescription:
+    'This block needs repair before it can use the current layout. Its original data is shown below.',
+  savedBlockAdditionalDescription:
+    'This block also includes earlier data. Its complete saved values are shown below.',
+  replaceSavedBlockDescription:
+    'Copy the writing you need into a new block. Remove this block only after you have preserved its content. Saving will not discard these older fields automatically.',
   // @sentence-case: Validation feedback.
   invalidHeading: 'Add a heading of up to 200 characters.',
   // @sentence-case: Validation feedback.
   invalidText: 'Add text of up to 20,000 characters.',
+  // @sentence-case: Short text-block validation.
+  invalidShortText: 'Add text of up to 4,000 characters.',
+  // @sentence-case: Optional caption validation.
+  invalidCaption: 'Keep the caption within 1,000 characters.',
+  // @sentence-case: Optional quote attribution validation.
+  invalidAttribution: 'Keep the attribution within 200 characters.',
   // @sentence-case: Validation for converted legacy writing.
   invalidLegacyText: 'Keep converted Markdown text within 50,000 characters.',
   // @sentence-case: Validation feedback.
@@ -8503,7 +8524,11 @@ export const gentlePathBlogBuilderStrings = {
     'The article is too large. Shorten the text or use fewer blocks.',
   legacyTitle: 'Existing Markdown Story',
   legacyDescription:
-    'Your existing story remains editable. Convert it into a text block when you are ready to add images and arrange more blocks.',
+    'This article includes an earlier Markdown story. Its exact writing stays available here alongside any saved blocks. Convert it explicitly before saving to keep all of its content.',
+  legacyBodyLabel: 'Earlier Markdown Story',
+  // @sentence-case: Explicit lossless conversion requirement.
+  legacyConversionRequired:
+    'Convert this story into a Markdown block before saving or publishing. Conversion appends the complete original text without trimming it; current block and article limits still apply. Shorten or split any highlighted text before saving.',
   convert: 'Convert To Blocks',
   legacyFormatHint:
     'This converted text keeps its original Markdown formatting.',
@@ -10294,8 +10319,7 @@ export const gentlePathNotificationInboxStrings = {
     activityBody:
       'Return to a recent reflection and the small moment you chose to keep.',
     mentionTitle: 'A Conversation Worth Returning To',
-    mentionBody:
-      'Return to a conversation in your local demo community.',
+    mentionBody: 'Return to a conversation in your local demo community.',
     tagTitle: 'Everyday Routines',
     tagBody:
       'Find a resource about building gentler transitions into your day.',

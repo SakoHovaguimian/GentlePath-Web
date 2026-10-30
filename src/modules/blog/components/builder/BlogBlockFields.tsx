@@ -2,14 +2,14 @@
 
 import { Field, Input, MarkdownEditor, TextArea } from '@/components/ui';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
-import type { BlogContent } from '../../models/blogContent';
+import type { BlogReadableContent } from '../../models/blogReadableContent';
 import { BlogImageFields } from './BlogImageFields';
 
 interface BlogBlockFieldsProps {
-  block: BlogContent;
+  block: BlogReadableContent;
   disabled: boolean;
   errorPaths?: string[];
-  onChangeAction: (block: BlogContent) => void;
+  onChangeAction: (block: BlogReadableContent) => void;
   onUploadStateChangeAction: (busy: boolean) => void;
 }
 export function BlogBlockFields({
@@ -67,20 +67,30 @@ export function BlogBlockFields({
   switch (block.contentType) {
     case 'header':
       return input('text', copy.headingLabel, block.metaData.text, (value) =>
-        onChangeAction({ ...block, metaData: { text: value } }),
+        onChangeAction({
+          ...block,
+          metaData: { ...block.metaData, text: value },
+        }),
       );
     case 'footer':
       return text('text', copy.textLabel, block.metaData.text, (value) =>
-        onChangeAction({ ...block, metaData: { text: value } }),
+        onChangeAction({
+          ...block,
+          metaData: { ...block.metaData, text: value },
+        }),
       );
     case 'section':
       return (
         <>
-          {input('title', copy.headingLabel, block.metaData.title, (value) =>
-            onChangeAction({
-              ...block,
-              metaData: { ...block.metaData, title: value },
-            }),
+          {input(
+            'title',
+            copy.headingLabel,
+            block.metaData.title ?? '',
+            (value) =>
+              onChangeAction({
+                ...block,
+                metaData: { ...block.metaData, title: value },
+              }),
           )}
           {block.metaData.format === 'markdown' ? (
             <>
@@ -130,7 +140,7 @@ export function BlogBlockFields({
           {input(
             'attribution',
             copy.attributionLabel,
-            block.metaData.attribution,
+            block.metaData.attribution ?? '',
             (value) =>
               onChangeAction({
                 ...block,
@@ -149,7 +159,7 @@ export function BlogBlockFields({
             (value) =>
               onChangeAction({
                 ...block,
-                metaData: { items: value.split('\n') },
+                metaData: { ...block.metaData, items: value.split('\n') },
               }),
             30029,
           )}
@@ -161,11 +171,15 @@ export function BlogBlockFields({
     case 'embed':
       return (
         <>
-          {input('title', copy.headingLabel, block.metaData.title, (title) =>
-            onChangeAction({
-              ...block,
-              metaData: { ...block.metaData, title },
-            }),
+          {input(
+            'title',
+            copy.headingLabel,
+            block.metaData.title ?? '',
+            (title) =>
+              onChangeAction({
+                ...block,
+                metaData: { ...block.metaData, title },
+              }),
           )}
           {input(
             'url',
@@ -181,7 +195,7 @@ export function BlogBlockFields({
           {input(
             'caption',
             copy.captionLabel,
-            block.metaData.caption,
+            block.metaData.caption ?? '',
             (caption) =>
               onChangeAction({
                 ...block,
@@ -243,7 +257,7 @@ export function BlogBlockFields({
           {input(
             'caption',
             copy.captionLabel,
-            block.metaData.caption,
+            block.metaData.caption ?? '',
             (caption) =>
               onChangeAction({
                 ...block,
@@ -256,11 +270,15 @@ export function BlogBlockFields({
     case 'callout':
       return (
         <>
-          {input('title', copy.headingLabel, block.metaData.title, (title) =>
-            onChangeAction({
-              ...block,
-              metaData: { ...block.metaData, title },
-            }),
+          {input(
+            'title',
+            copy.headingLabel,
+            block.metaData.title ?? '',
+            (title) =>
+              onChangeAction({
+                ...block,
+                metaData: { ...block.metaData, title },
+              }),
           )}
           {text('text', copy.textLabel, block.metaData.text, (value) =>
             onChangeAction({

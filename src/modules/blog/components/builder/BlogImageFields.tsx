@@ -10,19 +10,19 @@ import {
   UiIcon,
 } from '@/components/ui';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
-import type { BlogImage } from '../../models/blogImage';
-import { BlogImageUrlSchema } from '../../models/blogContentUrl';
+import type { BlogReadableImage } from '../../models/blogImage';
+import { isBlogImageUrl } from '../../models/blogContentUrl';
 import { blogImageMimeTypes } from '../../models/blogMedia';
 import styles from '../../Blog.module.css';
 import { useBlogImageUpload } from '../../useBlogImageUpload';
 
 interface BlogImageFieldsProps {
-  image: BlogImage;
+  image: BlogReadableImage;
   fieldId: string;
   disabled: boolean;
   errorKeys?: string[];
   errorId?: string;
-  onChangeAction: (image: BlogImage) => void;
+  onChangeAction: (image: BlogReadableImage) => void;
   onUploadStateChangeAction: (busy: boolean) => void;
 }
 export function BlogImageFields({
@@ -41,7 +41,7 @@ export function BlogImageFields({
       onUploadStateChange: onUploadStateChangeAction,
     },
   );
-  const validImage = BlogImageUrlSchema.safeParse(image.src).success;
+  const validImage = isBlogImageUrl(image.src);
   return (
     <div className="grid min-w-0 gap-4" aria-busy={uploading}>
       {validImage && (
@@ -119,7 +119,7 @@ export function BlogImageFields({
           aria-invalid={errorKeys.includes('caption')}
           aria-describedby={errorKeys.includes('caption') ? errorId : undefined}
           disabled={disabled || uploading}
-          value={image.caption}
+          value={image.caption ?? ''}
           maxLength={1000}
           onChange={(event) =>
             onChangeAction({ ...image, caption: event.target.value })

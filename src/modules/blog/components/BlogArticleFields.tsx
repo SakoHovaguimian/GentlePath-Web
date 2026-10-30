@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button, Field, Input, SplitSection, TextArea } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
-import type { BlogMutationInput } from '../models/blogArticle';
+import type { BlogArticleDraft } from '../models/blogArticle';
 import {
   BlogCoverSchema,
   blogCoverSource,
@@ -22,18 +22,18 @@ export function BlogArticleFields({
   onChangeAction,
   onUploadStateChangeAction,
 }: {
-  form: BlogMutationInput;
+  form: BlogArticleDraft;
   errors: BlogFormErrors;
   disabled: boolean;
-  onChangeAction: (form: BlogMutationInput) => void;
+  onChangeAction: (form: BlogArticleDraft) => void;
   onUploadStateChangeAction: (busy: boolean) => void;
 }) {
   const options = useBlogOptions();
-  const update = <Key extends keyof BlogMutationInput>(
+  const update = <Key extends keyof BlogArticleDraft>(
     key: Key,
-    value: BlogMutationInput[Key],
+    value: BlogArticleDraft[Key],
   ) => onChangeAction({ ...form, [key]: value });
-  const error = (key: keyof BlogMutationInput) =>
+  const error = (key: keyof BlogArticleDraft) =>
     errors[key] && (
       <p
         id={`blog-${key}-error`}
