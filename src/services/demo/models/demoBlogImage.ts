@@ -1,4 +1,1 @@
-export interface DemoBlogImage {
-  bytes: Uint8Array;
-  type: string;
-}
+export type { DemoPublicImage as DemoBlogImage } from './demoPublicImage';

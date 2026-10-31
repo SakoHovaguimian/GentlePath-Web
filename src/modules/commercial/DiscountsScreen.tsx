@@ -1,10 +1,14 @@
 'use client';
 import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { DiscountSortSchema } from './models/discountSort';
 import {
   Button,
   DirectoryFilters,
   DirectoryPagination,
   EmptyState,
+  Field,
+  Select,
   Message,
   Page,
   PageHeader,
@@ -24,10 +28,14 @@ export function DiscountsScreen() {
   const { confirmNavigation } = useNavigationGuard();
   const staff = canManageContent(session?.user.role ?? 'user');
   const directory = usePortalDirectory();
+  const sort = DiscountSortSchema.catch('latest').parse(
+    useSearchParams().get('sort') ?? 'latest',
+  );
   const query = useDiscountOffers({
     query: directory.query,
     category: directory.status || undefined,
     offset: directory.offset,
+    sort,
   });
   useEffect(() => {
     if (
@@ -89,6 +97,28 @@ export function DiscountsScreen() {
             offset: undefined,
           })
         }
+        additionalFilters={
+          <Field labelText={copy.sortLabel}>
+            <Select
+              value={sort}
+              onValueChange={(value) =>
+                directory.update({
+                  sort:
+                    value === 'latest'
+                      ? undefined
+                      : DiscountSortSchema.parse(value),
+                  offset: undefined,
+                })
+              }
+            >
+              {DiscountSortSchema.options.map((value) => (
+                <option key={value} value={value}>
+                  {copy.sorts[value]}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        }
         statuses={Object.entries(copy.categories).map(([value, label]) => ({
           value,
           label,
@@ -101,7 +131,7 @@ export function DiscountsScreen() {
           allStatuses: copy.allCategories,
         }}
       />
-      <QueryBoundary query={query}>
+      <QueryBoundary query={query} animateChanges>
         {(page) => (
           <>
             {page.data.length ? (

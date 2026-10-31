@@ -3,12 +3,13 @@
 import { NavigationLink } from '@/components/ui/components/NavigationLink';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { useState } from 'react';
-import { Button, SectionStack, SplitSection } from '@/components/ui';
+import { Button, SectionStack, SplitSection, UiIcon } from '@/components/ui';
 import { useSessionState } from '@/providers/AppProviders';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import { canManagePlatform } from '@/services/auth/permissions';
 import { gentlePathAccountToolsStrings as copy } from '@/strings';
 import { AccountDeletionDialog } from './AccountDeletionDialog';
+import './accountSettings.css';
 
 export function AccountSettings() {
   const { session } = useSessionState();
@@ -59,17 +60,29 @@ export function AccountSettings() {
           </SplitSection>
         )}
         <SplitSection
+          className="gp-account-deletion"
           id="account-deletion"
           title={copy.account.deleteTitle}
           description={copy.account.deleteHint}
         >
-          {runtime.demoMode && (
-            <p className="m-0 text-sm text-secondary">
-              {copy.account.demoHint}
-            </p>
-          )}
-          <div>
+          <div className="gp-account-deletion__heading">
+            <span className="gp-account-deletion__icon" aria-hidden="true">
+              <UiIcon name="warning" className="size-6" />
+            </span>
+            <div className="grid gap-2">
+              <h3 className="m-0 text-base font-semibold text-primary">
+                {copy.account.deleteCardTitle}
+              </h3>
+              <p className="m-0 text-sm text-secondary">
+                {runtime.demoMode
+                  ? copy.account.demoHint
+                  : copy.account.deleteCardHint}
+              </p>
+            </div>
+          </div>
+          <div className="gp-account-deletion__actions">
             <Button variant="destructive" onClick={() => setDeleting(true)}>
+              <UiIcon name="trash" />
               {copy.account.deleteAction}
             </Button>
           </div>

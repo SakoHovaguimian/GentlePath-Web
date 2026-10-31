@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import { useRuntimeConfig } from '@/providers/RuntimeProvider';
+import { resolveDemoMediaUrl } from '@/services/demo/demoMedia';
 import { useState } from 'react';
 import { BlogEmbeddedMedia } from '@/modules/blog/components/BlogEmbeddedMedia';
 import { resolveBlogEmbed } from '@/modules/blog/content/resolveBlogEmbed';
@@ -12,6 +14,8 @@ import {
 } from '../models/communityAttachment';
 
 function CommunityAttachmentPreview({ item }: { item: CommunityAttachment }) {
+  const { demoMode } = useRuntimeConfig();
+  const mediaUrl = resolveDemoMediaUrl(item.url, demoMode);
   const [failed, setFailed] = useState(false);
   // Validate again at the rendering boundary before loading any remote resource.
   if (!CommunityAttachmentSchema.safeParse(item).success) return null;
@@ -31,13 +35,13 @@ function CommunityAttachmentPreview({ item }: { item: CommunityAttachment }) {
       {item.kind === 'IMAGE' && !failed && (
         <a
           className="gp-community-attachment__image"
-          href={item.url}
+          href={mediaUrl}
           target="_blank"
           rel="noopener noreferrer"
           referrerPolicy="no-referrer"
         >
           <Image
-            src={item.url}
+            src={mediaUrl}
             alt={item.description}
             fill
             unoptimized
@@ -51,7 +55,7 @@ function CommunityAttachmentPreview({ item }: { item: CommunityAttachment }) {
       {item.kind === 'VIDEO' && !failed && (
         <video
           className="gp-community-attachment__video"
-          src={item.url}
+          src={mediaUrl}
           controls
           playsInline
           preload="none"
@@ -65,12 +69,16 @@ function CommunityAttachmentPreview({ item }: { item: CommunityAttachment }) {
             {item.description}
           </span>
           <span className="block text-xs text-tertiary wrap-anywhere">
-            {failed ? copy.unavailableMediaHint : new URL(item.url).hostname}
+            {failed
+              ? copy.unavailableMediaHint
+              : mediaUrl !== item.url
+                ? copy.illustrationSource
+                : new URL(item.url).hostname}
           </span>
         </span>
         <Button asChild variant="ghost" className="shrink-0 px-2">
           <a
-            href={item.url}
+            href={mediaUrl}
             target="_blank"
             rel="noopener noreferrer"
             referrerPolicy="no-referrer"

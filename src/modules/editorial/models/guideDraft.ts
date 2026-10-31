@@ -1,19 +1,9 @@
 import type { Guide } from './guide';
+import type { GuideDraftItem } from './guideDraftItem';
 import type { ContentMetadata } from './contentMetadata';
 
 const empty = '';
 
-export interface GuideDraftItem {
-  id: string;
-  persistedId?: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  sourceName: string;
-  sourceUrl: string;
-  sourceDate: string;
-  metadataText: string;
-}
 export interface GuideDraft {
   title: string;
   description: string;

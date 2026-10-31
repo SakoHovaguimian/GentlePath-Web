@@ -10,6 +10,7 @@ import {
   PageHeader,
   QueryBoundary,
   UiIcon,
+  buttonClassName,
 } from '@/components/ui';
 import { useSessionState } from '@/providers/AppProviders';
 import { canManagePlatform } from '@/services/auth/permissions';
@@ -24,7 +25,11 @@ export function AdminDashboardScreen() {
   const query = useAdminOverview();
   return (
     <div className={styles.page}>
-      <section className={styles.hero}>
+      <Link
+        href="/admin/blog/new"
+        className={styles.hero}
+        aria-label={copy.admin.create}
+      >
         <div className={styles.heroBody}>
           <PageHeader
             title={superadmin ? copy.admin.superTitle : copy.admin.title}
@@ -35,12 +40,10 @@ export function AdminDashboardScreen() {
                 : copy.navigation.role.admin
             }
             action={
-              <Button asChild>
-                <Link href="/admin/blog/new">
-                  <UiIcon name="plus" />
-                  {copy.admin.create}
-                </Link>
-              </Button>
+              <span className={buttonClassName()}>
+                <UiIcon name="plus" />
+                {copy.admin.create}
+              </span>
             }
           />
         </div>
@@ -53,43 +56,59 @@ export function AdminDashboardScreen() {
             preload
           />
         </div>
-      </section>
+      </Link>
       <QueryBoundary query={query}>
         {(data) => (
           <>
             <section className={styles.metrics}>
-              <div className={styles.metric} data-tone="sage">
+              <Link
+                href="/admin/users"
+                className={styles.metric}
+                data-tone="sage"
+              >
                 <MetricCard
                   eyebrow={copy.admin.users}
                   value={String(data.userCount)}
                   caption={copy.admin.usersHint}
                   icon={<UiIcon name="user" />}
                 />
-              </div>
-              <div className={styles.metric} data-tone="lilac">
+              </Link>
+              <Link
+                href="/admin/users?activity=active"
+                className={styles.metric}
+                data-tone="lilac"
+              >
                 <MetricCard
                   eyebrow={copy.admin.active}
                   value={String(data.activeUserCount)}
                   caption={copy.admin.activeHint}
                   icon={<UiIcon name="check" />}
                 />
-              </div>
-              <div className={styles.metric} data-tone="sunlight">
+              </Link>
+              <Link
+                href="/admin/blog?status=published"
+                className={styles.metric}
+                data-tone="sunlight"
+              >
                 <MetricCard
                   eyebrow={copy.admin.published}
                   value={String(data.publishedBlogCount)}
                   caption={copy.admin.publishedHint}
                   icon={<UiIcon name="file" />}
                 />
-              </div>
-              <div className={styles.metric} data-tone="clay">
+              </Link>
+              <Link
+                href="/admin/moderation?status=open"
+                className={styles.metric}
+                data-tone="clay"
+              >
                 <MetricCard
                   eyebrow={copy.admin.reports}
                   value={String(data.openReportCount)}
                   caption={copy.admin.reportsHint}
                   icon={<UiIcon name="warning" />}
                 />
-              </div>
+              </Link>
             </section>
             <div className={styles.insights}>
               <Card className={styles.chartPanel}>
@@ -107,7 +126,12 @@ export function AdminDashboardScreen() {
                   <h2>{copy.admin.roleBreakdown}</h2>
                 </div>
                 {Object.entries(data.roleCounts).map(([role, count]) => (
-                  <div key={role} className={styles.role} data-role={role}>
+                  <Link
+                    href={`/admin/users?status=${role}`}
+                    key={role}
+                    className={styles.role}
+                    data-role={role}
+                  >
                     <div className={styles.roleLabel}>
                       <span>
                         {
@@ -128,7 +152,7 @@ export function AdminDashboardScreen() {
                         }}
                       />
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </Card>
             </div>

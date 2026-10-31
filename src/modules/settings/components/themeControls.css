@@ -38,6 +38,8 @@
   grid-template-columns: 22% 1fr;
   height: 7rem;
   overflow: hidden;
+  isolation: isolate;
+  clip-path: inset(0 round var(--radius-md));
   border: 1px solid var(--color-border-secondary);
   border-radius: var(--radius-md);
   background: var(--preview-canvas);

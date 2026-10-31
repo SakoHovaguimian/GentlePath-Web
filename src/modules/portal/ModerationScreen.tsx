@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
-  Badge,
   Button,
   Card,
   DirectoryFilters,
   EmptyState,
+  Field,
+  Select,
   PageHeader,
   QueryBoundary,
-  UiIcon,
 } from '@/components/ui';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { useModerationReports } from './adminHooks';
@@ -19,6 +20,10 @@ import {
   type ModerationReport,
 } from './models/moderationReport';
 import { ReportReview } from './components/ReportReview';
+import { ReportDetails } from './components/ReportDetails';
+import { ModerationReportCard } from './components/ModerationReportCard';
+import { ModerationSortSchema } from './models/moderationSort';
+import { sortModerationReports } from './services/sortModerationReports';
 import {
   CollectionPagination,
   collectionOffset,
@@ -27,6 +32,10 @@ import styles from './Admin.module.css';
 
 export function ModerationScreen() {
   const query = useModerationReports();
+  const params = useSearchParams();
+  const sort = ModerationSortSchema.catch('latest').parse(
+    params.get('sort') ?? 'latest',
+  );
   const directory = usePortalDirectory();
   const [selected, setSelected] = useState<ModerationReport | null>(null);
   const statuses = ModerationReportSchema.shape.status.options.map(
@@ -56,6 +65,26 @@ export function ModerationScreen() {
             })
           }
           statuses={statuses}
+          additionalFilters={
+            <Field labelText={copy.moderation.sortLabel}>
+              <Select
+                className="@4xl:w-48"
+                value={sort}
+                onValueChange={(value) =>
+                  directory.update({
+                    sort: value === 'latest' ? undefined : value,
+                    offset: undefined,
+                  })
+                }
+              >
+                {ModerationSortSchema.options.map((value) => (
+                  <option key={value} value={value}>
+                    {copy.moderation.sortOptions[value]}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          }
           copy={{
             search: copy.common.search,
             placeholder: copy.moderation.searchPlaceholder,
@@ -67,88 +96,26 @@ export function ModerationScreen() {
       </Card>
       <QueryBoundary query={query}>
         {(reports) => {
-          const filtered = reports.filter(
-            (report) =>
-              (!directory.status || report.status === directory.status) &&
-              `${report.contentTitle} ${report.reason}`
-                .toLocaleLowerCase()
-                .includes(directory.query.toLocaleLowerCase()),
+          const filtered = sortModerationReports(
+            reports.filter(
+              (report) =>
+                (!directory.status || report.status === directory.status) &&
+                `${report.contentTitle} ${report.reason}`
+                  .toLocaleLowerCase()
+                  .includes(directory.query.toLocaleLowerCase()),
+            ),
+            sort,
           );
           const offset = collectionOffset(directory.offset, filtered.length);
           return filtered.length ? (
             <>
               <div className={styles.reports}>
                 {filtered.slice(offset, offset + 9).map((report) => (
-                  <Card
+                  <ModerationReportCard
                     key={report.id}
-                    className={styles.report}
-                    data-status={report.status}
-                  >
-                    <div className={styles.reportHeader}>
-                      <div className={styles.reportIdentity}>
-                        <span
-                          className={styles.roundIcon}
-                          data-tone={
-                            report.status === 'open'
-                              ? 'sunlight'
-                              : report.status === 'dismissed'
-                                ? 'lilac'
-                                : 'sage'
-                          }
-                        >
-                          <UiIcon
-                            name={
-                              report.status === 'open'
-                                ? 'warning'
-                                : report.status === 'dismissed'
-                                  ? 'close'
-                                  : 'check'
-                            }
-                          />
-                        </span>
-                        <div>
-                          <Badge
-                            className="justify-self-start"
-                            intent={
-                              report.status === 'open' ? 'warning' : 'neutral'
-                            }
-                          >
-                            {
-                              statuses.find(
-                                (status) => status.value === report.status,
-                              )?.label
-                            }
-                          </Badge>
-                          <h2>{report.contentTitle}</h2>
-                        </div>
-                      </div>
-                      <time
-                        dateTime={report.createdAt}
-                        className="text-xs text-tertiary"
-                      >
-                        {new Date(report.createdAt).toLocaleDateString('en-US')}
-                      </time>
-                    </div>
-                    <p className={styles.reportReason}>{report.reason}</p>
-                    <div className={styles.reportFooter}>
-                      <span className="text-xs text-tertiary">
-                        {copy.moderation.reportedBy(report.reporterName)}
-                      </span>
-                      {report.status === 'open' ? (
-                        <Button
-                          variant="secondary"
-                          onClick={() => setSelected(report)}
-                        >
-                          {copy.moderation.review}
-                          <UiIcon name="arrowRight" className="size-4" />
-                        </Button>
-                      ) : (
-                        <p className="m-0 text-sm text-secondary">
-                          {report.resolutionNote}
-                        </p>
-                      )}
-                    </div>
-                  </Card>
+                    report={report}
+                    onOpen={() => setSelected(report)}
+                  />
                 ))}
               </div>
               <CollectionPagination
@@ -189,13 +156,16 @@ export function ModerationScreen() {
           );
         }}
       </QueryBoundary>
-      {selected && (
-        <ReportReview
-          key={selected.id}
-          report={selected}
-          onClose={() => setSelected(null)}
-        />
-      )}
+      {selected &&
+        (selected.status === 'open' ? (
+          <ReportReview
+            key={selected.id}
+            report={selected}
+            onClose={() => setSelected(null)}
+          />
+        ) : (
+          <ReportDetails report={selected} onClose={() => setSelected(null)} />
+        ))}
     </div>
   );
 }

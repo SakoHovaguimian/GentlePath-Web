@@ -11,6 +11,7 @@ export interface MultiSelectProps<Value extends string> {
   className?: string;
   disabled?: boolean;
   selectAllLabel?: string;
+  maxSelections?: number;
   id?: string;
   ref?: Ref<HTMLButtonElement>;
   'aria-labelledby'?: string;

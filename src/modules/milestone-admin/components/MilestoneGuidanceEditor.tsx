@@ -1,4 +1,5 @@
 'use client';
+import { PublicImageField } from '@/services/media/components/PublicImageField';
 import { useRef, useState, type FormEvent } from 'react';
 import {
   BookmarkButton,
@@ -18,21 +19,17 @@ import {
   gentlePathMilestoneAdminStrings as copy,
   gentlePathPortalStrings as portalCopy,
 } from '@/strings';
-import {
-  MilestoneGuidanceInputSchema,
-  type MilestoneGuidance,
-} from '../models/milestoneGuidance';
+import { MilestoneGuidanceInputSchema } from '../models/milestoneGuidance';
+import type { MilestoneGuidanceEditorProps } from '../models/milestoneGuidanceEditorProps';
 import type { ResponseOptionDraft } from '../models/responseOptionDraft';
 import { useHideMilestoneGuidance, useSaveMilestoneGuidance } from '../hooks';
 import { ResponseOptionEditor } from './ResponseOptionEditor';
-interface MilestoneGuidanceEditorProps {
-  milestone?: MilestoneGuidance;
-  onClose: () => void;
-}
 export function MilestoneGuidanceEditor({
   milestone,
   onClose,
 }: MilestoneGuidanceEditorProps) {
+  const [imageUrl, setImageUrl] = useState(milestone?.image_url ?? '');
+  const [uploading, setUploading] = useState(false);
   const [name, setName] = useState(milestone?.milestone ?? '');
   const [information, setInformation] = useState(milestone?.information ?? '');
   const [guidance, setGuidance] = useState(
@@ -67,7 +64,7 @@ export function MilestoneGuidanceEditor({
   const save = useSaveMilestoneGuidance();
   const remove = useHideMilestoneGuidance();
   const [confirming, setConfirming] = useState(false);
-  const pending = save.isPending || remove.isPending || confirming;
+  const pending = save.isPending || remove.isPending || confirming || uploading;
   const { showAlert, showToast } = usePresentationService();
   const dismiss = () => {
     void leave().then((allowed) => {
@@ -110,6 +107,7 @@ export function MilestoneGuidanceEditor({
     if (busy.current) return;
     const result = MilestoneGuidanceInputSchema.safeParse({
       milestone: name,
+      image_url: imageUrl.trim() || null,
       information,
       observation_guidance: guidance.trim() || null,
       tags: tags
@@ -175,6 +173,18 @@ export function MilestoneGuidanceEditor({
             onChange={(event) => change(() => setName(event.target.value))}
           />
         </Field>
+        <PublicImageField
+          id="milestone-image"
+          value={imageUrl}
+          label={copy.imageLabel}
+          disabled={pending}
+          error={validation.image_url}
+          onChange={(url) => change(() => setImageUrl(url))}
+          onUploadStateChange={(active) => {
+            busy.current = active;
+            setUploading(active);
+          }}
+        />
         <Field labelText={copy.informationLabel}>
           <TextArea
             name="information"
@@ -259,7 +269,7 @@ export function MilestoneGuidanceEditor({
           <BookmarkButton
             type="submit"
             loading={save.isPending}
-            disabled={remove.isPending || confirming}
+            disabled={remove.isPending || confirming || uploading}
           >
             {copy.saveMilestone}
           </BookmarkButton>

@@ -68,15 +68,15 @@ Every save/publication/deletion sends the observed integer revision. Success inc
 
 Staff `BlogService` follows the authenticated domain/proxy path. Public SSR uses its server-only published service without reading/refreshing a session.
 
-| Endpoint                                        | Behavior                                                       |
-| ----------------------------------------------- | -------------------------------------------------------------- |
-| `GET /blog/_options` or `/public/blog/_options` | Reusable choices from staff-visible or published articles      |
-| `GET/POST /blog`                                | Staff paging/create draft                                      |
-| `GET/PATCH/DELETE /blog/:id`                    | Staff read/save/delete with revision                           |
-| `POST /blog/:id/publish` or `/unpublish`        | Revision-checked publication                                   |
+| Endpoint                                        | Behavior                                                              |
+| ----------------------------------------------- | --------------------------------------------------------------------- |
+| `GET /blog/_options` or `/public/blog/_options` | Reusable choices from staff-visible or published articles             |
+| `GET/POST /blog`                                | Staff paging/create draft                                             |
+| `GET/PATCH/DELETE /blog/:id`                    | Staff read/save/delete with revision                                  |
+| `POST /blog/:id/publish` or `/unpublish`        | Revision-checked publication                                          |
 | `GET /public/blog` or `/public/blog/:slug`      | Published-only list/detail by slug or UUID; drafts/missing return 404 |
-| `GET /public/blog/id/:id`                       | Resolve a published UUID to its canonical slug for app actions |
-| `POST /blog/media/upload`                       | Web facade forwarding to `/media/upload-media`                 |
+| `GET /public/blog/id/:id`                       | Resolve a published UUID to its canonical slug for app actions        |
+| `POST /blog/media/upload`                       | Web facade forwarding to `/media/upload-media`                        |
 
 Lists accept query/category, staff status, limit/offset, and return `{data,total,limit,offset}`. Search includes block text. Filter/page pushes create browser history. Public Next routes are GET-only under `/api/public/blog`.
 
@@ -90,4 +90,4 @@ Ordered BlogContent rows store `meta_data` JSONB with a GIN index and parent pub
 
 JSONB supports path/containment queries. Its metadata GIN index does not optimize arbitrary case-insensitive substring search. Current search includes selected JSON paths; measured workloads may justify a separate full-text index.
 
-Demo article state enforces trusted staff roles, visibility, slugs, and revisions. Demo uploads store actual validated bytes (20 images/25 MB cap) and serve typed public image responses at `/api/public/blog-media/:id`; reset/restart clears them. [Verification](VERIFICATION.md) covers add/edit/reorder/preview/upload/publication/SSR and revision recovery, with no live storage/provider writes during routine checks.
+Demo article state enforces trusted staff roles, visibility, slugs, and revisions. Demo uploads share the validated public byte store with guide/milestone uploads (20 images/25 MB total cap) and serve typed public image responses at `/api/public/blog-media/:id`; reset/restart clears them. [Verification](VERIFICATION.md) covers add/edit/reorder/preview/upload/publication/SSR and revision recovery, with no live storage/provider writes during routine checks.

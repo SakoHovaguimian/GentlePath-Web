@@ -1,6 +1,11 @@
 import type { ReactNode } from 'react';
-import { Page, PageHeader, SegmentedTabs } from '@/components/ui';
-import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
+import {
+  ContentTransition,
+  Page,
+  PageHeader,
+  SegmentedTabs,
+} from '@/components/ui';
+import { useCommunityViewNavigation } from '../useCommunityViewNavigation';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import type { CommunityView } from '../models/communityView';
 
@@ -17,9 +22,10 @@ export function CommunityHub({
   action,
   children,
 }: CommunityHubProps) {
-  const navigate = useGuardedNavigate();
+  const navigation = useCommunityViewNavigation();
   return (
     <Page
+      aria-busy={navigation.pending}
       className={`gp-portal-page ${activeView === 'polls' ? 'gp-polls' : 'gp-community'}`}
     >
       <PageHeader
@@ -37,12 +43,11 @@ export function CommunityHub({
             { value: communityViews.polls, label: copy.pollsTitle },
           ]}
           onValueChange={(view) => {
-            if (view !== activeView)
-              void navigate(view === 'polls' ? '/polls' : '/community');
+            if (view !== activeView) void navigation.choose(view);
           }}
         />
       </div>
-      {children}
+      <ContentTransition revision={activeView}>{children}</ContentTransition>
     </Page>
   );
 }

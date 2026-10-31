@@ -1,5 +1,10 @@
 'use client';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
 import { portalQueryKeys } from '@/modules/portal/queryKeys';
 import { milestoneAdminKeys as keys } from './queryKeys';
@@ -13,6 +18,7 @@ export function useMilestoneGuidance(query: MilestoneAdminQuery) {
   const { milestoneAdminService: service } = useServiceContainer();
   return useQuery({
     queryKey: keys.milestones(query),
+    placeholderData: keepPreviousData,
     queryFn: ({ signal }) => service.milestones(query, signal),
   });
 }
@@ -35,6 +41,7 @@ export function useMilestoneProgressSummary(childId: string) {
   const { milestoneAdminService: service } = useServiceContainer();
   return useQuery({
     queryKey: keys.progress(childId),
+    placeholderData: keepPreviousData,
     queryFn: ({ signal }) => service.progressSummary(childId, signal),
     enabled: Boolean(childId),
   });

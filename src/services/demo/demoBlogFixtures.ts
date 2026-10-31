@@ -1,3 +1,4 @@
+import { demoMedia } from './demoMedia';
 import {
   gentlePathBlogStrings as copy,
   gentlePathBlogBuilderStrings as builderCopy,
@@ -74,6 +75,32 @@ export function createDemoBlogArticles(): BlogArticle[] {
                 metaData: {
                   text: builderCopy.demo.quote,
                   attribution: builderCopy.demo.attribution,
+                },
+              },
+              {
+                id: 'b2000000-0000-4000-8000-000000000008',
+                contentType: 'image',
+                metaData: {
+                  src: demoMedia.connection,
+                  alt: builderCopy.demo.connectionAlt,
+                  caption: builderCopy.demo.connectionCaption,
+                },
+              },
+              {
+                id: 'b2000000-0000-4000-8000-000000000009',
+                contentType: 'gallery2',
+                metaData: {
+                  images: [
+                    {
+                      src: demoMedia.reading,
+                      alt: builderCopy.demo.readingAlt,
+                    },
+                    {
+                      src: demoMedia.transition,
+                      alt: builderCopy.demo.pathAlt,
+                    },
+                  ],
+                  caption: builderCopy.demo.galleryCaption,
                 },
               },
               {

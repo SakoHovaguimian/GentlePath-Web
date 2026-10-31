@@ -1,3 +1,5 @@
+import { DiscountSortSchema } from '../models/discountSort';
+import { sortDiscountOffers } from '../services/sortDiscountOffers';
 import 'server-only';
 import { commercialDestination } from './commercialDestination';
 import { z } from 'zod';
@@ -170,11 +172,18 @@ export async function handleCommercialRequest(
             b.id.localeCompare(a.id),
         );
       if (!id) {
+        const parsedSort = DiscountSortSchema.safeParse(
+          url.searchParams.get('sort') ?? 'latest',
+        );
+        if (!parsedSort.success)
+          throw new ValidationError(copy.validation.invalid);
+        const params = new URLSearchParams(url.searchParams);
+        params.delete('sort');
         const page = demoCommercialPage(
           state,
           'offers',
-          offers,
-          url.searchParams,
+          sortDiscountOffers(offers, parsedSort.data),
+          params,
           empty,
           true,
         );

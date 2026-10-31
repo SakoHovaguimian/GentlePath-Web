@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { UserRoleSchema } from '@/models/userRole';
+import { AccountActivitySchema } from './models/accountActivity';
 import {
   Badge,
   Button,
@@ -8,6 +11,8 @@ import {
   DataTable,
   DirectoryFilters,
   EmptyState,
+  Field,
+  Select,
   InitialsAvatar,
   MobileRecordRow,
   PageHeader,
@@ -32,10 +37,14 @@ export function ManagedUsersScreen() {
   const { session } = useSessionState();
   const canEdit = session && canManagePlatform(session.user.role);
   const directory = usePortalDirectory();
+  const activity = AccountActivitySchema.catch('all').parse(
+    useSearchParams().get('activity') ?? 'all',
+  );
   const [selected, setSelected] = useState<ManagedUser | null>(null);
   const filtered = (query.data ?? []).filter(
     (user) =>
       (!directory.status || user.role === directory.status) &&
+      (activity === 'all' || user.disabled === (activity === 'disabled')) &&
       `${user.firstName} ${user.lastName} ${user.email}`
         .toLocaleLowerCase()
         .includes(directory.query.toLocaleLowerCase()),
@@ -95,9 +104,34 @@ export function ManagedUsersScreen() {
                 offset: undefined,
               })
             }
-            statuses={Object.entries(copy.people.roles).map(
-              ([value, label]) => ({ value, label }),
-            )}
+            statuses={UserRoleSchema.options.map((value) => ({
+              value,
+              label: copy.people.roles[value],
+            }))}
+            additionalFilters={
+              <Field labelText={copy.common.status}>
+                <Select
+                  value={activity}
+                  onValueChange={(value) =>
+                    directory.update({
+                      activity:
+                        value === 'all'
+                          ? undefined
+                          : AccountActivitySchema.parse(value),
+                      offset: undefined,
+                    })
+                  }
+                >
+                  {AccountActivitySchema.options.map((value) => (
+                    <option key={value} value={value}>
+                      {value === 'all'
+                        ? copy.people.allAccounts
+                        : copy.people[value]}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            }
             copy={{
               search: copy.common.search,
               placeholder: copy.people.searchPlaceholder,
@@ -227,6 +261,7 @@ export function ManagedUsersScreen() {
                       directory.update({
                         query: undefined,
                         status: undefined,
+                        activity: undefined,
                         offset: undefined,
                       })
                     }

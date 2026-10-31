@@ -6,6 +6,7 @@ import { useState, type ReactNode } from 'react';
 import { Card } from './Card';
 import { ErrorState } from './ErrorState';
 import { Spinner } from './Spinner';
+import { ContentTransition } from './ContentTransition';
 
 /**
  * Loading skeleton that matches the Card layout
@@ -91,6 +92,8 @@ interface QueryBoundaryProps<T> {
   showError?: boolean;
   /** Pads the error state when rendered inside a DataPanel or other surface */
   inset?: boolean;
+  /** Keep loaded content mounted and animate confirmed result changes. */
+  animateChanges?: boolean;
 }
 
 /**
@@ -123,6 +126,7 @@ export function QueryBoundary<T>({
   loadingMessage,
   showError = true,
   inset = false,
+  animateChanges = false,
 }: QueryBoundaryProps<T>): ReactNode {
   // A retry retains its error panel and action instead of flashing the initial loader.
   const retryingError =
@@ -146,7 +150,13 @@ export function QueryBoundary<T>({
     return null;
   }
 
-  return children(query.data);
+  return animateChanges ? (
+    <ContentTransition revision={query.data} busy={query.isFetching}>
+      {children(query.data)}
+    </ContentTransition>
+  ) : (
+    children(query.data)
+  );
 }
 
 /**

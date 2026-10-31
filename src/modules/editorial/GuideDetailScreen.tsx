@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useRef, useState } from 'react';
-import { z } from 'zod';
 import {
   Badge,
   Button,
@@ -18,10 +17,8 @@ import {
 import { gentlePathEditorialStrings as copy } from '@/strings';
 import { useGuide } from './hooks';
 import type { Guide } from './models/guide';
-import { ContentUrlSchema } from './models/contentUrl';
 import { EditorialImage } from './components/EditorialImage';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
-import { formatBlogDate } from '@/modules/blog/formatBlogDate';
 
 function GuideReader({ guide }: { guide: Guide }) {
   const [selected, setSelected] = useState(0);
@@ -29,16 +26,6 @@ function GuideReader({ guide }: { guide: Guide }) {
   const items = [...guide.items].sort((a, b) => a.position - b.position);
   const index = Math.min(selected, Math.max(0, items.length - 1));
   const item = items[index];
-  const sourceName =
-    typeof item?.additional_properties.source_name === 'string'
-      ? item.additional_properties.source_name
-      : undefined;
-  const sourceUrl = ContentUrlSchema.safeParse(
-    item?.additional_properties.source_url,
-  );
-  const sourceDate = z.iso
-    .date()
-    .safeParse(item?.additional_properties.source_published_at);
   const choose = (next: number) => {
     setSelected(next);
     requestAnimationFrame(() => heading.current?.focus());
@@ -97,43 +84,6 @@ function GuideReader({ guide }: { guide: Guide }) {
               />
             )}
             <MarkdownContent value={item.description} />
-            {(sourceName || sourceUrl.success || sourceDate.success) && (
-              <div className="grid gap-2 border-t border-secondary pt-4">
-                <span className="text-xs font-medium text-tertiary">
-                  {copy.sourceTitle}
-                </span>
-                {sourceName && (
-                  <span className="text-sm text-secondary">{sourceName}</span>
-                )}
-                {sourceDate.success && (
-                  <span className="text-xs text-tertiary">
-                    {copy.sourcePublished(
-                      formatBlogDate(
-                        `${sourceDate.data}T12:00:00Z`,
-                        false,
-                        'UTC',
-                      ),
-                    )}
-                  </span>
-                )}
-                {sourceUrl.success && (
-                  <Button
-                    asChild
-                    variant="ghost"
-                    className="justify-self-start"
-                  >
-                    <a
-                      href={sourceUrl.data}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      {copy.sourceLink}
-                      <UiIcon name="arrowRight" />
-                    </a>
-                  </Button>
-                )}
-              </div>
-            )}
             <div className="grid gap-5 border-t border-secondary pt-5">
               {index === items.length - 1 && (
                 <Message

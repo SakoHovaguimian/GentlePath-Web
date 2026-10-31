@@ -1,4 +1,5 @@
 import 'server-only';
+import { handlePublicImageRequest } from '@/services/media/server/handlePublicImageRequest';
 import { z } from 'zod';
 import { UserMutationInputSchema } from '@/models/user';
 import { FeatureRequestMutationInputSchema } from '@/models/featureRequest';
@@ -85,6 +86,8 @@ export class DemoApiClient {
     )
       throw new OwnershipError();
     await simulateDemoRequest(context);
+    const imageUpload = await handlePublicImageRequest(request, path);
+    if (imageUpload) return imageUpload;
     const documents = await handleDocumentVaultRequest(
       request,
       path,

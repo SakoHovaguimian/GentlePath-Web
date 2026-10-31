@@ -1,4 +1,5 @@
 import 'server-only';
+import { handlePublicImageRequest } from '@/services/media/server/handlePublicImageRequest';
 import { handleLiveJournalRequest } from '@/modules/portal/server/handleLiveJournalRequest';
 import { handleLiveAdministrationRequest } from '@/modules/portal/server/handleLiveAdministrationRequest';
 import { handleLiveDocumentVaultRequest } from '@/modules/documents/server/handleLiveDocumentVaultRequest';
@@ -23,6 +24,7 @@ export async function featureBackendProxy(
   role: UserRole,
 ): Promise<Response | null> {
   return (
+    (await handlePublicImageRequest(request, path, forward)) ??
     (await handleLiveAdministrationRequest(request, path, forward)) ??
     (await handleLiveBlogMediaRequest(request, path, forward)) ??
     (await handleLiveChildProfileRequest(request, path, forward, userId)) ??

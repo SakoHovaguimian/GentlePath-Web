@@ -23,6 +23,7 @@ export function MilestoneProgressOverview({ childId }: { childId: string }) {
       </header>
       <QueryBoundary
         query={query}
+        animateChanges
         loadingMessage={copy.overview.loading}
         loadingFallback={<InlineLoading message={copy.overview.loading} />}
       >
@@ -44,18 +45,16 @@ export function MilestoneProgressOverview({ childId }: { childId: string }) {
               </dl>
             </div>
             <div className="gp-milestone-progress__track" aria-hidden="true">
-              {answeredStates.map((state) =>
-                summary.counts[state] > 0 && summary.total > 0 ? (
-                  <span
-                    key={state}
-                    className="gp-milestone-progress__segment"
-                    data-state={state}
-                    style={{
-                      width: `${(summary.counts[state] / summary.total) * 100}%`,
-                    }}
-                  />
-                ) : null,
-              )}
+              {answeredStates.map((state) => (
+                <span
+                  key={state}
+                  className="gp-milestone-progress__segment"
+                  data-state={state}
+                  style={{
+                    width: `${summary.total ? (summary.counts[state] / summary.total) * 100 : 0}%`,
+                  }}
+                />
+              ))}
             </div>
             <ul
               className="gp-milestone-progress__legend"

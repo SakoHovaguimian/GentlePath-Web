@@ -2,7 +2,12 @@
 
 import type { CommunityCommentQuery } from '@/modules/community/models/communityCommentQuery';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
 import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
 import { portalQueryKeys } from '@/modules/portal/queryKeys';
@@ -22,6 +27,7 @@ export function usePolls(query: PollQuery) {
   const { pollService: service } = useServiceContainer();
   return useQuery({
     queryKey: keys.list(query),
+    placeholderData: keepPreviousData,
     queryFn: ({ signal }) => service.polls(query, signal),
   });
 }

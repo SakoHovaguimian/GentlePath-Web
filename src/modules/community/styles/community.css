@@ -1,7 +1,5 @@
 .gp-community {
   width: 100%;
-  max-width: 64rem;
-  margin-inline: auto;
 }
 
 .gp-community-feed {
@@ -163,8 +161,6 @@
 
 .gp-community-detail {
   width: 100%;
-  max-width: 62rem;
-  margin-inline: auto;
 }
 
 .gp-community-thread {

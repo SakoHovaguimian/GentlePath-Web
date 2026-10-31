@@ -30,31 +30,50 @@ function createPortalState(): DemoPortalState {
     'article',
   ];
   return {
-    children: users.map((user, index) => ({
-      id: `child-${index + 1}`,
-      userId: user.id,
-      name: copy.childName,
-      dateOfBirth: '2020-06-15',
-      gender: null,
-      supportNotes: '',
-      supportDetails: ChildSupportDetailsSchema.parse({
-        comfortStrategies: copy.childNotes,
-      }),
-    })),
+    children: users.flatMap((user, index) => [
+      {
+        id: `child-${index + 1}`,
+        userId: user.id,
+        name: copy.childName,
+        dateOfBirth: '2020-06-15',
+        gender: 'NON_BINARY' as const,
+        supportNotes: copy.childSupportNotes,
+        supportDetails: ChildSupportDetailsSchema.parse(
+          copy.childSupportDetails,
+        ),
+      },
+      {
+        id: `child-${index + 1}-younger`,
+        userId: user.id,
+        name: copy.youngerChildName,
+        dateOfBirth: '2023-02-08',
+        gender: null,
+        supportNotes: '',
+        supportDetails: ChildSupportDetailsSchema.parse({
+          communication: copy.youngerChildCommunication,
+        }),
+      },
+    ]),
     journals: users.flatMap((user, userIndex) =>
       copy.journalSeeds.map((seed, index) => ({
         id: `journal-${userIndex + 1}-${index + 1}`,
         userId: user.id,
-        childId: `child-${userIndex + 1}`,
+        childId:
+          index === 5
+            ? null
+            : `child-${userIndex + 1}${index === 4 ? '-younger' : ''}`,
         title: seed.title,
         body: seed.body,
-        emotions: [
+        emotions:
           index === 0
-            ? ('grateful' as const)
+            ? ['grateful' as const, 'hopeful' as const]
             : index === 1
-              ? ('calm' as const)
-              : ('hopeful' as const),
-        ],
+              ? ['calm' as const]
+              : index === 3
+                ? ['tired' as const, 'hopeful' as const]
+                : index === 4
+                  ? ['overwhelmed' as const]
+                  : [],
         createdAt: daysAgo(index + 1),
         updatedAt: daysAgo(index + 1),
       })),
@@ -74,13 +93,24 @@ function createPortalState(): DemoPortalState {
       response: null,
       observedAt: null,
     })),
-    observations: users.map((user, index) => ({
-      userId: user.id,
-      childId: `child-${index + 1}`,
-      milestoneId: 'milestone-1',
-      response: 'emerging',
-      observedAt: daysAgo(1),
-    })),
+    observations: users.flatMap((user, index) =>
+      (
+        [
+          'emerging',
+          'often',
+          'not_yet',
+          'stopped',
+          'often',
+          'emerging',
+        ] as const
+      ).map((response, position) => ({
+        userId: user.id,
+        childId: `child-${index + 1}`,
+        milestoneId: `milestone-${position + 1}`,
+        response,
+        observedAt: daysAgo(position + 1),
+      })),
+    ),
     favorites: new Map(
       users.map((user) => [user.id, new Set(['resource-1', 'resource-4'])]),
     ),

@@ -1,5 +1,6 @@
 'use client';
 
+import { PublicImageField } from '@/services/media/components/PublicImageField';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -37,9 +38,15 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
   const mutations = useEditorialMutations();
   const [guide, setGuide] = useState(initialGuide);
   const [confirming, setConfirming] = useState(false);
-  const busy = mutations.isPending || confirming;
+  const [uploading, setUploading] = useState(false);
+  const busy = mutations.isPending || confirming || uploading;
   const draft = useEditorialDraft(() => createGuideDraft(initialGuide), busy);
   const { form, errors } = draft;
+  const uploadStateChanged = (pending: boolean) => {
+    if (pending) draft.lock();
+    else draft.release();
+    setUploading(pending);
+  };
   const failure = (error: unknown) =>
     draft.setFailure(
       error instanceof DomainError && error.status < 500
@@ -154,22 +161,15 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
                   }
                 />
               </EditorField>
-              <EditorField
+              <PublicImageField
                 id="editorial-image_url"
                 label={copy.imageLabel}
-                hint={copy.imageHint}
+                value={form.imageUrl}
                 error={errors.image_url}
-              >
-                <Input
-                  type="url"
-                  value={form.imageUrl}
-                  maxLength={1000}
-                  disabled={busy}
-                  onChange={(event) =>
-                    draft.update({ ...form, imageUrl: event.target.value })
-                  }
-                />
-              </EditorField>
+                disabled={busy}
+                onChange={(imageUrl) => draft.update({ ...form, imageUrl })}
+                onUploadStateChange={uploadStateChanged}
+              />
             </div>
           </SplitSection>
           <SplitSection
@@ -181,6 +181,7 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
             <GuideItemsEditor
               items={form.items}
               disabled={busy}
+              onUploadStateChange={uploadStateChanged}
               errors={errors}
               onChangeAction={(items) => draft.update({ ...form, items })}
             />

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Checkbox, Radio } from '@/components/ui';
 import { gentlePathPollStrings as copy } from '@/strings';
 import type { Poll } from '../models/poll';
@@ -34,6 +35,24 @@ export function PollAnswerOptions({
           : 0;
         const selected = selectedIds.includes(option.id);
         const recorded = recordedIds.includes(option.id);
+        const content = (
+          <>
+            <span className="gp-poll-answer__label">
+              <span>{option.text}</span>
+              {recorded && (
+                <span className="gp-poll-answer__choice">{copy.selected}</span>
+              )}
+            </span>
+            <span className="gp-poll-answer__result">
+              <span className="gp-poll-answer__percent">
+                {copy.resultPercentage(percent)}
+              </span>
+              <span className="gp-poll-answer__count">
+                {copy.optionVotes(option.selectionsCount)}
+              </span>
+            </span>
+          </>
+        );
         const props = {
           name,
           value: option.id,
@@ -43,28 +62,21 @@ export function PollAnswerOptions({
           className: `gp-poll-answer${selected ? ' gp-poll-answer--selected' : ''}`,
           onChange: () => onSelect(option.id),
           label: (
-            <span className="gp-poll-answer__content">
-              <span
-                aria-hidden="true"
-                className="gp-poll-answer__fill"
-                style={{ width: `${Math.min(percent, 100)}%` }}
-              />
-              <span className="gp-poll-answer__label">
-                <span>{option.text}</span>
-                {recorded && (
-                  <span className="gp-poll-answer__choice">
-                    {copy.selected}
-                  </span>
-                )}
-              </span>
-              <span className="gp-poll-answer__result">
-                <span className="gp-poll-answer__percent">
-                  {copy.resultPercentage(percent)}
+            <span
+              className="gp-poll-answer__content"
+              style={
+                {
+                  '--poll-answer-percent': `${Math.min(percent, 100)}%`,
+                } as CSSProperties
+              }
+            >
+              <span aria-hidden="true" className="gp-poll-answer__fill" />
+              {content}
+              {selected && (
+                <span aria-hidden="true" className="gp-poll-answer__contrast">
+                  {content}
                 </span>
-                <span className="gp-poll-answer__count">
-                  {copy.optionVotes(option.selectionsCount)}
-                </span>
-              </span>
+              )}
             </span>
           ),
         };

@@ -24,6 +24,7 @@ export function MultiSelect<Value extends string>({
   className,
   disabled,
   selectAllLabel,
+  maxSelections,
   id,
   ref,
   'aria-labelledby': labelledBy,
@@ -33,6 +34,13 @@ export function MultiSelect<Value extends string>({
   return (
     <AriaSelect
       selectionMode="multiple"
+      disabledKeys={
+        maxSelections !== undefined && value.length >= maxSelections
+          ? options
+              .filter((option) => !value.includes(option.value))
+              .map((option) => option.value)
+          : []
+      }
       value={value}
       onChange={(keys) =>
         onValueChange(
@@ -41,7 +49,7 @@ export function MultiSelect<Value extends string>({
             .map((option) => option.value),
         )
       }
-      aria-label={label}
+      aria-label={labelledBy ? undefined : label}
       aria-labelledby={labelledBy}
       aria-describedby={describedBy}
       isInvalid={invalid === true || invalid === 'true'}
@@ -90,7 +98,7 @@ export function MultiSelect<Value extends string>({
             <ListBoxItem
               id={option.value}
               textValue={option.label}
-              className="ui-select-option flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-secondary outline-none data-focused:bg-secondary_subtle selected:bg-brand-primary selected:text-brand-secondary data-focus-visible:outline-2 data-focus-visible:-outline-offset-2 data-focus-visible:outline-brand"
+              className="ui-select-option flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-secondary outline-none data-focused:bg-secondary_subtle selected:bg-brand-primary selected:text-brand-secondary data-focus-visible:outline-2 data-focus-visible:-outline-offset-2 data-focus-visible:outline-brand data-disabled:cursor-not-allowed data-disabled:text-disabled"
             >
               {({ isSelected }) => (
                 <>
@@ -114,7 +122,11 @@ export function MultiSelect<Value extends string>({
             <Button
               variant="ghost"
               className="w-full"
-              disabled={!options.length || value.length === options.length}
+              disabled={
+                !options.length ||
+                value.length === options.length ||
+                (maxSelections !== undefined && options.length > maxSelections)
+              }
               onClick={() =>
                 onValueChange(options.map((option) => option.value))
               }

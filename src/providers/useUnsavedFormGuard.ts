@@ -32,6 +32,12 @@ export function useUnsavedFormGuard(
           tone: 'danger',
           confirmLabel: strings.common.discardChanges,
           cancelLabel: strings.common.keepEditing,
+        }).then((confirmed) => {
+          // The accepted discard must also release native unload and any
+          // subsequent guard check while the destination is being loaded.
+          // A new edit marks the form dirty again through its existing owner.
+          if (confirmed) dirty.current = false;
+          return confirmed;
         });
         pendingConfirmation.current = confirmation;
         void confirmation.finally(() => {

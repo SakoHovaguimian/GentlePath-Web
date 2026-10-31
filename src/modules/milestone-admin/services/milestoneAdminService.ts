@@ -29,10 +29,19 @@ import { MilestoneProgressSummarySchema } from '../models/milestoneProgressSumma
 export class MilestoneAdminService {
   constructor(private readonly api: ApiClientInterface) {}
   async milestones(query: MilestoneAdminQuery, signal?: AbortSignal) {
-    const { query: search, tag, limit, offset, child_id, progress } = query;
+    const {
+      query: search,
+      tag,
+      tags,
+      limit,
+      offset,
+      child_id,
+      progress,
+    } = query;
     const params = milestoneAdminQueryParams({
       query: search,
       tag,
+      tags,
       limit,
       offset,
       milestone_id: '',

@@ -1,7 +1,5 @@
 .gp-polls {
   width: 100%;
-  max-width: 64rem;
-  margin-inline: auto;
 }
 
 .gp-poll-card {
@@ -100,7 +98,9 @@
   position: relative;
   isolation: isolate;
   min-height: 4.25rem;
-  padding: 0.875rem 1rem;
+  --poll-answer-padding-y: 0.875rem;
+  --poll-answer-padding-x: 1rem;
+  padding: var(--poll-answer-padding-y) var(--poll-answer-padding-x);
   overflow: hidden;
   border: 1px solid var(--color-border-secondary);
   border-radius: var(--radius-lg);
@@ -126,17 +126,20 @@
   z-index: -1;
   inset-block: 0;
   inset-inline-start: 0;
-  background: var(--color-bg-secondary);
-  transition: width var(--motion-duration-base) var(--motion-ease-out);
+  width: var(--poll-answer-percent);
+  background: var(--gp-forest);
+  opacity: 0.15;
+  transition:
+    width var(--motion-duration-base) var(--motion-ease-out),
+    opacity var(--motion-duration-base) var(--motion-ease-out);
 }
 
 .gp-poll-answer--selected {
   border-color: var(--color-border-brand);
-  background: var(--color-selection-fill);
 }
 
 .gp-poll-answer--selected .gp-poll-answer__fill {
-  background: var(--color-selection-fill);
+  opacity: 1;
 }
 
 .gp-poll-answer__label {
@@ -200,7 +203,8 @@
 
 @media (max-width: 420px) {
   .gp-poll-answer {
-    padding: 0.75rem;
+    --poll-answer-padding-y: 0.75rem;
+    --poll-answer-padding-x: 0.75rem;
   }
 
   .gp-poll-answer__content {
@@ -222,4 +226,37 @@
 [data-motion='reduced'] .gp-poll-answer,
 [data-motion='reduced'] .gp-poll-answer__fill {
   transition: none;
+}
+
+/* Repeat the same text only over the opaque fill; both halves keep luminance contrast. */
+.gp-poll-answer__contrast {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: var(--poll-answer-padding-y) var(--poll-answer-padding-x);
+  padding-inline-start: calc(var(--poll-answer-padding-x) + 2rem);
+  clip-path: inset(0 calc(100% - var(--poll-answer-percent)) 0 0);
+  color: var(--gp-paper);
+  pointer-events: none;
+}
+.gp-poll-answer__contrast
+  :is(
+    .gp-poll-answer__choice,
+    .gp-poll-answer__result,
+    .gp-poll-answer__percent
+  ) {
+  color: inherit;
+}
+@supports (color: contrast-color(var(--gp-forest))) {
+  .gp-poll-answer__contrast {
+    color: contrast-color(var(--gp-forest));
+  }
+}
+@media (max-width: 420px) {
+  .gp-poll-answer__contrast {
+    gap: 0.5rem;
+  }
 }

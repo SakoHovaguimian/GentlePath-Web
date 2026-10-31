@@ -24,7 +24,10 @@ import {
   type FamilyTip,
 } from '../models/familyTip';
 import { TipReviewInputSchema } from '../models/tipReview';
-import { MilestoneAdminQuerySchema } from '../models/milestoneAdminQuery';
+import {
+  MilestoneAdminQuerySchema,
+  milestoneQueryTags,
+} from '../models/milestoneAdminQuery';
 import { getDemoMilestoneAdminState } from './demoMilestoneAdminState';
 import { handleDemoMilestoneObservations } from './handleDemoMilestoneObservations';
 import { milestoneProgressState } from '../models/milestoneProgressState';
@@ -117,9 +120,12 @@ export async function handleMilestoneAdminRequest(
     else portal.milestones.push(value);
   };
   const query = () => {
-    const parsed = MilestoneAdminQuerySchema.safeParse(
-      Object.fromEntries(url.searchParams),
-    );
+    const parsed = MilestoneAdminQuerySchema.safeParse({
+      ...Object.fromEntries(url.searchParams),
+      tags: url.searchParams.has('tags')
+        ? url.searchParams.getAll('tags')
+        : undefined,
+    });
     if (!parsed.success)
       throw new ValidationError(copy.validation.invalidQuery);
     const params = url.searchParams;
@@ -283,6 +289,7 @@ export async function handleMilestoneAdminRequest(
         return json(detailed(item));
       }
       const filter = query();
+      const selectedTags = milestoneQueryTags(filter);
       if (
         filter.child_id &&
         !portal.children.some(
@@ -303,7 +310,8 @@ export async function handleMilestoneAdminRequest(
                 `${item.milestone} ${item.information} ${item.observation_guidance ?? ''}`
                   .toLowerCase()
                   .includes(filter.query.toLowerCase())) &&
-              (!filter.tag || item.tags.includes(filter.tag)) &&
+              (!selectedTags.length ||
+                selectedTags.some((tag) => item.tags.includes(tag))) &&
               (!progress ||
                 progress.includes(
                   milestoneProgressState(
@@ -324,6 +332,7 @@ export async function handleMilestoneAdminRequest(
       const now = new Date().toISOString();
       const item: MilestoneGuidance = {
         ...input,
+        image_url: input.image_url ?? null,
         id: crypto.randomUUID(),
         content_type: 'MILESTONE',
         created_at: now,
@@ -345,6 +354,9 @@ export async function handleMilestoneAdminRequest(
       Object.assign(item, {
         milestone: input.milestone,
         information: input.information,
+        ...(input.image_url !== undefined
+          ? { image_url: input.image_url }
+          : {}),
         observation_guidance: input.observation_guidance,
         tags: input.tags,
       });

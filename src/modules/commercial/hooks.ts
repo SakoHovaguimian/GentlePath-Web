@@ -1,5 +1,10 @@
 'use client';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
 import type { CommercialEntity } from './models/commercialEntity';
 import type { CommercialFilters } from './models/commercialDirectory';
@@ -31,6 +36,7 @@ export function useDiscountOffers(filters: CommercialFilters = {}) {
   const { commercialService: service } = useServiceContainer();
   return useQuery({
     queryKey: [...root, 'offers', filters],
+    placeholderData: keepPreviousData,
     queryFn: ({ signal }) => service.offers(filters, signal),
   });
 }

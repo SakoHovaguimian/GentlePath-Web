@@ -50,6 +50,8 @@ Live community/poll availability reads the canonical `/platform/status` communit
 
 Content tags are normalized at web/API inputs, filters, seed writes, and response boundaries: capitalize words, collapse whitespace, preserve acronyms/mixed-case names, and reject duplicate case variants. Review existing-row normalization as part of the API's existing-database rollout before relying on normalized live filters. Report evidence must remain unchanged.
 
+Staff public images use `PublicImageService` → `/admin/media/images` → the existing authenticated backend `/media/upload-media`, forcing IMAGE/public after web MIME/signature/size checks. Guide covers/steps and milestone editors store the returned permanent URL; credentials and S3 writes remain server-owned. Milestone create/update/read contracts include nullable `image_url`; apply `20261031000000_milestone_images` before serving the updated live API. Demo implements actual validated bytes through the same facade and its demo-only public reader, without contacting storage.
+
 ## Realtime And Messaging
 
 Live chat maps canonical `/chat-messages` HTTP pages and strict message writes to the existing display model; Older/Newer Messages controls retain pagination metadata. Own edit/delete service methods and demo ownership checks match the backend. Socket events invalidate queries rather than becoming another data store. Chat polls when sockets are unavailable. Demo uses local state/polling only.

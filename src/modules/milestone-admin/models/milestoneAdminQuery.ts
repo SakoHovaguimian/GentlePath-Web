@@ -11,6 +11,19 @@ export const MilestoneAdminQuerySchema = z.object({
     .max(100, copy.validation.invalidQuery)
     .default('')
     .transform(normalizeContentTag),
+  tags: z
+    .array(
+      z
+        .string()
+        .trim()
+        .min(1, copy.validation.invalidQuery)
+        .max(100, copy.validation.invalidQuery)
+        .transform(normalizeContentTag)
+        .refine((tag) => tag.length <= 100, copy.validation.invalidQuery),
+    )
+    .min(1, copy.validation.invalidQuery)
+    .max(30, copy.validation.invalidQuery)
+    .optional(),
   milestone_id: z.string().default(''),
   child_id: z.string().min(1, copy.validation.invalidQuery).optional(),
   progress: z
@@ -31,10 +44,19 @@ export const MilestoneAdminQuerySchema = z.object({
   offset: z.coerce.number().int().nonnegative().safe().default(0),
 });
 export type MilestoneAdminQuery = z.infer<typeof MilestoneAdminQuerySchema>;
+export function milestoneQueryTags(query: MilestoneAdminQuery) {
+  return [
+    ...new Set([...(query.tags ?? []), ...(query.tag ? [query.tag] : [])]),
+  ];
+}
 export function milestoneAdminQueryParams(query: MilestoneAdminQuery) {
   const params = new URLSearchParams();
   Object.entries(query).forEach(([key, value]) => {
-    if (value !== '' && value !== undefined) params.set(key, String(value));
+    if (Array.isArray(value)) {
+      value.forEach((tag) => params.append(key, tag));
+    } else if (value !== '' && value !== undefined) {
+      params.set(key, String(value));
+    }
   });
   return params.toString();
 }

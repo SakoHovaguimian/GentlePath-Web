@@ -1,5 +1,7 @@
 import { normalizeContentTags } from '@/utils/normalizeContentTag';
 import 'server-only';
+import { demoMedia } from '@/services/demo/demoMedia';
+import type { CommunityAttachment } from '../models/communityAttachment';
 import { getDemoState } from '@/services/demo/demoState';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import type { DemoCommunityState } from './models/demoCommunityState';
@@ -17,8 +19,34 @@ function createCommunityState(): DemoCommunityState {
     tags: [...seed.tags],
     id: `community-post-${index + 1}`,
     userId: users[index % users.length].id,
-    imageUrl: null,
-    attachments: [],
+    imageUrl: index === 0 ? demoMedia.connection : null,
+    attachments: (index === 0
+      ? [
+          {
+            kind: 'IMAGE',
+            url: demoMedia.connection,
+            description: copy.demo.connectionImage,
+          },
+          {
+            kind: 'IMAGE',
+            url: demoMedia.reading,
+            description: copy.demo.readingImage,
+          },
+        ]
+      : index === 1
+        ? [
+            {
+              kind: 'IMAGE',
+              url: demoMedia.community,
+              description: copy.demo.communityImage,
+            },
+            {
+              kind: 'LINK',
+              url: 'https://gentlepath.app/resources',
+              description: copy.demo.resourcesLink,
+            },
+          ]
+        : []) as CommunityAttachment[],
     createdAt: daysAgo(index + 1),
     updatedAt: daysAgo(index + 1),
     deleted: false,
@@ -32,8 +60,8 @@ function createCommunityState(): DemoCommunityState {
         index === 2 ? `community-comment-${postIndex + 1}-1` : null,
       userId: users[(postIndex + index + 1) % users.length].id,
       body,
-      createdAt: daysAgo(postIndex + 0.25 + index / 10),
-      updatedAt: daysAgo(postIndex + 0.25 + index / 10),
+      createdAt: daysAgo(postIndex + 0.75 - index / 10),
+      updatedAt: daysAgo(postIndex + 0.75 - index / 10),
       deleted: false,
       hidden: false,
     })),

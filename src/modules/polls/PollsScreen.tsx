@@ -144,7 +144,7 @@ export function PollsScreen() {
         </div>
       )}
       <MutationError error={remove.error} />
-      <QueryBoundary query={query}>
+      <QueryBoundary query={query} animateChanges>
         {(result) => (
           <>
             {result.data.length ? (

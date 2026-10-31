@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { BlogContentImage } from '../BlogContentImage';
 import {
   Button,
   Field,
@@ -45,7 +45,7 @@ export function BlogImageFields({
   return (
     <div className="grid min-w-0 gap-4" aria-busy={uploading}>
       {validImage && (
-        <Image
+        <BlogContentImage
           src={image.src}
           alt={image.alt}
           width={600}

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { BlogContentImage } from './BlogContentImage';
 import { MarkdownContent } from '@/components/ui';
 import { gentlePathBlogBuilderStrings as copy } from '@/strings';
 import {
@@ -15,7 +15,7 @@ import styles from '../Blog.module.css';
 function ContentImage({ image }: { image: BlogReadableImage }) {
   return (
     <figure className={styles.contentFigure}>
-      <Image
+      <BlogContentImage
         src={image.src}
         alt={image.alt}
         width={1200}

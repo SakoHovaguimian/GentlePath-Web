@@ -1,3 +1,4 @@
+import { PublicImageReferenceSchema } from '@/models/publicImageUrl';
 import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
@@ -10,6 +11,7 @@ export const MilestoneGuidanceSchema = z.object({
   id: z.string().min(1),
   content_type: z.literal('MILESTONE'),
   milestone: z.string(),
+  image_url: z.string().nullable().default(null),
   information: z.string(),
   observation_guidance: z.string().nullable(),
   tags: z.array(z.string().transform(normalizeContentTag)),
@@ -20,6 +22,7 @@ export const MilestoneGuidanceSchema = z.object({
 });
 export const MilestoneGuidanceInputSchema = z
   .object({
+    image_url: PublicImageReferenceSchema.nullable().optional(),
     milestone: z
       .string()
       .trim()

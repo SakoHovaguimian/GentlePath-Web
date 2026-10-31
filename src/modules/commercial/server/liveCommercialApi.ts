@@ -1,4 +1,5 @@
 import 'server-only';
+import { readSortedDiscountOffers } from './readSortedDiscountOffers';
 import { commercialDestination } from './commercialDestination';
 import {
   AuthError,
@@ -30,6 +31,8 @@ export async function handleLiveCommercialRequest(
   const method = request.method;
   let target: string | undefined;
   if (area === 'portal') {
+    if (entity === 'offers' && !id && method === 'GET')
+      return readSortedDiscountOffers(request, url.searchParams, forward);
     if (entity === 'destination' && !id && method === 'GET')
       return Response.json(
         await commercialDestination(url.searchParams, false, request, forward),

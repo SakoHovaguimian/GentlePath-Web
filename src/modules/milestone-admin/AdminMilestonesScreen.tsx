@@ -92,7 +92,11 @@ export function AdminMilestonesScreen() {
       setConfirming(false);
     }
   }
-  const filtered = Boolean(directory.query.query || directory.query.tag);
+  const filtered = Boolean(
+    directory.query.query ||
+    directory.query.tag ||
+    directory.query.tags?.length,
+  );
   const actions = (milestone: MilestoneGuidance) => (
     <div className="flex flex-wrap gap-2">
       <Button
@@ -135,6 +139,7 @@ export function AdminMilestonesScreen() {
             query={directory.query}
             tags={choices.data?.flatMap((milestone) => milestone.tags)}
             onChange={directory.update}
+            multipleTags
           />
         }
         footer={
@@ -229,7 +234,12 @@ export function AdminMilestonesScreen() {
                     variant={filtered ? 'secondary' : 'primary'}
                     onClick={() =>
                       filtered
-                        ? directory.update({ query: '', tag: '', offset: 0 })
+                        ? directory.update({
+                            query: '',
+                            tag: '',
+                            tags: undefined,
+                            offset: 0,
+                          })
                         : setEditor('new')
                     }
                   >

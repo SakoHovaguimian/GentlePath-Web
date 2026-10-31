@@ -1,5 +1,6 @@
 import { normalizeContentTags } from '@/utils/normalizeContentTag';
 import 'server-only';
+import { demoMedia } from '@/services/demo/demoMedia';
 import { getDemoPortalState } from '@/services/demo/demoPortalState';
 import { getDemoState } from '@/services/demo/demoState';
 import { gentlePathEditorialStrings as copy } from '@/strings';
@@ -63,7 +64,11 @@ function createState(): DemoEditorialState {
         position,
         title: item.title,
         description: item.description,
-        image_url: null,
+        image_url: [
+          demoMedia.transition,
+          demoMedia.connection,
+          demoMedia.reading,
+        ][(index + position) % 3],
         additional_properties: {
           source_name: copy.demo.sourceName,
           source_url: copy.demo.sourceUrl,

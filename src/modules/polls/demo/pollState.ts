@@ -1,5 +1,7 @@
 import { normalizeContentTags } from '@/utils/normalizeContentTag';
 import 'server-only';
+import { demoMedia } from '@/services/demo/demoMedia';
+import type { CommunityAttachment } from '@/modules/community/models/communityAttachment';
 import { getDemoState } from '@/services/demo/demoState';
 import { gentlePathPollStrings as copy } from '@/strings';
 import type { DemoPollState } from './models/demoPollState';
@@ -41,9 +43,17 @@ export function getDemoPollState(): DemoPollState {
       title: item.title,
       message: item.message,
       selectionMode: item.selectionMode,
-      votingLocked: index === 0,
+      votingLocked: index < 2,
       tags: [],
-      attachments: [],
+      attachments: (index === 0
+        ? [
+            {
+              kind: 'IMAGE',
+              url: demoMedia.reading,
+              description: copy.demo.routineImage,
+            },
+          ]
+        : []) as CommunityAttachment[],
       options: item.choices.map((text, position) => ({
         id: crypto.randomUUID(),
         text,
@@ -60,14 +70,22 @@ export function getDemoPollState(): DemoPollState {
     globalPolls.gentlePathPollState = {
       polls,
       ballots: [
-        {
+        ...accounts.map((account, index) => ({
           id: crypto.randomUUID(),
-          userId: accounts[1].id,
+          userId: account.id,
           pollId: polls[0].id,
-          optionIds: [polls[0].options[0].id],
+          optionIds: [polls[0].options[index === 0 ? 1 : 0].id],
           createdAt,
           updatedAt: createdAt,
-        },
+        })),
+        ...accounts.slice(0, 2).map((account, index) => ({
+          id: crypto.randomUUID(),
+          userId: account.id,
+          pollId: polls[1].id,
+          optionIds: [polls[1].options[0].id, polls[1].options[index + 1].id],
+          createdAt,
+          updatedAt: createdAt,
+        })),
       ],
       comments: [copy.demo.commentOne, copy.demo.commentTwo].map(
         (body, index) => ({

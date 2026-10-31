@@ -143,7 +143,7 @@ export function CommunityScreen() {
           {feedPreference.error}
         </p>
       )}
-      <QueryBoundary query={query}>
+      <QueryBoundary query={query} animateChanges>
         {(result) => (
           <>
             {result.data.some(

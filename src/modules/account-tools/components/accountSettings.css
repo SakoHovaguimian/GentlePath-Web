@@ -1,0 +1,57 @@
+.gp-account-deletion.ui-card {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border-color: color-mix(
+    in srgb,
+    var(--color-text-error-primary) 22%,
+    var(--color-border-secondary)
+  );
+  background: var(--color-bg-primary);
+}
+.gp-account-deletion__heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+.gp-account-deletion__icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-full);
+  background: color-mix(
+    in srgb,
+    var(--color-text-error-primary) 8%,
+    transparent
+  );
+  color: var(--color-text-error-primary);
+}
+.gp-account-deletion__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-border-secondary);
+  background: var(--color-bg-secondary_subtle);
+}
+.gp-account-deletion .ui-button[data-variant='destructive'] {
+  background: color-mix(
+    in srgb,
+    var(--color-text-error-primary) 15%,
+    transparent
+  );
+}
+.gp-account-deletion .ui-button[data-variant='destructive']:hover {
+  background: color-mix(
+    in srgb,
+    var(--color-text-error-primary) 20%,
+    transparent
+  );
+}
+@media (max-width: 599px) {
+  .gp-account-deletion__heading {
+    flex-direction: column;
+  }
+}

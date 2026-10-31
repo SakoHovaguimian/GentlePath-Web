@@ -114,3 +114,6 @@ export type { DirectoryPage } from './models/directoryPage';
 export * from './components/InitialsAvatar';
 export * from './components/StarRating';
 export * from './components/RatingSummary';
+
+export * from './components/HorizontalCarousel';
+export * from './components/ContentTransition';

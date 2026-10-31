@@ -6061,6 +6061,7 @@ export const strings = {
     invalid: 'Invalid Portal environment configuration.',
   },
   ui: {
+    carousel: { previous: 'Previous Items', next: 'Next Items' },
     stepper: {
       horizontal: 'Horizontal',
       vertical: 'Vertical',
@@ -7264,6 +7265,32 @@ export const strings = {
     ],
   },
   media: {
+    uploadImage: 'Upload Image',
+    replaceImage: 'Replace Image',
+    removeImage: 'Remove Image',
+    cancelImageUpload: 'Cancel Upload',
+    imagePreviewAlt: 'Preview of the selected image',
+    imageUploadHint:
+      'Upload a PNG, JPEG, WebP, or GIF up to 5 MB, or enter a public HTTPS image URL. Uploaded images are public.',
+    // @sentence-case: Image validation and upload errors.
+    imageUrlError: 'Use a permanent public HTTPS image URL or upload an image.',
+    // @sentence-case: Image validation and upload errors.
+    imageTypeError: 'Choose a PNG, JPEG, WebP, or GIF image.',
+    // @sentence-case: Image validation and upload errors.
+    imageSizeError:
+      'Choose an image larger than zero bytes and no larger than 5 MB.',
+    // @sentence-case: Image validation and upload errors.
+    imageMissingError: 'Choose an image to upload.',
+    // @sentence-case: Image validation and upload errors.
+    imageInvalidError:
+      'The file contents do not match the selected image format.',
+    // @sentence-case: Demo image storage limit.
+    imageCapacityError:
+      'This demo has reached its image limit. Reset the demo data to upload more images.',
+    // @sentence-case: Image validation and upload errors.
+    imageUploadError:
+      'The image could not be uploaded. Your current image is unchanged. Try again.',
+
     // @sentence-case: Supporting prose.
     empty: 'No images have been saved for this product.',
     // @sentence-case: Supporting prose.
@@ -7467,6 +7494,26 @@ export const gentlePathDemoStrings = {
     },
   },
   childName: 'Jamie',
+  youngerChildName: 'Riley',
+  // @sentence-case: Fictional family support details.
+  youngerChildCommunication:
+    'Points to favorite objects and enjoys choosing between two pictures.',
+  // @sentence-case: Fictional demo prose and image descriptions.
+  childSupportNotes:
+    'Loves trains and drawing maps. Offer a little extra time when meeting someone new.',
+  // @sentence-case: Fictional demo prose and image descriptions.
+  childSupportDetails: {
+    allergies:
+      'No known allergies. Prefers foods served separately and a familiar cup.',
+    communication:
+      'Uses short phrases, gestures, and picture choices. Pause to allow time for a response.',
+    sensoryNeeds:
+      'Busy rooms and sudden sounds can feel overwhelming. Soft lighting and ear defenders help.',
+    comfortStrategies:
+      'A favorite picture book, a quiet corner, and knowing a trusted adult is nearby.',
+    dailyRoutines:
+      'A simple picture plan in the morning, outdoor time after school, and a familiar bedtime story.',
+  },
   // @preserve-case: Private demo note content retains its authored case.
   childNotes:
     'Enjoys quiet mornings, picture books, and having time to prepare for changes.',
@@ -7482,6 +7529,18 @@ export const gentlePathDemoStrings = {
     {
       title: 'Something To Remember',
       body: 'Today I noticed how much easier a transition felt when we talked about it ahead of time. I want to keep making space for those little preparations.',
+    },
+    {
+      title: 'An Unhurried Walk Together',
+      body: 'We took the longer path home and stopped to watch the leaves. Some parts of the day were tiring, but that little pause gave us a chance to reconnect.',
+    },
+    {
+      title: 'A New Way To Choose',
+      body: 'Riley pointed to a picture to choose our next activity. We made time for the answer and enjoyed a few minutes of drawing together.',
+    },
+    {
+      title: 'Making Space For Myself',
+      body: 'I asked for a little help this afternoon and took a quiet break. Keeping a small moment for myself helped me return with a little more energy.',
     },
   ],
   resourceSeeds: [
@@ -8019,6 +8078,12 @@ export const gentlePathPortalStrings = {
     minutes: (minutes: number) => `${minutes} Min Read`,
   },
   home: {
+    welcomeEyebrow: 'A Little Space For You',
+    welcomeTitle: (name: string) => `Make Yourself At Home, ${name}`,
+    welcomeDescription:
+      'Keep the details that matter, notice a small moment, or find a little support. Start wherever feels right for your family today.',
+    welcomeAction: 'Explore Your Family Space',
+    dismissWelcome: 'Dismiss Welcome',
     eyebrow: 'One Step At A Time',
     title: (name: string) => `Welcome Back, ${name}`,
     description:
@@ -8302,6 +8367,7 @@ export const gentlePathPortalStrings = {
     email: 'Email',
     role: 'Platform Role',
     allRoles: 'All Roles',
+    allAccounts: 'All Accounts',
     roles: {
       user: 'Member',
       admin: 'Administrator',
@@ -8339,6 +8405,19 @@ export const gentlePathPortalStrings = {
     resolved: 'Resolved',
     dismissed: 'Dismissed',
     review: 'Review Report',
+    viewReview: 'View Review',
+    detailsTitle: 'Report Details',
+    openReport: (title: string) => `Open Report ${title}`,
+    reviewedOn: 'Reviewed On',
+    // @sentence-case: Supporting prose.
+    noResolutionNote: 'No resolution note was recorded.',
+    sortLabel: 'Sort By',
+    sortOptions: {
+      latest: 'Latest Reports',
+      oldest: 'Oldest Reports',
+      reviewed: 'Recently Reviewed',
+      title: 'Content Title A–Z',
+    },
     reviewTitle: 'Review Content Report',
     noteLabel: 'Resolution Note',
     notePlaceholder: 'Describe what you reviewed and the action you took…',
@@ -8774,6 +8853,18 @@ export const gentlePathBlogBuilderStrings = {
     link: 'Guide readers to another resource.',
   },
   demo: {
+    // @sentence-case: Alternative text and captions for bundled demo imagery.
+    connectionAlt: 'A parent and child sharing a quiet activity together',
+    // @sentence-case: Alternative text and captions for bundled demo imagery.
+    connectionCaption:
+      'Connection can begin with an unhurried moment together.',
+    // @sentence-case: Alternative text and captions for bundled demo imagery.
+    readingAlt: 'An illustrated garden with an open book and soft green leaves',
+    // @sentence-case: Alternative text and captions for bundled demo imagery.
+    pathAlt: 'A winding path through green hills toward warm sunlight',
+    // @sentence-case: Alternative text and captions for bundled demo imagery.
+    galleryCaption: 'There is room for quiet days and small steps forward.',
+
     heading: 'One Small Moment At A Time',
     // @sentence-case: Article paragraphs retain natural prose.
     text: 'There is room for your family to find its own rhythm. Notice what brings a little ease today, and let that be enough for this moment.',
@@ -8944,6 +9035,7 @@ export const gentlePathDocumentStrings = {
 } as const;
 
 export const gentlePathCommunityStrings = {
+  illustrationSource: 'GentlePath Illustration',
   title: 'Community',
   contentViewLabel: 'Community Content',
   postsTitle: 'Posts',
@@ -9142,6 +9234,15 @@ export const gentlePathCommunityStrings = {
     reason: 'Enter a reason between 1 and 10,000 characters.',
   },
   demo: {
+    // @sentence-case: Fictional demo prose and image descriptions.
+    connectionImage: 'A parent and child sharing a quiet activity together',
+    // @sentence-case: Fictional demo prose and image descriptions.
+    readingImage:
+      'An illustrated reading garden with books and soft green leaves',
+    // @sentence-case: Fictional demo prose and image descriptions.
+    communityImage: 'An illustrated garden with space to gather and connect',
+    resourcesLink: 'Everyday Ideas To Explore Together',
+
     posts: [
       {
         title: 'A Quieter Way To Start The School Day',
@@ -9324,6 +9425,9 @@ export const gentlePathPollStrings = {
     unavailableDescription: 'This poll is unavailable or is no longer visible.',
   },
   demo: {
+    // @sentence-case: Fictional demo prose and image descriptions.
+    routineImage:
+      'A quiet illustrated reading space with books and soft green leaves',
     routineTitle: 'What Helps Your Family Settle Into The Evening?',
     // @sentence-case: Supporting context for the poll question.
     routineMessage:
@@ -9625,6 +9729,11 @@ export const gentlePathEditorialStrings = {
 };
 
 export const gentlePathMilestoneAdminStrings = {
+  tagSelection: (count: number) => `${count} Tags`,
+  clearTags: 'Clear Tag Filters',
+  tagFilterHint:
+    'Show milestones matching any selected tag. Choose up to 30 tags.',
+  imageLabel: 'Milestone Image',
   overview: {
     title: 'Your Milestone Answers',
     description:
@@ -10037,6 +10146,9 @@ export const gentlePathAccountToolsStrings = {
     nameLabel: 'Name',
     formatName: (firstName: string, lastName: string) =>
       `${firstName} ${lastName}`,
+    deleteCardTitle: 'Before You Go',
+    deleteCardHint:
+      'Please review what happens to your account before continuing. You will have a chance to confirm your choice.',
     deleteTitle: 'Delete Account',
     deleteHint:
       'Deleting your account removes access to GentlePath and hides your private family records. This action does not permanently erase stored records or uploaded files. You cannot restore access from this app.',
@@ -10181,6 +10293,13 @@ export const gentlePathCommercialStrings = {
   title: 'Commercial Features',
   description:
     'Manage sponsors, verified family offers, and clearly disclosed advertising.',
+  sortLabel: 'Sort By',
+  sorts: {
+    latest: 'Latest First',
+    oldest: 'Oldest First',
+    expiring: 'Ending Soon',
+    title: 'Title A–Z',
+  },
   discountsTitle: 'Family Discounts',
   discountsDescription:
     'Explore current offers from approved sponsors. Check the terms and verification before visiting a partner.',
@@ -10407,6 +10526,7 @@ export const gentlePathCommercialStrings = {
   platforms: { IOS: 'iOS', ANDROID: 'Android', WEB: 'Web' },
   // @sentence-case: Complete validation and recovery messages.
   validation: {
+    directory: 'The complete offer list could not be loaded. Try again.',
     required: 'Enter a value for this field.',
     invalid: 'Check the highlighted fields and enter valid values.',
     url: 'Enter an HTTP or HTTPS URL without credentials, spaces, or backslashes.',
@@ -10440,6 +10560,26 @@ export const gentlePathCommercialStrings = {
       'Use a served item, today or yesterday in UTC, and a positive aggregate count from 1 to 100.',
   },
   demo: {
+    additionalOffers: [
+      {
+        title: 'A Quiet Afternoon At The Museum',
+        description:
+          'An illustrative offer for relaxed family visits. This demo offer is not redeemable.',
+        category: 'ACTIVITIES' as const,
+      },
+      {
+        title: 'Everyday Sensory Comforts',
+        description:
+          'An illustrative offer for familiar comforts and quieter spaces. This demo offer is not redeemable.',
+        category: 'PRODUCTS' as const,
+      },
+      {
+        title: 'Creative Time Together',
+        description:
+          'An illustrative offer for a small family art session. This demo offer is not redeemable.',
+        category: 'SERVICES' as const,
+      },
+    ],
     sponsorName: 'Kindred Learning',
     legalName: 'Kindred Learning Demo',
     // @preserve-case: Partner URL retains its exact spelling.

@@ -1,3 +1,4 @@
+import { PublicImageService } from '@/services/media/publicImageService';
 import { BrowserApiClient } from '@/services/api/browserApiClient';
 import { UserService } from '@/modules/users/services/userService';
 import { FeatureRequestService } from '@/modules/feature-requests/services/featureRequestService';
@@ -28,6 +29,7 @@ export class ClientServiceContainer {
   readonly chatService = new ChatService(this.apiClient);
   readonly portalService = new PortalService(this.apiClient);
   readonly adminService = new AdminService(this.apiClient);
+  readonly publicImageService = new PublicImageService(this.apiClient);
   readonly blogService = new BlogService(this.apiClient);
   readonly documentVaultService = new DocumentVaultService(this.apiClient);
   readonly communityService = new CommunityService(this.apiClient);

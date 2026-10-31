@@ -1,6 +1,11 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
 import { adminQueryKeys, portalQueryKeys } from '@/modules/portal/queryKeys';
 import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
@@ -23,6 +28,7 @@ export function useCommunityPosts(query: CommunityPostQuery) {
   const { communityService: service } = useServiceContainer();
   return useQuery({
     queryKey: keys.posts(query),
+    placeholderData: keepPreviousData,
     queryFn: ({ signal }) => service.posts(query, signal),
   });
 }

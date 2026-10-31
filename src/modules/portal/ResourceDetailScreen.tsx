@@ -21,8 +21,8 @@ import { useResources, useSaveResource } from './hooks';
 import { MutationError } from './components/MutationError';
 import { getResourceArtwork } from './components/resourceArtwork';
 import { ResourceRatingControl } from '@/modules/engagement/components/ResourceRatingControl';
+import { ResourceRelatedContent } from '@/modules/editorial/components/ResourceRelatedContent';
 import { ResourceRatingSummary } from '@/modules/engagement/components/ResourceRatingSummary';
-import { ResourceProvenance } from '@/modules/editorial/components/ResourceProvenance';
 import './styles/portal.css';
 
 export function ResourceDetailScreen({ id }: { id: string }) {
@@ -107,7 +107,7 @@ export function ResourceDetailScreen({ id }: { id: string }) {
               }
             />
             <MutationError error={mutation.error} />
-            <ResourceProvenance resource={resource} resources={resources} />
+            <ResourceRelatedContent resource={resource} resources={resources} />
             <Card className="gp-resource-detail__body">
               <MarkdownContent value={resource.body} />
             </Card>

@@ -6,6 +6,7 @@ import { useMilestoneObservations } from '@/modules/milestone-admin/hooks';
 import { formatMilestoneDate } from '@/modules/milestone-admin/formatMilestoneDate';
 import type { MilestoneDetailsSection } from '../models/milestoneDetailsSection';
 import { MilestoneProgressSelect } from './MilestoneProgressSelect';
+import { MilestoneCoverImage } from './MilestoneCoverImage';
 
 export function MilestoneCard({
   milestone,
@@ -25,6 +26,12 @@ export function MilestoneCard({
   return (
     <>
       <Card className="gp-milestone-card">
+        {milestone.image_url && (
+          <MilestoneCoverImage
+            key={milestone.image_url}
+            src={milestone.image_url}
+          />
+        )}
         <CardOpenButton
           type="button"
           className="gp-milestone-card__open"

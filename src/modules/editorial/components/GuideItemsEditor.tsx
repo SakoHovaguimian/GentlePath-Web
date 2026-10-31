@@ -1,3 +1,4 @@
+import { PublicImageField } from '@/services/media/components/PublicImageField';
 import {
   Button,
   Input,
@@ -6,24 +7,20 @@ import {
   UiIcon,
 } from '@/components/ui';
 import { gentlePathEditorialStrings as copy } from '@/strings';
-import { emptyGuideItem, type GuideDraftItem } from '../models/guideDraft';
-import type { EditorialFormErrors } from '../models/editorialFormErrors';
+import { emptyGuideItem } from '../models/guideDraft';
+import type { GuideDraftItem } from '../models/guideDraftItem';
+import type { GuideItemsEditorProps } from '../models/guideItemsEditorProps';
 import { EditorField } from './EditorField';
 import { SourceFields } from './SourceFields';
 import { MetadataField } from './MetadataField';
 
-interface Props {
-  items: GuideDraftItem[];
-  errors: EditorialFormErrors;
-  disabled: boolean;
-  onChangeAction: (items: GuideDraftItem[]) => void;
-}
 export function GuideItemsEditor({
   items,
   errors,
   disabled,
   onChangeAction,
-}: Props) {
+  onUploadStateChange,
+}: GuideItemsEditorProps) {
   const update = (id: string, patch: Partial<GuideDraftItem>) =>
     onChangeAction(
       items.map((item) => (item.id === id ? { ...item, ...patch } : item)),
@@ -105,22 +102,15 @@ export function GuideItemsEditor({
                   }
                 />
               </EditorField>
-              <EditorField
+              <PublicImageField
                 id={inputId('image_url')}
+                value={item.imageUrl}
                 label={copy.imageLabel}
-                hint={copy.imageHint}
+                disabled={disabled}
                 error={errors[`${prefix}.image_url`]}
-              >
-                <Input
-                  type="url"
-                  value={item.imageUrl}
-                  maxLength={1000}
-                  disabled={disabled}
-                  onChange={(event) =>
-                    update(item.id, { imageUrl: event.target.value })
-                  }
-                />
-              </EditorField>
+                onChange={(imageUrl) => update(item.id, { imageUrl })}
+                onUploadStateChange={onUploadStateChange}
+              />
               <details
                 open={
                   Object.keys(errors).some((key) =>

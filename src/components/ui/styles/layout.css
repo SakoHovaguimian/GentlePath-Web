@@ -74,3 +74,13 @@ body:has(.ui-floating-assistant) .ui-page {
 .ui-card-open:disabled::after {
   cursor: not-allowed;
 }
+
+/* A pending refresh remains usable and signals work through the pointer. */
+.ui-content-transition[aria-busy='true'],
+.ui-content-transition[aria-busy='true'] *,
+.gp-community[aria-busy='true'],
+.gp-community[aria-busy='true'] *,
+.gp-polls[aria-busy='true'],
+.gp-polls[aria-busy='true'] * {
+  cursor: progress !important;
+}

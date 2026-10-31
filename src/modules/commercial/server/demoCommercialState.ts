@@ -38,7 +38,7 @@ function seed(): DemoCommercialState {
     reviewed_at: now,
     review_notes: null,
   };
-  return {
+  const state: DemoCommercialState = {
     sponsors: [
       {
         ...life,
@@ -177,6 +177,23 @@ function seed(): DemoCommercialState {
       },
     ],
   };
+  state.offers.push(
+    ...copy.demo.additionalOffers.map((offer, index) => ({
+      ...state.offers[0],
+      id: `73000000-0000-4000-8000-${String(20 + index).padStart(12, '0')}`,
+      title: offer.title,
+      description: offer.description,
+      category: offer.category,
+      created_at: new Date(Date.now() - (index + 1) * 86400000).toISOString(),
+      expires_at: new Date(
+        Date.now() + (index + 1) * 7 * 86400000,
+      ).toISOString(),
+      verification_valid_until: new Date(
+        Date.now() + (index + 1) * 7 * 86400000,
+      ).toISOString(),
+    })),
+  );
+  return state;
 }
 const globalCommercial = globalThis as typeof globalThis & {
   gentlePathCommercialState?: DemoCommercialState;

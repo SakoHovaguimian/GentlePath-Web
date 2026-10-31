@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import type { Route } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -8,6 +7,7 @@ import {
   Button,
   Card,
   EmptyState,
+  HorizontalCarousel,
   Page,
   PageHeader,
   QueryBoundary,
@@ -23,6 +23,7 @@ import {
 } from './hooks';
 import { useJournalRemoval } from './useJournalRemoval';
 import { CommercialServing } from '@/modules/commercial/components/CommercialServing';
+import { DashboardWelcome } from './components/DashboardWelcome';
 import { WeeklyActivity } from './components/WeeklyActivity';
 import { ResourceCard } from './components/ResourceCard';
 import { JournalEntryCard } from './components/JournalEntryCard';
@@ -110,31 +111,17 @@ export function FamilyDashboardScreen() {
                 ))}
               </div>
             </section>
-            <section className="gp-home-hero">
-              <div className="gp-home-hero__copy">
-                <span className="gp-home-hero__eyebrow">
-                  <UiIcon name="leaf" className="size-4" />
-                  {copy.navigation.workspace}
-                </span>
-                <h2>{copy.home.heroTitle}</h2>
-                <p>{copy.home.heroDescription}</p>
-                <Button asChild>
-                  <Link href="/resources">
-                    {copy.home.heroAction}
-                    <UiIcon name="arrowRight" />
-                  </Link>
-                </Button>
-              </div>
-              <div className="gp-home-hero__art">
-                <Image
-                  src="/gentlepath/path-landscape-v2.png"
-                  alt={copy.home.heroAlt}
-                  fill
-                  sizes="(max-width: 767px) 100vw, 55vw"
-                  priority
-                />
-              </div>
-            </section>
+            <DashboardWelcome
+              key={session?.user.id}
+              name={session?.user.firstName ?? ''}
+            />
+            <Card className="gp-week-card">
+              <WeeklyActivity
+                values={data.weeklyActivity}
+                title={copy.home.week}
+                hint={copy.home.weekHint}
+              />
+            </Card>
             <div className="gp-home-middle">
               <section className="grid content-start gap-5">
                 <div className="gp-portal-section-heading">
@@ -150,8 +137,8 @@ export function FamilyDashboardScreen() {
                 <QueryBoundary query={journals}>
                   {(entries) =>
                     entries.length ? (
-                      <div className="gp-journal-preview-list">
-                        {entries.slice(0, 3).map((entry) => (
+                      <HorizontalCarousel label={copy.home.recent}>
+                        {entries.slice(0, 6).map((entry) => (
                           <JournalEntryCard
                             key={entry.id}
                             entry={entry}
@@ -166,7 +153,7 @@ export function FamilyDashboardScreen() {
                             onDelete={() => void deleteEntry(entry)}
                           />
                         ))}
-                      </div>
+                      </HorizontalCarousel>
                     ) : (
                       <EmptyState
                         title={copy.home.noJournalTitle}
@@ -183,13 +170,6 @@ export function FamilyDashboardScreen() {
                   }
                 </QueryBoundary>
               </section>
-              <Card className="gp-week-card">
-                <WeeklyActivity
-                  values={data.weeklyActivity}
-                  title={copy.home.week}
-                  hint={copy.home.weekHint}
-                />
-              </Card>
             </div>
           </>
         )}

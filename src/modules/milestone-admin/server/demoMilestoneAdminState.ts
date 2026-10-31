@@ -15,10 +15,11 @@ const stoppedResponseValue = 'stopped';
 function createState(): DemoMilestoneAdminState {
   const now = new Date().toISOString();
   const portal = getDemoPortalState();
-  const milestones = portal.milestones.map((item) => ({
+  const milestones = portal.milestones.map((item, index) => ({
     id: item.id,
     content_type: 'MILESTONE' as const,
     milestone: item.title,
+    image_url: `https://picsum.photos/seed/gentlepath-milestone-${index + 1}/960/540`,
     information: item.description,
     observation_guidance:
       demoCopy.milestoneSeeds.find((seed) => seed.title === item.title)
@@ -134,6 +135,10 @@ function createState(): DemoMilestoneAdminState {
 }
 export function getDemoMilestoneAdminState() {
   const state = (globalState.gentlePathMilestoneAdminState ??= createState());
+  for (const [index, milestone] of state.milestones.entries()) {
+    if (milestone.image_url === undefined)
+      milestone.image_url = `https://picsum.photos/seed/gentlepath-milestone-${index + 1}/960/540`;
+  }
   const now = new Date().toISOString();
   demoCopy.milestoneSeeds.forEach((seed, index) => {
     const id = `milestone-${index + 1}`;
@@ -146,6 +151,7 @@ export function getDemoMilestoneAdminState() {
       id,
       content_type: 'MILESTONE',
       milestone: seed.title,
+      image_url: `https://picsum.photos/seed/gentlepath-milestone-${index + 1}/960/540`,
       information: seed.description,
       observation_guidance: seed.guidance,
       tags: [...seed.tags],

@@ -25,12 +25,9 @@ export function FamilyProfileCard({
   onOpen,
   onRemove,
 }: FamilyProfileCardProps) {
-  const summaryQuestion = childSupportQuestions.find(
-    ({ key }) => child.supportDetails[key],
+  const answeredQuestions = childSupportQuestions.filter(({ key }) =>
+    child.supportDetails[key].trim(),
   );
-  const summary = summaryQuestion
-    ? child.supportDetails[summaryQuestion.key]
-    : child.supportNotes;
   return (
     <Card className="gp-family-card">
       <div className="gp-family-card__header">
@@ -81,18 +78,42 @@ export function FamilyProfileCard({
           </time>
         </span>
       </div>
-      <div className="gp-family-card__summary">
-        <UiIcon name={summaryQuestion?.icon ?? 'leaf'} className="size-5" />
-        <div className="grid min-w-0 gap-1.5">
-          <p className="gp-family-card__question">
-            {summaryQuestion
-              ? copy.family.questions[summaryQuestion.key].label
-              : copy.family.notesLabel}
-          </p>
-          <p className="gp-family-card__notes">
-            {summary || copy.family.noNotesHint}
-          </p>
+      {child.gender && (
+        <div className="gp-family-card__gender">
+          <span className="text-xs text-tertiary">
+            {copy.family.genderLabel}
+          </span>
+          <span>{copy.family.genders[child.gender]}</span>
         </div>
+      )}
+      <div className="gp-family-card__details">
+        {answeredQuestions.map((question) => (
+          <div className="gp-family-card__summary" key={question.key}>
+            <UiIcon name={question.icon} className="size-5" />
+            <div className="grid min-w-0 gap-1.5">
+              <h3 className="gp-family-card__question">
+                {copy.family.questions[question.key].label}
+              </h3>
+              <p className="gp-family-card__notes">
+                {child.supportDetails[question.key]}
+              </p>
+            </div>
+          </div>
+        ))}
+        {child.supportNotes.trim() && (
+          <div className="gp-family-card__summary">
+            <UiIcon name="leaf" className="size-5" />
+            <div className="grid min-w-0 gap-1.5">
+              <h3 className="gp-family-card__question">
+                {copy.family.notesLabel}
+              </h3>
+              <p className="gp-family-card__notes">{child.supportNotes}</p>
+            </div>
+          </div>
+        )}
+        {!answeredQuestions.length && !child.supportNotes.trim() && (
+          <p className="gp-family-card__notes">{copy.family.noNotesHint}</p>
+        )}
       </div>
     </Card>
   );
