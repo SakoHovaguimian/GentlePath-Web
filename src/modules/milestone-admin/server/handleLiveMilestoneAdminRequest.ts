@@ -60,6 +60,26 @@ export async function handleLiveMilestoneAdminRequest(
     request.method === 'PATCH'
   )
     upstream = `/tips/${id}/review`;
+  if (
+    area === 'admin' &&
+    resource === 'milestone-tools' &&
+    request.method === 'GET' &&
+    parts.length <= 3
+  ) {
+    if (id) url.searchParams.set('include_hidden', 'true');
+    else if (!url.searchParams.has('visibility'))
+      url.searchParams.set('visibility', 'visible');
+    upstream = `/milestones${id ? `/${id}` : ''}`;
+  }
+  if (
+    area === 'admin' &&
+    resource === 'milestone-tools' &&
+    id &&
+    action === 'restore' &&
+    parts.length === 4 &&
+    request.method === 'PATCH'
+  )
+    upstream = `/milestones/${id}/restore`;
   if (!upstream) return null;
   return forward(request, `${upstream}${url.search}`);
 }

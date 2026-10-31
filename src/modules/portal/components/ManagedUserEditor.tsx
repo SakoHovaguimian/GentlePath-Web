@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import {
   Button,
   BookmarkButton,
@@ -28,6 +28,7 @@ export function ManagedUserEditor({
   user: ManagedUser;
   onClose: () => void;
 }) {
+  const formId = useId();
   const [role, setRole] = useState(user.role);
   const [enabled, setEnabled] = useState(!user.disabled);
   const restrictsAccess =
@@ -46,8 +47,29 @@ export function ManagedUserEditor({
       onDismiss={() => {
         if (!mutation.isPending) onClose();
       }}
+
+      footer={
+        <div className="flex justify-end gap-3">
+          <Button
+            variant="secondary"
+            onClick={onClose}
+            disabled={mutation.isPending}
+          >
+            {copy.common.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={mutation.isPending}
+            disabled={role === user.role && enabled === !user.disabled}
+          >
+            {copy.people.save}
+          </BookmarkButton>
+        </div>
+      }
     >
       <form
+        id={formId}
         noValidate
         className="grid gap-5"
         onSubmit={async (event) => {
@@ -117,22 +139,6 @@ export function ManagedUserEditor({
           disabled={mutation.isPending}
         />
         <MutationError error={mutation.error} />
-        <div className="flex justify-end gap-3 border-t border-secondary pt-5">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            disabled={mutation.isPending}
-          >
-            {copy.common.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            loading={mutation.isPending}
-            disabled={role === user.role && enabled === !user.disabled}
-          >
-            {copy.people.save}
-          </BookmarkButton>
-        </div>
       </form>
     </Modal>
   );

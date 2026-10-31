@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import {
   Button,
   BookmarkButton,
@@ -40,6 +40,7 @@ export function JournalEditor({
   removing = false,
   removalError,
 }: JournalEditorProps) {
+  const formId = useId();
   const [input, setInput] = useState<JournalInput>(
     entry
       ? {
@@ -131,8 +132,55 @@ export function JournalEditor({
           if (allowed) onClose();
         });
       }}
+
+      footer={
+        <div className="flex flex-wrap justify-end gap-3">
+          {entry && onDelete && (
+            <Button
+              variant="destructive"
+              className="mr-auto"
+              disabled={pending}
+              onClick={() => {
+                if (busy.current) return;
+                busy.current = true;
+                void onDelete()
+                  .then((deleted) => {
+                    if (!deleted) return;
+                    dirty.current = false;
+                    onClose();
+                  })
+                  .finally(() => {
+                    busy.current = false;
+                  });
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.journal.deleteAction}
+            </Button>
+          )}
+          <Button
+            variant="secondary"
+            disabled={pending}
+            onClick={() => {
+              void confirmLeave().then((allowed) => {
+                if (allowed) onClose();
+              });
+            }}
+          >
+            {copy.common.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={mutation.isPending}
+            disabled={removing}
+          >
+            {copy.journal.publish}
+          </BookmarkButton>
+        </div>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid gap-5">
+      <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
         <Field labelText={copy.journal.titleLabel}>
           <Input
             name="title"
@@ -205,49 +253,6 @@ export function JournalEditor({
         )}
         <MutationError error={mutation.error} />
         <MutationError error={removalError} />
-        <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
-          {entry && onDelete && (
-            <Button
-              variant="destructive"
-              className="mr-auto"
-              disabled={pending}
-              onClick={() => {
-                if (busy.current) return;
-                busy.current = true;
-                void onDelete()
-                  .then((deleted) => {
-                    if (!deleted) return;
-                    dirty.current = false;
-                    onClose();
-                  })
-                  .finally(() => {
-                    busy.current = false;
-                  });
-              }}
-            >
-              <UiIcon name="trash" className="size-4" />
-              {copy.journal.deleteAction}
-            </Button>
-          )}
-          <Button
-            variant="secondary"
-            disabled={pending}
-            onClick={() => {
-              void confirmLeave().then((allowed) => {
-                if (allowed) onClose();
-              });
-            }}
-          >
-            {copy.common.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            loading={mutation.isPending}
-            disabled={removing}
-          >
-            {copy.journal.publish}
-          </BookmarkButton>
-        </div>
       </form>
     </Modal>
   );

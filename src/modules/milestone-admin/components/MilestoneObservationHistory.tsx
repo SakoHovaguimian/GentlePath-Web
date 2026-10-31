@@ -31,6 +31,14 @@ export function MilestoneObservationHistory({
       title={copy.observationHistory}
       description={copy.observationHistoryDescription}
       onDismiss={onClose}
+
+      footer={
+        <div className="flex justify-end">
+          <Button variant="secondary" onClick={onClose}>
+            {copy.close}
+          </Button>
+        </div>
+      }
     >
       <div className="grid gap-5">
         <p className="m-0 font-display text-xl text-primary wrap-anywhere">
@@ -41,11 +49,6 @@ export function MilestoneObservationHistory({
           milestone={milestone}
           onEdit={setEditor}
         />
-        <div className="flex justify-end border-t border-secondary pt-4">
-          <Button variant="secondary" onClick={onClose}>
-            {copy.close}
-          </Button>
-        </div>
       </div>
     </Modal>
   );

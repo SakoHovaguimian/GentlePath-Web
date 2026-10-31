@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import { Button, Field, Modal, TextArea } from '@/components/ui';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
@@ -16,6 +16,7 @@ export function CommunityReportDialog({
   target,
   onClose,
 }: CommunityReportDialogProps) {
+  const formId = useId();
   const [reason, setReason] = useState('');
   const [validation, setValidation] = useState('');
   const dirty = useRef(false);
@@ -61,8 +62,23 @@ export function CommunityReportDialog({
       title={copy.reportTitle}
       description={copy.reportDescription}
       onDismiss={close}
+
+      footer={
+        <div className="flex flex-wrap justify-end gap-3">
+          <Button
+            variant="secondary"
+            disabled={mutation.isPending}
+            onClick={close}
+          >
+            {copy.cancel}
+          </Button>
+          <Button type="submit" form={formId} loading={mutation.isPending}>
+            {copy.submitReport}
+          </Button>
+        </div>
+      }
     >
-      <form noValidate className="grid gap-5" onSubmit={submit}>
+      <form id={formId} noValidate className="grid gap-5" onSubmit={submit}>
         <p className="m-0 rounded-xl bg-secondary_subtle p-4 text-sm font-semibold text-primary wrap-anywhere">
           {target.title}
         </p>
@@ -95,18 +111,6 @@ export function CommunityReportDialog({
           </p>
         )}
         <MutationError error={mutation.error} />
-        <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
-          <Button
-            variant="secondary"
-            disabled={mutation.isPending}
-            onClick={close}
-          >
-            {copy.cancel}
-          </Button>
-          <Button type="submit" loading={mutation.isPending}>
-            {copy.submitReport}
-          </Button>
-        </div>
       </form>
     </Modal>
   );

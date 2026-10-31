@@ -46,7 +46,18 @@ export function MilestoneDetailsModal({
   });
   return (
     <>
-      <Modal open title={milestone.milestone} onDismiss={onClose}>
+      <Modal
+        open
+        title={milestone.milestone}
+        onDismiss={onClose}
+        footer={
+          <div className="flex justify-end">
+            <Button variant="secondary" onClick={onClose}>
+              {copy.close}
+            </Button>
+          </div>
+        }
+      >
         <div className="grid min-w-0 gap-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap gap-1">
@@ -77,7 +88,11 @@ export function MilestoneDetailsModal({
                 label: copy.historyShortAction,
                 panelId: `${id}-history`,
               },
-              { value: tipsSection, label: copy.tipsTitle, panelId: `${id}-tips` },
+              {
+                value: tipsSection,
+                label: copy.tipsTitle,
+                panelId: `${id}-tips`,
+              },
             ]}
           />
           <div id={`${id}-${section}`} className="grid min-w-0 gap-5">
@@ -161,11 +176,6 @@ export function MilestoneDetailsModal({
               />
             )}
             {section === 'tips' && <MilestoneTips milestoneId={milestone.id} />}
-          </div>
-          <div className="flex justify-end border-t border-secondary pt-4">
-            <Button variant="secondary" onClick={onClose}>
-              {copy.close}
-            </Button>
           </div>
         </div>
       </Modal>

@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   Button,
@@ -21,6 +21,7 @@ export function AccountDeletionDialog({
   email: string;
   onClose: () => void;
 }) {
+  const formId = useId();
   const [confirmationEmail, setConfirmationEmail] = useState('');
   const [acknowledged, setAcknowledged] = useState(false);
   const [validation, setValidation] = useState('');
@@ -73,8 +74,30 @@ export function AccountDeletionDialog({
       description={copy.account.confirmationDescription(email)}
       onDismiss={close}
       initialFocusRef={cancelRef}
+
+      footer={
+        <div className="flex flex-wrap justify-end gap-3">
+          <Button
+            ref={cancelRef}
+            variant="secondary"
+            disabled={deletion.isPending}
+            onClick={close}
+          >
+            {copy.common.cancelAction}
+          </Button>
+          <Button
+            type="submit"
+            form={formId}
+            variant="destructive"
+            loading={deletion.isPending}
+            disabled={confirmationEmail !== email || !acknowledged}
+          >
+            {copy.account.deleteAction}
+          </Button>
+        </div>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid gap-5">
+      <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
         <Field labelText={copy.account.confirmationEmailLabel}>
           <Input
             ref={emailRef}
@@ -122,24 +145,6 @@ export function AccountDeletionDialog({
           </p>
         )}
         <MutationError error={deletion.error} />
-        <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
-          <Button
-            ref={cancelRef}
-            variant="secondary"
-            disabled={deletion.isPending}
-            onClick={close}
-          >
-            {copy.common.cancelAction}
-          </Button>
-          <Button
-            type="submit"
-            variant="destructive"
-            loading={deletion.isPending}
-            disabled={confirmationEmail !== email || !acknowledged}
-          >
-            {copy.account.deleteAction}
-          </Button>
-        </div>
       </form>
     </Modal>
   );

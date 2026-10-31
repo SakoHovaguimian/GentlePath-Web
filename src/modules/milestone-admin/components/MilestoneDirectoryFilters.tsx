@@ -1,6 +1,7 @@
 'use client';
 import { DirectoryFilters, Field, MultiSelect, Select } from '@/components/ui';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
+import { MilestoneVisibilitySchema } from '../models/milestoneVisibility';
 import { milestoneQueryTags } from '../models/milestoneAdminQuery';
 import type { MilestoneDirectoryFiltersProps } from '../models/milestoneDirectoryFiltersProps';
 import { TipApprovalStatusSchema } from '../models/tipApprovalStatus';
@@ -16,6 +17,7 @@ export function MilestoneDirectoryFilters({
   tags = [],
   progress = false,
   multipleTags = false,
+  visibility = false,
 }: MilestoneDirectoryFiltersProps) {
   const selectedTags = milestoneQueryTags(query);
   const tagOptions = [...new Set([...tags, ...selectedTags])].sort((a, b) =>
@@ -47,6 +49,22 @@ export function MilestoneDirectoryFilters({
         }}
         additionalFilters={
           <>
+            {visibility && (
+              <Field labelText={copy.visibilityLabel}>
+                <Select
+                  value={query.visibility ?? 'visible'}
+                  onValueChange={(value) =>
+                    onChange({ visibility: value, offset: 0 })
+                  }
+                >
+                  {MilestoneVisibilitySchema.options.map((value) => (
+                    <option key={value} value={value}>
+                      {copy.visibility[value]}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            )}
             {progress && (
               <Field labelText={copy.progressLabel}>
                 <MultiSelect

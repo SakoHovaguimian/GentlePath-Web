@@ -63,7 +63,23 @@ export function CommercialReferenceField({
           </Button>
         )}
       </div>
-      <Modal open={open} title={label} onDismiss={() => setOpen(false)}>
+      <Modal
+        open={open}
+        title={label}
+        onDismiss={() => setOpen(false)}
+        footer={
+          list.data && (
+            <DirectoryPagination
+              page={list.data.page}
+              count={list.data.data.length}
+              busy={list.isFetching}
+              label={copy.pagination}
+              range={copy.range}
+              onNavigate={setOffset}
+            />
+          )
+        }
+      >
         <div className="grid gap-4">
           <DirectoryFilters
             id={`${id}-search`}
@@ -111,14 +127,6 @@ export function CommercialReferenceField({
                     description={copy.emptyHint}
                   />
                 )}
-                <DirectoryPagination
-                  page={page.page}
-                  count={page.data.length}
-                  busy={list.isFetching}
-                  label={copy.pagination}
-                  range={copy.range}
-                  onNavigate={setOffset}
-                />
               </>
             )}
           </QueryBoundary>

@@ -8498,20 +8498,25 @@ export const gentlePathPortalStrings = {
 } as const;
 
 export const gentlePathLandingStrings = {
+  decorativeAlt: '',
   brandTitle: 'GentlePath',
   homeLabel: 'GentlePath Home',
   skipAction: 'Skip To Content',
   mainNavigationLabel: 'Main Navigation',
   mobileNavigationLabel: 'Mobile Navigation',
   metadata: {
-    title: 'GentlePath — A Little Clarity. A Lot Of Care.',
+    title: 'GentlePath — You’re Not Alone. Grow Together.',
     description:
-      'A thoughtful space for parents and caregivers navigating autism. Find community, make room for reflection, and keep helpful resources close, at your family’s pace.',
+      'A family space for parents and caregivers navigating autism. Connect with community, keep a journal, notice milestones, organize documents, and find practical Guided Steps.',
   },
   navigation: {
     supportLabel: 'How It Helps',
-    familyLabel: 'For Your Family',
+    featuresLabel: 'For Your Family',
+    accountAction: 'Your Account',
+    createAccountAction: 'Create Account',
     blogLabel: 'Thoughtful Reads',
+    purposeLabel: 'Our Purpose',
+    contactLabel: 'Email Us',
     loginAction: 'Log In',
     signupAction: 'Get Started',
     portalLabel: 'Your Space',
@@ -8519,73 +8524,123 @@ export const gentlePathLandingStrings = {
     closeMenuAction: 'Close Navigation',
   },
   hero: {
-    eyebrowLabel: 'A Thoughtful Way Forward',
-    firstHeading: 'A Little Clarity.',
-    secondHeading: 'A Lot Of Care.',
+    eyebrowLabel: 'For Parents And Caregivers Navigating Autism',
+    firstHeading: 'You’re Not Alone.',
+    secondHeading: 'Let’s Grow Together.',
     description:
-      'A thoughtful space for parents navigating autism. Find a little perspective, keep what matters close, and take the next step at your family’s pace.',
+      'Every family needs a community. Meet parents and caregivers who understand, learn practical ways to support your child, and find your next step together.',
     primaryAction: 'Find Your GentlePath',
-    secondaryAction: 'Explore The Support',
-    reassuranceDescription:
-      'For the questions, the small wins, and everything in between.',
+    secondaryAction: 'See How It Helps',
     artAlt: 'A winding path through sage and forest hills toward warm sunlight',
-    artCaption: 'Every Family Finds Their Own Way.',
-    bottomLabel: 'At Your Family’s Pace.',
+    bottomLabel: 'Your Family’s Own Way.',
     bottomDescription:
-      'A little connection. A little perspective. A place to begin.',
+      'Notice the little things. Make room for connection. Take one gentle step.',
   },
   support: {
-    eyebrowLabel: 'Room For Your Whole Journey',
-    title: 'You Don’t Have To Figure It All Out Alone.',
+    eyebrowLabel: 'More Than One Way To Feel Supported',
+    title: 'For The Life You’re Living.',
     description:
-      'Some days call for useful guidance. Others call for a quiet moment to reflect. There’s room for both here.',
+      'Some days you need an idea. Some days you need to be heard. Some days you just need somewhere to put it all.',
     pillars: [
       {
-        title: 'Find A Little Perspective.',
+        title: 'Keep Your Story Together.',
         description:
-          'Read thoughtful stories and practical guidance for parents and caregivers, with room for your own way forward.',
-        artAlt: 'Three caregivers sharing a relaxed conversation',
+          'Make space for each child, your reflections, and the moments of growth that matter to your family.',
+        artAlt:
+          'A parent and child reading together on a cushion, with sage and lavender wooden shapes',
+        topics: ['Family Profiles', 'Journal', 'Milestones'],
       },
       {
-        title: 'Notice What Matters.',
+        title: 'Find Your Next Small Step.',
         description:
-          'Make room for reflection, everyday observations, and the small moments that tell your child’s own story.',
-        artAlt: 'A parent listening as their child shares a drawing',
+          'Explore approachable guides and useful resources. Try what fits your day, and save the rest for later.',
+        artAlt:
+          'A lavender planning clipboard with three check marks, a sage pencil, and a leafy sprig',
+        topics: ['Guided Steps', 'Resources', 'Family Tips'],
       },
       {
-        title: 'Keep Clarity Close.',
+        title: 'Feel A Little Less Alone.',
         description:
-          'Bring helpful reads, practical guidance, and your family’s own notes together in a place you can return to.',
-        artAlt: 'A lilac folder with saved papers, a bookmark, and leaves',
+          'Share everyday experiences, join conversations and polls, and find perspective from other parents and caregivers.',
+        artAlt:
+          'Overlapping lavender and sage message bubbles with a small sun and leaves',
+        topics: ['Community', 'Conversations', 'Polls'],
       },
     ],
   },
-  family: {
-    eyebrowLabel: 'A Space That Grows With You',
-    title: 'A Little Less To Carry.',
+  features: {
+    eyebrowLabel: 'Your Everyday Toolkit',
+    title: 'Useful Things. All In One Place.',
     description:
-      'There’s a lot to hold in your head. Give your family’s reflections, discoveries, and next steps a home of their own.',
-    primaryAction: 'Make Space For Your Family',
-    noteDescription: 'Start wherever you are. Come back whenever you need.',
-    features: [
+      'A little structure when life feels full. A little connection when it feels lonely. Choose the tools that help today.',
+    items: [
       {
-        title: 'Their Own Story',
+        title: 'Family Profiles',
         description:
-          'Keep a profile for each child, with space for their individual experiences and the things you’re noticing along the way.',
+          'Make room for each child’s story: their strengths, preferences, communication, and what helps them feel comfortable.',
       },
       {
-        title: 'A Moment To Reflect',
+        title: 'Your Private Journal',
         description:
-          'Write down a feeling, remember a good day, or work through a question in a journal that belongs to you.',
+          'Write a reflection, add the feelings that go with it, and return to the moments you want to remember.',
       },
       {
-        title: 'The Important Things, Together',
+        title: 'Milestones At Their Pace',
         description:
-          'Keep family notes and save helpful discoveries so the things you need are easier to find again.',
+          'Keep everyday observations and dated milestone notes that follow your child’s own experience, without comparison.',
+      },
+      {
+        title: 'Your Document Vault',
+        description:
+          'Give important family documents a home, with useful records together and easier to find when you need them.',
+      },
+      {
+        title: 'Community And Polls',
+        description:
+          'Start a conversation, respond to another parent, or take part in a poll. Shared experience has a place here.',
+      },
+      {
+        title: 'Guided Steps',
+        description:
+          'Work through practical ideas one clear step at a time. Pause, come back, and move at your own pace.',
+      },
+      {
+        title: 'A Thoughtful Resource Library',
+        description:
+          'Browse collections and reading, follow source links, and leave a rating on resources you’ve tried.',
+      },
+      {
+        title: 'Family Tips',
+        description:
+          'Explore reviewed tips from other families, or contribute something that has helped in your own home.',
+      },
+      {
+        title: 'Family Discounts',
+        description:
+          'Find offers from approved sponsors, with the terms, eligibility, and commercial disclosures clearly shown.',
+      },
+      {
+        title: 'Your Saved Discoveries',
+        description:
+          'Bookmark guides, resources, milestones, tips, posts, and polls so useful discoveries are easy to return to.',
       },
     ],
-    sentimentDescription:
-      'No two children follow the same path. Your space shouldn’t expect them to.',
+    privacyDescription:
+      'Your family profiles, journal, observations, and documents stay separate from your community contributions.',
+    noteDescription:
+      'Your inbox keeps updates together. Notification settings let you choose what reaches you.',
+  },
+  cause: {
+    eyebrowLabel: 'Why GentlePath Exists',
+    title: 'Understanding Comes Before Expectations.',
+    description:
+      'Parenting a child with autism can come with a lot of information, a lot of decisions, and too few places where you feel understood. Families deserve support that makes everyday life a little easier.',
+    supportDescription:
+      'We’re making room for different ways to communicate, connect, and grow. For the small wins, the hard afternoons, and the things only your family knows.',
+    noteDescription:
+      'GentlePath offers personal organization, general information, and peer support. It does not provide diagnosis, treatment, or emergency care.',
+    artAlt:
+      'A parent listening while their child shares a drawing, illustrated in soft sage and lavender',
   },
   stories: {
     eyebrowLabel: 'A Little Perspective',
@@ -8604,17 +8659,32 @@ export const gentlePathLandingStrings = {
       {
         title: 'Who Is GentlePath For?',
         description:
-          'GentlePath is for parents and caregivers navigating autism, whether you’re finding your feet, looking for useful reading, or making space for your family’s reflections.',
+          'GentlePath is for adult parents and caregivers navigating autism. You can begin with the questions you have today, whether you’re looking for useful ideas, a place to reflect, or connection with other families.',
+      },
+      {
+        title: 'What Can I Do Here?',
+        description:
+          'Create child profiles, keep a journal, record milestone observations, organize documents, and save helpful content. You can also explore Guided Steps, resources, Family Tips, community conversations, polls, and Family Discounts.',
+      },
+      {
+        title: 'Can I Add More Than One Child?',
+        description:
+          'Yes. Create a separate profile for each child and keep their details and milestone observations connected to their own story.',
+      },
+      {
+        title: 'Will My Family Records Be Posted To The Community?',
+        description:
+          'No. Your family records and your community contributions are separate. Creating a profile, journal entry, or observation does not publish a community post. Only share what you intend others to see.',
+      },
+      {
+        title: 'Is This Medical Or Developmental Advice?',
+        description:
+          'No. GentlePath is a place for general information, personal organization, and peer support. Milestones are personal observations, not clinical assessments. Bring health and development questions to a qualified professional.',
       },
       {
         title: 'Where Should I Start?',
         description:
-          'Start with what feels helpful today. Read an article, create your family’s space, or take a moment to reflect. There’s no checklist to finish and no pace to keep up with.',
-      },
-      {
-        title: 'Can I Make Space For More Than One Child?',
-        description:
-          'Yes. You can keep a separate profile for each child, so their experiences, observations, and records stay connected to their own story.',
+          'Start small. Add a child’s profile, write one reflection, or explore a guide. There’s no checklist to finish and no pace to keep up with.',
       },
     ],
   },
@@ -8622,12 +8692,13 @@ export const gentlePathLandingStrings = {
     eyebrowLabel: 'One Gentle Step At A Time',
     title: 'Your Family. Your Pace. Your Path.',
     description:
-      'You don’t need to have it all figured out. A little support is a good place to start.',
+      'You don’t need to have it all figured out. Make a little room for support, and begin wherever you are.',
     primaryAction: 'Take The First Step',
     artAlt: 'A small sprout growing beside stepping stones and sunshine',
   },
   footer: {
-    description: 'A little clarity. A lot of care. At your family’s pace.',
+    description:
+      'A community to learn, connect, and grow. At your family’s pace.',
     navigationLabel: 'Footer Navigation',
     copyrightDescription: '© 2026 GentlePath. With care, every step.',
     careDescription: 'Made for real families, and their own way forward.',
@@ -8636,6 +8707,10 @@ export const gentlePathLandingStrings = {
 
 export const gentlePathWorkspaceStrings = {
   navigation: {
+    peopleGroup: 'People And Community',
+    contentGroup: 'Content And Guidance',
+    platformGroup: 'Partners And Platform',
+    supportGroup: 'Support',
     documents: 'Document Vault',
     guides: 'Guided Steps',
     community: 'Community',
@@ -9486,6 +9561,14 @@ export const gentlePathEditorialStrings = {
   editGuide: 'Edit Guide',
   newResource: 'Create Resource',
   editResource: 'Edit Resource',
+  previewGuide: 'Preview Guided Steps',
+  previewTitle: 'Guided Steps Preview',
+  previewDescription:
+    'Preview your current draft as families will read it. Nothing is saved or published.',
+  previewUntitled: 'Untitled Guide',
+  // @sentence-case: Preview placeholder prose.
+  previewEmptyStep: 'Add step content in the editor to see it here.',
+  closePreview: 'Back To Editing',
   openGuide: 'Read Guide',
   openResource: 'View In Library',
   openExternal: 'Open Resource',
@@ -9730,6 +9813,18 @@ export const gentlePathEditorialStrings = {
 
 export const gentlePathMilestoneAdminStrings = {
   tagSelection: (count: number) => `${count} Tags`,
+  visibilityLabel: 'Visibility',
+  visibility: {
+    visible: 'Visible Milestones',
+    hidden: 'Hidden Milestones',
+    all: 'All Milestones',
+  },
+  emptyHiddenTitle: 'No Hidden Milestones',
+  emptyHiddenDescription:
+    'Hidden milestones appear here with a Restore action. Your visible guidance and retained observations are still available.',
+  showVisibleMilestones: 'Show Visible Milestones',
+  restoreMilestone: 'Restore Milestone',
+  restoredMilestone: 'Milestone Restored',
   clearTags: 'Clear Tag Filters',
   tagFilterHint:
     'Show milestones matching any selected tag. Choose up to 30 tags.',
@@ -10770,3 +10865,154 @@ export const gentlePathNotificationInboxStrings = {
       'This demo notification has expired and stays out of the visible inbox.',
   },
 } as const;
+
+export const gentlePathContactStrings = {
+  title: 'A Question, An Idea, Or Just Hello?',
+  description:
+    'We’d love to hear what would make GentlePath more useful for your family. Send a question, share feedback, or tell us about something that needs fixing.',
+  formLabel: 'Email GentlePath',
+  formDescription:
+    'Send a message to our support team. Please leave out private family records and sensitive information.',
+  nameLabel: 'Your Name',
+  emailLabel: 'Email Address',
+  contextLabel: 'What Can We Help With?',
+  messageLabel: 'Your Message',
+  contexts: {
+    INITIAL_CONTACT: 'Say Hello Or Ask A Question',
+    FEATURE_REQUEST: 'Suggest A Feature',
+    BUG_REPORT: 'Report A Bug',
+    FEEDBACK: 'Share Feedback',
+  },
+  sendAction: 'Send Message',
+  successTitle: 'Message Sent',
+  successDescription:
+    'Your message has been sent to GentlePath support. We’ll reply using the email address you provided.',
+  demoTitle: 'Demo Message Received',
+  demoDescription:
+    'This preview accepted your message locally. No email was sent.',
+  errorTitle: 'Message Could Not Be Sent',
+  errorDescription: 'Your message is still here. Please try again in a moment.',
+  validation: {
+    // @sentence-case: Form validation message.
+    name: 'Enter your name, using up to 100 characters.',
+    // @sentence-case: Form validation message.
+    email: 'Enter a valid email address.',
+    // @sentence-case: Form validation message.
+    message: 'Write a message between 10 and 5,000 characters.',
+    // @sentence-case: Form validation message.
+    context: 'Choose a message topic.',
+  },
+} as const;
+
+export const gentlePathHelpFaqSections = [
+  {
+    title: 'Getting Started',
+    sections: [
+      {
+        question: 'What Can I Do With GentlePath?',
+        answer:
+          'Keep family profiles, a journal, milestone observations, and important documents together. Explore resources, Guided Steps, Family Tips, community conversations, polls, and Family Discounts. Start with whichever part feels useful today.',
+      },
+      {
+        question: 'Can I Create A Profile For Each Child?',
+        answer:
+          'Yes. Open My Family and choose Add Child. Each profile has its own birthday, preferences, communication details, and support notes. Choose the relevant child when recording milestone observations.',
+      },
+    ],
+  },
+  {
+    title: 'Your Family And Journal',
+    sections: [
+      {
+        question: 'Who Can See My Family Records?',
+        answer:
+          'Your family profiles, journal entries, observations, and documents belong to your account. They are not published to the community when you save them. Staff roles do not grant access to another family’s private records.',
+      },
+      {
+        question: 'Can I Share My Account With Another Caregiver?',
+        answer:
+          'Keep your sign-in details private. Another caregiver does not receive access to your family records by creating an account. Shared family access is not currently offered.',
+      },
+      {
+        question: 'How Do I Keep A Reflection?',
+        answer:
+          'Open My Journal and create an entry. Add a title, write what you want to remember, and choose any relevant feelings or child. You can return to edit or remove your own entries.',
+      },
+    ],
+  },
+  {
+    title: 'Milestones And Family Tips',
+    sections: [
+      {
+        question: 'Are Milestones A Developmental Assessment?',
+        answer:
+          'No. Milestones help you record personal observations, not compare your child with others or make a clinical assessment. Choose the response that fits what you noticed and discuss health or development questions with a qualified professional.',
+      },
+      {
+        question: 'Can I Change An Observation Later?',
+        answer:
+          'Yes. Open a milestone’s details to record notes, review the observation history, or edit or remove an entry belonging to your child.',
+      },
+      {
+        question: 'Why Is My Family Tip Pending?',
+        answer:
+          'New and edited Family Tips go through staff review before appearing in the shared tips directory. Editing a published tip sends it back for review. Your own submissions remain available in your tips view.',
+      },
+    ],
+  },
+  {
+    title: 'Community And Saved Content',
+    sections: [
+      {
+        question: 'What Should I Keep Out Of Community Posts?',
+        answer:
+          'Leave out identifying child records, school details, private documents, and anyone else’s personal information. Posts, comments, and polls are shared contributions. Use the report action if something needs staff attention.',
+      },
+      {
+        question: 'Can I Change My Poll Vote?',
+        answer:
+          'Yes. Select your new choice or choices, then choose Update Vote. A multiple-choice poll accepts more than one option. Your ballot is personal; the results show aggregate participation.',
+      },
+      {
+        question: 'Where Do My Bookmarks Go?',
+        answer:
+          'Choose Save on a guide, resource, milestone, tip, post, or poll. Find your collection in Saved Content. Choose Saved again to remove a bookmark.',
+      },
+    ],
+  },
+  {
+    title: 'Resources, Guides, And Discounts',
+    sections: [
+      {
+        question: 'How Do Guided Steps Work?',
+        answer:
+          'Open a guide and move through its ordered steps using the step list or Previous and Next actions. You can revisit any step and save the guide for another day.',
+      },
+      {
+        question: 'How Should I Use Family Discounts?',
+        answer:
+          'Read the offer’s terms, eligibility, expiry, and commercial disclosure before visiting the partner. GentlePath shows eligible offers from approved sponsors; availability and redemption terms belong to the provider.',
+      },
+    ],
+  },
+  {
+    title: 'Account And Support',
+    sections: [
+      {
+        question: 'How Do I Change Notifications?',
+        answer:
+          'Open Notification Settings to choose your preferences. Your inbox keeps updates in one place. Browser push notifications require your separate permission and can be disabled again.',
+      },
+      {
+        question: 'How Can I Ask A Question Or Suggest A Feature?',
+        answer:
+          'Use Email Us on the GentlePath landing page. Choose a question, feature request, bug report, or feedback, and include only the information needed to explain it.',
+      },
+      {
+        question: 'Does GentlePath Offer Medical Advice Or An AI Assistant?',
+        answer:
+          'GentlePath offers general information, personal organization, and peer support. It does not diagnose autism, provide treatment, or offer emergency care. A parent-facing AI assistant is not currently available.',
+      },
+    ],
+  },
+] as const;

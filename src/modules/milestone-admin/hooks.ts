@@ -14,19 +14,22 @@ import type { FamilyTipInput } from './models/familyTip';
 import type { TipReviewInput } from './models/tipReview';
 import type { MilestoneObservationInput } from './models/milestoneObservation';
 import type { MilestoneObservationQuery } from './models/milestoneObservationQuery';
-export function useMilestoneGuidance(query: MilestoneAdminQuery) {
+export function useMilestoneGuidance(
+  query: MilestoneAdminQuery,
+  admin = false,
+) {
   const { milestoneAdminService: service } = useServiceContainer();
   return useQuery({
-    queryKey: keys.milestones(query),
+    queryKey: [...keys.milestones(query), { admin }],
     placeholderData: keepPreviousData,
-    queryFn: ({ signal }) => service.milestones(query, signal),
+    queryFn: ({ signal }) => service.milestones(query, signal, admin),
   });
 }
-export function useMilestoneGuidanceDetail(id: string) {
+export function useMilestoneGuidanceDetail(id: string, admin = false) {
   const { milestoneAdminService: service } = useServiceContainer();
   return useQuery({
-    queryKey: keys.milestone(id),
-    queryFn: ({ signal }) => service.milestone(id, signal),
+    queryKey: [...keys.milestone(id), { admin }],
+    queryFn: ({ signal }) => service.milestone(id, signal, admin),
     enabled: Boolean(id),
   });
 }
@@ -78,6 +81,10 @@ export function useSaveMilestoneGuidance() {
 export function useHideMilestoneGuidance() {
   const { milestoneAdminService: service } = useServiceContainer();
   return useMilestoneMutation((id: string) => service.hideMilestone(id));
+}
+export function useRestoreMilestoneGuidance() {
+  const { milestoneAdminService: service } = useServiceContainer();
+  return useMilestoneMutation((id: string) => service.restoreMilestone(id));
 }
 export function useSaveFamilyTip() {
   const { milestoneAdminService: service } = useServiceContainer();

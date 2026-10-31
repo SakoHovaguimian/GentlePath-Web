@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { GentlePathBrand } from '@/components/GentlePathBrand';
-import { Button, UiIcon } from '@/components/ui';
+import { Button, IconMenu, UiIcon } from '@/components/ui';
 import { gentlePathLandingStrings as copy } from '@/strings';
+import { LandingThemeToggle } from './LandingThemeToggle';
 
 export function LandingHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,19 +31,31 @@ export function LandingHeader() {
         </Link>
         <nav className="gp-desktop-nav" aria-label={copy.mainNavigationLabel}>
           <Link href="/#support">{copy.navigation.supportLabel}</Link>
-          <Link href="/#your-family">{copy.navigation.familyLabel}</Link>
-          <Link href="/blog">{copy.navigation.blogLabel}</Link>
+          <Link href="/#features">{copy.navigation.featuresLabel}</Link>
+          <Link href="/#our-purpose">{copy.navigation.purposeLabel}</Link>
+          <Link href="/#contact">{copy.navigation.contactLabel}</Link>
         </nav>
         <div className="gp-header-actions">
-          <Link href="/login" prefetch={false} className="gp-login-link">
-            {copy.navigation.loginAction}
-          </Link>
-          <Button asChild className="gp-button gp-header-signup">
-            <Link href="/signup" prefetch={false}>
-              {copy.navigation.signupAction}
-              <UiIcon name="arrowRight" />
-            </Link>
-          </Button>
+          <IconMenu
+            label={copy.navigation.accountAction}
+            triggerLabel={copy.navigation.accountAction}
+            icon="user"
+            className="gp-account-access"
+            items={[
+              {
+                id: 'signup',
+                label: copy.navigation.createAccountAction,
+                icon: 'arrowRight',
+                href: '/signup',
+              },
+              {
+                id: 'login',
+                label: copy.navigation.loginAction,
+                icon: 'user',
+                href: '/login',
+              },
+            ]}
+          />
           <Button
             ref={menuButton}
             variant="ghost"
@@ -58,6 +71,7 @@ export function LandingHeader() {
           >
             <UiIcon name={menuOpen ? 'close' : 'menu'} />
           </Button>
+          <LandingThemeToggle />
         </div>
       </div>
       <nav
@@ -69,21 +83,18 @@ export function LandingHeader() {
         <Link href="/#support" onClick={closeMenu}>
           {copy.navigation.supportLabel}
         </Link>
-        <Link href="/#your-family" onClick={closeMenu}>
-          {copy.navigation.familyLabel}
+        <Link href="/#features" onClick={closeMenu}>
+          {copy.navigation.featuresLabel}
+        </Link>
+        <Link href="/#our-purpose" onClick={closeMenu}>
+          {copy.navigation.purposeLabel}
+        </Link>
+        <Link href="/#contact" onClick={closeMenu}>
+          {copy.navigation.contactLabel}
         </Link>
         <Link href="/blog" onClick={closeMenu}>
           {copy.navigation.blogLabel}
         </Link>
-        <Link href="/login" prefetch={false} onClick={closeMenu}>
-          {copy.navigation.loginAction}
-        </Link>
-        <Button asChild className="gp-button">
-          <Link href="/signup" prefetch={false} onClick={closeMenu}>
-            {copy.navigation.signupAction}
-            <UiIcon name="arrowRight" />
-          </Link>
-        </Button>
       </nav>
     </header>
   );

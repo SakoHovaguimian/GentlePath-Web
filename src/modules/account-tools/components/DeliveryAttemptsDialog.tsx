@@ -32,6 +32,14 @@ export function DeliveryAttemptsDialog({
       title={copy.deliveries.attemptsTitle}
       description={copy.deliveries.attemptsDescription}
       onDismiss={onClose}
+
+      footer={
+        <div className="flex justify-end">
+          <Button variant="secondary" onClick={onClose}>
+            {copy.common.closeAction}
+          </Button>
+        </div>
+      }
     >
       <div className="grid gap-5">
         <DeliveryStatusBadge status={delivery.status} />
@@ -131,11 +139,6 @@ export function DeliveryAttemptsDialog({
             </>
           )}
         </QueryBoundary>
-        <div className="flex justify-end border-t border-secondary pt-5">
-          <Button variant="secondary" onClick={onClose}>
-            {copy.common.closeAction}
-          </Button>
-        </div>
       </div>
     </Modal>
   );

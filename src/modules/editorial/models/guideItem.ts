@@ -28,3 +28,8 @@ export const GuideItemSchema = GuideItemInputSchema.extend({
 });
 export type GuideItem = z.infer<typeof GuideItemSchema>;
 export type GuideItemInput = z.infer<typeof GuideItemInputSchema>;
+
+export type GuideStepContent = Pick<
+  GuideItem,
+  'id' | 'title' | 'description' | 'image_url' | 'position'
+>;

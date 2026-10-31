@@ -1,5 +1,7 @@
+import { LandingFeatures } from './components/LandingFeatures';
+import { LandingCause } from './components/LandingCause';
+import { LandingContact } from './components/LandingContact';
 import { gentlePathLandingStrings as copy } from '@/strings';
-import { LandingFamily } from './components/LandingFamily';
 import { LandingFooter } from './components/LandingFooter';
 import { LandingHeader } from './components/LandingHeader';
 import { LandingHero } from './components/LandingHero';
@@ -18,9 +20,11 @@ export function LandingPage() {
       <main id="main-content">
         <LandingHero />
         <LandingSupport />
-        <LandingFamily />
+        <LandingFeatures />
+        <LandingCause />
         <LandingStories />
         <LandingQuestions />
+        <LandingContact />
         <LandingInvitation />
       </main>
       <LandingFooter />

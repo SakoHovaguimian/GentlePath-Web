@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BookmarkButton, IconMenu } from '@/components/ui';
 import { gentlePathPortalStrings as copy } from '@/strings';
-import type { Resource } from '../models/resource';
+import type { ResourceCardProps } from '../models/resourceCardProps';
 import { getResourceArtwork } from './resourceArtwork';
 import { ResourceRatingSummary } from '@/modules/engagement/components/ResourceRatingSummary';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
@@ -12,12 +12,7 @@ export function ResourceCard({
   onSave,
   busy = false,
   headingLevel = 'h2',
-}: {
-  resource: Resource;
-  onSave?: (resource: Resource) => void;
-  busy?: boolean;
-  headingLevel?: 'h2' | 'h3';
-}) {
+}: ResourceCardProps) {
   const Heading = headingLevel;
   const illustration = getResourceArtwork(resource);
   return (
@@ -81,10 +76,10 @@ export function ResourceCard({
             {resource.title}
           </Link>
         </Heading>
-        <ResourceRatingSummary ratings={resource.ratings} compact />
         <p className="m-0 flex-1 text-sm leading-relaxed text-secondary">
           {resource.description}
         </p>
+        <ResourceRatingSummary ratings={resource.ratings} compact />
         <div className="gp-resource-card__footer">
           <span className="text-xs text-tertiary">
             {copy.resources.formats[resource.format]}

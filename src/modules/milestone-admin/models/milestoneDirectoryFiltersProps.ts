@@ -10,4 +10,5 @@ export interface MilestoneDirectoryFiltersProps {
   tags?: string[];
   progress?: boolean;
   multipleTags?: boolean;
+  visibility?: boolean;
 }

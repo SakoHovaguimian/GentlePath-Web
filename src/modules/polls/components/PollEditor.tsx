@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import {
   BookmarkButton,
   Button,
@@ -36,6 +36,7 @@ export function PollEditor({
   onSaved?: () => void;
   onDeleted?: () => void;
 }) {
+  const formId = useId();
   const [input, setInput] = useState<Omit<PollInput, 'options'>>({
     attachments: poll?.attachments ?? [],
     title: poll?.title ?? '',
@@ -146,8 +147,48 @@ export function PollEditor({
       title={poll ? copy.editPoll : copy.newPoll}
       description={copy.formDescription}
       onDismiss={close}
+
+      footer={
+        <div className="flex flex-wrap justify-end gap-3">
+          {poll && (
+            <Button
+              variant="destructive"
+              className="mr-auto"
+              loading={remove.isPending}
+              disabled={mutation.isPending || !writable}
+              onClick={() => {
+                void remove.deletePoll(poll);
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.deletePoll}
+            </Button>
+          )}
+          <Button
+            variant="secondary"
+            disabled={mutation.isPending || remove.isPending}
+            onClick={close}
+          >
+            {copy.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={mutation.isPending}
+            disabled={!writable || remove.isPending}
+          >
+            {poll ? copy.save : copy.newPoll}
+          </BookmarkButton>
+        </div>
+      }
     >
-      <form ref={formRef} noValidate onSubmit={submit} className="grid gap-5">
+      <form
+        id={formId}
+        ref={formRef}
+        noValidate
+        onSubmit={submit}
+        className="grid gap-5"
+      >
         {locked && (
           <div className="rounded-xl bg-secondary_subtle p-4">
             <h3 className="m-0 text-sm font-semibold">{copy.lockedTitle}</h3>
@@ -338,36 +379,6 @@ export function PollEditor({
         ) : (
           <MutationError error={mutation.error ?? remove.error} />
         )}
-        <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
-          {poll && (
-            <Button
-              variant="destructive"
-              className="mr-auto"
-              loading={remove.isPending}
-              disabled={mutation.isPending || !writable}
-              onClick={() => {
-                void remove.deletePoll(poll);
-              }}
-            >
-              <UiIcon name="trash" className="size-4" />
-              {copy.deletePoll}
-            </Button>
-          )}
-          <Button
-            variant="secondary"
-            disabled={mutation.isPending || remove.isPending}
-            onClick={close}
-          >
-            {copy.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            loading={mutation.isPending}
-            disabled={!writable || remove.isPending}
-          >
-            {poll ? copy.save : copy.newPoll}
-          </BookmarkButton>
-        </div>
       </form>
     </Modal>
   );

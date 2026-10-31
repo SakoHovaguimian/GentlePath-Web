@@ -28,7 +28,11 @@ import { MilestoneProgressSummarySchema } from '../models/milestoneProgressSumma
 
 export class MilestoneAdminService {
   constructor(private readonly api: ApiClientInterface) {}
-  async milestones(query: MilestoneAdminQuery, signal?: AbortSignal) {
+  async milestones(
+    query: MilestoneAdminQuery,
+    signal?: AbortSignal,
+    admin = false,
+  ) {
     const {
       query: search,
       tag,
@@ -47,9 +51,13 @@ export class MilestoneAdminService {
       milestone_id: '',
       child_id,
       progress,
+      ...(admin ? { visibility: query.visibility ?? 'visible' } : {}),
     });
     return milestoneAdminPageSchema(MilestoneGuidanceSchema).parse(
-      await this.api.request(`/portal/milestone-tools?${params}`, { signal }),
+      await this.api.request(
+        `/${admin ? 'admin' : 'portal'}/milestone-tools?${params}`,
+        { signal },
+      ),
     );
   }
   async progressSummary(childId: string, signal?: AbortSignal) {
@@ -60,10 +68,10 @@ export class MilestoneAdminService {
       }),
     );
   }
-  async milestone(id: string, signal?: AbortSignal) {
+  async milestone(id: string, signal?: AbortSignal, admin = false) {
     return MilestoneGuidanceSchema.parse(
       await this.api.request(
-        `/portal/milestone-tools/${encodeURIComponent(id)}`,
+        `/${admin ? 'admin' : 'portal'}/milestone-tools/${encodeURIComponent(id)}`,
         { signal },
       ),
     );
@@ -102,6 +110,14 @@ export class MilestoneAdminService {
     await this.api.request(`/admin/milestone-tools/${encodeURIComponent(id)}`, {
       method: 'DELETE',
     });
+  }
+  async restoreMilestone(id: string) {
+    return MilestoneGuidanceSchema.parse(
+      await this.api.request(
+        `/admin/milestone-tools/${encodeURIComponent(id)}/restore`,
+        { method: 'PATCH' },
+      ),
+    );
   }
   async tips(
     scope: 'approved' | 'mine' | 'review',

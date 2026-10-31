@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useId, useEffect, useRef, useState, type FormEvent } from 'react';
 import {
   Button,
   BookmarkButton,
@@ -48,6 +48,7 @@ export function DocumentEditor({
   onDelete?: () => Promise<boolean>;
   onClose: () => void;
 }) {
+  const formId = useId();
   const [input, setInput] = useState<DocumentMetadataInput>(() => ({
     title: existing?.title ?? '',
     documentType: existing?.documentType ?? 'OTHER',
@@ -174,8 +175,68 @@ export function DocumentEditor({
       description={copy.formDescription}
       icon={<UiIcon name="file" />}
       onDismiss={dismiss}
+
+      footer={
+        <div className="flex flex-wrap justify-end gap-3">
+          {existing && onDelete && (
+            <Button
+              variant="destructive"
+              className="me-auto"
+              disabled={mutation.isPending}
+              loading={deleting}
+              onClick={async () => {
+                if (busy.current) return;
+                busy.current = true;
+                try {
+                  if (await onDelete()) dirty.current = false;
+                } finally {
+                  busy.current = false;
+                }
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.deleteAction}
+            </Button>
+          )}
+          {!existing && mutation.isPending ? (
+            <Button
+              variant="secondary"
+              onClick={() => abortRef.current?.abort()}
+            >
+              {copy.cancelUploadAction}
+            </Button>
+          ) : (
+            <Button
+              variant="secondary"
+              disabled={mutation.isPending || deleting}
+              onClick={dismiss}
+            >
+              {copy.cancelAction}
+            </Button>
+          )}
+          {existing ? (
+            <BookmarkButton
+              type="submit"
+              form={formId}
+              loading={mutation.isPending}
+              disabled={deleting}
+            >
+              {copy.saveAction}
+            </BookmarkButton>
+          ) : (
+            <Button
+              type="submit"
+              form={formId}
+              loading={mutation.isPending}
+              disabled={deleting}
+            >
+              {copy.uploadAction}
+            </Button>
+          )}
+        </div>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid gap-5">
+      <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
         {!existing && (
           <div className="grid gap-2">
             <p className="m-0 text-sm font-medium text-secondary">
@@ -370,61 +431,6 @@ export function DocumentEditor({
             <p className="m-0 text-xs text-secondary">{copy.uploadingHint}</p>
           </div>
         )}
-        <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
-          {existing && onDelete && (
-            <Button
-              variant="destructive"
-              className="me-auto"
-              disabled={mutation.isPending}
-              loading={deleting}
-              onClick={async () => {
-                if (busy.current) return;
-                busy.current = true;
-                try {
-                  if (await onDelete()) dirty.current = false;
-                } finally {
-                  busy.current = false;
-                }
-              }}
-            >
-              <UiIcon name="trash" className="size-4" />
-              {copy.deleteAction}
-            </Button>
-          )}
-          {!existing && mutation.isPending ? (
-            <Button
-              variant="secondary"
-              onClick={() => abortRef.current?.abort()}
-            >
-              {copy.cancelUploadAction}
-            </Button>
-          ) : (
-            <Button
-              variant="secondary"
-              disabled={mutation.isPending || deleting}
-              onClick={dismiss}
-            >
-              {copy.cancelAction}
-            </Button>
-          )}
-          {existing ? (
-            <BookmarkButton
-              type="submit"
-              loading={mutation.isPending}
-              disabled={deleting}
-            >
-              {copy.saveAction}
-            </BookmarkButton>
-          ) : (
-            <Button
-              type="submit"
-              loading={mutation.isPending}
-              disabled={deleting}
-            >
-              {copy.uploadAction}
-            </Button>
-          )}
-        </div>
       </form>
     </Modal>
   );

@@ -1,9 +1,11 @@
+import { MilestoneVisibilitySchema } from './milestoneVisibility';
 import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import { TipApprovalStatusSchema } from './tipApprovalStatus';
 import { MilestoneProgressStateSchema } from './milestoneProgressState';
 export const MilestoneAdminQuerySchema = z.object({
+  visibility: MilestoneVisibilitySchema.optional(),
   query: z.string().trim().max(500, copy.validation.invalidQuery).default(''),
   tag: z
     .string()

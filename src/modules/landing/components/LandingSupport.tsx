@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { gentlePathLandingStrings as copy } from '@/strings';
 
 const supportIllustrations = [
-  '/gentlepath/caregiver-community.png',
-  '/gentlepath/parent-and-child.png',
-  '/gentlepath/care-folder.png',
+  '/gentlepath/family-connection.png',
+  '/gentlepath/guided-steps.png',
+  '/gentlepath/community-messages.png',
 ] as const;
 
 export function LandingSupport() {
@@ -34,6 +34,11 @@ export function LandingSupport() {
             <div className="gp-pillar-copy">
               <h3>{pillar.title}</h3>
               <p>{pillar.description}</p>
+              <div className="gp-pillar-topics">
+                {pillar.topics.map((topic) => (
+                  <span key={topic}>{topic}</span>
+                ))}
+              </div>
             </div>
           </article>
         ))}

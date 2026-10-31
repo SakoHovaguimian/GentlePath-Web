@@ -1,4 +1,5 @@
 'use client';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import {
   Badge,
@@ -19,6 +20,7 @@ import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import styles from '@/modules/portal/Admin.module.css';
 import {
   useHideMilestoneGuidance,
+  useRestoreMilestoneGuidance,
   useMilestoneGuidance,
   useMilestoneGuidanceDetail,
   useMilestoneChoices,
@@ -37,7 +39,7 @@ function ExistingMilestoneEditor({
   id,
   onClose,
 }: ExistingMilestoneEditorProps) {
-  const query = useMilestoneGuidanceDetail(id);
+  const query = useMilestoneGuidanceDetail(id, true);
   if (query.data)
     return <MilestoneGuidanceEditor milestone={query.data} onClose={onClose} />;
   return (
@@ -50,10 +52,14 @@ function ExistingMilestoneEditor({
 }
 export function AdminMilestonesScreen() {
   const directory = useMilestoneDirectory();
-  const query = useMilestoneGuidance(directory.query);
+  const query = useMilestoneGuidance(directory.query, true);
   const choices = useMilestoneChoices();
   const remove = useHideMilestoneGuidance();
-  const [editor, setEditor] = useState<string | null>(null);
+  const params = useSearchParams();
+  const editor = params.get('edit');
+  const setEditor = (id: string | null) =>
+    directory.update({ edit: id ?? undefined });
+  const restore = useRestoreMilestoneGuidance();
   const [confirming, setConfirming] = useState(false);
   const busy = useRef(false);
   const { showAlert, showToast } = usePresentationService();
@@ -92,6 +98,18 @@ export function AdminMilestonesScreen() {
       setConfirming(false);
     }
   }
+  async function bringBack(milestone: MilestoneGuidance) {
+    if (busy.current) return;
+    busy.current = true;
+    try {
+      await restore.mutateAsync(milestone.id);
+      void showToast({ title: copy.restoredMilestone, intent: 'success' });
+    } catch {
+      /* Retain the record and show the mutation error. */
+    } finally {
+      busy.current = false;
+    }
+  }
   const filtered = Boolean(
     directory.query.query ||
     directory.query.tag ||
@@ -101,17 +119,19 @@ export function AdminMilestonesScreen() {
     <div className="flex flex-wrap gap-2">
       <Button
         variant="secondary"
-        disabled={remove.isPending || confirming}
+        disabled={remove.isPending || restore.isPending || confirming}
         onClick={() => setEditor(milestone.id)}
       >
         {copy.editMilestone}
       </Button>
       <Button
-        variant="destructive"
-        disabled={remove.isPending || confirming}
-        onClick={() => void hide(milestone)}
+        variant={milestone.hidden ? 'secondary' : 'destructive'}
+        disabled={remove.isPending || restore.isPending || confirming}
+        onClick={() =>
+          void (milestone.hidden ? bringBack(milestone) : hide(milestone))
+        }
       >
-        {copy.hideMilestone}
+        {milestone.hidden ? copy.restoreMilestone : copy.hideMilestone}
       </Button>
     </div>
   );
@@ -130,7 +150,7 @@ export function AdminMilestonesScreen() {
           }
         />
       </div>
-      <MutationError error={remove.error} />
+      <MutationError error={remove.error ?? restore.error} />
       <DataPanel
         busy={query.isFetching}
         busyLabel={copy.loadingMilestones}
@@ -140,6 +160,7 @@ export function AdminMilestonesScreen() {
             tags={choices.data?.flatMap((milestone) => milestone.tags)}
             onChange={directory.update}
             multipleTags
+            visibility
           />
         }
         footer={
@@ -164,6 +185,18 @@ export function AdminMilestonesScreen() {
                 caption={copy.milestoneCaption}
                 rows={page.data}
                 getRowKey={(item) => item.id}
+                getRowHref={(item) => {
+                  const next = new URLSearchParams(params.toString());
+                  next.set('edit', item.id);
+                  return `/admin/milestones?${next}`;
+                }}
+                onRowNavigate={(href) =>
+                  setEditor(
+                    new URL(href, window.location.origin).searchParams.get(
+                      'edit',
+                    ),
+                  )
+                }
                 renderMobileRow={(item) => (
                   <MobileRecordRow
                     title={item.milestone}
@@ -182,9 +215,18 @@ export function AdminMilestonesScreen() {
                     header: copy.milestoneLabel,
                     render: (item) => (
                       <div className="grid max-w-xl gap-2">
-                        <span className="font-medium text-primary">
+                        <Button
+                          variant="ghost"
+                          className="h-auto min-h-0 justify-start p-0 text-left font-medium"
+                          onClick={() => setEditor(item.id)}
+                        >
                           {item.milestone}
-                        </span>
+                        </Button>
+                        {item.hidden && (
+                          <Badge intent="neutral">
+                            {copy.visibility.hidden}
+                          </Badge>
+                        )}
                         <div className="flex flex-wrap gap-1">
                           {item.tags.map((tag) => (
                             <Badge key={tag} intent="neutral">
@@ -222,12 +264,18 @@ export function AdminMilestonesScreen() {
                 variant="plain"
                 icon="leaf"
                 title={
-                  filtered ? copy.noResultsTitle : copy.emptyMilestonesTitle
+                  filtered
+                    ? copy.noResultsTitle
+                    : directory.query.visibility === 'hidden'
+                      ? copy.emptyHiddenTitle
+                      : copy.emptyMilestonesTitle
                 }
                 description={
                   filtered
                     ? copy.noResultsDescription
-                    : copy.emptyMilestonesDescription
+                    : directory.query.visibility === 'hidden'
+                      ? copy.emptyHiddenDescription
+                      : copy.emptyMilestonesDescription
                 }
                 action={
                   <Button
@@ -240,10 +288,19 @@ export function AdminMilestonesScreen() {
                             tags: undefined,
                             offset: 0,
                           })
-                        : setEditor('new')
+                        : directory.query.visibility === 'hidden'
+                          ? directory.update({
+                              visibility: 'visible',
+                              offset: 0,
+                            })
+                          : setEditor('new')
                     }
                   >
-                    {filtered ? copy.resetFilters : copy.newMilestone}
+                    {filtered
+                      ? copy.resetFilters
+                      : directory.query.visibility === 'hidden'
+                        ? copy.showVisibleMilestones
+                        : copy.newMilestone}
                   </Button>
                 }
               />

@@ -95,6 +95,7 @@ export async function handleMilestoneAdminRequest(
         state.referencedOptionIds.add(option.id);
   const detailed = (item: MilestoneGuidance): MilestoneGuidance => ({
     ...item,
+    hidden: state.hiddenMilestoneIds.has(item.id),
     response_options: item.response_options?.filter(
       (option) => !option.deleted,
     ),
@@ -107,6 +108,7 @@ export async function handleMilestoneAdminRequest(
     ).length,
   });
   const syncPortal = (item: MilestoneGuidance) => {
+    if (state.hiddenMilestoneIds.has(item.id)) return;
     const old = portal.milestones.find((milestone) => milestone.id === item.id);
     const value = {
       id: item.id,
@@ -127,6 +129,10 @@ export async function handleMilestoneAdminRequest(
         : undefined,
     });
     if (!parsed.success)
+      throw new ValidationError(copy.validation.invalidQuery);
+    if (parsed.data.visibility !== undefined && !staff)
+      throw new OwnershipError();
+    if (area === 'admin' && (parsed.data.child_id || parsed.data.progress))
       throw new ValidationError(copy.validation.invalidQuery);
     const params = url.searchParams;
     for (const [after, before] of [
@@ -242,6 +248,32 @@ export async function handleMilestoneAdminRequest(
     item.updated_at = now;
   }
   if (resource === 'milestone-tools') {
+    if (area === 'admin' && method === 'GET' && !action) {
+      const filter = query();
+      const tags = milestoneQueryTags(filter);
+      if (id) {
+        const milestone = state.milestones.find((item) => item.id === id);
+        if (!milestone) throw new NotFoundError();
+        return json(detailed(milestone));
+      }
+      return page(
+        state.milestones
+          .filter((item) => {
+            const hidden = state.hiddenMilestoneIds.has(item.id);
+            const visibility = filter.visibility ?? 'visible';
+            return (
+              (visibility === 'all' || hidden === (visibility === 'hidden')) &&
+              (!filter.query ||
+                `${item.milestone} ${item.information} ${item.observation_guidance ?? ''}`
+                  .toLowerCase()
+                  .includes(filter.query.toLowerCase())) &&
+              (!tags.length || tags.some((tag) => item.tags.includes(tag))) &&
+              dateMatches(item.created_at, 'created')
+            );
+          })
+          .map(detailed),
+      );
+    }
     if (area === 'portal' && method === 'GET' && !action) {
       if (id === 'progress') {
         const filter = MilestoneProgressQuerySchema.parse(
@@ -344,10 +376,14 @@ export async function handleMilestoneAdminRequest(
       syncPortal(item);
       return json(detailed(item), 201);
     }
-    const item = state.milestones.find(
-      (item) => item.id === id && milestoneVisible(item.id),
-    );
+    const item = state.milestones.find((item) => item.id === id);
     if (!item) throw new NotFoundError();
+    if (method === 'PATCH' && action === 'restore' && !subaction) {
+      state.hiddenMilestoneIds.delete(item.id);
+      item.updated_at = new Date().toISOString();
+      syncPortal(item);
+      return json(detailed(item));
+    }
     if (method === 'PUT' && !action) {
       const input = MilestoneGuidanceInputSchema.parse(await body(request));
       replaceOptions(item, input.response_options);

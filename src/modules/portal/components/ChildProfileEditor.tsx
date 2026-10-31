@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import {
   BookmarkButton,
   Button,
@@ -40,6 +40,7 @@ export function ChildProfileEditor({
   removing?: boolean;
   removalError?: Error | null;
 }) {
+  const formId = useId();
   const [input, setInput] = useState<ChildProfileInput>({
     name: child?.name ?? '',
     dateOfBirth: child?.dateOfBirth ?? '',
@@ -121,8 +122,47 @@ export function ChildProfileEditor({
       title={child ? copy.family.editTitle : copy.family.newTitle}
       description={copy.family.formDescription}
       onDismiss={dismiss}
+
+      footer={
+        <div className="flex flex-wrap justify-end gap-3">
+          {child && onRemove && (
+            <Button
+              variant="destructive"
+              className="mr-auto"
+              disabled={pending}
+              onClick={() => {
+                if (busy.current) return;
+                busy.current = true;
+                void onRemove()
+                  .then((removed) => {
+                    if (!removed) return;
+                    dirty.current = false;
+                    onClose();
+                  })
+                  .finally(() => {
+                    busy.current = false;
+                  });
+              }}
+            >
+              <UiIcon name="trash" className="size-4" />
+              {copy.family.deleteAction}
+            </Button>
+          )}
+          <Button variant="secondary" onClick={dismiss} disabled={pending}>
+            {copy.common.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={mutation.isPending}
+            disabled={removing}
+          >
+            {copy.family.save}
+          </BookmarkButton>
+        </div>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid gap-5">
+      <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
         <Field labelText={copy.family.nameLabel}>
           <Input
             name="name"
@@ -226,41 +266,6 @@ export function ChildProfileEditor({
         )}
         <MutationError error={mutation.error} />
         <MutationError error={removalError} />
-        <div className="flex flex-wrap justify-end gap-3 border-t border-secondary pt-5">
-          {child && onRemove && (
-            <Button
-              variant="destructive"
-              className="mr-auto"
-              disabled={pending}
-              onClick={() => {
-                if (busy.current) return;
-                busy.current = true;
-                void onRemove()
-                  .then((removed) => {
-                    if (!removed) return;
-                    dirty.current = false;
-                    onClose();
-                  })
-                  .finally(() => {
-                    busy.current = false;
-                  });
-              }}
-            >
-              <UiIcon name="trash" className="size-4" />
-              {copy.family.deleteAction}
-            </Button>
-          )}
-          <Button variant="secondary" onClick={dismiss} disabled={pending}>
-            {copy.common.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            loading={mutation.isPending}
-            disabled={removing}
-          >
-            {copy.family.save}
-          </BookmarkButton>
-        </div>
       </form>
     </Modal>
   );

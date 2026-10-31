@@ -689,6 +689,7 @@
 
 .gp-resource-card__body h2,
 .gp-resource-card__body h3 {
+  min-block-size: 2.7em;
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.35rem;
@@ -765,7 +766,7 @@
 .gp-family-card.ui-card {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: 1.5rem;
   padding: 1.5rem;
@@ -1081,7 +1082,7 @@
 
 .gp-milestone-card__image {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 32 / 9;
   margin: -1.25rem -1.25rem 0;
   overflow: hidden;
   border-start-start-radius: inherit;
@@ -1324,7 +1325,7 @@
 }
 
 .gp-family-card__birth {
-  margin-inline-end: 1.5rem;
+  justify-self: start;
 }
 .gp-family-card__gender {
   grid-column: 1 / -1;

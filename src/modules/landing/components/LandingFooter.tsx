@@ -20,7 +20,8 @@ export function LandingFooter() {
           <nav aria-label={copy.footer.navigationLabel}>
             <Link href="/#support">{copy.navigation.supportLabel}</Link>
             <Link href="/blog">{copy.navigation.blogLabel}</Link>
-            <Link href="/dashboard">{copy.navigation.portalLabel}</Link>
+            <Link href="/#our-purpose">{copy.navigation.purposeLabel}</Link>
+            <Link href="/#contact">{copy.navigation.contactLabel}</Link>
             <Link href="/signup" prefetch={false}>
               {copy.navigation.signupAction}
             </Link>

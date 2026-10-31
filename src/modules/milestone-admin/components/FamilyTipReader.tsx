@@ -19,6 +19,14 @@ export function FamilyTipReader({
       title={copy.readTip}
       description={milestone}
       onDismiss={onClose}
+
+      footer={
+        <div className="flex justify-end">
+          <Button variant="secondary" onClick={onClose}>
+            {copy.close}
+          </Button>
+        </div>
+      }
     >
       <div className="grid gap-5">
         <p className="m-0 whitespace-pre-wrap text-sm leading-7 text-secondary wrap-anywhere">
@@ -51,11 +59,6 @@ export function FamilyTipReader({
           </div>
         </dl>
         {tip.review && <TipReviewRecord tip={tip} />}
-        <div className="flex justify-end border-t border-secondary pt-4">
-          <Button variant="secondary" onClick={onClose}>
-            {copy.close}
-          </Button>
-        </div>
       </div>
     </Modal>
   );

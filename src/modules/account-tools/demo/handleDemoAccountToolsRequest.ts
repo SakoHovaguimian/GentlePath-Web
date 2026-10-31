@@ -9,7 +9,10 @@ import {
 import type { ServerSession } from '@/services/session/models/serverSession';
 import type { DemoContext } from '@/models/demoContext';
 import { getDemoState } from '@/services/demo/demoState';
-import { gentlePathAccountToolsStrings as copy } from '@/strings';
+import {
+  gentlePathAccountToolsStrings as copy,
+  gentlePathHelpFaqSections,
+} from '@/strings';
 import { AccountDeletionSchema } from '../models/accountDeletion';
 import { AccountDeviceQuerySchema } from '../models/accountDeviceQuery';
 import {
@@ -135,21 +138,8 @@ export async function handleDemoAccountToolsRequest(
     }
     if (resource === 'faq' && !id && !action && method === 'GET') {
       return json({
-        illustrative: true,
-        sections:
-          context.scenario === 'empty'
-            ? []
-            : [
-                {
-                  title: copy.demo.faqTitle,
-                  sections: [
-                    {
-                      question: copy.demo.faqQuestion,
-                      answer: copy.demo.faqAnswer,
-                    },
-                  ],
-                },
-              ],
+        illustrative: false,
+        sections: context.scenario === 'empty' ? [] : gentlePathHelpFaqSections,
       });
     }
   } else {

@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import {
   BookmarkButton,
   Button,
@@ -42,6 +42,7 @@ export function MilestoneObservationEditor({
   onClose,
   onDeleted,
 }: MilestoneObservationEditorProps) {
+  const formId = useId();
   const activeOptions = (milestone.response_options ?? []).filter(
     (option) => !option.deleted,
   );
@@ -156,8 +157,34 @@ export function MilestoneObservationEditor({
       title={observation ? copy.observationEditTitle : copy.observationTitle}
       description={copy.observationDescription}
       onDismiss={dismiss}
+
+      footer={
+        <FormActions variant="inline" sticky={false}>
+          {observation && (
+            <Button
+              variant="destructive"
+              className="sm:mr-auto"
+              disabled={pending}
+              onClick={() => void deleteObservation()}
+            >
+              {copy.observationDelete}
+            </Button>
+          )}
+          <Button variant="secondary" onClick={dismiss} disabled={pending}>
+            {copy.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={save.isPending}
+            disabled={remove.isPending || confirming}
+          >
+            {copy.observationSave}
+          </BookmarkButton>
+        </FormActions>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid gap-5">
+      <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
         <p className="m-0 font-display text-xl text-primary wrap-anywhere">
           {milestone.milestone}
         </p>
@@ -247,28 +274,6 @@ export function MilestoneObservationEditor({
           </p>
         )}
         <MutationError error={save.error ?? remove.error} />
-        <FormActions variant="inline" sticky={false}>
-          {observation && (
-            <Button
-              variant="destructive"
-              className="sm:mr-auto"
-              disabled={pending}
-              onClick={() => void deleteObservation()}
-            >
-              {copy.observationDelete}
-            </Button>
-          )}
-          <Button variant="secondary" onClick={dismiss} disabled={pending}>
-            {copy.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            loading={save.isPending}
-            disabled={remove.isPending || confirming}
-          >
-            {copy.observationSave}
-          </BookmarkButton>
-        </FormActions>
       </form>
     </Modal>
   );

@@ -1,6 +1,6 @@
 'use client';
 import { PublicImageField } from '@/services/media/components/PublicImageField';
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import {
   BookmarkButton,
   Button,
@@ -22,12 +22,17 @@ import {
 import { MilestoneGuidanceInputSchema } from '../models/milestoneGuidance';
 import type { MilestoneGuidanceEditorProps } from '../models/milestoneGuidanceEditorProps';
 import type { ResponseOptionDraft } from '../models/responseOptionDraft';
-import { useHideMilestoneGuidance, useSaveMilestoneGuidance } from '../hooks';
+import {
+  useHideMilestoneGuidance,
+  useRestoreMilestoneGuidance,
+  useSaveMilestoneGuidance,
+} from '../hooks';
 import { ResponseOptionEditor } from './ResponseOptionEditor';
 export function MilestoneGuidanceEditor({
   milestone,
   onClose,
 }: MilestoneGuidanceEditorProps) {
+  const formId = useId();
   const [imageUrl, setImageUrl] = useState(milestone?.image_url ?? '');
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState(milestone?.milestone ?? '');
@@ -63,8 +68,14 @@ export function MilestoneGuidanceEditor({
   const leave = useUnsavedFormGuard(dirty, busy);
   const save = useSaveMilestoneGuidance();
   const remove = useHideMilestoneGuidance();
+  const restore = useRestoreMilestoneGuidance();
   const [confirming, setConfirming] = useState(false);
-  const pending = save.isPending || remove.isPending || confirming || uploading;
+  const pending =
+    save.isPending ||
+    remove.isPending ||
+    restore.isPending ||
+    confirming ||
+    uploading;
   const { showAlert, showToast } = usePresentationService();
   const dismiss = () => {
     void leave().then((allowed) => {
@@ -76,6 +87,20 @@ export function MilestoneGuidanceEditor({
     setValidation({});
     action();
   };
+  async function restoreMilestone() {
+    if (!milestone || busy.current || !(await leave())) return;
+    busy.current = true;
+    try {
+      await restore.mutateAsync(milestone.id);
+      dirty.current = false;
+      void showToast({ title: copy.restoredMilestone, intent: 'success' });
+      onClose();
+    } catch {
+      /* Keep the editor open for retry. */
+    } finally {
+      busy.current = false;
+    }
+  }
   async function hideMilestone() {
     if (!milestone || busy.current) return;
     busy.current = true;
@@ -161,8 +186,43 @@ export function MilestoneGuidanceEditor({
       title={milestone ? copy.editMilestone : copy.newMilestone}
       description={copy.guidanceDescription}
       onDismiss={dismiss}
+
+      footer={
+        <FormActions variant="inline" sticky={false}>
+          {milestone && (
+            <Button
+              variant={milestone.hidden ? 'secondary' : 'destructive'}
+              className="sm:mr-auto"
+              disabled={pending}
+              onClick={() =>
+                void (milestone.hidden ? restoreMilestone() : hideMilestone())
+              }
+            >
+              {milestone.hidden ? copy.restoreMilestone : copy.hideMilestone}
+            </Button>
+          )}
+          <Button variant="secondary" disabled={pending} onClick={dismiss}>
+            {copy.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={save.isPending}
+            disabled={
+              remove.isPending || restore.isPending || confirming || uploading
+            }
+          >
+            {copy.saveMilestone}
+          </BookmarkButton>
+        </FormActions>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid min-w-0 gap-7">
+      <form
+        id={formId}
+        noValidate
+        onSubmit={submit}
+        className="grid min-w-0 gap-7"
+      >
         <Field labelText={copy.milestoneLabel}>
           <Input
             name="milestone"
@@ -251,29 +311,7 @@ export function MilestoneGuidanceEditor({
             {[...new Set(Object.values(validation))].join(' ')}
           </p>
         )}
-        <MutationError error={save.error ?? remove.error} />
-        <FormActions variant="inline" sticky={false}>
-          {milestone && (
-            <Button
-              variant="destructive"
-              className="sm:mr-auto"
-              disabled={pending}
-              onClick={() => void hideMilestone()}
-            >
-              {copy.hideMilestone}
-            </Button>
-          )}
-          <Button variant="secondary" disabled={pending} onClick={dismiss}>
-            {copy.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            loading={save.isPending}
-            disabled={remove.isPending || confirming || uploading}
-          >
-            {copy.saveMilestone}
-          </BookmarkButton>
-        </FormActions>
+        <MutationError error={save.error ?? remove.error ?? restore.error} />
       </form>
     </Modal>
   );

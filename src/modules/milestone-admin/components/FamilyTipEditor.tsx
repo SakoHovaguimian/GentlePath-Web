@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import {
   BookmarkButton,
   Button,
@@ -29,6 +29,7 @@ export function FamilyTipEditor({
   initialMilestoneId,
   onClose,
 }: FamilyTipEditorProps) {
+  const formId = useId();
   const [milestoneId, setMilestoneId] = useState(
     tip?.milestone_id ?? initialMilestoneId ?? '',
   );
@@ -123,8 +124,34 @@ export function FamilyTipEditor({
       title={tip ? copy.editTip : copy.submitTip}
       description={copy.tipFormDescription}
       onDismiss={dismiss}
+
+      footer={
+        <FormActions variant="inline" sticky={false}>
+          {tip && (
+            <Button
+              variant="destructive"
+              className="sm:mr-auto"
+              disabled={pending}
+              onClick={() => void deleteTip()}
+            >
+              {copy.deleteTip}
+            </Button>
+          )}
+          <Button variant="secondary" onClick={dismiss} disabled={pending}>
+            {copy.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={save.isPending}
+            disabled={remove.isPending || confirming}
+          >
+            {tip ? copy.saveTip : copy.submitTip}
+          </BookmarkButton>
+        </FormActions>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid gap-5">
+      <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
         <div className="grid gap-2">
           <Field labelText={copy.milestoneLabel}>
             <Select
@@ -181,28 +208,6 @@ export function FamilyTipEditor({
           </p>
         )}
         <MutationError error={save.error ?? remove.error} />
-        <FormActions variant="inline" sticky={false}>
-          {tip && (
-            <Button
-              variant="destructive"
-              className="sm:mr-auto"
-              disabled={pending}
-              onClick={() => void deleteTip()}
-            >
-              {copy.deleteTip}
-            </Button>
-          )}
-          <Button variant="secondary" onClick={dismiss} disabled={pending}>
-            {copy.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            loading={save.isPending}
-            disabled={remove.isPending || confirming}
-          >
-            {tip ? copy.saveTip : copy.submitTip}
-          </BookmarkButton>
-        </FormActions>
       </form>
     </Modal>
   );

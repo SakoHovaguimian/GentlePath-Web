@@ -93,15 +93,7 @@ export function CreativeAction({ creative }: { creative: AdCreativePublic }) {
           open={browserOpen}
           title={creative.title}
           onDismiss={() => setBrowserOpen(false)}
-        >
-          <div className="grid gap-4">
-            <iframe
-              src={creative.action_value ?? undefined}
-              title={creative.title}
-              referrerPolicy="no-referrer"
-              sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
-              className="h-[60dvh] w-full rounded-xl border border-secondary"
-            />
+          footer={
             <Button asChild variant="secondary">
               <a
                 href={creative.action_value ?? ''}
@@ -111,6 +103,16 @@ export function CreativeAction({ creative }: { creative: AdCreativePublic }) {
                 {copy.visit}
               </a>
             </Button>
+          }
+        >
+          <div className="grid gap-4">
+            <iframe
+              src={creative.action_value ?? undefined}
+              title={creative.title}
+              referrerPolicy="no-referrer"
+              sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+              className="h-[60dvh] w-full rounded-xl border border-secondary"
+            />
           </div>
         </Modal>
       </>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import {
   Button,
   Field,
@@ -25,6 +25,7 @@ export function ReportReview({
   report: ModerationReport;
   onClose: () => void;
 }) {
+  const formId = useId();
   const [input, setInput] = useState<ReportResolution>({
     status: 'resolved',
     resolutionNote: report.resolutionNote,
@@ -40,8 +41,28 @@ export function ReportReview({
       onDismiss={() => {
         if (!mutation.isPending) onClose();
       }}
+
+      footer={
+        <div className="flex justify-end gap-3">
+          <Button
+            variant="secondary"
+            disabled={mutation.isPending}
+            onClick={onClose}
+          >
+            {copy.common.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            loading={mutation.isPending}
+          >
+            {copy.moderation.save}
+          </BookmarkButton>
+        </div>
+      }
     >
       <form
+        id={formId}
         noValidate
         className="grid gap-5"
         onSubmit={async (event) => {
@@ -121,18 +142,6 @@ export function ReportReview({
           </p>
         )}
         <MutationError error={mutation.error} />
-        <div className="flex justify-end gap-3 border-t border-secondary pt-5">
-          <Button
-            variant="secondary"
-            disabled={mutation.isPending}
-            onClick={onClose}
-          >
-            {copy.common.cancel}
-          </Button>
-          <BookmarkButton type="submit" loading={mutation.isPending}>
-            {copy.moderation.save}
-          </BookmarkButton>
-        </div>
       </form>
     </Modal>
   );

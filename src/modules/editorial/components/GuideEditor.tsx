@@ -30,6 +30,7 @@ import { useEditorialDraft } from '../useEditorialDraft';
 import { useEditorialMutations } from '../hooks';
 import { EditorField } from './EditorField';
 import { GuideItemsEditor } from './GuideItemsEditor';
+import { GuidePreview } from './GuidePreview';
 
 export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
   const router = useRouter();
@@ -37,6 +38,7 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
   const presentation = usePresentationService();
   const mutations = useEditorialMutations();
   const [guide, setGuide] = useState(initialGuide);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [uploading, setUploading] = useState(false);
   const busy = mutations.isPending || confirming || uploading;
@@ -215,6 +217,14 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
           >
             {copy.backToGuides}
           </Button>
+          <Button
+            variant="secondary"
+            disabled={busy}
+            onClick={() => setPreviewOpen(true)}
+          >
+            <UiIcon name="search" />
+            {copy.previewGuide}
+          </Button>
           <BookmarkButton
             saved={Boolean(draft.notice) && !draft.dirty}
             type="submit"
@@ -246,6 +256,9 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
           </div>
         )}
       </form>
+      {previewOpen && (
+        <GuidePreview draft={form} onClose={() => setPreviewOpen(false)} />
+      )}
     </Page>
   );
 }

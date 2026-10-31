@@ -3,15 +3,10 @@
   min-width: 0;
   gap: 0.75rem;
 }
-.ui-horizontal-carousel__controls {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
 .ui-horizontal-carousel__track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: calc((100% - 2rem) / 3);
+  grid-auto-columns: calc((100% - 5rem) / 3);
   align-items: stretch;
   gap: 1rem;
   overflow-x: auto;
@@ -31,11 +26,19 @@
 }
 @media (max-width: 1100px) {
   .ui-horizontal-carousel__track {
-    grid-auto-columns: calc((100% - 1rem) / 2);
+    grid-auto-columns: calc((100% - 4rem) / 2);
   }
 }
 @media (max-width: 599px) {
   .ui-horizontal-carousel__track {
     grid-auto-columns: 90%;
   }
+}
+
+.ui-horizontal-carousel[data-variant='feature'] .ui-horizontal-carousel__track {
+  grid-auto-columns: 92%;
+}
+
+.ui-horizontal-carousel__track:has(> :only-child) {
+  grid-auto-columns: 100%;
 }

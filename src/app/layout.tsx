@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: `%s | ${strings.app.name}`,
   },
   description: gentlePathLandingStrings.metadata.description,
-  icons: { icon: '/gentlepath/brand-mark.svg' },
+  icons: { icon: '/gentlepath/brand-blocks.png' },
 };
 
 const bodyFont = localFont({

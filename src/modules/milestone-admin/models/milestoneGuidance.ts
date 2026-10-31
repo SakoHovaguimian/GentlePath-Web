@@ -10,6 +10,7 @@ import {
 export const MilestoneGuidanceSchema = z.object({
   id: z.string().min(1),
   content_type: z.literal('MILESTONE'),
+  hidden: z.boolean().optional(),
   milestone: z.string(),
   image_url: z.string().nullable().default(null),
   information: z.string(),

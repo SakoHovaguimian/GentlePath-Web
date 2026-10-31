@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button, UiIcon } from '@/components/ui';
 import { gentlePathLandingStrings as copy } from '@/strings';
@@ -31,27 +30,7 @@ export function LandingHero() {
             <UiIcon name="chevronDown" />
           </a>
         </div>
-        <div className="gp-hero-reassurance">
-          <span className="gp-reassurance-icon" aria-hidden="true">
-            <UiIcon name="leaf" />
-          </span>
-          <p>{copy.hero.reassuranceDescription}</p>
-        </div>
       </div>
-      <figure className="gp-hero-art">
-        <Image
-          src="/gentlepath/path-landscape-v2.png"
-          width={1536}
-          height={1024}
-          alt={copy.hero.artAlt}
-          sizes="(max-width: 760px) 94vw, 49vw"
-          preload
-        />
-        <figcaption>
-          <UiIcon name="sparkles" />
-          {copy.hero.artCaption}
-        </figcaption>
-      </figure>
       <div className="gp-hero-bottom">
         <div>
           <UiIcon name="leaf" />

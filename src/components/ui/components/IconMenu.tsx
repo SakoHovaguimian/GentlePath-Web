@@ -15,6 +15,7 @@ import { cn } from '../lib/cn';
 
 export function IconMenu<T extends string>({
   label,
+  triggerLabel,
   icon = 'moreVertical',
   items,
   disabled = false,
@@ -22,11 +23,12 @@ export function IconMenu<T extends string>({
   onAction,
 }: {
   label: string;
+  triggerLabel?: string;
   icon?: IconName;
   items: IconMenuItem<T>[];
   disabled?: boolean;
   className?: string;
-  onAction: (id: T) => void;
+  onAction?: (id: T) => void;
 }) {
   return (
     <MenuTrigger>
@@ -43,6 +45,7 @@ export function IconMenu<T extends string>({
             name={icon}
             strokeWidth={icon === 'moreVertical' ? 3.5 : undefined}
           />
+          {triggerLabel && <span>{triggerLabel}</span>}
           {icon !== 'moreVertical' && (
             <UiIcon name="chevronDown" className="size-3" />
           )}
@@ -62,8 +65,9 @@ export function IconMenu<T extends string>({
             <MenuItem
               id={item.id}
               textValue={item.label}
+              href={item.href}
               isDisabled={item.disabled}
-              onAction={() => onAction(item.id)}
+              onAction={() => onAction?.(item.id)}
               className={cn(
                 'flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-primary outline-none hover:bg-secondary_subtle focus:bg-secondary_subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand pressed:bg-secondary disabled:cursor-not-allowed disabled:text-disabled',
                 (item.variant === 'destructive' || item.intent === 'danger') &&

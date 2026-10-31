@@ -10,6 +10,14 @@ export function ReportDetails({ report, onClose }: ReportDetailsProps) {
       title={copy.moderation.detailsTitle}
       description={report.contentTitle}
       onDismiss={onClose}
+
+      footer={
+        <div className="flex justify-end">
+          <Button variant="secondary" onClick={onClose}>
+            {copy.common.close}
+          </Button>
+        </div>
+      }
     >
       <div className="grid min-w-0 gap-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -58,11 +66,6 @@ export function ReportDetails({ report, onClose }: ReportDetailsProps) {
             </div>
           )}
         </dl>
-        <div className="flex justify-end border-t border-secondary pt-5">
-          <Button variant="secondary" onClick={onClose}>
-            {copy.common.close}
-          </Button>
-        </div>
       </div>
     </Modal>
   );

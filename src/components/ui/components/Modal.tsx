@@ -5,6 +5,7 @@ import { UNSAFE_PortalProvider } from 'react-aria/PortalProvider';
 import { useRef, type ReactNode, type RefObject } from 'react';
 import { strings } from '@/strings';
 import { IconButton } from './IconButton';
+import { Button } from './Button';
 import { UiIcon } from './UiIcon';
 
 interface ModalProps {
@@ -14,6 +15,7 @@ interface ModalProps {
   icon?: ReactNode;
   onDismiss: () => void;
   children: ReactNode;
+  footer?: ReactNode;
   initialFocusRef?: RefObject<HTMLElement | null>;
 }
 
@@ -26,6 +28,7 @@ export function Modal({
   icon,
   onDismiss,
   children,
+  footer,
   initialFocusRef,
 }: ModalProps) {
   const returnFocusRef = useRef<HTMLElement | null>(null);
@@ -115,10 +118,19 @@ export function Modal({
               <UiIcon name="close" />
             </IconButton>
           </div>
-          <div className="min-h-0 overflow-y-auto overscroll-contain p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:p-6 sm:pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          <div className="ui-modal-body min-h-0 overflow-y-auto overscroll-contain p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:p-6 sm:pb-[max(1.5rem,env(safe-area-inset-bottom))]">
             <UNSAFE_PortalProvider getContainer={() => overlaysRef.current}>
               {children}
             </UNSAFE_PortalProvider>
+          </div>
+          <div className="ui-modal-footer shrink-0 rounded-b-2xl border-t border-secondary bg-primary px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6 [&_.ui-form-actions]:border-0 [&_.ui-form-actions]:pt-0">
+            {footer ?? (
+              <div className="flex justify-end">
+                <Button variant="secondary" onClick={onDismiss}>
+                  {strings.ui.modal.close}
+                </Button>
+              </div>
+            )}
           </div>
           <div ref={overlaysRef} className="contents" />
         </Dialog.Content>

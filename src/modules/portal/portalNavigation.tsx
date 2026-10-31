@@ -45,16 +45,16 @@ export function portalNavigation(
       icon: <UiIcon name="folder" />,
     },
     {
-      href: '/guides',
-      label: navigationCopy.guides,
-      icon: <UiIcon name="leaf" />,
-      sectionLabel: copy.navigation.exploreGroup,
-    },
-    {
       href: '/community',
       label: navigationCopy.community,
       icon: <UiIcon name="chat" />,
       activePaths: ['/community', '/polls'],
+      sectionLabel: copy.navigation.exploreGroup,
+    },
+    {
+      href: '/guides',
+      label: navigationCopy.guides,
+      icon: <UiIcon name="leaf" />,
     },
     {
       href: '/tips',
@@ -76,17 +76,19 @@ export function portalNavigation(
     {
       href: '/admin/users',
       label: copy.navigation.users,
+      sectionLabel: navigationCopy.peopleGroup,
       icon: <UiIcon name="user" />,
-    },
-    {
-      href: '/admin/blog',
-      label: copy.navigation.publishing,
-      icon: <UiIcon name="file" />,
     },
     {
       href: '/admin/moderation',
       label: copy.navigation.moderation,
       icon: <UiIcon name="checklist" />,
+    },
+    {
+      href: '/admin/blog',
+      label: copy.navigation.publishing,
+      icon: <UiIcon name="file" />,
+      sectionLabel: navigationCopy.contentGroup,
     },
     {
       href: '/admin/guides',
@@ -101,6 +103,7 @@ export function portalNavigation(
     {
       href: '/admin/commercial',
       label: navigationCopy.commercial,
+      sectionLabel: navigationCopy.platformGroup,
       icon: <UiIcon name="globe" />,
     },
     ...(canManagePlatform(role)
@@ -122,6 +125,7 @@ export function portalNavigation(
     {
       href: '/help',
       label: navigationCopy.help,
+      ...(adminArea ? { sectionLabel: navigationCopy.supportGroup } : {}),
       icon: <UiIcon name="file" />,
     },
     {

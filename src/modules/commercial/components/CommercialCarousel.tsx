@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Button, UiIcon } from '@/components/ui';
+import { useEffect, useRef, useState, type SyntheticEvent } from 'react';
+import { Button, HorizontalCarousel } from '@/components/ui';
 import { prefersReducedMotion } from '@/components/ui/lib/motionPreferences';
 import { useMotionPreference } from '@/providers/MotionPreferenceProvider';
 import { gentlePathCommercialStrings as copy } from '@/strings';
@@ -18,6 +18,7 @@ export function CommercialCarousel({
   busy,
   onSimulate,
 }: CommercialCarouselProps) {
+  const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -26,6 +27,13 @@ export function CommercialCarousel({
   const count = placement.items.length;
   const active = Math.min(index, Math.max(0, count - 1));
   const seconds = placement.auto_advance_seconds;
+  const pauseForInteraction = (event: SyntheticEvent) => {
+    if (
+      event.target instanceof Element &&
+      event.target.closest('.ui-horizontal-carousel')
+    )
+      setPaused(true);
+  };
   useEffect(() => {
     if (
       !seconds ||
@@ -38,8 +46,26 @@ export function CommercialCarousel({
     )
       return;
     const timer = window.setInterval(() => {
-      if (!document.hidden && !prefersReducedMotion())
-        setIndex((current) => (current + 1) % count);
+      const element = track.current;
+      if (document.hidden || prefersReducedMotion() || !element) return;
+      const cards = [...element.children] as HTMLElement[];
+      const current = cards.reduce(
+        (nearest, card, position) =>
+          Math.abs(card.offsetLeft - cards[0].offsetLeft - element.scrollLeft) <
+          Math.abs(
+            cards[nearest].offsetLeft -
+              cards[0].offsetLeft -
+              element.scrollLeft,
+          )
+            ? position
+            : nearest,
+        0,
+      );
+      const next = cards[(current + 1) % count];
+      element.scrollTo({
+        left: next.offsetLeft - cards[0].offsetLeft,
+        behavior: 'smooth',
+      });
     }, seconds * 1000);
     return () => window.clearInterval(timer);
   }, [seconds, count, paused, hovered, focused, busy, preference]);
@@ -48,6 +74,9 @@ export function CommercialCarousel({
       role="region"
       aria-label={placement.name}
       className="grid min-w-0 gap-4"
+      onPointerDown={pauseForInteraction}
+      onWheel={pauseForInteraction}
+      onKeyDown={pauseForInteraction}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocusCapture={() => setFocused(true)}
@@ -56,14 +85,33 @@ export function CommercialCarousel({
           setFocused(false);
       }}
     >
-      <div className="grid min-w-0 items-stretch">
-        {placement.items.map((item, position) => (
-          <div
-            key={item.id}
-            aria-hidden={position !== active}
-            inert={position !== active}
-            className={`col-start-1 row-start-1 grid min-w-0 ${position === active ? '' : 'invisible pointer-events-none'}`}
-          >
+      <HorizontalCarousel
+        label={placement.name}
+        variant="feature"
+        trackRef={track}
+        onScroll={(event) => {
+          const element = event.currentTarget;
+          const cards = [...element.children] as HTMLElement[];
+          if (!cards.length) return;
+          const nearest = cards.reduce(
+            (selected, card, position) =>
+              Math.abs(
+                card.offsetLeft - cards[0].offsetLeft - element.scrollLeft,
+              ) <
+              Math.abs(
+                cards[selected].offsetLeft -
+                  cards[0].offsetLeft -
+                  element.scrollLeft,
+              )
+                ? position
+                : selected,
+            0,
+          );
+          setIndex(nearest);
+        }}
+      >
+        {placement.items.map((item) => (
+          <div key={item.id} className="grid min-w-0">
             <ServedCreativeCard
               item={item}
               simulate={simulate}
@@ -72,33 +120,9 @@ export function CommercialCarousel({
             />
           </div>
         ))}
-      </div>
+      </HorizontalCarousel>
       {count > 1 && (
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="secondary"
-              aria-label={copy.previousCreative}
-              onClick={() => {
-                setPaused(true);
-                setIndex((active - 1 + count) % count);
-              }}
-            >
-              <UiIcon name="chevronLeft" />
-              {copy.previousCreative}
-            </Button>
-            <Button
-              variant="secondary"
-              aria-label={copy.nextCreative}
-              onClick={() => {
-                setPaused(true);
-                setIndex((active + 1) % count);
-              }}
-            >
-              {copy.nextCreative}
-              <UiIcon name="chevronRight" />
-            </Button>
-          </div>
           {placement.show_pagination && (
             <p
               className="m-0 text-sm text-tertiary"

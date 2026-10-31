@@ -104,8 +104,50 @@ export function PollCommentEditor({
       busy.current = false;
     }
   }
+  const formId = `${errorId}-form`;
+  const inModal = Boolean(comment || parentCommentId);
+  const actions = (
+    <div className="flex flex-wrap justify-end gap-3">
+      {comment && (
+        <Button
+          variant="destructive"
+          className="mr-auto"
+          loading={remove.isPending}
+          disabled={mutation.isPending || !writable}
+          onClick={() => {
+            void remove.deleteComment(comment);
+          }}
+        >
+          <UiIcon name="trash" className="size-4" />
+          {copy.deleteComment}
+        </Button>
+      )}
+      {(comment || body || onClose) && (
+        <Button variant="secondary" disabled={pending} onClick={close}>
+          {copy.cancel}
+        </Button>
+      )}
+      <BookmarkButton
+        type="submit"
+        form={formId}
+        loading={mutation.isPending}
+        disabled={!writable || remove.isPending}
+      >
+        {comment
+          ? copy.save
+          : parentCommentId
+            ? communityCopy.postReply
+            : copy.postComment}
+      </BookmarkButton>
+    </div>
+  );
   const form = (
-    <form noValidate onSubmit={submit} className="relative grid gap-4">
+    <form
+      id={formId}
+      noValidate
+      onSubmit={submit}
+      className="relative grid gap-4"
+    >
       <SuccessCelebration sequence={celebration} />
       <Field
         labelText={
@@ -137,38 +179,7 @@ export function PollCommentEditor({
         </p>
       )}
       <MutationError error={mutation.error ?? remove.error} />
-      <div className="flex flex-wrap justify-end gap-3">
-        {comment && (
-          <Button
-            variant="destructive"
-            className="mr-auto"
-            loading={remove.isPending}
-            disabled={mutation.isPending || !writable}
-            onClick={() => {
-              void remove.deleteComment(comment);
-            }}
-          >
-            <UiIcon name="trash" className="size-4" />
-            {copy.deleteComment}
-          </Button>
-        )}
-        {(comment || body || onClose) && (
-          <Button variant="secondary" disabled={pending} onClick={close}>
-            {copy.cancel}
-          </Button>
-        )}
-        <BookmarkButton
-          type="submit"
-          loading={mutation.isPending}
-          disabled={!writable || remove.isPending}
-        >
-          {comment
-            ? copy.save
-            : parentCommentId
-              ? communityCopy.postReply
-              : copy.postComment}
-        </BookmarkButton>
-      </div>
+      {!inModal && actions}
     </form>
   );
   return comment || parentCommentId ? (
@@ -181,6 +192,7 @@ export function PollCommentEditor({
           : copy.discussionDescription
       }
       onDismiss={close}
+      footer={actions}
     >
       {form}
     </Modal>

@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import {
   BookmarkButton,
   Button,
@@ -29,6 +29,7 @@ export function TipReviewEditor({
   milestone,
   onClose,
 }: TipReviewEditorProps) {
+  const formId = useId();
   const [decision, setDecision] = useState(
     tip.approval_status === 'APPROVED' ? 'REJECTED' : 'APPROVED',
   );
@@ -92,8 +93,29 @@ export function TipReviewEditor({
       title={copy.reviewTip}
       description={copy.reviewFormDescription}
       onDismiss={dismiss}
+
+      footer={
+        <FormActions variant="inline" sticky={false}>
+          <Button
+            variant="secondary"
+            onClick={dismiss}
+            disabled={mutation.isPending || confirming}
+          >
+            {copy.cancel}
+          </Button>
+          <BookmarkButton
+            type="submit"
+            form={formId}
+            variant={decision === 'REJECTED' ? 'destructive' : 'primary'}
+            loading={mutation.isPending}
+            disabled={confirming && !mutation.isPending}
+          >
+            {copy.saveReview}
+          </BookmarkButton>
+        </FormActions>
+      }
     >
-      <form noValidate onSubmit={submit} className="grid gap-5">
+      <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
         <div className="grid gap-2">
           <p className="m-0 text-sm font-medium text-primary">{milestone}</p>
           <p className="m-0 max-h-64 overflow-auto whitespace-pre-wrap text-sm leading-7 text-secondary wrap-anywhere">
@@ -162,23 +184,6 @@ export function TipReviewEditor({
           </p>
         )}
         <MutationError error={mutation.error} />
-        <FormActions variant="inline" sticky={false}>
-          <Button
-            variant="secondary"
-            onClick={dismiss}
-            disabled={mutation.isPending || confirming}
-          >
-            {copy.cancel}
-          </Button>
-          <BookmarkButton
-            type="submit"
-            variant={decision === 'REJECTED' ? 'destructive' : 'primary'}
-            loading={mutation.isPending}
-            disabled={confirming && !mutation.isPending}
-          >
-            {copy.saveReview}
-          </BookmarkButton>
-        </FormActions>
       </form>
     </Modal>
   );

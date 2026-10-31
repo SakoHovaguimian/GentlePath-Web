@@ -22,7 +22,7 @@ export function LandingInvitation() {
           </Button>
         </div>
         <Image
-          src="/gentlepath/growing-together.png"
+          src="/gentlepath/growing-together-v2.png"
           width={1280}
           height={1280}
           alt={copy.invitation.artAlt}
