@@ -30,9 +30,8 @@ export function OnboardingWelcome({ onContinue }: { onContinue: () => void }) {
         <Image
           src="/gentlepath/caregiver-community.png"
           alt={copy.welcome.artAlt}
-          width={1280}
-          height={1280}
-          sizes="(max-width: 599px) 75vw, 320px"
+          fill
+          sizes="320px"
         />
       </div>
       <p className="gp-onboarding-welcome-saved">

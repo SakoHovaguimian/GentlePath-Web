@@ -26,9 +26,8 @@ export function OnboardingStory({ step }: { step: OnboardingStep }) {
           key={artwork[step]}
           src={artwork[step]}
           alt={copy.artworkAlt[step]}
-          width={1536}
-          height={1024}
-          sizes="(max-width: 599px) 160px, (max-width: 899px) 32vw, 440px"
+          fill
+          sizes="(max-width: 599px) 112px, (max-width: 899px) 250px, 480px"
           className="object-contain"
           preload={step === 'STATE'}
         />

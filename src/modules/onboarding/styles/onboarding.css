@@ -62,17 +62,15 @@
   line-height: 1.75;
 }
 .gp-onboarding-welcome-art {
-  display: grid;
-  place-items: center;
+  position: relative;
   width: min(100%, 20rem);
   height: 14rem;
   border-radius: 45% 55% 49% 51%;
-  background: var(--gp-light-oat);
+  background: var(--gp-artwork-canvas);
 }
 .gp-onboarding-welcome-art img {
-  width: 100%;
-  height: 100%;
   object-fit: contain;
+  padding: 0.75rem;
 }
 .gp-onboarding-welcome-saved {
   display: flex;
@@ -128,17 +126,15 @@
   line-height: 1.75;
 }
 .gp-onboarding-art {
-  display: grid;
-  place-items: center;
+  position: relative;
   width: 100%;
   height: 19rem;
   border-radius: 45% 55% 49% 51%;
-  background: var(--gp-light-oat);
+  background: var(--gp-artwork-canvas);
 }
 .gp-onboarding-art img {
-  width: 100%;
-  height: 100%;
   object-fit: contain;
+  padding: 0.75rem;
 }
 .gp-onboarding-form-card {
   display: grid;
@@ -371,6 +367,9 @@
   }
   .gp-onboarding-art {
     height: 7.5rem;
+  }
+  .gp-onboarding-art img {
+    padding: 0.35rem;
   }
   .gp-onboarding-form-card {
     min-height: 28rem;

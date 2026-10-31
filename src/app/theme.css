@@ -2310,13 +2310,22 @@
   --gp-plum: #67517d;
   --gp-sunlight: #f8dc94;
   --gp-clay: #f1ddcf;
+  --gp-artwork-canvas: color-mix(
+    in srgb,
+    var(--gp-light-oat) 55%,
+    var(--gp-clay)
+  );
   --gp-ink: #123e39;
   --gp-muted: #53625b;
   --gp-border: #d9dfd5;
   --gp-leaf: #78a18a;
   --color-rating-active: var(--gp-forest);
   --color-rating-inactive: var(--gp-muted);
-  --color-rating-surface: color-mix(in srgb, var(--gp-sage) 60%, var(--gp-paper));
+  --color-rating-surface: color-mix(
+    in srgb,
+    var(--gp-sage) 60%,
+    var(--gp-paper)
+  );
   --gp-shadow: 0 6px 24px rgb(37 61 54 / 3.5%);
   --gp-menu-shadow: 0 14px 28px rgb(37 61 54 / 8%);
   --dashboard-sidebar-bg: var(--gp-light-sidebar);

@@ -9,6 +9,7 @@ import {
   TextArea,
   Select,
   Card,
+  DatePicker,
   NavigationLink,
 } from '@/components/ui';
 import { useServiceContainer } from '@/providers/AppProviders';
@@ -191,21 +192,17 @@ export function ApplicationEditor({
               ))}
             </Select>
           </Field>
-          <Field labelText={copy.appliedLabel}>
-            <Input
-              type="date"
-              name="applied_on"
-              value={input.applied_on ?? ''}
-              disabled={pending}
-              onChange={(event) =>
-                change('applied_on', event.target.value || null)
-              }
-              aria-invalid={Boolean(validation.applied_on)}
-              aria-describedby={
-                validation.applied_on ? 'application-validation' : undefined
-              }
-            />
-          </Field>
+          <DatePicker
+            label={copy.appliedLabel}
+            name="applied_on"
+            value={input.applied_on ?? ''}
+            disabled={pending}
+            onValueChange={(value) => change('applied_on', value || null)}
+            invalid={Boolean(validation.applied_on)}
+            describedBy={
+              validation.applied_on ? 'application-validation' : undefined
+            }
+          />
         </div>
         {(input.benefit_program_key || programKey) && (
           <Field labelText={copy.programLabel}>
