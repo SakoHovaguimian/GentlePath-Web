@@ -1,6 +1,9 @@
 'use client';
 
-import { strings } from '@/strings';
+import {
+  strings,
+  gentlePathOnboardingStrings as onboardingCopy,
+} from '@/strings';
 import type { Route } from 'next';
 import { AppSessionSchema } from '@/models/appSession';
 
@@ -26,6 +29,10 @@ const allowedRedirectPrefixes = [
   '/tips',
   '/discounts',
   '/notifications',
+  '/onboarding',
+  '/benefits',
+  '/applications',
+  '/goals',
   '/help',
   '/admin',
   '/superadmin',
@@ -72,4 +79,12 @@ export function resolveAuthRedirect(redirectTo?: string): Route {
   }
 
   return '/dashboard';
+}
+
+export async function restartOnboardingDemo() {
+  const response = await fetch('/api/dev-settings/onboarding-restart', {
+    method: 'POST',
+    credentials: 'same-origin',
+  });
+  if (!response.ok) throw new Error(onboardingCopy.restartDemoFailed);
 }

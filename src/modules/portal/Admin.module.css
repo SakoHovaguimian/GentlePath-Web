@@ -58,8 +58,8 @@
 .heroArtwork img {
   height: 100%;
   width: 100%;
-  object-fit: cover;
-  object-position: 68% center;
+  object-fit: contain;
+  object-position: center;
 }
 
 .metrics {
@@ -816,10 +816,6 @@
   .heroArtwork {
     min-height: 11rem;
     height: 11rem;
-  }
-
-  .heroArtwork img {
-    object-position: center 58%;
   }
 
   .metric > :global(.ui-card) {

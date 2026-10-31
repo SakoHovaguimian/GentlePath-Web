@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import {
   Badge,
   Button,
@@ -49,7 +50,7 @@ export function AdminDashboardScreen() {
         </div>
         <div className={styles.heroArtwork} aria-hidden="true">
           <Image
-            src="/gentlepath/path-landscape-v2.png"
+            src={gentlePathIllustrations.pathLandscape}
             alt={copy.common.decorativeAlt}
             fill
             sizes="(max-width: 540px) 100vw, (max-width: 1024px) 42vw, 34vw"

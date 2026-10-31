@@ -1,4 +1,6 @@
 'use client';
+
+import { applicationQueryKeys } from '@/modules/applications/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServiceContainer, useSessionState } from '@/providers/AppProviders';
 import type {
@@ -50,7 +52,11 @@ function useInboxMutation<T, R>(mutationFn: (input: T) => Promise<R>) {
   const cache = useQueryClient();
   return useMutation({
     mutationFn,
-    onSuccess: () => cache.invalidateQueries({ queryKey: keys.all }),
+    onSuccess: () =>
+      Promise.all([
+        cache.invalidateQueries({ queryKey: keys.all }),
+        cache.invalidateQueries({ queryKey: applicationQueryKeys.all }),
+      ]),
   });
 }
 export function useNotificationRead() {

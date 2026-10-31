@@ -53,12 +53,16 @@ export class ApiClient {
       const value = request.headers.get(name);
       if (value) headers.set(name, value);
     }
+    const finalizingGoalUpload =
+      request.method === 'POST' &&
+      /^\/goals\/uploads\/[0-9a-f-]{36}\/complete$/i.test(path);
+    const timeoutMs = finalizingGoalUpload ? 180000 : 30000;
     const response = await fetch(`${environment.apiUrl}${path}`, {
       method: request.method,
       headers,
       cache: 'no-store',
       redirect: 'manual',
-      signal: AbortSignal.any([request.signal, AbortSignal.timeout(30000)]),
+      signal: AbortSignal.any([request.signal, AbortSignal.timeout(timeoutMs)]),
       body: ['GET', 'HEAD'].includes(request.method)
         ? undefined
         : await request.arrayBuffer(),

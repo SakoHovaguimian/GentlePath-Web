@@ -111,8 +111,9 @@ export function ChatScreen() {
           }}
           className="grid gap-3"
         >
-          <Field labelText={strings.chat.placeholder}>
+          <Field labelText={strings.chat.messageLabel}>
             <Input
+              placeholder={strings.chat.placeholder}
               value={message}
               maxLength={2000}
               disabled={mutation.isPending}

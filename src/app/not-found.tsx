@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { GentlePathBrand } from '@/components/GentlePathBrand';
 import { buttonClassName } from '@/components/ui';
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import { gentlePathLandingStrings, strings } from '@/strings';
 
 const copy = strings.notFoundPage;
@@ -26,7 +27,7 @@ export default function NotFound() {
       </header>
       <main className="flex flex-1 flex-col items-center justify-center px-6 pt-4 pb-16 text-center sm:pt-0 sm:pb-20">
         <Image
-          src="/gentlepath/off-the-path.png"
+          src={gentlePathIllustrations.offThePath}
           width={1536}
           height={1024}
           alt={copy.illustrationAlt}

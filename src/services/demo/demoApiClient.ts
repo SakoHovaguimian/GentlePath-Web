@@ -1,3 +1,7 @@
+import { handleGoalRequest } from '@/modules/goals/demo/handleGoalRequest';
+import { handleDemoStateBenefitsRequest } from '@/modules/state-benefits/demo/handleDemoStateBenefitsRequest';
+import { handleDemoOnboardingRequest } from '@/modules/onboarding/demo/handleDemoOnboardingRequest';
+import { handleApplicationRequest } from '@/modules/applications/demo/handleApplicationRequest';
 import 'server-only';
 import { handlePublicImageRequest } from '@/services/media/server/handlePublicImageRequest';
 import { z } from 'zod';
@@ -86,6 +90,33 @@ export class DemoApiClient {
     )
       throw new OwnershipError();
     await simulateDemoRequest(context);
+    const goals = await handleGoalRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (goals) return goals;
+    const benefits = await handleDemoStateBenefitsRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (benefits) return benefits;
+    const onboarding = await handleDemoOnboardingRequest(
+      request,
+      path,
+      trustedSession,
+    );
+    if (onboarding) return onboarding;
+    const applications = await handleApplicationRequest(
+      request,
+      path,
+      trustedSession,
+      context,
+    );
+    if (applications) return applications;
     const imageUpload = await handlePublicImageRequest(request, path);
     if (imageUpload) return imageUpload;
     const documents = await handleDocumentVaultRequest(

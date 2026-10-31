@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: GentlePath
-description: A warm illustrated family space with forest, sage, lavender, and sunlight surfaces, watercolor botanicals, and editorial typography.
+description: A warm illustrated family space with forest, sage, lavender, and sunlight surfaces, clean outlined botanicals, and editorial typography.
 colors:
   surface: '#fffdf8'
   background: '#faf8f2'
@@ -60,9 +60,11 @@ Local DM Sans is the body/control face and local Lora the editorial display face
 
 Page → one PageHeader → purposeful work surfaces. The shell header supplies context, not a second title. Desktop uses a fixed 17.5rem forest sidebar from 64rem; navigation scrolls independently above the account. The sidebar has no promotional/care-note card. Below 64rem use the shared full-screen navigation with safe areas, Escape, focus trap, and restoration.
 
-Family, journal, Milestones, document, and community screens move directly from the compact colored page header to their controls and content, without a second promotional banner. My Path places a dismissible illustrated welcome below the For Your Family tools, followed by the full-width weekly activity panel and a horizontal reflection carousel. Recent reflections reuse the journal's gradient headers, bordered cards, metadata divider, and overflow actions in a compact variant. Resource and community list/detail screens use the same shell content width as sibling pages.
+Family, journal, Milestones, document, and community screens move directly from the compact colored page header to their controls and content, without a second promotional banner. My Path prioritizes pending follow-ups immediately below the page header, with clear calendar-day labels and direct actions; the section collapses when empty. A dismissible illustrated welcome sits below the For Your Family tools, followed by the full-width weekly activity panel and a horizontal reflection carousel. Recent reflections reuse the journal's gradient headers, bordered cards, metadata divider, and overflow actions in a compact variant. Resource and community list/detail screens use the same shell content width as sibling pages.
 
 Directories reuse shared filtering/paging and responsive record patterns; wide tables own a labeled horizontal scroller. Long page forms scroll naturally. Scrolling modals keep actions outside the scrolling body at every viewport, with native form association for submit buttons. Carousels use native scrolling and a partial next card instead of chevron controls. Community combines Posts/Polls through prominent editorial tabs with an animated selection marker. Inbox content uses separated ivory cards and a clear unread hierarchy instead of a dense tinted wall. Parallel staff work cards stretch content and align their CTAs.
+
+Required onboarding uses a centered branded header and shared four-step progress owner above an illustrated two-column stage. Each step pairs its own botanical/family artwork and editorial introduction with a focused paper form; narrow layouts stack the stage and keep all actions in natural document flow. Child names and birthdays form a tight two-line group. Confirmed completion reveals an illustrated community welcome and a bounded shared confetti burst, with a deliberate continue action into the family space; reduced motion retains the welcome without animation. Discovery preferences reuse shared checkboxes in selectable outlined tiles. The state map retains its light sage/lavender palette and transparent alpha, presented on the fixed light artwork canvas in either theme. Family birthday metadata is a quiet calendar/date line aligned with the profile name, without a separate tinted tile. State-benefit artwork fits wholly inside its reserved image region.
 
 ## Elevation & Depth
 
@@ -88,22 +90,26 @@ Record cards have a single semantic details/editor entry surface and a top-right
 
 ## Illustrations And Fonts
 
-Original PNG illustrations and bundled fonts came from the supplied product reference. The three `*-v2.png` botanical scenes were generated for GentlePath. Keep the files as maintained assets; generation transcripts and interface screenshots are not runtime dependencies.
+The illustration direction follows `winding-path`, `care-folder`, `care-notes`, `community-messages`, `community-polls`, and `resource-library`: rounded graphic shapes, fine forest outlines, restrained paper grain, and a sage/lilac/ivory palette with small yellow accents. New artwork uses clean transparent silhouettes and sparse botanical details. Avoid realistic watercolor scenery, dense foliage, glowing halos, and heavy dimensional shading. Keep the files as maintained assets; generation prompts and review sheets are not runtime dependencies.
 
-| Asset Group                                                                                                     | Use                                                                   |
-| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `public/gentlepath/brand-blocks.png`                                                                            | Shared brand identity                                                 |
-| `winding-path`, `care-notes`, `care-folder`, `caregiver-community`, `growing-together`, `parent-and-child` PNGs | Existing product illustrations                                        |
-| `path-landscape-v2.png`                                                                                         | Sunlit landscape for public/family/admin regions                      |
-| `parent-and-child.png`                                                                                          | Welcome/sign-up story illustration with a quiet shared drawing moment |
-| `reading-garden-v2.png`                                                                                         | Journal, reading, and resource regions                                |
-| `community-garden-v2.png`                                                                                       | Community/communication regions                                       |
-| `off-the-path.png`                                                                                              | Watercolor garden and signpost for the root 404 screen                |
-| `family-connection.png`, `guided-steps.png`, `community-messages.png`                                           | Matching transparent illustrations for the public feature overview    |
-| `growing-together-v2.png`                                                                                       | Landing invitation sprout with a fully visible eight-ray sun          |
-| `public/gentlepath/fonts/`                                                                                      | Local DM Sans and Lora; no font network dependency                    |
+| Asset Group                                                                                 | Use                                                                                      |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `public/gentlepath/brand-blocks.png`                                                        | Shared brand identity                                                                    |
+| `winding-path`, `care-notes`, `care-folder`, `caregiver-community`, `parent-and-child` PNGs | Existing product illustrations                                                           |
+| `path-landscape-v2.png`                                                                     | Transparent outlined path, hills, butterfly, and sun for public/family/admin regions     |
+| `parent-and-child.png`                                                                      | Welcome/sign-up story illustration with a quiet shared drawing moment                    |
+| `reading-garden-v2.png`                                                                     | Transparent open ivory book, lilac cover, and sparse leaves for reading/resource regions |
+| `community-garden-v2.png`                                                                   | Transparent sage/lilac conversation bubbles on a small botanical base                    |
+| `off-the-path.png`                                                                          | Transparent path and blank lilac signpost for the root 404 screen                        |
+| `family-connection.png`, `community-messages.png`                                           | Matching transparent illustrations for the public feature overview                       |
+| `guided-steps.png`                                                                          | Transparent folded route guide with checks and a sprout for support/setup                |
+| `milestone-garden.png`                                                                      | Transparent trio of potted plants at different growth stages                             |
+| `community-polls.png`, `resource-library.png`                                               | Approved poll and resource illustrations and style references                            |
+| `growing-together-v2.png`                                                                   | Landing invitation and Growth blog-cover sprout with a fully visible eight-ray sun       |
+| `onboarding-state-garden.png`                                                               | Transparent simplified US silhouette, lilac location pin, and leaves for state setup     |
+| `public/gentlepath/fonts/`                                                                  | Local DM Sans and Lora; no font network dependency                                       |
 
-All illustration names above are under `public/gentlepath/`. Use responsive images and catalog alt text. Never embed phone/UI reference mockups as the product interface.
+All illustration names above are under `public/gentlepath/`. Replaced artwork URLs are owned by [gentlePathIllustrations](src/models/gentlePathIllustrations.ts); static image imports give them content-hashed URLs so optimized images refresh automatically when the PNGs change. Reuse those URLs for local demo media. Use responsive images and catalog alt text. Preserve complete illustration silhouettes with contain sizing in headers, banners, and resource cards; transparent artwork does not need landscape edge-fade overlays. Never embed phone/UI reference mockups as the product interface.
 
 ## Do's And Don'ts
 

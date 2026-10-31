@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, EmptyState } from '@/components/ui';
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import {
   gentlePathBlogStrings as copy,
   gentlePathLandingStrings,
@@ -46,7 +47,7 @@ export function PublicBlogScreen({
         <Image
           preload
           className={styles.headerArt}
-          src="/gentlepath/path-landscape-v2.png"
+          src={gentlePathIllustrations.pathLandscape}
           width={1536}
           height={1024}
           alt={gentlePathLandingStrings.hero.artAlt}

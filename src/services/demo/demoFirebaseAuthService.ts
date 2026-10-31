@@ -1,3 +1,4 @@
+import { initializeDemoOnboarding } from '@/modules/onboarding/demo/onboardingState';
 import 'server-only';
 import { AuthError, OwnershipError } from '@/errors/domainErrors';
 import { strings, gentlePathDemoStrings } from '@/strings';
@@ -46,6 +47,7 @@ export class DemoFirebaseAuthService implements FirebaseAuthServiceInterface {
       deleted: false,
     };
     state.users.push(user);
+    initializeDemoOnboarding(user.id, false);
     state.credentials.set(user.external_id, passwordRecord(input.password));
     return this.session(user.external_id, email);
   }

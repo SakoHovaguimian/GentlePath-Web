@@ -1,3 +1,7 @@
+import { handleLiveGoalRequest } from '@/modules/goals/server/handleLiveGoalRequest';
+import { handleLiveStateBenefitsRequest } from '@/modules/state-benefits/server/handleLiveStateBenefitsRequest';
+import { handleLiveOnboardingRequest } from '@/modules/onboarding/server/handleLiveOnboardingRequest';
+import { handleLiveApplicationRequest } from '@/modules/applications/server/handleLiveApplicationRequest';
 import 'server-only';
 import { handlePublicImageRequest } from '@/services/media/server/handlePublicImageRequest';
 import { handleLiveJournalRequest } from '@/modules/portal/server/handleLiveJournalRequest';
@@ -24,6 +28,10 @@ export async function featureBackendProxy(
   role: UserRole,
 ): Promise<Response | null> {
   return (
+    (await handleLiveGoalRequest(request, path, forward)) ??
+    (await handleLiveStateBenefitsRequest(request, path, forward)) ??
+    (await handleLiveOnboardingRequest(request, path, forward)) ??
+    (await handleLiveApplicationRequest(request, path, forward, userId)) ??
     (await handlePublicImageRequest(request, path, forward)) ??
     (await handleLiveAdministrationRequest(request, path, forward)) ??
     (await handleLiveBlogMediaRequest(request, path, forward)) ??

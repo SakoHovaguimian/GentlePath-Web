@@ -4,6 +4,8 @@
 
 Import `strings` and, when needed, `labels` from `@/strings`. Both exports are defined directly in `src/strings.ts`. GentlePath domain groups also use named `*Strings` exports in that same catalog; they receive the same title-case checks. Organize copy with nested domain/screen keys inside that file. Do not create additional catalog files, a strings directory, or re-export shims. Shared accent, tone, and panel labels belong in the same file.
 
+Standard actions and the `actionsFor` formatter are authored once in the catalog's private `commonActionStrings` group and exposed through `strings.common`. Existing domain keys reference that group to preserve their callers. Reuse these shared values for the same action; keep object-specific actions such as `Delete Goal` with their domain copy.
+
 ```tsx
 import { strings } from '@/strings';
 <Button>{strings.chat.send}</Button>;
@@ -20,6 +22,8 @@ Use **Title Case** for actions and CTAs, page/section/card/dialog titles, text-f
 Use sentence case for supporting descriptions, help/hints, complete validation/error messages, notification bodies, descriptive alt text, and instructional placeholders. Preserve the original case of user/backend content, geographic names, credentials, email addresses, URLs, version identifiers, units, and example Markdown/code. Do not transform copy at render time or use CSS capitalization; author the right case in the catalog.
 
 Authored demo and editorial content follows the same UI roles: article, document, community-post, poll, and notification titles, FAQ headings, Markdown headings, offer badges, and selectable poll options use Title Case. Their paragraphs, comments, and notification bodies stay in sentence case. Keep mixed-content groups under normal casing checks and scope prose/data annotations to the relevant properties so they do not exempt nested titles or actions.
+
+Use separate catalog entries when a message needs both a short title or field label and an explanation. Render the title in Title Case and its supporting description in sentence case. Do not reuse an instructional placeholder as a field label. Mixed groups named `help`, `syntax`, or `sample*` need an explicit `@title-case` annotation so inferred prose/data roles do not exempt their nested labels; scope examples and descriptions within them to their own roles.
 
 The ESLint error rule `copy/title-case` checks `strings` and `labels` in `src/strings.ts`, including arrays, formatter template segments, and conditional output. `npm run check:strings` runs the same casing check alongside the inline-copy guard. The `addressCountries` dataset keeps its geographic spelling. Dynamic formatter parameters keep the caller's original data; formatter arguments such as locale codes and separators are not title-cased.
 

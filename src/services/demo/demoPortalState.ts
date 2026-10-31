@@ -1,6 +1,6 @@
 import 'server-only';
 import { gentlePathDemoStrings as copy } from '@/strings';
-import { users } from './demoFixtures';
+import { populatedDemoUsers as users } from './demoFixtures';
 import type { Resource } from '@/modules/portal/models/resource';
 import type { DemoPortalState } from './models/demoPortalState';
 import { JournalEmotionSchema } from '@/modules/portal/models/journalEmotion';

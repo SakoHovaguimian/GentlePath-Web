@@ -1,5 +1,5 @@
 import 'server-only';
-import { getDemoState } from '@/services/demo/demoState';
+import { populatedDemoUsers } from '@/services/demo/demoFixtures';
 import { getDemoPortalState } from '@/services/demo/demoPortalState';
 import { getDemoCommunityState } from '@/modules/community/demo/communityState';
 import { journalEntryLocation } from '@/modules/portal/journalEntryLocation';
@@ -30,7 +30,7 @@ export function getDemoNotificationInboxState(): DemoNotificationInboxState {
   const resource = portal.resources[0];
   if (!globalInbox.gentlePathNotificationInboxState) {
     const now = Date.now();
-    const notifications = getDemoState().users.flatMap((user) => {
+    const notifications = populatedDemoUsers.flatMap((user) => {
       const journal = portal.journals.find((entry) => entry.userId === user.id);
       const templates = [
         {

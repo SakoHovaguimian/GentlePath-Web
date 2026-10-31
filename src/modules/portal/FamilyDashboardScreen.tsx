@@ -28,6 +28,7 @@ import { WeeklyActivity } from './components/WeeklyActivity';
 import { ResourceCard } from './components/ResourceCard';
 import { JournalEntryCard } from './components/JournalEntryCard';
 import { MutationError } from './components/MutationError';
+import { PriorityFollowUps } from '@/modules/applications/components/PriorityFollowUps';
 import './styles/portal.css';
 
 export function FamilyDashboardScreen() {
@@ -53,6 +54,7 @@ export function FamilyDashboardScreen() {
           </Button>
         }
       />
+      <PriorityFollowUps />
       <QueryBoundary query={overview}>
         {(data) => (
           <>

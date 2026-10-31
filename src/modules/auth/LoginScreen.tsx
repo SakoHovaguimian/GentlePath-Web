@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Button,
+  Checkbox,
   Card,
   Field,
   Input,
@@ -16,6 +17,7 @@ import { UserRoleSchema, type UserRole } from '@/models/userRole';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import {
   gentlePathAuthStrings as authCopy,
+  gentlePathOnboardingStrings as onboardingCopy,
   gentlePathPortalStrings,
   gentlePathAccountToolsStrings as accountCopy,
   strings,
@@ -23,7 +25,13 @@ import {
 import { AuthCardShell } from './AuthCardShell';
 import { authDestination } from './authDestination';
 import { LockIcon, MailIcon } from './authIcons';
-import { createSession, enableDemoMode } from './sessionClient';
+import {
+  createSession,
+  enableDemoMode,
+  restartOnboardingDemo,
+} from './sessionClient';
+
+const onboardingPreset = 'onboarding';
 
 export function LoginScreen({
   redirectTo,
@@ -34,7 +42,8 @@ export function LoginScreen({
 }) {
   const router = useRouter();
   const { demoMode, devSettingsEnabled } = useRuntimeConfig();
-  const [demoRole, setDemoRole] = useState<UserRole>('user');
+  const [demoRole, setDemoRole] = useState<UserRole | 'onboarding'>('user');
+  const [restartSetup, setRestartSetup] = useState(false);
   const [email, setEmail] = useState(demoMode ? authCopy.demoEmails.user : '');
   const [password, setPassword] = useState(
     demoMode ? authCopy.demoPassword : '',
@@ -84,6 +93,13 @@ export function LoginScreen({
     setPending(true);
     try {
       const session = await createSession({ action: 'login', ...parsed.data });
+      if (
+        demoMode &&
+        restartSetup &&
+        session.user.email === onboardingCopy.onboardingDemoEmail
+      ) {
+        await restartOnboardingDemo();
+      }
       router.push(authDestination(session.user.role, redirectTo));
       router.refresh();
     } catch (caughtError) {
@@ -130,9 +146,19 @@ export function LoginScreen({
                 disabled={pending}
                 leadingIcon={<UiIcon name="user" />}
                 onValueChange={(value) => {
+                  if (value === 'onboarding') {
+                    setDemoRole('onboarding');
+                    setEmail(onboardingCopy.onboardingDemoEmail);
+                    setPassword(authCopy.demoPassword);
+                    setRestartSetup(false);
+                    setError(null);
+                    setFieldErrors({});
+                    return;
+                  }
                   const role = UserRoleSchema.safeParse(value);
                   if (!role.success) return;
                   setDemoRole(role.data);
+                  setRestartSetup(false);
                   setEmail(authCopy.demoEmails[role.data]);
                   setPassword(authCopy.demoPassword);
                   setError(null);
@@ -146,8 +172,21 @@ export function LoginScreen({
                     </option>
                   ),
                 )}
+                <option value={onboardingPreset}>
+                  {onboardingCopy.demoPreset}
+                </option>
               </Select>
             </Field>
+            {demoRole === 'onboarding' && (
+              <Checkbox
+                label={onboardingCopy.restartDemo}
+                description={onboardingCopy.restartDemoHint}
+                checked={restartSetup}
+                disabled={pending}
+                onChange={(event) => setRestartSetup(event.target.checked)}
+                className="mt-3"
+              />
+            )}
           </div>
         ) : null}
         <div>

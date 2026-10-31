@@ -11,6 +11,7 @@ All sample accounts use `password123`:
 | `user@gentlepath.demo`       | Family Member |
 | `admin@gentlepath.demo`      | Admin         |
 | `superadmin@gentlepath.demo` | SuperAdmin    |
+| `onboarding@gentlepath.demo` | Family Member, Fresh Setup |
 
 Signup creates an ordinary demo account and an immediate session without email verification. Roles and disabled/deleted status are rechecked against current server records; browser fields cannot grant permissions. Developer role switching signs in a trusted seed identity and clears the previous account's client state. Blog fixtures store Markdown in canonical sections; new writes reject retired body-only payloads and unknown fields, and public slug/UUID reads expose published articles only.
 
@@ -66,3 +67,14 @@ Guide-cover, per-step, and milestone image uploads share the existing process-ow
 Implement demo operations with the same models, statuses, paging, ownership, and lifecycle as the actual API. Register reset and shared count/invalidation behavior. Keep fixtures/copy server-owned and in the single strings catalog; no client business fixture flag. Do not initialize external SDKs or emit live provider writes during demo verification.
 
 Use [verification](VERIFICATION.md) for checks and manual flows. Exercise multiple accounts, foreign/private denial, mutation recovery, finite loading, empty state, and reset without deleting another developer's work on a shared preview.
+
+### Onboarding Demo
+
+The Onboarding Demo login preset selects `onboarding@gentlepath.demo`, an ordinary family identity with no seeded children or private activity. Existing populated presets retain their records and completed setup. New signup creates an incomplete resumable setup; merely signing into the onboarding identity never resets its progress.
+
+The preset includes an unchecked Restart Setup option. After successful sign-in, this explicit action calls the developer-only, same-origin `POST /api/dev-settings/onboarding-restart`; it verifies the authenticated onboarding identity, clears only that identity's private family activity, and restarts its setup state. Other identities are rejected and other accounts keep their data. Global fixture reset also resets the onboarding store.
+
+The demo onboarding service validates the same sequential steps, explicit children-later answer, approach/no-preference exclusivity, and completion requirements as the live API. State benefit samples mirror the API-owned templates for 50 states plus DC and match only the saved state. Empty simulation hides the benefit list without deleting preferences; setup settings stay usable.
+
+
+Services/applications and Goals use account-owned mutable stores with matching status, pagination, conflict, active-child, media-limit, and follow-up behavior. Only the original populated User/Admin/SuperAdmin identities receive seeded applications/Goals/activity. The onboarding identity and newly registered users start empty. Global reset restores all new stores; the explicit onboarding restart clears only that demo account's profile, child/activity, application, and Goal/upload records. Goal demo media uses an existing tracked illustration and local byte readers, never S3. The home commercial fixture has several eligible items and a six-second rotation interval.

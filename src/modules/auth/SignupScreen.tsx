@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import type { Route } from 'next';
 import { Button, Field, Input, PasswordInput, UiIcon } from '@/components/ui';
 import { SignupInputSchema, type SignupInput } from '@/models/signupInput';
 import {
@@ -51,7 +52,10 @@ export function SignupScreen({ redirectTo }: { redirectTo?: string }) {
     setPending(true);
     try {
       const session = await createSession({ action: 'signup', ...parsed.data });
-      router.push(authDestination(session.user.role, redirectTo));
+      const destination = authDestination(session.user.role, redirectTo);
+      router.push(
+        `/onboarding?redirectTo=${encodeURIComponent(destination)}` as Route,
+      );
       router.refresh();
     } catch (caughtError) {
       form.querySelector('input')?.focus();

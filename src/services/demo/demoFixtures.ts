@@ -9,6 +9,8 @@ const now = new Date();
 const daysAgo = (days: number) =>
   new Date(now.getTime() - days * 86400000).toISOString();
 
+export const onboardingDemoUserId = '44444444-4444-4444-8444-444444444444';
+
 export const users: DemoUser[] = [
   {
     id: '11111111-1111-4111-8111-111111111111',
@@ -52,7 +54,25 @@ export const users: DemoUser[] = [
     updated_at: daysAgo(7),
     deleted: false,
   },
+  {
+    id: onboardingDemoUserId,
+    external_id: 'firebase-demo-onboarding',
+    first_name: copy.accounts.onboarding.firstName,
+    last_name: copy.accounts.onboarding.lastName,
+    email: copy.accounts.onboarding.email,
+    role: 'user',
+    disabled: false,
+    phone_number: null,
+    date_of_birth: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted: false,
+  },
 ];
+
+export const populatedDemoUsers = users.filter(
+  (user) => user.id !== onboardingDemoUserId,
+);
 
 export const featureRequests: FeatureRequestTransport[] = [
   {

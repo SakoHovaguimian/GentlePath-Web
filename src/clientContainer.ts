@@ -1,3 +1,7 @@
+import { GoalService } from '@/modules/goals/services/goalService';
+import { StateBenefitsService } from '@/modules/state-benefits/services/stateBenefitsService';
+import { OnboardingService } from '@/modules/onboarding/services/onboardingService';
+import { ApplicationService } from '@/modules/applications/services/applicationService';
 import { PublicImageService } from '@/services/media/publicImageService';
 import { BrowserApiClient } from '@/services/api/browserApiClient';
 import { UserService } from '@/modules/users/services/userService';
@@ -21,6 +25,10 @@ import { CommercialService } from '@/modules/commercial/services/commercialServi
 import { NotificationInboxService } from '@/modules/notification-inbox/services/notificationInboxService';
 export class ClientServiceContainer {
   readonly apiClient = new BrowserApiClient();
+  readonly goalService = new GoalService(this.apiClient);
+  readonly stateBenefitsService = new StateBenefitsService(this.apiClient);
+  readonly onboardingService = new OnboardingService(this.apiClient);
+  readonly applicationService = new ApplicationService(this.apiClient);
   readonly userService = new UserService(this.apiClient);
   readonly featureRequestService = new FeatureRequestService(this.apiClient);
   readonly dashboardService = new DashboardService(this.apiClient);

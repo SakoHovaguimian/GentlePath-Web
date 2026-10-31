@@ -19,7 +19,8 @@ export function ThemeToggle() {
       await setPreference({ mode: dark ? 'light' : 'dark', accent });
     } catch {
       await presentation.showToast({
-        title: strings.ui.shellActions.themeSaveFailed,
+        title: strings.ui.shellActions.themeSaveFailedTitle,
+        description: strings.ui.shellActions.themeSaveFailed,
         intent: 'danger',
       });
     } finally {

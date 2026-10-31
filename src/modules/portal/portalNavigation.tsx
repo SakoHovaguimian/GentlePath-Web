@@ -1,3 +1,8 @@
+import { gentlePathGoalStrings, gentlePathOnboardingStrings } from '@/strings';
+import {
+  gentlePathApplicationStrings,
+  gentlePathStateBenefitsStrings,
+} from '@/strings';
 import { UiIcon, type AppSidebarItem } from '@/components/ui';
 import type { UserRole } from '@/models/userRole';
 import {
@@ -33,6 +38,21 @@ export function portalNavigation(
       href: '/milestones',
       label: copy.navigation.milestones,
       icon: <UiIcon name="leaf" />,
+    },
+    {
+      href: '/goals',
+      label: gentlePathGoalStrings.title,
+      icon: <UiIcon name="leaf" />,
+    },
+    {
+      href: '/applications',
+      label: gentlePathApplicationStrings.title,
+      icon: <UiIcon name="file" />,
+    },
+    {
+      href: '/benefits',
+      label: gentlePathStateBenefitsStrings.title,
+      icon: <UiIcon name="layers" />,
     },
     {
       href: '/resources',
@@ -127,6 +147,12 @@ export function portalNavigation(
       label: navigationCopy.help,
       ...(adminArea ? { sectionLabel: navigationCopy.supportGroup } : {}),
       icon: <UiIcon name="file" />,
+    },
+    {
+      href: '/settings/family-preferences',
+      label: gentlePathOnboardingStrings.preferencesTitle,
+      icon: <UiIcon name="user" />,
+      placement: 'bottom',
     },
     {
       href: '/settings/appearance',

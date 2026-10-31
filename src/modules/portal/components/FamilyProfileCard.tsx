@@ -69,14 +69,12 @@ export function FamilyProfileCard({
       </div>
       <div className="gp-family-card__birth">
         <UiIcon name="calendar" className="size-4" />
-        <span className="grid gap-1">
-          <span className="text-xs text-tertiary">
-            {copy.family.birthDateLabel}
-          </span>
-          <time dateTime={child.dateOfBirth}>
-            {formatChildBirthDate(child.dateOfBirth)}
-          </time>
+        <span className="gp-family-card__birth-label">
+          {copy.family.birthDateLabel}
         </span>
+        <time dateTime={child.dateOfBirth}>
+          {formatChildBirthDate(child.dateOfBirth)}
+        </time>
       </div>
       {child.gender && (
         <div className="gp-family-card__gender">

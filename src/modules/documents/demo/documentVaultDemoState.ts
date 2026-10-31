@@ -1,6 +1,6 @@
 import 'server-only';
 import { gentlePathDocumentStrings as copy } from '@/strings';
-import { getDemoState } from '@/services/demo/demoState';
+import { populatedDemoUsers } from '@/services/demo/demoFixtures';
 import { getDemoPortalState } from '@/services/demo/demoPortalState';
 import type { DocumentType } from '../models/documentType';
 import type { DemoDocumentVaultState } from './demoDocumentVaultState';
@@ -55,7 +55,7 @@ function createState(): DemoDocumentVaultState {
   const contents = samplePdf();
   const documentTypes: DocumentType[] = ['IEP', 'CARE_PLAN', 'OTHER'];
   return {
-    documents: getDemoState().users.flatMap((user) => {
+    documents: populatedDemoUsers.flatMap((user) => {
       const child = getDemoPortalState().children.find(
         (item) => item.userId === user.id,
       );

@@ -1,5 +1,8 @@
 'use client';
 
+import { goalQueryKeys } from '@/modules/goals/hooks';
+import { applicationQueryKeys } from '@/modules/applications/hooks';
+
 import {
   useMutation,
   useQuery,
@@ -77,7 +80,12 @@ export function useDeleteChild() {
   const { portalService: service } = useServiceContainer();
   return usePortalMutation(
     (id: string) => service.deleteChild(id),
-    [documentVaultQueryKeys.all, milestoneAdminKeys.all],
+    [
+      documentVaultQueryKeys.all,
+      milestoneAdminKeys.all,
+      applicationQueryKeys.all,
+      goalQueryKeys.all,
+    ],
   );
 }
 export function useSaveJournal() {

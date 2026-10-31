@@ -78,16 +78,8 @@
 }
 
 .gp-home-hero__art img {
-  object-fit: cover;
-  object-position: 62% center;
-}
-
-.gp-home-hero__art::after {
-  position: absolute;
-  inset: 0;
-  content: '';
-  background: linear-gradient(90deg, var(--gp-sage), transparent 30%);
-  pointer-events: none;
+  object-fit: contain;
+  object-position: center;
 }
 
 .gp-home-tools {
@@ -330,16 +322,8 @@
 }
 
 .gp-portal-banner--landscape .gp-portal-banner__art img {
-  object-fit: cover;
-  object-position: 60% center;
-}
-
-.gp-portal-banner--landscape .gp-portal-banner__art::after {
-  position: absolute;
-  inset: 0;
-  content: '';
-  background: linear-gradient(90deg, var(--gp-banner-tint), transparent 35%);
-  pointer-events: none;
+  object-fit: contain;
+  object-position: center;
 }
 
 .gp-journal-toolbar {
@@ -666,7 +650,7 @@
 }
 
 .gp-resource-card__image--landscape img {
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .gp-resource-card:hover .gp-resource-card__image img {
@@ -834,19 +818,25 @@
 }
 .gp-family-card__birth {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  background: var(--gp-sage);
+  gap: 0.5rem 0.65rem;
+  padding-inline-start: 4.6rem;
+  margin-top: -0.65rem;
   color: var(--gp-ink);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
+  line-height: 1.6;
 }
-.gp-family-card:nth-child(2n) .gp-family-card__birth {
-  background: var(--gp-lilac);
+.gp-family-card__birth > svg {
+  flex-shrink: 0;
+  color: var(--gp-muted);
 }
-.gp-family-card:nth-child(3n) .gp-family-card__birth {
-  background: var(--gp-sunlight);
+.gp-family-card__birth-label {
+  color: var(--gp-muted);
+}
+.gp-family-card__birth time {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 .gp-family-card__summary {
   display: flex;
@@ -1217,14 +1207,6 @@
     min-height: 8rem;
   }
 
-  .gp-home-hero__art img {
-    object-position: center 60%;
-  }
-
-  .gp-home-hero__art::after {
-    background: linear-gradient(180deg, var(--gp-sage), transparent 25%);
-  }
-
   .gp-home-tool {
     gap: 0.65rem 0.35rem;
     padding: 1rem;
@@ -1361,7 +1343,8 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .gp-family-card__birth {
-    margin-inline-end: 0;
+    padding-inline-start: 0;
+    margin-top: -0.25rem;
   }
 }
 

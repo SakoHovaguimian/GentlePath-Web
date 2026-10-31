@@ -1,3 +1,6 @@
+import { resetDemoGoalState } from '@/modules/goals/demo/goalDemoState';
+import { resetDemoOnboardingState } from '@/modules/onboarding/demo/onboardingState';
+import { resetDemoApplicationState } from '@/modules/applications/demo/applicationDemoState';
 import { errorResponse } from '@/services/api/routeSafety';
 import { requireDeveloperAccess } from '@/services/demo/demoDevAccess';
 import { createDemoIdentitySession } from '@/services/demo/demoIdentity';
@@ -19,7 +22,10 @@ export async function POST(request: Request) {
   try {
     const { container, session } = await requireDeveloperAccess(request, true);
     resetDemoState();
+    resetDemoOnboardingState();
+    resetDemoApplicationState();
     resetDemoPortalState();
+    resetDemoGoalState();
     resetDemoBlogState();
     resetDocumentVaultDemoState();
     resetDemoCommunityState();

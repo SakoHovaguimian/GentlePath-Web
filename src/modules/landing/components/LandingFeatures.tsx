@@ -1,7 +1,11 @@
-import { UiIcon } from '@/components/ui';
+import { UiIcon, type IconName } from '@/components/ui';
 import { gentlePathLandingStrings as copy } from '@/strings';
 
 const icons = [
+  'pin',
+  'checklist',
+  'leaf',
+  'settings',
   'user',
   'quote',
   'leaf',
@@ -12,7 +16,7 @@ const icons = [
   'sun',
   'gift',
   'bookmark',
-] as const;
+] as const satisfies readonly IconName[];
 
 export function LandingFeatures() {
   return (

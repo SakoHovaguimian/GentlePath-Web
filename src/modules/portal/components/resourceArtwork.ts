@@ -1,21 +1,22 @@
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import type { Resource } from '../models/resource';
 
 const guideArtwork = {
-  src: '/gentlepath/reading-garden-v2.png',
+  src: gentlePathIllustrations.readingGarden,
   landscape: true,
 } as const;
 
 export const resourceArtwork = {
   everyday: {
-    src: '/gentlepath/path-landscape-v2.png',
+    src: gentlePathIllustrations.pathLandscape,
     landscape: true,
   },
   education: {
-    src: '/gentlepath/reading-garden-v2.png',
+    src: gentlePathIllustrations.readingGarden,
     landscape: true,
   },
   communication: {
-    src: '/gentlepath/community-garden-v2.png',
+    src: gentlePathIllustrations.communityGarden,
     landscape: true,
   },
   wellbeing: {

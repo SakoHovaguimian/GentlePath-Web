@@ -138,7 +138,7 @@ function seed(): DemoCommercialState {
         name: copy.demo.homePlacementName,
         is_enabled: true,
         max_items: 5,
-        auto_advance_seconds: null,
+        auto_advance_seconds: 6,
         show_pagination: true,
       },
     ],
@@ -193,6 +193,27 @@ function seed(): DemoCommercialState {
       ).toISOString(),
     })),
   );
+  state.offers.slice(1).forEach((offer, index) => {
+    const creativeId = `73000000-0000-4000-8000-${String(40 + index).padStart(12, '0')}`;
+    state.creatives.push({
+      ...state.creatives[0],
+      id: creativeId,
+      discount_offer_id: offer.id,
+      title: offer.title,
+      subtitle: offer.description,
+      action_value: `/family-discounts/${offer.id}`,
+    });
+    state.items.push({
+      ...life,
+      id: `73000000-0000-4000-8000-${String(50 + index).padStart(12, '0')}`,
+      placement_id: ids.home,
+      creative_id: creativeId,
+      position: index + 1,
+      is_enabled: true,
+      starts_at: null,
+      ends_at: null,
+    });
+  });
   return state;
 }
 const globalCommercial = globalThis as typeof globalThis & {

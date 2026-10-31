@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button, IconButton, UiIcon } from '@/components/ui';
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import { gentlePathPortalStrings as copy } from '@/strings';
 
 export function DashboardWelcome({ name }: { name: string }) {
@@ -34,7 +35,7 @@ export function DashboardWelcome({ name }: { name: string }) {
       </div>
       <div className="gp-home-hero__art">
         <Image
-          src="/gentlepath/path-landscape-v2.png"
+          src={gentlePathIllustrations.pathLandscape}
           alt={copy.home.heroAlt}
           fill
           sizes="(max-width: 767px) 100vw, 55vw"

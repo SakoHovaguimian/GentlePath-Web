@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, type ReactNode } from 'react';
+import { OnboardingGate } from '@/modules/onboarding/OnboardingGate';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { usePathname } from 'next/navigation';
 import type { AppSession } from '@/models';
@@ -55,6 +56,8 @@ export function ProtectedShell({
       : allowed.then((result) => (result ? confirmExit() : false));
   }
 
+  if (pathname === '/onboarding') return children;
+
   return (
     <>
       <NotificationTimezoneSync />
@@ -81,7 +84,7 @@ export function ProtectedShell({
         activePath={pathname}
         onBeforeNavigate={beforeNavigate}
       >
-        {children}
+        <OnboardingGate>{children}</OnboardingGate>
       </AppShell>
     </>
   );

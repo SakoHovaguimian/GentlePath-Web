@@ -5840,11 +5840,29 @@ export const addressCountries: {
   },
 ];
 
-// All authored display copy belongs in this file. See AGENTS.md#copy-and-formatting.
-// Use Title Case and & for short UI copy; keep sentences in sentence case.
-// Stable synthetic identities keep demo records distinct across account directories.
 // All authored display copy belongs in this file. See docs/STRINGS.md.
 // Copy casing and narrow prose/data exceptions: docs/STRINGS.md#copy-casing.
+const commonActionStrings = {
+  back: 'Back',
+  cancel: 'Cancel',
+  clearFilters: 'Clear Filters',
+  clearSearch: 'Clear Search',
+  close: 'Close',
+  confirm: 'Confirm',
+  continue: 'Continue',
+  delete: 'Delete',
+  edit: 'Edit',
+  next: 'Next',
+  open: 'Open',
+  preview: 'Preview',
+  previous: 'Previous',
+  saveChanges: 'Save Changes',
+  search: 'Search',
+  tryAgain: 'Try Again',
+  viewAll: 'View All',
+  actionsFor: (title: string) => `Actions For ${title}`,
+} as const;
+
 export const strings = {
   designSystem: {
     recordRange: (from: number, to: number) => `Showing Records ${from}–${to}`,
@@ -5875,14 +5893,14 @@ export const strings = {
     reorderDown: (name: string) => `Move ${name} Down`,
     panels: 'Persistent Panels',
     panelsHint: 'Switch sections and return. Each section keeps its entries.',
-    edit: 'Edit',
-    preview: 'Preview',
+    edit: commonActionStrings.edit,
+    preview: commonActionStrings.preview,
     draftLabel: 'Draft Title',
     // @title-case: Authored example of a draft title.
     draftSample: 'My Next Project',
     filters: 'Directory Filters',
     noResults: 'No Matching Items',
-    clearFilters: 'Clear Filters',
+    clearFilters: commonActionStrings.clearFilters,
     multiSelect: 'Multiple Selection',
     selectProjects: 'Select Projects',
     dialog: 'Dialog With A Select',
@@ -5905,7 +5923,7 @@ export const strings = {
     showToast: 'Preview Toast',
     showAlert: 'Preview Alert',
     showSheet: 'Preview Sheet',
-    close: 'Close',
+    close: commonActionStrings.close,
     openLibrary: 'Open Component Library',
     libraryHint:
       'Browse the shared controls and responsive patterns available in this project.',
@@ -5914,6 +5932,7 @@ export const strings = {
   },
 
   common: {
+    ...commonActionStrings,
     loading: 'Loading…',
     saving: 'Saving…',
     pendingValue: '…',
@@ -5937,7 +5956,7 @@ export const strings = {
       'We couldn’t find what you’re looking for. The link may have changed, or this item may no longer be available. Let’s get you back to familiar ground.',
     homeAction: 'Go To Homepage',
     illustrationAlt:
-      'A winding garden path beside a wooden sign, surrounded by sage leaves and lavender flowers in soft sunlight.',
+      'An ivory path winding through sage hills beside a lilac signpost, leafy branches, and a warm sun.',
   },
   // @sentence-case: Validation and error messages are complete sentences.
   errors: {
@@ -6036,6 +6055,7 @@ export const strings = {
     older: 'Older Messages',
     pageStatus: (page: number) => `Page ${page}`,
     description: 'A shared workspace conversation.',
+    messageLabel: 'Message',
     placeholder: 'Write a message…',
     send: 'Send Message',
     sending: 'Sending…',
@@ -6084,12 +6104,13 @@ export const strings = {
       darkMode: 'Dark Mode',
       switchToLight: 'Switch To Light Mode',
       switchToDark: 'Switch To Dark Mode',
+      themeSaveFailedTitle: 'Theme Could Not Be Saved',
       // @sentence-case: Supporting prose.
       themeSaveFailed: 'Could not save the theme. Try again.',
     },
     alertModal: {
-      confirm: 'Confirm',
-      cancel: 'Cancel',
+      confirm: commonActionStrings.confirm,
+      cancel: commonActionStrings.cancel,
     },
     metricCard: {
       live: 'Live',
@@ -6097,7 +6118,7 @@ export const strings = {
     queryBoundary: {
       error: 'Error',
       somethingWentWrong: 'Unable To Load This',
-      tryAgain: 'Try Again',
+      tryAgain: commonActionStrings.tryAgain,
       loadFailureDescription: 'Please try again in a moment.',
       // @sentence-case: Supporting prose.
       youNeedToBeLoggedInToViewThis:
@@ -6112,13 +6133,13 @@ export const strings = {
       anUnexpectedErrorOccurred: 'An unexpected error occurred.',
     },
     sheetPanel: {
-      continue: 'Continue',
-      close: 'Close',
+      continue: commonActionStrings.continue,
+      close: commonActionStrings.close,
     },
     states: {
       empty: 'Empty',
       error: 'Error',
-      retry: 'Try Again',
+      retry: commonActionStrings.tryAgain,
     },
     toastStack: {
       dismissToast: (title: string) => `Dismiss ${title} Toast`,
@@ -6262,7 +6283,7 @@ export const strings = {
       orderValue: 'Order Value',
       avgOrderValue: 'AVG Order Value',
       current: 'Current',
-      previous: 'Previous',
+      previous: commonActionStrings.previous,
       audience: 'Audience',
       topCountries: 'Top Countries',
       acquisition: 'Acquisition',
@@ -6416,7 +6437,7 @@ export const strings = {
       primaryCardsMutedPanelsAndFlatterDataRowsStay:
         'Primary cards, muted panels, and flatter data rows stay aligned from shell to detail pages.',
       looksGood: 'Looks Good',
-      close: 'Close',
+      close: commonActionStrings.close,
       accentUsageGuardrails: 'Accent Usage Guardrails',
       // @sentence-case: Supporting prose.
       useTheSelectedAccentForActiveStatesChipsAnd:
@@ -6499,7 +6520,7 @@ export const strings = {
         'The Same Design Language Scales From Hero Sections To Operational Widgets.',
       dashboardPreview: 'Dashboard Preview',
       neutralCanvasSelectiveAccent: 'Neutral Canvas, Selective Accent',
-      preview: 'Preview',
+      preview: commonActionStrings.preview,
       revenueMix: 'Revenue Mix',
       topChannels: 'Top Channels',
       product: 'Product',
@@ -6613,7 +6634,7 @@ export const strings = {
       featureRequestDetail: 'Feature Request Detail',
       requestUpdated: 'Request Updated',
       message: 'Message',
-      saveChanges: 'Save Changes',
+      saveChanges: commonActionStrings.saveChanges,
       deleteThisRequest: 'Delete This Request?',
       // @sentence-case: Supporting prose.
       thisRequestWillBeRemovedFromYourQueue:
@@ -6809,13 +6830,17 @@ export const strings = {
       stepper:
         'Horizontal segments and vertical stages with shared progress, focus, and motion.',
     },
+    // @title-case: Step names are navigation labels, including in previews.
     sampleSteps: ['Details', 'Settings', 'Review'],
+    // @title-case: Short supporting labels for the preview steps.
     sampleStepHints: [
       'Name & Classification',
       'Pricing & Availability',
       'Check Before Saving',
     ],
+    // @title-case: Sample names used as section and table titles.
     sampleCatalog: 'Sample Catalog',
+    // @title-case: Sample collection title.
     sampleProducts: 'Products',
     foundations: 'Foundations / Tokens',
     foundationsHint: 'Shared colors, spacing, corners, and outline icons.',
@@ -6868,13 +6893,14 @@ export const strings = {
       disabled: 'Disabled',
       loading: 'Loading',
     },
+    // @title-case: Accessible action name using catalog-backed variant and state labels.
     buttonExample: (variant: string, state: string) =>
       `${variant}, ${state} Example`,
     create: 'Create Product',
     creating: 'Creating…',
     filter: 'Filter',
-    cancel: 'Cancel',
-    delete: 'Delete',
+    cancel: commonActionStrings.cancel,
+    delete: commonActionStrings.delete,
     settings: 'Settings',
     actionPreview: 'Preview Action Completed',
     actionPreviewHint: 'This example did not change any saved data.',
@@ -7016,7 +7042,7 @@ export const strings = {
     sheetHint: 'A shared sheet keeps secondary information within reach.',
     // @sentence-case: Supporting prose.
     sheetContent: 'Use Escape or Close to return to the component library.',
-    close: 'Close',
+    close: commonActionStrings.close,
     table: 'Table / List Preview',
     tableHint: 'Shared components together in a responsive list.',
     tableCaption: 'Records',
@@ -7076,8 +7102,8 @@ export const strings = {
   directory: {
     status: 'Status',
     firstPage: 'First Page',
-    previousPage: 'Previous',
-    nextPage: 'Next',
+    previousPage: commonActionStrings.previous,
+    nextPage: commonActionStrings.next,
   },
   assistantMessages: {
     name: 'Assistant',
@@ -7109,6 +7135,7 @@ export const strings = {
     decline: 'Keep Current Draft',
     missing: 'Still Needed',
     notes: 'Review Notes',
+    invalidValueTitle: 'Check This Value',
     // @sentence-case: Supporting prose.
     invalidValue: 'Check this value before accepting, or turn this field off.',
     // @sentence-case: Supporting prose.
@@ -7146,9 +7173,11 @@ export const strings = {
     review:
       'Review the transcript and edit any suggested values. Select only the fields you want to apply; saving the form remains a separate step.',
     transcript: 'Transcript',
+    noSuggestionsTitle: 'No Field Suggestions',
     // @sentence-case: Supporting prose.
     noSuggestions:
       'No supported field suggestions were found. The transcript can still be reviewed.',
+    changedTitle: 'Draft Has Changed',
     // @sentence-case: Supporting prose.
     changed:
       'Draft fields changed. Generate again before applying suggestions.',
@@ -7179,6 +7208,7 @@ export const strings = {
     dismissPush: 'Dismiss Push Preview',
   },
   scheduleEditor: {
+    repeatedTimeLabel: 'Time Occurrence',
     // @sentence-case: Supporting prose.
     invalidTime:
       'Choose a valid local date and time. This time may be skipped by a daylight-saving change.',
@@ -7191,7 +7221,7 @@ export const strings = {
   markdownEditor: {
     view: 'Markdown Editor View',
     write: 'Write',
-    preview: 'Preview',
+    preview: commonActionStrings.preview,
     split: 'Split',
     source: 'Markdown Source',
     toolbar: 'Markdown Formatting',
@@ -7241,6 +7271,7 @@ export const strings = {
       heading2: 'Heading 2',
       heading3: 'Heading 3',
     },
+    // @title-case: Syntax-guide labels are headings; only their examples preserve case.
     syntax: [
       {
         label: 'Headings',
@@ -7302,7 +7333,7 @@ export const strings = {
   },
   schedule: {
     editDay: (day: string) => `Edit ${day} Hours`,
-    editHours: 'Edit',
+    editHours: commonActionStrings.edit,
     doneEditing: 'Done',
     reviewDay: 'Review',
     incompleteHours: 'Set Opening & Closing Times',
@@ -7345,9 +7376,11 @@ export const strings = {
     categoryRange: (from: number, to: number) =>
       `Showing Categories ${from}–${to}`,
   },
+  // @title-case: Shared field labels used in sample screens.
   sampleFields: {
     name: 'Name',
   },
+  // @title-case: Shared section labels used in sample screens.
   sampleCatalog: {
     categories: 'Categories',
   },
@@ -7377,7 +7410,7 @@ export const labels = {
     info: 'Information',
     success: 'Success',
     warning: 'Warning',
-    danger: 'Delete',
+    danger: commonActionStrings.delete,
   },
   sides: {
     left: 'Left Panel',
@@ -7439,11 +7472,11 @@ export const gentlePathDemoStrings = {
   resetConfirmationDescription:
     'This removes sample edits, new demo accounts, journals, children, observations, favorites, and blog changes from every browser using this server. The original demo records will be restored.',
   resetSuccessTitle: 'Demo Data Reset',
-  cancelAction: 'Cancel',
+  cancelAction: commonActionStrings.cancel,
   errorTitle: 'Settings Could Not Be Applied',
   errorDescription:
     'Keep your settings and try again. If your session expired, sign in again.',
-  retryAction: 'Try Again',
+  retryAction: commonActionStrings.tryAgain,
   // @sentence-case: Complete runtime or validation message.
   simulatedError:
     'The demo response is temporarily unavailable. Change the response state to recover.',
@@ -7477,6 +7510,11 @@ export const gentlePathDemoStrings = {
   seedPassword: 'password123',
   // @preserve-case: Sample account data retains its original spelling.
   accounts: {
+    onboarding: {
+      firstName: 'Taylor',
+      lastName: 'Brooks',
+      email: 'onboarding@gentlepath.demo',
+    },
     user: {
       firstName: 'Sam',
       lastName: 'Rivera',
@@ -7763,7 +7801,7 @@ export const gentlePathBlogStrings = {
   addTopic: 'Add Topic',
   newTopicLabel: 'New Topic',
   useTopic: 'Use Topic',
-  cancelTopic: 'Cancel',
+  cancelTopic: commonActionStrings.cancel,
   addCover: 'Add Cover Illustration',
   customCover: 'Custom Illustration',
   coverFromArticle: (title: string) => `Illustration From ${title}`,
@@ -7784,7 +7822,7 @@ export const gentlePathBlogStrings = {
   readArticle: 'Read Article',
   searchLabel: 'Search Articles',
   searchPlaceholder: 'Find a little clarity…',
-  clearSearch: 'Clear Search',
+  clearSearch: commonActionStrings.clearSearch,
   categoryLabel: 'Topic',
   allCategories: 'All Topics',
   categories: {
@@ -7813,7 +7851,7 @@ export const gentlePathBlogStrings = {
   articleUnavailableTitle: 'This Read Is Taking A Moment',
   articleUnavailableDescription:
     'We could not load the journal. Please try again in a moment.',
-  retry: 'Try Again',
+  retry: commonActionStrings.tryAgain,
   loadingTitle: 'Opening The Journal',
   loadingDescription: 'Gathering thoughtful reads for your family.',
   notFoundTitle: 'This Article Is Not Here',
@@ -7861,11 +7899,11 @@ export const gentlePathBlogStrings = {
   previewEmpty: 'Your story will appear here as you write.',
   closePreview: 'Back To Writing',
   saveDraft: 'Save Draft',
-  saveChanges: 'Save Changes',
+  saveChanges: commonActionStrings.saveChanges,
   publish: 'Publish Article',
   unpublish: 'Unpublish Article',
   delete: 'Delete Article',
-  cancel: 'Cancel',
+  cancel: commonActionStrings.cancel,
   backToArticles: 'Back To Articles',
   openPublic: 'View Published Article',
   draftHint:
@@ -8044,17 +8082,17 @@ export const gentlePathPortalStrings = {
     // @preserve-case: External account names retain the person's spelling.
     personName: (firstName: string, lastName: string) =>
       `${firstName} ${lastName}`,
-    cancel: 'Cancel',
-    save: 'Save Changes',
-    edit: 'Edit',
-    remove: 'Delete',
-    viewAll: 'View All',
-    open: 'Open',
-    back: 'Back',
-    search: 'Search',
-    clear: 'Clear Search',
-    next: 'Next',
-    previous: 'Previous',
+    cancel: commonActionStrings.cancel,
+    save: commonActionStrings.saveChanges,
+    edit: commonActionStrings.edit,
+    remove: commonActionStrings.delete,
+    viewAll: commonActionStrings.viewAll,
+    open: commonActionStrings.open,
+    back: commonActionStrings.back,
+    search: commonActionStrings.search,
+    clear: commonActionStrings.clearSearch,
+    next: commonActionStrings.next,
+    previous: commonActionStrings.previous,
     category: 'Category',
     allCategories: 'All Topics',
     allStatuses: 'All Statuses',
@@ -8071,7 +8109,7 @@ export const gentlePathPortalStrings = {
       'No items match these filters. Clear your search or choose another topic.',
     errorTitle: 'Your Changes Could Not Be Saved',
     errorHint: 'Please try again. Your entries are still here.',
-    close: 'Close',
+    close: commonActionStrings.close,
     pagination: 'Page Navigation',
     range: (from: number, to: number, total: number) =>
       `${from}–${to} Of ${total}`,
@@ -8147,14 +8185,14 @@ export const gentlePathPortalStrings = {
     personal: 'Personal Entry',
     filterLabel: 'Entries For',
     allEntries: 'All Entries',
-    entryActions: (title: string) => `Actions For ${title}`,
+    entryActions: commonActionStrings.actionsFor,
     openEntry: (title: string) => `Open Reflection ${title}`,
     relatedChildUnavailable: 'Related Child',
     profilesUnavailableTitle: 'Family Profiles Unavailable',
     profilesUnavailableHint:
       'Try loading your family profiles again before creating a reflection.',
     reloadProfilesAction: 'Reload Profiles',
-    clearFiltersAction: 'Clear Filters',
+    clearFiltersAction: commonActionStrings.clearFilters,
     noResultsTitle: 'No Matching Reflections',
     noResultsHint:
       'Try another search or choose a different child to find a reflection.',
@@ -8195,7 +8233,7 @@ export const gentlePathPortalStrings = {
     searchPlaceholder: 'Search resources, guides, and everyday support…',
     save: 'Save',
     unsave: 'Saved',
-    actionsLabel: (title: string) => `Actions For ${title}`,
+    actionsLabel: commonActionStrings.actionsFor,
     open: 'View Resource',
     savedToast: 'Resource Saved',
     unsavedToast: 'Resource Removed',
@@ -8208,7 +8246,7 @@ export const gentlePathPortalStrings = {
     sampleHint: 'Demo resource · illustrative reading material',
     // @sentence-case: Descriptive alternative text for the book artwork.
     guideIllustration:
-      'An open book and notebook among leafy plants, lavender flowers, and sunlight',
+      'An open ivory book with a lilac cover, sage leaves, a butterfly, and a warm sun',
     categories: {
       everyday: 'Everyday Life',
       education: 'School And Learning',
@@ -8220,7 +8258,8 @@ export const gentlePathPortalStrings = {
     illustrations: {
       everyday:
         'A winding path through green hills and leafy plants toward sunlight',
-      education: 'An open book and notebook among leafy plants and sunlight',
+      education:
+        'An open ivory book with a lilac cover, sage leaves, a butterfly, and a warm sun',
       communication:
         'Sage and lavender conversation bubbles beside a leafy branch',
       wellbeing: 'Caregivers sharing a conversation',
@@ -8401,7 +8440,7 @@ export const gentlePathPortalStrings = {
     reason: 'Report Reason',
     reporter: 'Reported By',
     reportedBy: (name: string) => `Reported By ${name}`,
-    open: 'Open',
+    open: commonActionStrings.open,
     resolved: 'Resolved',
     dismissed: 'Dismissed',
     review: 'Review Report',
@@ -8507,7 +8546,7 @@ export const gentlePathLandingStrings = {
   metadata: {
     title: 'GentlePath — You’re Not Alone. Grow Together.',
     description:
-      'A family space for parents and caregivers navigating autism. Connect with community, keep a journal, notice milestones, organize documents, and find practical Guided Steps.',
+      'Support for families navigating autism. Set child goals, track applications and follow-ups, explore sample state programs, and connect with community.',
   },
   navigation: {
     supportLabel: 'How It Helps',
@@ -8528,35 +8567,35 @@ export const gentlePathLandingStrings = {
     firstHeading: 'You’re Not Alone.',
     secondHeading: 'Let’s Grow Together.',
     description:
-      'Every family needs a community. Meet parents and caregivers who understand, learn practical ways to support your child, and find your next step together.',
+      'Keep your family’s plans, progress, and everyday moments together. Set goals for your child, stay on top of applications and follow-ups, and find connection with parents who understand.',
     primaryAction: 'Find Your GentlePath',
     secondaryAction: 'See How It Helps',
     artAlt: 'A winding path through sage and forest hills toward warm sunlight',
     bottomLabel: 'Your Family’s Own Way.',
     bottomDescription:
-      'Notice the little things. Make room for connection. Take one gentle step.',
+      'A little more clarity for what’s next. More room for the moments that matter.',
   },
   support: {
     eyebrowLabel: 'More Than One Way To Feel Supported',
     title: 'For The Life You’re Living.',
     description:
-      'Some days you need an idea. Some days you need to be heard. Some days you just need somewhere to put it all.',
+      'From the goals you’re working toward to the follow-up you don’t want to forget, make room for practical support and shared experience.',
     pillars: [
       {
         title: 'Keep Your Story Together.',
         description:
-          'Make space for each child, your reflections, and the moments of growth that matter to your family.',
+          'Keep each child’s story, your reflections, and personal goals together. Add progress notes, photos, and the moments you want to remember.',
         artAlt:
           'A parent and child reading together on a cushion, with sage and lavender wooden shapes',
-        topics: ['Family Profiles', 'Journal', 'Milestones'],
+        topics: ['Family Profiles', 'Journal', 'Milestones', 'Custom Goals'],
       },
       {
         title: 'Find Your Next Small Step.',
         description:
-          'Explore approachable guides and useful resources. Try what fits your day, and save the rest for later.',
+          'Explore sample programs in your state, organize applications and waitlists, and see which follow-up needs your attention next.',
         artAlt:
-          'A lavender planning clipboard with three check marks, a sage pencil, and a leafy sprig',
-        topics: ['Guided Steps', 'Resources', 'Family Tips'],
+          'A folded ivory guide with a winding route, two check marks, a sprout, and sage leaves',
+        topics: ['State Benefits', 'Applications', 'Follow-Ups'],
       },
       {
         title: 'Feel A Little Less Alone.',
@@ -8572,8 +8611,28 @@ export const gentlePathLandingStrings = {
     eyebrowLabel: 'Your Everyday Toolkit',
     title: 'Useful Things. All In One Place.',
     description:
-      'A little structure when life feels full. A little connection when it feels lonely. Choose the tools that help today.',
+      'Less to keep in your head. More space to notice what helps. Bring your family’s plans, records, and discoveries into one place.',
     items: [
+      {
+        title: 'State Benefits',
+        description:
+          'Explore sample healthcare, early-support, and family-support programs for all 50 states and DC. These are mock examples; confirm current programs and qualifications with the administering agency.',
+      },
+      {
+        title: 'Services & Applications',
+        description:
+          'Keep applications, waitlists, approvals, and denials together. Add follow-up dates and notes; My Path brings due items forward with clear days-remaining and overdue indicators.',
+      },
+      {
+        title: 'Goals For Your Child',
+        description:
+          'Create personal goals for each child, add dated progress notes, and keep photos, videos, and PDFs alongside them. Mark goals completed when you’re ready.',
+      },
+      {
+        title: 'Family Discovery Preferences',
+        description:
+          'Choose conventional, holistic, functional, integrative, or emerging approaches during setup, or select No Preference. We record your interests for now; these choices don’t change the content you see.',
+      },
       {
         title: 'Family Profiles',
         description:
@@ -8617,7 +8676,7 @@ export const gentlePathLandingStrings = {
       {
         title: 'Family Discounts',
         description:
-          'Find offers from approved sponsors, with the terms, eligibility, and commercial disclosures clearly shown.',
+          'Discover sponsor offers on My Path or browse Family Discounts, with terms, eligibility, and commercial disclosures clearly shown.',
       },
       {
         title: 'Your Saved Discoveries',
@@ -8626,7 +8685,7 @@ export const gentlePathLandingStrings = {
       },
     ],
     privacyDescription:
-      'Your family profiles, journal, observations, and documents stay separate from your community contributions.',
+      'Your family profiles, journal, observations, documents, Goals, and applications are private to your account and stay separate from community contributions.',
     noteDescription:
       'Your inbox keeps updates together. Notification settings let you choose what reaches you.',
   },
@@ -8664,17 +8723,37 @@ export const gentlePathLandingStrings = {
       {
         title: 'What Can I Do Here?',
         description:
-          'Create child profiles, keep a journal, record milestone observations, organize documents, and save helpful content. You can also explore Guided Steps, resources, Family Tips, community conversations, polls, and Family Discounts.',
+          'Create child profiles and personal Goals, keep a journal, record milestone observations, and organize documents. Track applications and follow-ups, explore sample programs in your state, or find Guided Steps, resources, Family Tips, community conversations, polls, and sponsor offers.',
       },
       {
         title: 'Can I Add More Than One Child?',
         description:
-          'Yes. Create a separate profile for each child and keep their details and milestone observations connected to their own story.',
+          'Yes. Create a separate profile for each child, with their own details, milestone observations, and personal Goals. You can add children during setup or explicitly choose Add Children Later.',
       },
       {
         title: 'Will My Family Records Be Posted To The Community?',
         description:
-          'No. Your family records and your community contributions are separate. Creating a profile, journal entry, or observation does not publish a community post. Only share what you intend others to see.',
+          'No. Your profiles, journal, observations, documents, Goals, Goal attachments, and applications are private to your account. Creating or updating a family record does not publish a community post. You choose what to share in the community.',
+      },
+      {
+        title: 'Are State Benefits Verified Programs?',
+        description:
+          'Not yet. State Benefits currently shows mock program examples based on your saved state, covering all 50 states and DC. It does not assess eligibility or match by county, age, income, or diagnosis. Use the linked agency resources to confirm current programs, qualifications, and availability.',
+      },
+      {
+        title: 'Does The Tracker Submit Applications For Me?',
+        description:
+          'No. You record your own applications, statuses, and follow-up dates. Entries can cover your family or link to one child. My Path highlights pending follow-ups with days remaining or overdue indicators; the tracker does not submit applications, sync with agencies, or send automatic reminders.',
+      },
+      {
+        title: 'How Are Goals Different From Milestones?',
+        description:
+          'Goals are private plans you create for one child, with Active, Completed, or Archived status, dated progress notes, and up to ten photo, video, or PDF attachments. Milestones provide shared guidance where you can record your child’s observations. Neither is a clinical assessment.',
+      },
+      {
+        title: 'Do Discovery Preferences Change What I See?',
+        description:
+          'No. We currently save the approaches you select to understand families’ interests. Your choices do not filter content or change recommendations. You can choose No Preference and edit your selections later in Family Preferences.',
       },
       {
         title: 'Is This Medical Or Developmental Advice?',
@@ -8684,7 +8763,7 @@ export const gentlePathLandingStrings = {
       {
         title: 'Where Should I Start?',
         description:
-          'Start small. Add a child’s profile, write one reflection, or explore a guide. There’s no checklist to finish and no pace to keep up with.',
+          'After creating an account, complete a few setup steps: choose your state, add children or select Add Children Later, and choose your discovery preferences or No Preference. Then start with one useful thing: a Goal, an application, a reflection, or a guide.',
       },
     ],
   },
@@ -8723,6 +8802,7 @@ export const gentlePathWorkspaceStrings = {
     editorial: 'Guides And Resources',
     milestoneAdmin: 'Milestones And Tips',
     commercial: 'Sponsors And Campaigns',
+    // @title-case: Navigation action, not supporting help text.
     help: 'Help And Policies',
   },
 } as const;
@@ -8996,10 +9076,10 @@ export const gentlePathDocumentStrings = {
   personalOption: 'My Personal Documents',
   personalLabel: 'Personal',
   saveAction: 'Save Details',
-  cancelAction: 'Cancel',
+  cancelAction: commonActionStrings.cancel,
   cancelUploadAction: 'Cancel Upload',
   editAction: 'Edit Details',
-  actionsLabel: (title: string) => `Actions For ${title}`,
+  actionsLabel: commonActionStrings.actionsFor,
   downloadAction: 'Download',
   previewAction: 'Show Preview',
   deleteAction: 'Delete Document',
@@ -9019,8 +9099,8 @@ export const gentlePathDocumentStrings = {
     'Your selection and details are still here. Check your vault before retrying if the upload had already reached the server.',
   searchLabel: 'Search Documents',
   searchPlaceholder: 'Search document titles',
-  clearAction: 'Clear Search',
-  clearFiltersAction: 'Clear Filters',
+  clearAction: commonActionStrings.clearSearch,
+  clearFiltersAction: commonActionStrings.clearFilters,
   emptyTitle: 'A Place For The Important Paperwork',
   emptyHint:
     'Add your first care plan, school report, or helpful family document. You can organize it as you go.',
@@ -9137,7 +9217,7 @@ export const gentlePathCommunityStrings = {
     'We could not save your feed preference. Allow browser storage and try again.',
   search: 'Search Posts',
   searchPlaceholder: 'Search stories and questions',
-  clear: 'Clear Search',
+  clear: commonActionStrings.clearSearch,
   view: 'Show',
   allPosts: 'All Posts',
   mine: 'My Posts',
@@ -9149,16 +9229,16 @@ export const gentlePathCommunityStrings = {
   noResultsTitle: 'No Matching Posts',
   noResultsHint:
     'Try another search or clear your filters to see more conversations.',
-  clearFilters: 'Clear Filters',
+  clearFilters: commonActionStrings.clearFilters,
   viewPost: 'Join The Conversation',
   unavailableTitle: 'Post Unavailable',
   unavailableHint: 'This post may have been removed or is no longer available.',
   pausedTitle: 'Community Is Read-Only',
   pausedDescription:
     'Posting, comments, reactions, and new reports are temporarily paused. You can still browse conversations and your reports.',
-  cancel: 'Cancel',
-  edit: 'Edit',
-  delete: 'Delete',
+  cancel: commonActionStrings.cancel,
+  edit: commonActionStrings.edit,
+  delete: commonActionStrings.delete,
   editPost: 'Edit Post',
   deletePost: 'Delete Post',
   deletePostTitle: 'Delete This Post?',
@@ -9183,6 +9263,7 @@ export const gentlePathCommunityStrings = {
     'Use a direct video file, a youtu.be or YouTube Shorts link, or a Vimeo link. Supported players load when you choose.',
   attachmentKind: 'Type',
   attachmentUrl: 'Public URL',
+  // @title-case: Field label for the attachment's descriptive text.
   attachmentDescription: 'Description',
   attachmentDescriptionPlaceholder: 'Describe this image, video, or link',
   attachmentKinds: { IMAGE: 'Image', VIDEO: 'Video', LINK: 'Link' },
@@ -9265,7 +9346,7 @@ export const gentlePathCommunityStrings = {
   reportStatus: 'Status',
   allReportStatuses: 'All Statuses',
   statuses: {
-    open: 'Open',
+    open: commonActionStrings.open,
     in_review: 'In Review',
     resolved: 'Resolved',
     dismissed: 'Dismissed',
@@ -9322,26 +9403,22 @@ export const gentlePathCommunityStrings = {
       {
         title: 'A Quieter Way To Start The School Day',
         body: 'We tried arriving a few minutes early and taking the same small path to the classroom. The predictable start made this week feel a little easier. What has helped your mornings?',
-        // @preserve-case: Community tags retain their authored data spelling.
-        tags: ['school', 'routines'],
+        tags: ['School', 'Routines'],
       },
       {
         title: 'Celebrating A Small Win At The Park',
         body: 'Today we stayed at the park long enough for one turn on the swing. We followed our child’s pace and left while everyone still felt comfortable. I wanted to share this little moment with people who understand.',
-        // @preserve-case: Community tags retain their authored data spelling.
-        tags: ['small wins', 'everyday'],
+        tags: ['Small Wins', 'Everyday'],
       },
       {
         title: 'What Helps When Plans Change?',
         body: 'We are practicing small changes to our afternoon routine. A picture of the new plan seems to help, but some days are harder than others. I would love to hear what other families find useful.',
-        // @preserve-case: Community tags retain their authored data spelling.
-        tags: ['routines', 'communication'],
+        tags: ['Routines', 'Communication'],
       },
       {
         title: 'Finding A Moment To Recharge',
         body: 'I took a short walk after bedtime yesterday. Nothing on my list got done during those ten minutes, but I came back with a little more room to breathe. How do you make space for yourself?',
-        // @preserve-case: Community tags retain their authored data spelling.
-        tags: ['wellbeing'],
+        tags: ['Wellbeing'],
       },
     ],
     // @sentence-case: Community comments retain natural prose.
@@ -9380,13 +9457,13 @@ export const gentlePathPollStrings = {
   deleted: 'Poll Deleted',
   created: 'Poll Created',
   updated: 'Poll Updated',
-  cancel: 'Cancel',
-  save: 'Save Changes',
+  cancel: commonActionStrings.cancel,
+  save: commonActionStrings.saveChanges,
   back: 'Back To Polls',
   search: 'Search Polls',
   searchPlaceholder: 'Search questions and descriptions',
-  clear: 'Clear Search',
-  clearFilters: 'Clear Filters',
+  clear: commonActionStrings.clearSearch,
+  clearFilters: commonActionStrings.clearFilters,
   clearTag: 'Clear Tag',
   view: 'View',
   allPolls: 'All Polls',
@@ -9542,7 +9619,7 @@ export const gentlePathPollStrings = {
 };
 
 export const gentlePathEditorialStrings = {
-  guideActionsLabel: (title: string) => `Actions For ${title}`,
+  guideActionsLabel: commonActionStrings.actionsFor,
   guidesTitle: 'Guided Steps',
   guidesDescription:
     'Practical ideas, one step at a time. Explore at your own pace and choose what fits your family.',
@@ -9584,7 +9661,7 @@ export const gentlePathEditorialStrings = {
     `“${title}” will be removed from guided steps.`,
   deleteResourceDescription: (title: string) =>
     `“${title}” will be removed from the library. If it is a collection, its nested resources will also become unavailable.`,
-  cancel: 'Cancel',
+  cancel: commonActionStrings.cancel,
   savedTitle: 'Changes Saved',
   savedDescription: 'The updated content is available to members.',
   deletedTitle: 'Content Deleted',
@@ -9667,10 +9744,10 @@ export const gentlePathEditorialStrings = {
   emptyResourcesHint: 'Create a resource or a collection to get started.',
   noResultsTitle: 'No Matching Content',
   noResultsHint: 'Try another search or clear your filters.',
-  clearFilters: 'Clear Filters',
-  searchLabel: 'Search',
+  clearFilters: commonActionStrings.clearFilters,
+  searchLabel: commonActionStrings.search,
   searchPlaceholder: 'Search titles and descriptions',
-  clearSearch: 'Clear Search',
+  clearSearch: commonActionStrings.clearSearch,
   allTypes: 'All Resource Types',
   guideTableCaption: 'Guided Steps Directory',
   resourceTableCaption: 'Resource Directory',
@@ -9906,7 +9983,7 @@ export const gentlePathMilestoneAdminStrings = {
   // @sentence-case: Supporting instruction, validation, or descriptive count.
   observationNotesError: 'Use up to 20,000 characters for notes.',
   observationLoad: 'Loading Private Observations',
-  retry: 'Try Again',
+  retry: commonActionStrings.tryAgain,
   browseMilestoneTips: 'Browse Tips',
   milestonesTitle: 'Milestone Guidance',
   milestonesDescription:
@@ -9915,6 +9992,7 @@ export const gentlePathMilestoneAdminStrings = {
   newMilestone: 'New Milestone',
   editMilestone: 'Edit Milestone',
   guidanceTitle: 'Guidance',
+  // @title-case: Action that opens milestone guidance.
   readGuidance: 'Read Guidance',
   guidanceDescription:
     'Keep descriptions clear and factual. Recorded observations belong to each family.',
@@ -9951,7 +10029,7 @@ export const gentlePathMilestoneAdminStrings = {
   hideMilestoneDescription: (name: string) =>
     `Hide “${name}” from guidance, tips, and observations? Retained history is preserved, but related records become unavailable.`,
   hiddenMilestone: 'Milestone Hidden',
-  cancel: 'Cancel',
+  cancel: commonActionStrings.cancel,
   backMilestones: 'Back To Milestones',
   tipsTitle: 'Family Tips',
   tipsDescription:
@@ -9961,7 +10039,7 @@ export const gentlePathMilestoneAdminStrings = {
   submitTip: 'Submit Tip',
   editTip: 'Edit Tip',
   readTip: 'Read Tip',
-  close: 'Close',
+  close: commonActionStrings.close,
   saveTip: 'Save Tip',
   tipFormDescription:
     'Share your own experience. A staff member reviews every submission before it appears to other families.',
@@ -10027,13 +10105,13 @@ export const gentlePathMilestoneAdminStrings = {
   emptyReviewTitle: 'No Matching Submissions',
   emptyReviewDescription:
     'Try another review status or return when a family submits a tip.',
-  searchLabel: 'Search',
+  searchLabel: commonActionStrings.search,
   // @sentence-case: Supporting instruction, validation, or descriptive count.
   searchMilestones: 'Search milestone guidance',
   // @sentence-case: Supporting instruction, validation, or descriptive count.
   searchTips: 'Search family tips',
-  clearSearch: 'Clear Search',
-  resetFilters: 'Clear Filters',
+  clearSearch: commonActionStrings.clearSearch,
+  resetFilters: commonActionStrings.clearFilters,
   statusLabel: 'Status',
   allStatuses: 'All Statuses',
   allMilestones: 'All Milestones',
@@ -10101,7 +10179,7 @@ export const gentlePathEngagementStrings = {
   searchPlaceholder: 'Search titles and previews…',
   typeLabel: 'Content Type',
   allTypes: 'All Content',
-  clear: 'Clear Search',
+  clear: commonActionStrings.clearSearch,
   types: {
     RESOURCE: 'Resource',
     BLOG: 'Journal Article',
@@ -10116,7 +10194,7 @@ export const gentlePathEngagementStrings = {
   save: 'Save',
   saved: 'Saved',
   unsave: 'Unsave',
-  actionsLabel: (title: string) => `Actions For ${title}`,
+  actionsLabel: commonActionStrings.actionsFor,
   savedTitle: 'Content Saved',
   removedTitle: 'Content Removed',
   removeSavedTitle: 'Remove Saved Content?',
@@ -10149,7 +10227,7 @@ export const gentlePathEngagementStrings = {
   paginationLabel: 'Saved Content Pages',
   rangeDescription: (from: number, to: number) =>
     `Showing ${from}–${to} saved items`,
-  retry: 'Try Again',
+  retry: commonActionStrings.tryAgain,
   ratingTitle: 'Rate This Resource',
   ratingDescription:
     'Share how useful this resource was for you. You can change or remove your rating at any time.',
@@ -10197,14 +10275,14 @@ export const gentlePathAccountToolsStrings = {
   common: {
     accountEyebrow: 'Your Account',
     operationsEyebrow: 'Platform Operations',
-    cancelAction: 'Cancel',
-    closeAction: 'Close',
-    clearAction: 'Clear Search',
-    clearFiltersAction: 'Clear Filters',
+    cancelAction: commonActionStrings.cancel,
+    closeAction: commonActionStrings.close,
+    clearAction: commonActionStrings.clearSearch,
+    clearFiltersAction: commonActionStrings.clearFilters,
     refreshAction: 'Refresh',
-    saveAction: 'Save Changes',
-    editAction: 'Edit',
-    deleteAction: 'Delete',
+    saveAction: commonActionStrings.saveChanges,
+    editAction: commonActionStrings.edit,
+    deleteAction: commonActionStrings.delete,
     actionsColumn: 'Actions',
     createdColumn: 'Created',
     updatedColumn: 'Last Updated',
@@ -10330,6 +10408,7 @@ export const gentlePathAccountToolsStrings = {
       UNKNOWN: 'Unknown',
     },
   },
+  // @title-case: Help-screen titles, tabs, and labels; prose is scoped by its own keys.
   help: {
     title: 'Help And Legal Information',
     description:
@@ -10412,8 +10491,8 @@ export const gentlePathCommercialStrings = {
   preview: 'Serving Preview',
   create: 'Create Record',
   edit: 'Edit Record',
-  save: 'Save Changes',
-  cancel: 'Cancel',
+  save: commonActionStrings.saveChanges,
+  cancel: commonActionStrings.cancel,
   back: 'Back To Commercial Features',
   backDiscounts: 'Back To Family Discounts',
   delete: 'Delete Record',
@@ -10429,9 +10508,9 @@ export const gentlePathCommercialStrings = {
   reviewedTitle: 'Review Saved',
   verifiedTitle: 'Verification Saved',
   enabledTitle: 'Enablement Saved',
-  search: 'Search',
+  search: commonActionStrings.search,
   searchPlaceholder: 'Search names, titles, or descriptions',
-  clear: 'Clear Search',
+  clear: commonActionStrings.clearSearch,
   category: 'Category',
   allCategories: 'All Categories',
   status: 'Status',
@@ -10443,7 +10522,7 @@ export const gentlePathCommercialStrings = {
   loadingTitle: 'Loading Records',
   errorTitle: 'Unable To Load Records',
   errorHint: 'Try again. Your unsaved entries remain on this page.',
-  retry: 'Try Again',
+  retry: commonActionStrings.tryAgain,
   directoryCaption: 'Commercial Records',
   pagination: 'Commercial Pages',
   range: (from: number, to: number) => `${from}–${to}`,
@@ -10747,8 +10826,8 @@ export const gentlePathNotificationInboxStrings = {
   readStatuses: { unread: 'Unread', read: 'Read' },
   searchLabel: 'Search Notifications',
   searchPlaceholder: 'Search titles and messages',
-  clearSearchAction: 'Clear Search',
-  clearFiltersAction: 'Clear Filters',
+  clearSearchAction: commonActionStrings.clearSearch,
+  clearFiltersAction: commonActionStrings.clearFilters,
   categoryLabel: 'Category',
   allCategories: 'All Categories',
   readLabel: 'Read Status',
@@ -10774,7 +10853,7 @@ export const gentlePathNotificationInboxStrings = {
     'Archive every notification currently in your inbox, across all pages? Restoring archived notifications is not available.',
   archiveMatchingDescription:
     'Archive every notification matching the current search, category, and read status, across all pages? Restoring archived notifications is not available.',
-  cancelAction: 'Cancel',
+  cancelAction: commonActionStrings.cancel,
   openAction: 'Open Update',
   readChangedTitle: 'Read Status Updated',
   archivedTitle: 'Notifications Archived',
@@ -11016,3 +11095,497 @@ export const gentlePathHelpFaqSections = [
     ],
   },
 ] as const;
+
+export const gentlePathApplicationStrings = {
+  title: 'Services & Applications',
+  description:
+    'Keep your applications, decisions, and next steps together. You control every update.',
+  // @sentence-case: Supporting prose and validation remain sentence case.
+  privacy:
+    'Private to your account. This tracker does not submit applications or sync agency decisions.',
+  newAction: 'Add Application',
+  editAction: 'Edit Application',
+  viewAction: 'View Application',
+  backAction: 'All Applications',
+  saveAction: 'Save Application',
+  cancelAction: commonActionStrings.cancel,
+  deleteAction: 'Delete Application',
+  deleteTitle: 'Delete Application?',
+  deleteDescription: (title: string) =>
+    `Delete “${title}” and its follow ups from your tracker?`,
+  savedTitle: 'Application Saved',
+  deletedTitle: 'Application Deleted',
+  emptyTitle: 'Your Next Step Starts Here',
+  emptyHint:
+    'Add a service or benefit application and record what happens next.',
+  noResultsTitle: 'No Applications Found',
+  noResultsHint: 'Try another search or status.',
+  searchLabel: 'Search Applications',
+  searchPlaceholder: 'Search by title',
+  statusLabel: 'Status',
+  allStatuses: 'All Statuses',
+  clearAction: 'Clear',
+  clearFiltersAction: commonActionStrings.clearFilters,
+  childLabel: 'For',
+  personalOption: 'My Account',
+  allChildren: 'All Family Records',
+  titleLabel: 'Application Title',
+  providerLabel: 'Provider Or Agency',
+  programLabel: 'Benefit Program',
+  noProgram: 'No Linked Program',
+  notesLabel: 'Notes',
+  appliedLabel: 'Applied On',
+  referenceLabel: 'Reference Number',
+  // @sentence-case: Supporting prose and validation remain sentence case.
+  referenceEmpty: 'No reference recorded',
+  // @sentence-case: Supporting prose and validation remain sentence case.
+  providerEmpty: 'No provider recorded',
+  // @sentence-case: Supporting prose and validation remain sentence case.
+  notesEmpty: 'No notes yet.',
+  // @sentence-case: Supporting prose and validation remain sentence case.
+  appliedEmpty: 'Application date not recorded',
+  programAction: 'Program Website',
+  formDescription:
+    'Record what you know now. You can correct the status and details at any time.',
+  followUpsTitle: 'Follow Ups',
+  followUpsDescription:
+    'Set a date to check progress, call a provider, or gather information.',
+  // @sentence-case: Supporting prose and validation remain sentence case.
+  followUpsEmpty: 'No follow ups yet.',
+  followUpAdd: 'Add Follow Up',
+  followUpEdit: 'Edit Follow Up',
+  followUpSave: 'Save Follow Up',
+  followUpDelete: 'Delete Follow Up',
+  followUpDeleteTitle: 'Delete Follow Up?',
+  followUpDeleteDescription:
+    'This removes the follow up from your application and priority list.',
+  followUpSaved: 'Follow Up Saved',
+  followUpDeleted: 'Follow Up Deleted',
+  dueLabel: 'Due On',
+  completeAction: 'Complete',
+  reopenAction: 'Mark Pending',
+  completedLabel: 'Completed',
+  completedTitle: 'Follow Up Completed',
+  reopenedTitle: 'Follow Up Reopened',
+  priorityTitle: 'Priority Follow Ups',
+  priorityDescription:
+    'Your next steps, ordered by due date across all your applications.',
+  priorityViewAll: commonActionStrings.viewAll,
+  priorityEmptyTitle: 'No Pending Follow Ups',
+  priorityEmptyHint: 'Follow ups you add to an application will appear here.',
+  paginationLabel: 'Applications Pagination',
+  priorityPaginationLabel: 'Follow Ups Pagination',
+  rangeDescription: (start: number, end: number) => `${start}–${end}`,
+  dueDescription: (days: number) =>
+    days < 0
+      ? `${Math.abs(days)} ${Math.abs(days) === 1 ? 'Day' : 'Days'} Overdue`
+      : days === 0
+        ? 'Due Today'
+        : `${days} ${days === 1 ? 'Day' : 'Days'} Left`,
+  dateDescription: (date: string) =>
+    new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+      timeZone: 'UTC',
+    }).format(new Date(`${date}T00:00:00.000Z`)),
+  statuses: {
+    DRAFT: 'Draft',
+    APPLIED: 'Applied',
+    WAITLISTED: 'Waitlisted',
+    APPROVED: 'Approved',
+    DENIED: 'Denied',
+    WITHDRAWN: 'Withdrawn',
+  },
+  // @sentence-case: Supporting prose and validation remain sentence case.
+  validation: {
+    title: 'Enter an application title.',
+    date: 'Enter a valid calendar date.',
+    limit: 'Keep this value within the allowed length.',
+    url: 'Enter a valid HTTP or HTTPS link.',
+    conflict:
+      'This record changed. Reload the latest version before saving your corrections.',
+    invalidChild: 'Choose an active child from your own account.',
+    unavailable: 'This application is no longer available.',
+    program: 'Choose a recognized benefit program.',
+  },
+  reloadAction: 'Reload Latest Version',
+  demo: {
+    applicationTitle: 'Early Support Intake',
+    provider: 'Family Support Team',
+    // @sentence-case: Sample private notes are supporting prose.
+    notes: 'Keep intake notes and questions here while waiting for a decision.',
+    // @sentence-case: Sample private notes are supporting prose.
+    followUpOverdue: 'Call to confirm the intake documents were received.',
+    // @sentence-case: Sample private notes are supporting prose.
+    followUpToday: 'Check the provider portal for an update.',
+    // @sentence-case: Sample private notes are supporting prose.
+    followUpUpcoming: 'Prepare questions for the next appointment.',
+  },
+} as const;
+
+export const gentlePathOnboardingStrings = {
+  eyebrow: 'Your Family, Your Pace',
+  privateLabel: 'A Private Family Space',
+  footerHint: 'A few small details. A space that feels more like you.',
+  storyTitles: {
+    STATE: 'Support Starts Close To Home.',
+    CHILDREN: 'Room For Each Little Story.',
+    DISCOVERY: 'More Than One Way To Grow.',
+    FINISH: 'Your Own Path Starts Here.',
+    COMPLETE: 'Your Own Path Starts Here.',
+  },
+  storyDescriptions: {
+    STATE:
+      'Every family finds its own way. Let’s start with where yours calls home.',
+    CHILDREN:
+      'Their favorite things, their small wins, their own pace. Make a little room for each child.',
+    DISCOVERY:
+      'There is room for curiosity. Tell us what you are interested in exploring.',
+    FINISH:
+      'You have made a little space for your family. The next step is yours to choose.',
+    COMPLETE:
+      'You have made a little space for your family. The next step is yours to choose.',
+  },
+  formTitles: {
+    STATE: 'Where Do You Call Home?',
+    CHILDREN: 'Who’s Growing With You?',
+    DISCOVERY: 'What Are You Curious About?',
+    FINISH: 'Make Yourself At Home.',
+    COMPLETE: 'Make Yourself At Home.',
+  },
+  artworkAlt: {
+    STATE:
+      'A sage map of the United States with a lilac location pin, leafy branches, and a small warm sun',
+    CHILDREN:
+      'A parent and child sharing a picture book among soft sage and lavender shapes',
+    DISCOVERY:
+      'A folded ivory guide with a winding route, two check marks, a sprout, and sage leaves',
+    FINISH: 'A small sprout growing beside stepping stones and a warm sun',
+    COMPLETE: 'A small sprout growing beside stepping stones and a warm sun',
+  },
+  progressStates: {
+    complete: 'Complete',
+    current: 'Current Step',
+    upcoming: 'Coming Up',
+  },
+  // @sentence-case: Supporting guidance below the state field.
+  stateNote: 'Just your state. No street address needed.',
+  childEmptyHint:
+    'Start with a name and birthday. The little details can come later.',
+  // @sentence-case: Supporting guidance below child profile actions.
+  childrenNote: 'You can add more children and update their profiles anytime.',
+  // @sentence-case: Supporting guidance beside the final review.
+  reviewNote:
+    'Your state and interests can be updated later in Family Preferences.',
+  childSummary: (count: number) =>
+    `${count} ${count === 1 ? 'Child Profile' : 'Child Profiles'}`,
+  approachDescriptions: {
+    CONVENTIONAL: 'Established care and familiar support options.',
+    HOLISTIC: 'Whole-family wellbeing and everyday routines.',
+    FUNCTIONAL: 'Connections across different areas of wellbeing.',
+    INTEGRATIVE: 'A mix of approaches that fits your family.',
+    EMERGING: 'New ideas and areas you want to learn about.',
+  },
+  title: 'A Little About Your Family',
+  description:
+    'Set up your account in a few small steps. Your progress is saved as you go.',
+  steps: {
+    STATE: 'Your State',
+    CHILDREN: 'Your Children',
+    DISCOVERY: 'Discovery Preferences',
+    FINISH: 'Ready To Begin',
+    COMPLETE: 'Setup Complete',
+  },
+  state: 'State',
+  chooseState: 'Choose Your State',
+  stateHint:
+    'We use your state to show sample state benefit programs. You can change it in Settings.',
+  childrenHint:
+    'Create a profile for each child, or add them later. There is no rush to fill everything in.',
+  addChildrenLater: 'Add Children Later',
+  childrenAdded: 'Continue With My Children',
+  discoveryHint:
+    'Which approaches would you like to explore? These choices are saved to your profile and do not change the content you see yet.',
+  approachLabels: {
+    CONVENTIONAL: 'Conventional',
+    HOLISTIC: 'Holistic',
+    FUNCTIONAL: 'Functional',
+    INTEGRATIVE: 'Integrative',
+    EMERGING: 'Emerging',
+  },
+  noPreference: 'No Preference',
+  noPreferenceHint:
+    'Keep an open starting point without selecting an approach.',
+  continue: commonActionStrings.continue,
+  back: commonActionStrings.back,
+  finish: 'Finish Setup',
+  welcome: {
+    eyebrow: 'Welcome To GentlePath',
+    title: 'You’re Not Alone.',
+    description:
+      'There’s a community of parents and caregivers here to listen, share, and help you find your next step. We’re glad you’re here.',
+    artAlt:
+      'Three caregivers sharing a warm conversation among sage and lavender leaves',
+    // @sentence-case: Confirmation after successful account setup.
+    saved: 'Your setup is saved. Make yourself at home.',
+    continue: 'Let’s Get Started',
+  },
+  finishHint:
+    'Your state and discovery preferences are saved. You can update them anytime in Settings.',
+  // @sentence-case: Supporting prose or validation.
+  finishChildrenLater:
+    'You chose to add children later. Your family profiles will be here when you are ready.',
+  // @sentence-case: Supporting prose or validation.
+  completed: 'Your setup is complete.',
+  openDashboard: 'Open My Dashboard',
+  progress: (current: number, total: number) => `Step ${current} Of ${total}`,
+  selectedState: (name: string) => `Your State: ${name}`,
+  preferencesTitle: 'Family Preferences',
+  preferencesDescription:
+    'Update your state and the approaches you are interested in exploring.',
+  save: 'Save Preferences',
+  // @sentence-case: Supporting prose or validation.
+  saved: 'Your preferences were saved.',
+  // @sentence-case: Supporting prose or validation.
+  invalidSelection:
+    'Select at least one approach or explicitly choose no preference.',
+  // @sentence-case: Supporting prose or validation.
+  duplicateSelection: 'Each approach can be selected only once.',
+  // @sentence-case: Supporting prose or validation.
+  previousStep: 'Complete the previous setup step first.',
+  // @sentence-case: Supporting prose or validation.
+  childrenRequired: 'Add a child or explicitly choose to add children later.',
+  // @sentence-case: Supporting prose or validation.
+  incomplete: 'Complete every setup step before finishing.',
+  // @preserve-case: Demo identity address.
+  onboardingDemoEmail: 'onboarding@gentlepath.demo',
+  demoPreset: 'Onboarding Demo',
+  restartDemo: 'Restart Setup For This Demo Account',
+  restartDemoHint:
+    'After signing in, clear this demo account’s setup progress and private family activity. Other accounts keep their data.',
+  // @sentence-case: Supporting prose or validation.
+  restartDemoFailed: 'Unable to restart the onboarding demo. Try again.',
+  demoFirstName: 'New',
+  demoLastName: 'Family',
+} as const;
+
+export const gentlePathStateBenefitsStrings = {
+  title: 'State Benefits',
+  description: 'A starting point for exploring support in your saved state.',
+  sampleLabel: 'Sample Program',
+  imageAlt: (name: string) => `Illustration for ${name}`,
+  sampleNotice:
+    'These are mock program examples, not verified benefits or eligibility decisions. Confirm current programs, rules, and availability with the administering agency.',
+  noStateTitle: 'Choose Your State',
+  noStateHint:
+    'Save your state in Family Preferences to see sample programs for your area.',
+  preferences: 'Edit Family Preferences',
+  emptyTitle: 'No Programs To Show',
+  emptyHint:
+    'There are no sample programs to show in this view. Your saved state has not changed.',
+  viewProgram: 'View Program',
+  benefits: 'Possible Support',
+  qualifications: 'What To Confirm',
+  visitProgram: 'Visit Program Website',
+  trackApplication: 'Track An Application',
+  back: 'Back To State Benefits',
+  categories: {
+    HEALTHCARE: 'Healthcare',
+    EARLY_SUPPORT: 'Early Support',
+    FAMILY_SUPPORT: 'Family Support',
+  },
+  programName: (state: string, title: string) => `${state} ${title}`,
+  templates: [
+    {
+      // @preserve-case: Stable API program key.
+      key: 'medicaid',
+      title: 'Healthcare Support',
+      description:
+        'A sample starting point for exploring state healthcare coverage and support.',
+      // @sentence-case: Explanatory program examples.
+      benefits: [
+        'Explore coverage options',
+        'Find the state agency responsible for healthcare support',
+      ],
+      // @sentence-case: Explanatory criteria.
+      qualifications: [
+        'State residency may be required',
+        'Income, disability, and household criteria vary; confirm with the administering agency',
+      ],
+      // @preserve-case: External destination URL.
+      program_url: 'https://www.usa.gov/medicaid-chip-insurance',
+      category: 'HEALTHCARE',
+    },
+    {
+      // @preserve-case: Stable API program key.
+      key: 'early-intervention',
+      title: 'Early Support',
+      description:
+        'A sample guide to finding state developmental and early support services.',
+      // @sentence-case: Explanatory program examples.
+      benefits: [
+        'Find developmental support contacts',
+        'Learn about assessment and family support pathways',
+      ],
+      // @sentence-case: Explanatory criteria.
+      qualifications: [
+        'State residency may be required',
+        'Age and service criteria vary; this sample does not determine eligibility',
+      ],
+      // @preserve-case: External destination URL.
+      program_url:
+        'https://www.cdc.gov/act-early/early-intervention/contact-information-by-state.html',
+      category: 'EARLY_SUPPORT',
+    },
+    {
+      // @preserve-case: Stable API program key.
+      key: 'family-support',
+      title: 'Family Support',
+      description:
+        'A sample starting point for exploring practical assistance for families.',
+      // @sentence-case: Explanatory program examples.
+      benefits: [
+        'Explore family assistance options',
+        'Prepare questions for a state support agency',
+      ],
+      // @sentence-case: Explanatory criteria.
+      qualifications: [
+        'State residency may be required',
+        'Household and program criteria must be confirmed with the administering agency',
+      ],
+      // @preserve-case: External destination URL.
+      program_url: 'https://www.usa.gov/benefits',
+      category: 'FAMILY_SUPPORT',
+    },
+  ],
+} as const;
+
+export const gentlePathGoalStrings = {
+  title: 'Goals',
+  // @sentence-case: Supporting prose and validation.
+  description:
+    'Small steps, at your family’s pace. Keep your child’s goals and progress in one private place.',
+  newGoal: 'New Goal',
+  editGoal: 'Edit Goal',
+  viewGoal: 'View Goal',
+  titleLabel: 'Goal Title',
+  descriptionLabel: 'Description',
+  child: 'Child',
+  chooseChild: 'Choose A Child',
+  allChildren: 'All Children',
+  status: 'Status',
+  allStatuses: 'All Statuses',
+  search: 'Search Goals',
+  searchPlaceholder: 'Find a goal title or description…',
+  clearSearch: commonActionStrings.clearSearch,
+  active: 'Active',
+  completed: 'Completed',
+  archived: 'Archived',
+  complete: 'Mark Complete',
+  reopen: 'Reopen Goal',
+  archive: 'Archive Goal',
+  remove: 'Delete Goal',
+  save: 'Save Goal',
+  cancel: commonActionStrings.cancel,
+  back: 'Back To Goals',
+  emptyTitle: 'A Small Step Starts Here',
+  // @sentence-case: Supporting prose and validation.
+  emptyDescription:
+    'Create a goal for your child and celebrate progress in your own way.',
+  noChildrenTitle: 'Add A Child To Begin',
+  // @sentence-case: Supporting prose and validation.
+  noChildrenDescription:
+    'Goals belong to a child. Add a child profile before creating your first goal.',
+  manageChildren: 'Manage Children',
+  noMatches: 'No Goals Found',
+  loading: 'Loading Goals…',
+  retry: commonActionStrings.tryAgain,
+  errorTitle: 'Goals Could Not Be Loaded',
+  // @sentence-case: Supporting prose and validation.
+  error:
+    'We could not finish that request. Your draft is still here. Please try again.',
+  // @sentence-case: Supporting prose and validation.
+  notFound: 'This goal is unavailable.',
+  private: 'Private To Your Family',
+  saved: 'Goal Saved',
+  deleted: 'Goal Deleted',
+  deleteTitle: 'Delete This Goal?',
+  // @sentence-case: Supporting prose and validation.
+  deleteDescription:
+    'This removes the goal, its progress notes, and its attachments. This action cannot be undone.',
+  keepGoal: 'Keep Goal',
+  archiveTitle: 'Archive This Goal?',
+  // @sentence-case: Supporting prose and validation.
+  archiveDescription:
+    'Your notes and attachments will stay with this goal. You can reopen it anytime.',
+  keepActive: 'Keep Current Status',
+  attachments: 'Attachments',
+  // @sentence-case: Supporting prose and validation.
+  attachmentHelp:
+    'Up to 10 files. JPEG, PNG, WebP, and PDF up to 10 MiB each; MP4 and MOV up to 100 MiB each. Videos stay in their original format.',
+  addFiles: 'Add Files',
+  cover: 'Cover Image',
+  noCover: 'No Cover Image',
+  setCover: 'Use As Cover',
+  removeFile: 'Remove File',
+  reorder: 'Reorder Attachments',
+  // @sentence-case: Explains child ownership restriction.
+  childLocked: 'Remove attachments before changing the child.',
+  moveUp: 'Move Up',
+  moveDown: 'Move Down',
+  download: 'Download',
+  preview: commonActionStrings.preview,
+  closePreview: 'Close Preview',
+  upload: 'Upload',
+  uploading: 'Uploading…',
+  verifying: 'Verifying…',
+  // @sentence-case: Supporting prose and validation.
+  uploadFailed: 'Upload failed. Your file is ready to retry.',
+  cancelUpload: 'Cancel Upload',
+  retryUpload: 'Retry Upload',
+  // @sentence-case: Supporting prose and validation.
+  attachmentLimit: 'A goal can have at most 10 attachments.',
+  // @sentence-case: Supporting prose and validation.
+  invalidFile: 'Choose a supported file within the size limit.',
+  // @sentence-case: Supporting prose and validation.
+  invalidGoal: 'Choose a child and enter a goal title of 1–160 characters.',
+  // @sentence-case: Supporting prose and validation.
+  invalidAttachment:
+    'These attachments are unavailable for this child or goal.',
+  // @sentence-case: Supporting prose and validation.
+  invalidNote: 'Enter a progress note and a valid date.',
+  // @sentence-case: Supporting prose and validation.
+  draftExpired: 'The upload draft has expired. Please upload that file again.',
+  notes: 'Progress Notes',
+  addNote: 'Add Progress Note',
+  editNote: 'Edit Note',
+  deleteNote: 'Delete Note',
+  noteLabel: 'Progress Note',
+  noteDate: 'Date And Time',
+  saveNote: 'Save Note',
+  // @sentence-case: Supporting prose and validation.
+  noNotes: 'Notice a small win? Add your first progress note.',
+  noteSaved: 'Progress Note Saved',
+  noteDeleted: 'Progress Note Deleted',
+  deleteNoteTitle: 'Delete This Progress Note?',
+  deleteNoteDescription:
+    'This removes the selected note. This action cannot be undone.',
+  keepNote: 'Keep Note',
+  demoGoalTitle: 'Feel Comfortable Trying A New Activity',
+  // @sentence-case: Supporting prose and validation.
+  demoGoalDescription:
+    'Follow our child’s lead, offer a familiar comfort item, and celebrate each small step.',
+  demoCompletedTitle: 'Build A Calming Bedtime Routine',
+  demoArchivedTitle: 'Practice Asking For A Break',
+  // @sentence-case: Supporting prose and validation.
+  demoNote:
+    'Tried a short activity together and took a break when needed. A small step forward.',
+  progress: (value: number) => `${value}% Uploaded`,
+  fileSize: (value: number) =>
+    value >= 1024 * 1024
+      ? `${(value / (1024 * 1024)).toFixed(1)} MiB`
+      : `${Math.ceil(value / 1024)} KiB`,
+  attachmentCount: (value: number) =>
+    `${value} ${value === 1 ? 'Attachment' : 'Attachments'}`,
+  noteCount: (value: number) =>
+    `${value} ${value === 1 ? 'Progress Note' : 'Progress Notes'}`,
+};

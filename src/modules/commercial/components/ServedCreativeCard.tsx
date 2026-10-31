@@ -19,13 +19,13 @@ export function ServedCreativeCard({
   const creative = item.creative;
   if (!creative) return null;
   return (
-    <Card className="grid content-start gap-4 overflow-hidden">
+    <Card className="flex h-full flex-col gap-4 overflow-hidden">
       <div className="flex flex-wrap items-center gap-2">
         <Badge intent="warning">{copy.sponsored}</Badge>
         <span className="text-xs text-tertiary">{creative.sponsor?.name}</span>
       </div>
       <div
-        className="grid gap-4 rounded-xl bg-secondary_subtle p-4"
+        className="grid flex-1 content-start gap-4 rounded-xl bg-secondary_subtle p-4"
         style={{ backgroundColor: creative.background_color ?? undefined }}
       >
         {creative.image_url && (

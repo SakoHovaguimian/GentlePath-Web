@@ -21,7 +21,7 @@ export const blogCoverAssets: Record<
   family: '/gentlepath/parent-and-child.png',
   community: '/gentlepath/caregiver-community.png',
   journal: '/gentlepath/care-notes.png',
-  growth: '/gentlepath/growing-together.png',
+  growth: '/gentlepath/growing-together-v2.png',
   folder: '/gentlepath/care-folder.png',
   path: '/gentlepath/winding-path.png',
 };

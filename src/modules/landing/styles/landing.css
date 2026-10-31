@@ -199,6 +199,10 @@
 }
 
 .gp-pillar {
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+  row-gap: 0;
   min-width: 0;
   border-radius: 1.75rem;
   padding: 1.25rem 1.75rem 2rem;
@@ -239,10 +243,11 @@
 }
 
 .gp-pillar-copy {
-  margin-top: 0.75rem;
+  display: contents;
 }
 
 .gp-pillar h3 {
+  margin-top: 0.75rem;
   color: var(--gp-forest);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.65rem;
@@ -488,7 +493,9 @@
 
   .gp-pillar {
     display: grid;
+    grid-row: auto;
     grid-template-columns: 0.8fr 1fr;
+    grid-template-rows: auto;
     align-items: center;
     gap: 1.5rem;
     padding: 1.5rem;
@@ -501,10 +508,12 @@
   }
 
   .gp-pillar-copy {
+    display: block;
     margin-top: 0;
   }
 
   .gp-pillar h3 {
+    margin-top: 0;
     font-size: 1.6rem;
   }
 

@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import { gentlePathLandingStrings as copy } from '@/strings';
 
 const supportIllustrations = [
   '/gentlepath/family-connection.png',
-  '/gentlepath/guided-steps.png',
+  gentlePathIllustrations.guidedSteps,
   '/gentlepath/community-messages.png',
 ] as const;
 

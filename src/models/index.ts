@@ -6,4 +6,3 @@ export * from './dashboard';
 export * from './appearance';
 export * from '@/queries/queryKeys';
 export * from '@/errors/domainErrors';
-export * from '@/utils/errorHandling';

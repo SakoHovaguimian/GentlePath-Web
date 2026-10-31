@@ -36,7 +36,6 @@ Public landing/blog routes stay outside the protected layout. Blog SSR uses publ
 | Backend records, status, cache, invalidation                  | TanStack Query                      |
 | Committed nonprivate filters, selection, paging               | URL                                 |
 | Private journal search, forms, disclosure, pending UI         | Component state                     |
-| Existing dashboard density/chrome                             | Zustand                             |
 | Appearance/motion, consent, per-user push opt-in/registration | Preference services/browser storage |
 | Demo records and credentials                                  | Server-process stores               |
 
