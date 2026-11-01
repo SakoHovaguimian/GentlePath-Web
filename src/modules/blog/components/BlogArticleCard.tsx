@@ -11,13 +11,18 @@ import { BlogDate } from './BlogDate';
 export function BlogArticleCard({
   article,
   headingLevel = 'h2',
+  variant = 'journal',
 }: {
   article: BlogArticle;
   headingLevel?: 'h2' | 'h3';
+  variant?: 'journal' | 'related';
 }) {
   const Heading = headingLevel;
   return (
-    <article className={styles.articleCard} data-cover={article.cover}>
+    <article
+      className={`${styles.articleCard}${variant === 'related' ? ` ${styles.relatedArticleCard}` : ''}`}
+      data-cover={article.cover}
+    >
       <Link
         href={`/blog/${article.slug}`}
         className={styles.cardImage}
@@ -31,7 +36,11 @@ export function BlogArticleCard({
           alt={copy.decorativeAlt}
           width={640}
           height={480}
-          sizes="(max-width: 600px) 32vw, (max-width: 1000px) 28vw, 19vw"
+          sizes={
+            variant === 'related'
+              ? '(max-width: 767px) 100vw, 45vw'
+              : '(max-width: 600px) 32vw, (max-width: 1000px) 28vw, 19vw'
+          }
         />
       </Link>
       <div className={styles.cardCopy}>

@@ -112,6 +112,7 @@ function RelatedPosts({
                     )
                     .map((post) => (
                       <CommunityPostCard
+                        headingLevel="h3"
                         key={post.id}
                         post={post}
                         own={false}
@@ -178,6 +179,7 @@ function RelatedPolls({
             {page.data.length
               ? page.data.map((poll) => (
                   <PollCard
+                    headingLevel="h3"
                     key={poll.id}
                     poll={poll}
                     own={false}
@@ -223,10 +225,15 @@ function RelatedGuides({
     >
       {(page) => (
         <div className="grid min-w-0 gap-4">
-          <div className="gp-milestone-detail__cards">
+          <div className="gp-milestone-detail__cards gp-milestone-detail__cards--editorial">
             {page.data.length
               ? page.data.map((guide) => (
-                  <GuideCard key={guide.id} guide={guide} />
+                  <GuideCard
+                    key={guide.id}
+                    guide={guide}
+                    headingLevel="h3"
+                    variant="related"
+                  />
                 ))
               : empty}
           </div>
@@ -264,7 +271,7 @@ function RelatedResources({
     >
       {(page) => (
         <div className="grid min-w-0 gap-4">
-          <div className="gp-milestone-detail__cards">
+          <div className="gp-milestone-detail__cards gp-milestone-detail__cards--editorial">
             {page.data.length
               ? page.data.map((resource) => (
                   <ResourceCard
@@ -305,13 +312,14 @@ function RelatedArticles({
     >
       {(page) => (
         <div className="grid min-w-0 gap-4">
-          <div className="gp-milestone-detail__cards">
+          <div className="gp-milestone-detail__cards gp-milestone-detail__cards--editorial">
             {page.data.length
               ? page.data.map((article) => (
                   <BlogArticleCard
                     key={article.id}
                     article={article}
                     headingLevel="h3"
+                    variant="related"
                   />
                 ))
               : empty}

@@ -736,3 +736,32 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Related articles sit inside another content grid and keep one copy column. */
+.articleCard.relatedArticleCard {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+.relatedArticleCard .cardImage {
+  width: 100%;
+  height: 12rem;
+  min-height: 0;
+  max-height: none;
+  flex-shrink: 0;
+}
+
+.relatedArticleCard .cardCopy {
+  width: 100%;
+  min-width: 0;
+}
+
+.relatedArticleCard .readLink {
+  width: 100%;
+  margin: auto 0 0;
+}

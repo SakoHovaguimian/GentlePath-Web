@@ -11,10 +11,36 @@ import { SavedContentButton } from '@/modules/engagement/components/SavedContent
 import { gentlePathEditorialStrings as copy } from '@/strings';
 import type { Guide } from '../models/guide';
 
-export function GuideCard({ guide }: { guide: Guide }) {
+export function GuideCard({
+  guide,
+  headingLevel = 'h2',
+  variant = 'directory',
+}: {
+  guide: Guide;
+  headingLevel?: 'h2' | 'h3';
+  variant?: 'directory' | 'related';
+}) {
+  const Heading = headingLevel;
+  const heading = (
+    <div
+      className={`grid min-w-0 gap-2${variant === 'directory' ? ' flex-1' : ''}`}
+    >
+      <Badge intent="brand">{copy.itemCount(guide.items.length)}</Badge>
+      <Heading className="m-0 font-display text-xl font-normal text-primary wrap-anywhere">
+        <Link
+          className="ui-card-open hover:text-brand-secondary"
+          href={`/guides/${guide.id}`}
+        >
+          {guide.title}
+        </Link>
+      </Heading>
+    </div>
+  );
   return (
     <Card className="relative flex min-w-0 flex-col gap-5 hover:border-brand focus-within:border-brand">
-      <div className="flex items-start gap-4">
+      <div
+        className={`flex min-w-0 items-start gap-4${variant === 'related' ? ' justify-between' : ''}`}
+      >
         {guide.image_url ? (
           <RecordThumbnail src={guide.image_url} alt={guide.title} />
         ) : (
@@ -22,17 +48,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
             <UiIcon name="leaf" className="size-7" />
           </IconTile>
         )}
-        <div className="grid min-w-0 flex-1 gap-2">
-          <Badge intent="brand">{copy.itemCount(guide.items.length)}</Badge>
-          <h2 className="m-0 font-display text-xl font-normal text-primary wrap-anywhere">
-            <Link
-              className="ui-card-open hover:text-brand-secondary"
-              href={`/guides/${guide.id}`}
-            >
-              {guide.title}
-            </Link>
-          </h2>
-        </div>
+        {variant === 'directory' && heading}
         <div className="relative z-20">
           <SavedContentButton
             contentType="GUIDED_STEP"
@@ -42,6 +58,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
           />
         </div>
       </div>
+      {variant === 'related' && heading}
       <p className="m-0 flex-1 text-sm text-secondary">{guide.description}</p>
       <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-secondary pt-4">
         <Button asChild variant="secondary" className="relative z-10">

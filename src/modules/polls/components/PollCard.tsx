@@ -14,6 +14,7 @@ import { usePollExpired } from '../usePollExpired';
 
 export function PollCard({
   poll,
+  headingLevel = 'h2',
   returnTo,
   own,
   writable,
@@ -23,6 +24,7 @@ export function PollCard({
   onTag,
 }: {
   poll: Poll;
+  headingLevel?: 'h2' | 'h3';
   returnTo: string;
   own: boolean;
   writable: boolean;
@@ -31,6 +33,7 @@ export function PollCard({
   onDelete: () => void;
   onTag: (tag: string) => void;
 }) {
+  const Heading = headingLevel;
   const { confirmNavigation } = useNavigationGuard();
   const navigate = useGuardedNavigate();
   const href = `/polls/${encodeURIComponent(poll.id)}?returnTo=${encodeURIComponent(returnTo)}`;
@@ -60,7 +63,7 @@ export function PollCard({
         </Badge>
         {expired && <Badge intent="warning">{copy.expired}</Badge>}
       </div>
-      <h2 className="m-0 font-display text-xl font-normal text-primary wrap-anywhere sm:text-2xl">
+      <Heading className="m-0 font-display text-xl font-normal text-primary wrap-anywhere sm:text-2xl">
         <NavigationLink
           className="gp-poll-question-link"
           href={href}
@@ -68,7 +71,7 @@ export function PollCard({
         >
           {poll.title}
         </NavigationLink>
-      </h2>
+      </Heading>
       <p className="gp-poll-body line-clamp-3">{poll.message}</p>
       <MilestoneLinkList ids={poll.milestone_ids} />
       <CommunityAttachments items={poll.attachments} />

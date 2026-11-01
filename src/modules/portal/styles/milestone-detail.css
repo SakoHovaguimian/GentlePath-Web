@@ -45,8 +45,13 @@
 
 .gp-milestone-detail__cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
+}
+
+.gp-milestone-detail__cards > * {
+  min-width: 0;
 }
 
 .gp-milestone-detail__cards--community {
@@ -64,15 +69,8 @@
   grid-column: 1 / -1;
 }
 
-@media (max-width: 79.99rem) {
-  .gp-milestone-detail__cards:not(.gp-milestone-detail__cards--community) {
+@media (min-width: 48rem) {
+  .gp-milestone-detail__cards--editorial {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 47.99rem) {
-  .gp-milestone-detail__cards,
-  .gp-milestone-detail__cards--community {
-    grid-template-columns: minmax(0, 1fr);
   }
 }

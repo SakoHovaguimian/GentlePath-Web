@@ -14,6 +14,7 @@ import { CommunityPostMenu } from './CommunityPostMenu';
 
 interface CommunityPostCardProps {
   post: CommunityPost;
+  headingLevel?: 'h2' | 'h3';
   own: boolean;
   writable: boolean;
   busy: boolean;
@@ -25,6 +26,7 @@ interface CommunityPostCardProps {
 }
 export function CommunityPostCard({
   post,
+  headingLevel = 'h2',
   own,
   writable,
   busy,
@@ -34,6 +36,7 @@ export function CommunityPostCard({
   onReport,
   onHide,
 }: CommunityPostCardProps) {
+  const Heading = headingLevel;
   const { confirmNavigation } = useNavigationGuard();
   const href = `/community/${encodeURIComponent(post.id)}?returnTo=${encodeURIComponent(returnTo)}`;
   return (
@@ -59,7 +62,7 @@ export function CommunityPostCard({
         </div>
       </div>
       <div className="gp-community-post__copy">
-        <h2>
+        <Heading>
           <NavigationLink
             className="gp-community-post__link"
             href={href}
@@ -67,7 +70,7 @@ export function CommunityPostCard({
           >
             {post.title}
           </NavigationLink>
-        </h2>
+        </Heading>
         <p className="gp-community-post__excerpt">{post.body}</p>
       </div>
       <div className="gp-community-post__control">
