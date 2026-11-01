@@ -9,7 +9,6 @@ import {
   QueryBoundary,
 } from '@/components/ui';
 import {
-  gentlePathEditorialDiscoveryStrings as discovery,
   gentlePathPortalStrings as copy,
   gentlePathMilestoneAdminStrings as milestoneCopy,
 } from '@/strings';
@@ -141,29 +140,19 @@ export function MilestonesScreen() {
           )?.id;
           return (
             <>
-              <p className="m-0 text-sm text-secondary">
-                {discovery.noChildHint}
-              </p>
-              <div className="flex flex-wrap items-end gap-3">
-                <Button
-                  variant="secondary"
-                  aria-pressed={!childId}
-                  onClick={() =>
-                    directory.update({ child: '', progress: '', offset: 0 })
+              {profiles.length > 0 && (
+                <ChildProfilePicker
+                  profiles={profiles}
+                  value={childId ?? ''}
+                  onValueChange={(value) =>
+                    directory.update({
+                      child: value === childId ? '' : value,
+                      ...(value === childId ? { progress: '' } : {}),
+                      offset: 0,
+                    })
                   }
-                >
-                  {discovery.browseGuidance}
-                </Button>
-                {profiles.length > 0 && (
-                  <ChildProfilePicker
-                    profiles={profiles}
-                    value={childId ?? ''}
-                    onValueChange={(value) =>
-                      directory.update({ child: value, offset: 0 })
-                    }
-                  />
-                )}
-              </div>
+                />
+              )}
               <MilestoneList key={childId ?? 'guidance'} childId={childId} />
             </>
           );

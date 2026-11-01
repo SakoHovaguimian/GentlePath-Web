@@ -54,12 +54,18 @@
   align-items: start;
 }
 
-.gp-milestone-detail__cards > .ui-empty-state {
+.gp-milestone-detail__section .ui-state:not(.ui-error-state) {
+  width: 100%;
+  justify-items: center;
+  text-align: center;
+}
+
+.gp-milestone-detail__cards > .ui-state:not(.ui-error-state) {
   grid-column: 1 / -1;
 }
 
 @media (max-width: 79.99rem) {
-  .gp-milestone-detail__cards {
+  .gp-milestone-detail__cards:not(.gp-milestone-detail__cards--community) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
