@@ -73,6 +73,18 @@ export function useEditorialMutations() {
     }) => service.saveResource(input, id),
     onSuccess: refresh,
   });
+  const verifyResourceSource = useMutation({
+    mutationFn: ({
+      id,
+      version,
+      verified,
+    }: {
+      id: string;
+      version: number;
+      verified: boolean;
+    }) => service.verifyResourceSource(id, version, verified),
+    onSuccess: refresh,
+  });
   const deleteResource = useMutation({
     mutationFn: (id: string) => service.deleteResource(id),
     onSuccess: refresh,
@@ -82,7 +94,9 @@ export function useEditorialMutations() {
     deleteGuide,
     saveResource,
     deleteResource,
+    verifyResourceSource,
     isPending:
+      verifyResourceSource.isPending ||
       saveGuide.isPending ||
       deleteGuide.isPending ||
       saveResource.isPending ||

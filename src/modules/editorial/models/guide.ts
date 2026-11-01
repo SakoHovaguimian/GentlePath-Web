@@ -1,3 +1,4 @@
+import { MilestoneLinksSchema } from '@/modules/milestone-admin/models/milestoneLinks';
 import { z } from 'zod';
 import { gentlePathEditorialStrings as copy } from '@/strings';
 import { PublicImageUrlSchema } from './contentUrl';
@@ -19,6 +20,7 @@ export const GuideItemsInputSchema = z
   );
 
 export const GuideInputSchema = GuideItemsInputSchema.safeExtend({
+  milestone_ids: MilestoneLinksSchema.optional(),
   title: z
     .string()
     .trim()
@@ -32,6 +34,7 @@ export const GuideInputSchema = GuideItemsInputSchema.safeExtend({
   image_url: PublicImageUrlSchema.nullable(),
 });
 export const GuideSchema = z.object({
+  milestone_ids: MilestoneLinksSchema.default([]),
   id: z.string(),
   content_type: z.literal('GUIDED_STEP'),
   title: z.string(),

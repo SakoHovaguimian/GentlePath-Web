@@ -41,6 +41,7 @@ import adminStyles from '../../portal/Admin.module.css';
 
 const empty = '';
 const articleInput = (article: BlogArticle): BlogArticleDraft => ({
+  milestone_ids: article.milestone_ids,
   title: article.title,
   slug: article.slug,
   description: article.description,
@@ -66,6 +67,7 @@ export function BlogEditor({
     initialArticle
       ? articleInput(initialArticle)
       : {
+          milestone_ids: [],
           title: empty,
           slug: '',
           description: empty,

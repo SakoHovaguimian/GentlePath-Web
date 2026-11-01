@@ -1,4 +1,5 @@
 import 'server-only';
+import { visibleDemoMilestoneIds } from '@/modules/milestone-admin/server/demoMilestoneLinks';
 import { isDemoCommentVisible } from '@/modules/community/demo/isDemoCommentVisible';
 import { getDemoBlogState } from '@/services/demo/demoBlogState';
 import { getDemoState } from '@/services/demo/demoState';
@@ -36,19 +37,33 @@ export function demoSavedTarget(
   if (contentType === 'RESOURCE') {
     const resource = getVisibleDemoResources().find((item) => item.id === id);
     return resource
-      ? summary(resource.title, resource.description, resource.parent_id)
+      ? {
+          ...summary(resource.title, resource.description, resource.parent_id),
+          milestoneIds: resource.milestone_ids,
+          stateCodes: resource.state_codes,
+          officialSourceUrl: resource.official_source_url,
+          verifiedAt: resource.verified_at,
+        }
       : null;
   }
   if (contentType === 'GUIDED_STEP') {
     const guide = getVisibleDemoGuides().find((item) => item.id === id);
-    return guide ? summary(guide.title, guide.description) : null;
+    return guide
+      ? {
+          ...summary(guide.title, guide.description),
+          milestoneIds: visibleDemoMilestoneIds(guide.milestone_ids),
+        }
+      : null;
   }
   if (contentType === 'BLOG') {
     const article = getDemoBlogState().find(
       (item) => item.id === id && item.status === 'published',
     );
     return article
-      ? summary(article.title, article.description, null, article.slug)
+      ? {
+          ...summary(article.title, article.description, null, article.slug),
+          milestoneIds: visibleDemoMilestoneIds(article.milestone_ids),
+        }
       : null;
   }
   if (contentType === 'POST' || contentType === 'POST_COMMENT') {
@@ -59,7 +74,15 @@ export function demoSavedTarget(
       const post = state.posts.find(
         (item) => item.id === id && visiblePost(item),
       );
-      return post ? summary(post.title, post.body) : null;
+      return post
+        ? {
+            ...summary(post.title, post.body),
+            postKind: post.postKind,
+            stateCode: post.stateCode,
+            ageBand: post.ageBand,
+            milestoneIds: visibleDemoMilestoneIds(post.milestoneIds),
+          }
+        : null;
     }
     const comment = state.comments.find(
       (item) =>
@@ -86,7 +109,12 @@ export function demoSavedTarget(
       const poll = state.polls.find(
         (item) => item.id === id && visiblePoll(item),
       );
-      return poll ? summary(poll.title, poll.message) : null;
+      return poll
+        ? {
+            ...summary(poll.title, poll.message),
+            milestoneIds: visibleDemoMilestoneIds(poll.milestone_ids),
+          }
+        : null;
     }
     const comment = state.comments.find(
       (item) =>

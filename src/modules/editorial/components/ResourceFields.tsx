@@ -1,5 +1,7 @@
+import { MilestoneLinksField } from '@/modules/milestone-admin/components/MilestoneLinksField';
 import { Input, Select, TextArea } from '@/components/ui';
 import {
+  gentlePathEditorialDiscoveryStrings as discovery,
   gentlePathEditorialStrings as copy,
   gentlePathPortalStrings as portalCopy,
 } from '@/strings';
@@ -154,6 +156,39 @@ export function ResourceFields({
           }
         />
       </EditorField>
+      <EditorField
+        id="editorial-state_codes"
+        label={discovery.statesLabel}
+        hint={discovery.statesHint}
+        error={errors.state_codes}
+      >
+        <Input
+          value={form.stateCodes}
+          disabled={disabled}
+          onChange={(event) =>
+            onChangeAction({ ...form, stateCodes: event.target.value })
+          }
+        />
+      </EditorField>
+      <EditorField
+        id="editorial-official_source_url"
+        label={discovery.officialSourceLabel}
+        error={errors.official_source_url}
+      >
+        <Input
+          type="url"
+          value={form.officialSourceUrl}
+          disabled={disabled}
+          onChange={(event) =>
+            onChangeAction({ ...form, officialSourceUrl: event.target.value })
+          }
+        />
+      </EditorField>
+      <MilestoneLinksField
+        value={form.milestoneIds}
+        disabled={disabled}
+        onChange={(milestoneIds) => onChangeAction({ ...form, milestoneIds })}
+      />
       <EditorField
         id="editorial-tags"
         label={copy.tagsLabel}

@@ -1,24 +1,29 @@
-import { Badge, Card, CardOpenButton, QueryBoundary } from '@/components/ui';
+import { Badge, Card, NavigationLink, QueryBoundary } from '@/components/ui';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
 import type { MilestoneGuidance } from '@/modules/milestone-admin/models/milestoneGuidance';
 import { useMilestoneObservations } from '@/modules/milestone-admin/hooks';
 import { formatMilestoneDate } from '@/modules/milestone-admin/formatMilestoneDate';
-import type { MilestoneDetailsSection } from '../models/milestoneDetailsSection';
+import { milestoneReaderPath } from '../milestoneReaderPath';
+import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
+import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { MilestoneProgressSelect } from './MilestoneProgressSelect';
 import { MilestoneCoverImage } from './MilestoneCoverImage';
 
 export function MilestoneCard({
   milestone,
   childId,
-  onOpen,
+  returnTo,
 }: {
   milestone: MilestoneGuidance;
-  childId: string;
-  onOpen: (section: MilestoneDetailsSection) => void;
+  childId?: string;
+  returnTo: string;
 }) {
+  const navigate = useGuardedNavigate();
+  const { confirmNavigation } = useNavigationGuard();
+  const href = milestoneReaderPath(milestone.id, childId, returnTo);
   const query = useMilestoneObservations({
-    child_id: childId,
+    child_id: childId ?? '',
     milestone_id: milestone.id,
     limit: 1,
     offset: 0,
@@ -32,11 +37,11 @@ export function MilestoneCard({
             src={milestone.image_url}
           />
         )}
-        <CardOpenButton
-          type="button"
+        <NavigationLink
           className="gp-milestone-card__open"
           aria-label={copy.openMilestone(milestone.milestone)}
-          onClick={() => onOpen('information')}
+          href={href}
+          beforeNavigate={confirmNavigation}
         />
         <div className="gp-milestone-card__heading">
           <div className="flex min-w-0 flex-wrap gap-1">
@@ -59,11 +64,15 @@ export function MilestoneCard({
                   icon: 'info',
                   label: copy.informationLabel,
                 },
-                {
-                  id: 'history',
-                  icon: 'clock',
-                  label: copy.observationHistory,
-                },
+                ...(childId
+                  ? [
+                      {
+                        id: 'history',
+                        icon: 'clock' as const,
+                        label: copy.observationHistory,
+                      },
+                    ]
+                  : []),
               ]}
               onMenuAction={(action) => {
                 if (
@@ -71,7 +80,14 @@ export function MilestoneCard({
                   action === 'information' ||
                   action === 'history'
                 )
-                  onOpen(action);
+                  void navigate(
+                    milestoneReaderPath(
+                      milestone.id,
+                      childId,
+                      returnTo,
+                      action,
+                    ),
+                  );
               }}
             />
           </div>
@@ -84,25 +100,30 @@ export function MilestoneCard({
         </div>
         <div className="gp-milestone-card__footer">
           <div className="gp-milestone-card__control min-w-0 flex-1">
-            <QueryBoundary query={query} loadingMessage={copy.observationLoad}>
-              {(page) => (
-                <div className="grid gap-2">
-                  <MilestoneProgressSelect
-                    milestone={milestone}
-                    childId={childId}
-                    latest={page.data[0]}
-                  />
-                  {page.data[0] && (
-                    <time
-                      dateTime={page.data[0].observed_at}
-                      className="text-xs text-tertiary"
-                    >
-                      {formatMilestoneDate(page.data[0].observed_at)}
-                    </time>
-                  )}
-                </div>
-              )}
-            </QueryBoundary>
+            {childId && (
+              <QueryBoundary
+                query={query}
+                loadingMessage={copy.observationLoad}
+              >
+                {(page) => (
+                  <div className="grid gap-2">
+                    <MilestoneProgressSelect
+                      milestone={milestone}
+                      childId={childId}
+                      latest={page.data[0]}
+                    />
+                    {page.data[0] && (
+                      <time
+                        dateTime={page.data[0].observed_at}
+                        className="text-xs text-tertiary"
+                      >
+                        {formatMilestoneDate(page.data[0].observed_at)}
+                      </time>
+                    )}
+                  </div>
+                )}
+              </QueryBoundary>
+            )}
           </div>
           <div className="gp-milestone-card__control">
             <SavedContentButton

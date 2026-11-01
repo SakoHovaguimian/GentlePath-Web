@@ -4,12 +4,15 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { UiIcon } from '@/components/ui';
 import { gentlePathStateBenefitsStrings as copy } from '@/strings';
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import type { StateBenefitProgram } from '../models/stateBenefitProgram';
 
 const artwork = {
-  HEALTHCARE: '/gentlepath/caregiver-community.png',
-  EARLY_SUPPORT: '/gentlepath/growing-together-v2.png',
-  FAMILY_SUPPORT: '/gentlepath/family-connection-blonde.png',
+  MEDICAID_WAIVERS: gentlePathIllustrations.benefitMedicaidWaivers,
+  RESPITE: gentlePathIllustrations.benefitRespite,
+  EARLY_INTERVENTION: gentlePathIllustrations.benefitEarlyIntervention,
+  SCHOOL_SUPPORT: gentlePathIllustrations.benefitSchoolSupport,
+  DISABILITY_SERVICES: gentlePathIllustrations.benefitDisabilityServices,
 } as const;
 export function StateBenefitImage({
   program,
@@ -32,9 +35,13 @@ export function StateBenefitImage({
       ) : (
         <Image
           fill
-          unoptimized
+          unoptimized={source !== fallback}
           src={source}
-          alt={copy.imageAlt(program.name)}
+          alt={
+            source === fallback
+              ? copy.artworkAlt[program.category]
+              : copy.imageAlt(program.name)
+          }
           sizes="(max-width: 767px) 90vw, 640px"
           className="object-contain p-3"
           onError={() =>

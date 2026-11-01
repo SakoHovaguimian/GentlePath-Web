@@ -1,3 +1,4 @@
+import { CommunityPublicMetadataTransportSchema } from './communityPublicMetadataTransport';
 import { CommunityAttachmentsSchema } from '@/modules/community/models/communityAttachment';
 import { z } from 'zod';
 import { CommunityAuthorTransportSchema } from './communityAuthorTransport';
@@ -24,7 +25,7 @@ export const CommunityReportTransportSchema = z.object({
   reviewed_by_user_id: z.string().nullable(),
   reviewed_at: z.string().datetime().nullable(),
   created_at: z.string().datetime(),
-  target_snapshot: z.object({
+  target_snapshot: CommunityPublicMetadataTransportSchema.extend({
     id: z.string(),
     content_type: kind,
     title: z.string().nullable(),

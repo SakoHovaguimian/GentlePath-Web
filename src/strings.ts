@@ -8644,7 +8644,7 @@ export const gentlePathPortalStrings = {
     create: 'Add A Child',
     newTitle: 'A Place For Your Child',
     editTitle: 'Edit Child Profile',
-    formDescription: 'These details stay in your private family space.',
+    formDescription: 'Other signed-in members can see your registered child count and anonymous ages. Names, birthdays, and support details stay private.',
     nameLabel: 'Child’s Name',
     birthDateLabel: 'Date Of Birth',
     genderLabel: 'Gender',
@@ -8952,7 +8952,8 @@ export const gentlePathLandingStrings = {
       'Keep your family’s plans, progress, and everyday moments together. Set goals for your child, stay on top of applications and follow-ups, and find connection with parents who understand.',
     primaryAction: 'Find Your GentlePath',
     secondaryAction: 'See How It Helps',
-    artAlt: 'A winding path through sage and forest hills toward warm sunlight',
+    artAlt:
+      'A parent and child drawing together on a soft rug in a warm illustrated home',
     bottomLabel: 'Your Family’s Own Way.',
     bottomDescription:
       'A little more clarity for what’s next. More room for the moments that matter.',
@@ -8998,7 +8999,7 @@ export const gentlePathLandingStrings = {
       {
         title: 'State Benefits',
         description:
-          'Explore sample healthcare, early-support, and family-support programs for all 50 states and DC. These are mock examples; confirm current programs and qualifications with the administering agency.',
+          'Explore sample Medicaid waivers, respite, early intervention, school support, and disability services for all 50 states and DC. These are mock examples; confirm current programs and qualifications with the administering agency.',
       },
       {
         title: 'Services & Applications',
@@ -11697,6 +11698,7 @@ export const gentlePathOnboardingStrings = {
     FINISH: 'Make Yourself At Home.',
     COMPLETE: 'Make Yourself At Home.',
   },
+  // @sentence-case: Descriptive alternative text.
   artworkAlt: {
     STATE:
       'A sage map of the United States with a lilac location pin, leafy branches, and a small warm sun',
@@ -11830,72 +11832,128 @@ export const gentlePathStateBenefitsStrings = {
   trackApplication: 'Track An Application',
   back: 'Back To State Benefits',
   categories: {
-    HEALTHCARE: 'Healthcare',
-    EARLY_SUPPORT: 'Early Support',
-    FAMILY_SUPPORT: 'Family Support',
+    MEDICAID_WAIVERS: 'Medicaid Waivers',
+    RESPITE: 'Respite',
+    EARLY_INTERVENTION: 'Early Intervention',
+    SCHOOL_SUPPORT: 'School Support',
+    DISABILITY_SERVICES: 'Disability Services',
+  },
+  // @sentence-case: Descriptive alternative text.
+  artworkAlt: {
+    MEDICAID_WAIVERS:
+      'An open support folder with a winding path and small leaves',
+    RESPITE: 'A comfortable chair beside a calm window and a small plant',
+    EARLY_INTERVENTION:
+      'Play blocks and a young sprout representing early support',
+    SCHOOL_SUPPORT:
+      'An open school notebook with a pencil and supportive leaves',
+    DISABILITY_SERVICES:
+      'A connected path with symbols for work and community living',
   },
   programName: (state: string, title: string) => `${state} ${title}`,
   templates: [
     {
       // @preserve-case: Stable API program key.
-      key: 'medicaid',
-      title: 'Healthcare Support',
+      key: 'medicaid-waivers',
+      title: 'Medicaid Waivers',
       description:
-        'A sample starting point for exploring state healthcare coverage and support.',
+        'A sample starting point for asking about home and community-based Medicaid waiver services.',
       // @sentence-case: Explanatory program examples.
       benefits: [
-        'Explore coverage options',
-        'Find the state agency responsible for healthcare support',
+        'Explore services that support living at home or in the community',
+        'Prepare questions about assessments, available services, and waiting lists',
       ],
       // @sentence-case: Explanatory criteria.
       qualifications: [
-        'State residency may be required',
-        'Income, disability, and household criteria vary; confirm with the administering agency',
+        'State residency and Medicaid criteria may apply',
+        'Age, disability, level-of-care, financial, and waiting-list rules vary; confirm with the state agency',
       ],
       // @preserve-case: External destination URL.
-      program_url: 'https://www.usa.gov/medicaid-chip-insurance',
-      category: 'HEALTHCARE',
+      program_url:
+        'https://www.medicaid.gov/medicaid/home-community-based-services/home-community-based-services-authorities/home-community-based-services-1915c',
+      category: 'MEDICAID_WAIVERS',
+    },
+    {
+      // @preserve-case: Stable API program key.
+      key: 'respite',
+      title: 'Respite Support',
+      description:
+        'A sample guide to exploring temporary caregiving support and local respite contacts.',
+      // @sentence-case: Explanatory program examples.
+      benefits: [
+        'Ask about planned or emergency respite options',
+        'Find contacts to discuss caregiver breaks and available funding',
+      ],
+      // @sentence-case: Explanatory criteria.
+      qualifications: [
+        'Program availability and funding vary by location',
+        'Care needs, caregiver circumstances, and program criteria must be confirmed with the administering agency',
+      ],
+      // @preserve-case: External destination URL.
+      program_url:
+        'https://acl.gov/programs/support-caregivers/lifespan-respite-care-program',
+      category: 'RESPITE',
     },
     {
       // @preserve-case: Stable API program key.
       key: 'early-intervention',
-      title: 'Early Support',
+      title: 'Early Intervention',
       description:
-        'A sample guide to finding state developmental and early support services.',
+        'A sample guide to finding the state early intervention contact for developmental concerns.',
       // @sentence-case: Explanatory program examples.
       benefits: [
-        'Find developmental support contacts',
-        'Learn about assessment and family support pathways',
+        'Find a starting point for an early intervention referral',
+        'Ask about evaluation and family-centered developmental services',
       ],
       // @sentence-case: Explanatory criteria.
       qualifications: [
-        'State residency may be required',
-        'Age and service criteria vary; this sample does not determine eligibility',
+        'These services focus on babies and young children',
+        'Age, evaluation, and service criteria vary; confirm with the state early intervention program',
       ],
       // @preserve-case: External destination URL.
       program_url:
         'https://www.cdc.gov/act-early/early-intervention/contact-information-by-state.html',
-      category: 'EARLY_SUPPORT',
+      category: 'EARLY_INTERVENTION',
     },
     {
       // @preserve-case: Stable API program key.
-      key: 'family-support',
-      title: 'Family Support',
+      key: 'school-support',
+      title: 'School Support',
       description:
-        'A sample starting point for exploring practical assistance for families.',
+        'A sample starting point for learning about school evaluations, special education, and family participation.',
       // @sentence-case: Explanatory program examples.
       benefits: [
-        'Explore family assistance options',
-        'Prepare questions for a state support agency',
+        'Prepare questions about school evaluation and support planning',
+        'Find information to discuss an IEP and related services with the school',
       ],
       // @sentence-case: Explanatory criteria.
       qualifications: [
-        'State residency may be required',
-        'Household and program criteria must be confirmed with the administering agency',
+        'Contact the local school district about its evaluation process',
+        'Educational eligibility and services require an individual determination; this sample does not establish eligibility',
       ],
       // @preserve-case: External destination URL.
-      program_url: 'https://www.usa.gov/benefits',
-      category: 'FAMILY_SUPPORT',
+      program_url: 'https://sites.ed.gov/idea/parents-families/',
+      category: 'SCHOOL_SUPPORT',
+    },
+    {
+      // @preserve-case: Stable API program key.
+      key: 'disability-services',
+      title: 'Disability Services',
+      description:
+        'A sample guide to exploring disability service contacts, employment support, and community living options.',
+      // @sentence-case: Explanatory program examples.
+      benefits: [
+        'Find a starting point for disability service navigation',
+        'Ask about employment, independent living, and adult-service transitions',
+      ],
+      // @sentence-case: Explanatory criteria.
+      qualifications: [
+        'Services and responsible agencies vary by state',
+        'Age, residency, disability, and program-specific criteria must be confirmed with the administering agency',
+      ],
+      // @preserve-case: External destination URL.
+      program_url: 'https://www.usa.gov/disability-services',
+      category: 'DISABILITY_SERVICES',
     },
   ],
 } as const;
@@ -12032,3 +12090,404 @@ export const gentlePathGoalStrings = {
   noteCount: (value: number) =>
     `${value} ${value === 1 ? 'Progress Note' : 'Progress Notes'}`,
 };
+
+export const gentlePathLinkedContentStrings = {
+  choose: 'Choose Milestones',
+  clear: 'Clear Links',
+  selection: (count: number) => `${count} Milestones Selected`,
+  unavailableMilestone: (index: number) => `Unavailable Milestone ${index}`,
+  label: 'Related Milestones',
+  description:
+    'Choose up to 10 milestones that relate to this public content. Links are optional.',
+  // @sentence-case: Validation copy.
+  limit: 'Choose no more than 10 milestones.',
+  // @sentence-case: Validation copy.
+  distinct: 'Choose each milestone only once.',
+  // @sentence-case: Explains retained optional links.
+  unavailable:
+    'Some previously linked milestones are unavailable. Their links are preserved unless you remove them.',
+  removeUnavailable: 'Remove Unavailable Links',
+  // @sentence-case: Empty milestone choices.
+  noChoices: 'No milestones are available to link yet.',
+};
+
+export const gentlePathCommunityDiscoveryStrings = {
+  postKind: 'Post Type',
+  kinds: {
+    DISCUSSION: 'Discussion',
+    QUESTION: 'Question',
+    EXPERIENCE: 'Experience',
+    WIN: 'Small Win',
+  },
+  allKinds: 'All Post Types',
+  ageBand: 'Age Group',
+  defaultAgeContext: 'Default Age Context',
+  allAges: 'All Ages',
+  ages: {
+    AGE_0_2: '0–2 Years',
+    AGE_3_5: '3–5 Years',
+    AGE_6_8: '6–8 Years',
+    AGE_9_12: '9–12 Years',
+    AGE_13_17: '13–17 Years',
+    AGE_18_24: '18–24 Years',
+    AGE_25_PLUS: '25+ Years',
+  },
+  state: 'State',
+  allStates: 'All States',
+  // @sentence-case: Public context preview.
+  noState: 'No state shared',
+  child: 'Optional Child Context',
+  noChild: 'No Child Context',
+  contextTitle: 'Public Context Preview',
+  contextLoadingDescription: 'Loading your public context…',
+  contextHint:
+    'Your post will show your current state and an age group if you choose a child. Child names, birthdays, and private records are never shared.',
+  // @sentence-case: Explains refreshed preview.
+  contextChanged:
+    'Your family context changed. Review the updated preview, then publish when you are ready.',
+  // @sentence-case: Public context preview.
+  noAge: 'No age group shared',
+  // @sentence-case: Explains immutable public snapshots.
+  preservedContext:
+    'The state and age group recorded when this post was published stay the same when you edit it.',
+  experiences: 'What I Wish I Knew',
+  experiencesHint:
+    'Share your own experience. Choose a question to start a title, then write your own story.',
+  smallWins: 'Small Wins',
+  allPosts: 'All Posts',
+  // @sentence-case: Parent-authored title prompts.
+  starters: [
+    'What do you wish you knew about getting support?',
+    'What helped your family feel more understood?',
+    'What would you tell a parent starting this journey?',
+  ],
+  share: 'Share With Community',
+  shareHint:
+    'Start a new public post. Your private title, notes, and media will stay private.',
+  profileTitle: 'Community Profile',
+  profileName: (firstName: string, lastName: string) =>
+    `${firstName} ${lastName}`,
+  activityCount: (label: string, count: number) => `${label} (${count})`,
+  demoProfile: {
+    firstName: 'Maya',
+    lastName: 'Rivera',
+    // @preserve-case: Fictional demo account address.
+    email: 'maya@gentlepath.demo',
+    childName: 'Rowan',
+  },
+  postComments: 'Discussion Comments',
+  pollComments: 'Poll Comments',
+  profileHint:
+    'A public community overview with registered child count and anonymous ages. Names, birthdays, and support details stay private.',
+  children: (count: number) =>
+    `${count} Registered ${count === 1 ? 'Child' : 'Children'}`,
+  age: (years: number) =>
+    years === 0 ? 'Under 1 Year' : `${years} ${years === 1 ? 'Year' : 'Years'}`,
+  // @sentence-case: Profile empty prose.
+  noChildren: 'No registered children',
+  activity: {
+    posts: 'Posts',
+    polls: 'Polls',
+    tips: 'Approved Tips',
+    comments: 'Comments',
+  },
+  // @sentence-case: Profile empty prose.
+  emptyActivity: 'No visible activity in this section yet.',
+  emptyActivityTitle: 'No Public Activity Yet',
+  commentLink: 'View Conversation',
+  back: 'Back To Community',
+  milestone: 'Milestone',
+  allMilestones: 'All Milestones',
+  // @sentence-case: Fictional parent-authored community copy.
+  demoPosts: [
+    {
+      title: 'One calm moment at the grocery store',
+      body: 'We paused near the entrance, agreed on a short list, and took one aisle at a time. Today that felt like a win.',
+      tags: ['everyday-life'],
+    },
+    {
+      title: 'Preparing for our first school planning meeting',
+      body: 'I am gathering questions and making space to listen. What helped you explain what your family needed?',
+      tags: ['school'],
+    },
+    {
+      title: 'What I wish I knew about adult service transitions',
+      body: 'Starting a simple list of contacts early helped us ask clearer questions. Our plan is still changing, and that is okay.',
+      tags: ['adult-services'],
+    },
+    {
+      title: 'A conversation about work that felt hopeful',
+      body: 'We talked about interests before talking about applications. It helped us choose a small next step together.',
+      tags: ['employment'],
+    },
+    {
+      title: 'A new way to say what we need',
+      body: 'We practiced asking for a break without having to explain everything. We are celebrating that little moment.',
+      tags: ['communication'],
+    },
+    {
+      title: 'Finding friendship through shared interests',
+      body: 'A quiet activity group has been a helpful place to meet people. I would love to hear what makes groups welcoming for your family.',
+      tags: ['friendships'],
+    },
+    {
+      title: 'Learning to ask for the right support',
+      body: 'We are trying a short written request before meetings. What has helped with self-advocacy as your child gets older?',
+      tags: ['self-advocacy'],
+    },
+  ],
+};
+
+export const gentlePathEditorialDiscoveryStrings = {
+  backToMilestones: 'Back To Milestones',
+  milestoneCoverAlt: (title: string) => `Cover image for ${title}`,
+  milestoneCoverFallbackAlt: 'Illustrated plants growing at their own pace',
+  informationTitle: 'Information',
+  privateProgressTitle: 'Private Progress And History',
+  privateProgressDescription: 'Only you can see the progress and observations you record for your child.',
+  jumpNavigation: 'On This Page',
+  familyTipsTitle: 'Family Tips',
+  relatedPostsDescription: 'Experiences, Small Wins, discussions, and questions shared by the community.',
+  relatedQuestionsDescription: 'Questions from families exploring this milestone.',
+  childUnavailableDescription: 'This child is not available in your family. Choose another child or browse the shared guidance.',
+
+  collectionFilterDescription: 'Choose collections or individual resources, not both filters.',
+  stateLabel: 'State',
+  allStates: 'All States',
+  nationwide: 'Nationwide',
+  statesLabel: 'State Codes',
+  statesHint:
+    'Enter US state or DC codes separated by commas. Leave blank for nationwide resources.',
+  invalidStatesDescription: 'Choose distinct US state or DC codes.',
+  officialSourceLabel: 'Official Source URL',
+  officialSource: 'Official Source',
+  checkedDescription: (date: string) => `Source checked ${date}`,
+  notChecked: 'Source Not Checked',
+  verifySource: 'Mark Source Checked',
+  refreshSource: 'Refresh Source',
+  clearVerification: 'Clear Source Check',
+  verificationHint:
+    'Save changes before checking the official source. A source check is separate from editorial review and is cleared after substantive edits.',
+  sourceRequiredDescription:
+    'Add and save an official source URL before marking it checked.',
+  versionConflictDescription:
+    'This resource changed. Reload it before checking the source again. Your draft is still here.',
+  browseGuidance: 'Browse Guidance',
+  noChildHint:
+    'Explore guidance and shared content without selecting a child. Select a child to record private progress and observations.',
+  related: 'Related Content',
+  discussion: 'Posts',
+  question: 'Questions',
+  polls: 'Polls',
+  resources: 'Resources',
+  collections: 'Collections',
+  guides: 'Guided Steps',
+  articles: 'Published Articles',
+  askQuestion: 'Ask A Question',
+  emptyRelated: 'Nothing Shared Yet',
+  emptyRelatedHint:
+    'Related content will appear here when it is linked to this milestone.',
+  relatedLoadingDescription: 'Loading related content…',
+  next: 'Next',
+  previous: 'Previous',
+  sectionNavigation: 'Related Content Navigation',
+} as const;
+
+export const gentlePathExpandedResourceCatalogue = [
+  {
+    id: '38000000-0000-4000-8000-000000000013',
+    category: 'education',
+    content: {
+      title: 'IEPs And School Support',
+      description:
+        'Prepare for collaborative school conversations and keep decisions easy to follow.',
+    },
+    tags: ['IEPs'],
+    resources: [
+      {
+        title: 'Prepare For An IEP Meeting',
+        description:
+          'Bring strengths, questions, and examples to the conversation.',
+        body: 'Ask for the meeting agenda and a copy of the current plan. Write down what is working, what your child wants, and two or three questions. Invite your child to contribute in a way that feels comfortable.',
+      },
+      {
+        title: 'Read Goals Together',
+        description:
+          'Connect school goals to everyday access and participation.',
+        body: 'Ask the school team to explain each proposed goal in plain language. Discuss how progress will be measured, who will provide support, and how your child’s preferences will be included. Keep a copy of the agreed plan.',
+      },
+      {
+        title: 'Keep A School Communication Log',
+        description: 'Make follow-up easier with a simple shared record.',
+        body: 'Record the date, person contacted, question, and next step after school conversations. Send a brief written summary when useful. Store private documents in your family workspace rather than public community posts.',
+      },
+      {
+        title: 'Plan Classroom Accommodations',
+        description: 'Start with the barriers your child encounters.',
+        body: 'Talk about sensory access, communication choices, predictable instructions, and time to process. Ask which accommodations can be tried and when the team will review them. Local procedures and eligibility vary; check the official education agency.',
+      },
+    ],
+  },
+  {
+    id: '38000000-0000-4000-8000-000000000014',
+    category: 'communication',
+    content: {
+      title: 'Friendships And Belonging',
+      description:
+        'Support connection through shared interests, choice, and comfortable ways to participate.',
+    },
+    tags: ['Friendships'],
+    resources: [
+      {
+        title: 'Start With Shared Interests',
+        description: 'Let an enjoyable activity make room for connection.',
+        body: 'Choose a club, game, or activity your child already likes. Ask about group size and flexible participation. Watching first, parallel activities, and short visits can all be valid ways to join.',
+      },
+      {
+        title: 'Make Invitations Specific',
+        description: 'Offer a clear plan with an easy way to decline.',
+        body: 'Try an invitation with the activity, location, and likely duration. Discuss quieter options and breaks. Let your child decide whether to accept, change the plan, or decline.',
+      },
+      {
+        title: 'Talk About Friendship Preferences',
+        description: 'Explore what a comfortable friendship feels like.',
+        body: 'Ask which activities and communication methods feel good together. Some people prefer one close friend, online connection, or less frequent contact. Avoid treating a particular social style as the only right outcome.',
+      },
+      {
+        title: 'Practice Boundaries Together',
+        description:
+          'Make consent and personal space part of everyday support.',
+        body: 'Use clear language for yes, no, stop, and asking for help. Respect these signals in ordinary moments. Plan a trusted person to contact when an interaction feels uncomfortable or unsafe.',
+      },
+    ],
+  },
+  {
+    id: '38000000-0000-4000-8000-000000000015',
+    category: 'communication',
+    content: {
+      title: 'Self-Advocacy And Choice',
+      description:
+        'Make space for personal preferences, communication rights, and supported decisions.',
+    },
+    tags: ['Self-Advocacy'],
+    resources: [
+      {
+        title: 'Create A Preference Profile',
+        description:
+          'Describe support in the person’s own words or chosen communication.',
+        body: 'Ask what people should know about communication, sensory access, and preferred help. Include strengths and interests. Share only what the person wants others to know, and revisit the profile as preferences change.',
+      },
+      {
+        title: 'Prepare An Accommodation Request',
+        description: 'Explain the barrier and the support that would help.',
+        body: 'Describe the situation, the barrier to participation, and a practical adjustment. Decide how to make the request and who should receive it. Consult the relevant official service for the process that applies.',
+      },
+      {
+        title: 'Make Decisions With Support',
+        description: 'Keep the person’s choice at the center of planning.',
+        body: 'Offer accessible information, enough time, and trusted support. Break decisions into manageable parts and explain alternatives. Legal decision-making arrangements differ by location; use official local guidance for those questions.',
+      },
+      {
+        title: 'Plan For Speaking Up',
+        description: 'Choose a comfortable way to raise a concern.',
+        body: 'Prepare a short message, written note, AAC phrase, or support-person plan. Identify who can help and what response would be useful. Speaking up can be private and gradual rather than a public conversation.',
+      },
+    ],
+  },
+  {
+    id: '38000000-0000-4000-8000-000000000016',
+    category: 'education',
+    content: {
+      title: 'Employment And Meaningful Work',
+      description:
+        'Explore interests, workplace access, and practical next steps toward work.',
+    },
+    tags: ['Employment'],
+    resources: [
+      {
+        title: 'Explore Work Interests',
+        description: 'Start with enjoyable tasks and preferred environments.',
+        body: 'List activities the person enjoys and conditions that support concentration. Explore job descriptions, informational conversations, or a short visit. A person’s strengths need not fit one expected career path.',
+      },
+      {
+        title: 'Find Vocational Rehabilitation',
+        description: 'Locate the official state employment support service.',
+        body: 'Use the state vocational rehabilitation agency to ask about eligibility, application steps, and available support. Ask about assessment, training, and job coaching. Services and waiting periods vary; confirm current details with the agency.',
+      },
+      {
+        title: 'Prepare For An Interview',
+        description: 'Ask how the process can support clear communication.',
+        body: 'Find out the interview format and what to bring. Practice relevant examples without scripting a different personality. Discuss accommodations, such as written questions or a quieter setting, through the employer’s stated process.',
+      },
+      {
+        title: 'Plan Workplace Supports',
+        description: 'Turn access needs into practical routines.',
+        body: 'Discuss instructions, task priorities, sensory access, breaks, and a reliable contact person. Write down agreed arrangements and a review date. Keep personal health information private unless sharing is chosen and necessary.',
+      },
+    ],
+  },
+  {
+    id: '38000000-0000-4000-8000-000000000017',
+    category: 'everyday',
+    content: {
+      title: 'Independent Living And Daily Choice',
+      description:
+        'Build practical routines and community access around the person’s own priorities.',
+    },
+    tags: ['Independent Living'],
+    resources: [
+      {
+        title: 'Choose One Daily Skill',
+        description: 'Practice a useful task at a comfortable pace.',
+        body: 'Ask which task would make everyday life easier. Break it into steps and choose reminders, tools, or support together. Adjust the environment before assuming more practice is the answer.',
+      },
+      {
+        title: 'Plan A Familiar Journey',
+        description: 'Explore transport with backup options.',
+        body: 'Review the route, fare, accessibility, and a way to ask for help. Practice at a quieter time if wanted. Make a backup plan for delays or changes and decide what location information may be shared.',
+      },
+      {
+        title: 'Build A Spending Routine',
+        description: 'Make everyday money decisions easier to review.',
+        body: 'Choose a simple way to track planned and actual spending. Practice comparing prices and recognizing unexpected requests. For benefits or legal financial arrangements, ask a qualified local service about the individual circumstances.',
+      },
+      {
+        title: 'Explore Housing Preferences',
+        description: 'Begin with the person’s definition of home.',
+        body: 'Discuss location, privacy, sensory needs, housemates, and wanted support. Ask local housing services about current options, eligibility, and waiting lists. Record questions without making a commitment before the person is ready.',
+      },
+    ],
+  },
+  {
+    id: '38000000-0000-4000-8000-000000000018',
+    category: 'education',
+    content: {
+      title: 'Adult Services And Transition Planning',
+      description:
+        'Find official local services and plan continuity as support systems change.',
+    },
+    tags: ['Adult Services'],
+    resources: [
+      {
+        title: 'Map Adult Service Contacts',
+        description: 'Find the agencies that serve your area.',
+        body: 'Identify state disability services, the local independent living center, vocational rehabilitation, and benefits offices. Ask each agency what it provides and how to apply. Confirm current details on official websites.',
+      },
+      {
+        title: 'Prepare For A Service Application',
+        description: 'Keep requirements and follow-up dates together.',
+        body: 'Ask which documents are required, how information is protected, and when to expect a response. Keep copies in your private document space. Use an application record to track questions and deadlines.',
+      },
+      {
+        title: 'Plan A Support Handoff',
+        description: 'Make room for the adult’s consent and preferences.',
+        body: 'Discuss which contacts and information should transfer when a school or service changes. Ask about consent, release forms, and any gap in support. Include the person directly using their preferred communication.',
+      },
+      {
+        title: 'Review Benefits With A Local Adviser',
+        description: 'Get current information before changing a plan.',
+        body: 'Ask an official benefits office or qualified benefits counselor how work, income, or living arrangements may affect support. Rules depend on the program and personal circumstances. This sample resource does not determine eligibility.',
+      },
+    ],
+  },
+] as const;

@@ -23,6 +23,7 @@ export function mapPoll(value: z.output<typeof PollTransportSchema>): Poll {
     attachments: value.attachments ?? [],
     selectionMode: value.selection_mode,
     tags: value.tags,
+    milestone_ids: value.milestone_ids,
     author: author(value.author),
     options: (value.options ?? [])
       .filter((option) => !option.deleted)

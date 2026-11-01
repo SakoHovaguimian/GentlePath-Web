@@ -1,10 +1,15 @@
 import { DirectoryFilters, Field, Select } from '@/components/ui';
-import { gentlePathPortalStrings as copy } from '@/strings';
+import { USStateCodeSchema } from '@/modules/onboarding/models/usStateCode';
+import {
+  gentlePathEditorialDiscoveryStrings as discovery,
+  gentlePathPortalStrings as copy,
+} from '@/strings';
 import type { Resource } from '../models/resource';
 import { resourceSortOptions } from '../models/resourceSort';
 import { useResourceDirectory } from '../useResourceDirectory';
 
 const allTags = '';
+const allStatesValue = '';
 
 export function ResourceFilters({
   resources,
@@ -50,6 +55,24 @@ export function ResourceFilters({
       }}
       additionalFilters={
         <>
+          <Field labelText={discovery.stateLabel}>
+            <Select
+              value={directory.stateCode}
+              onValueChange={(state) =>
+                directory.update({
+                  state: state || undefined,
+                  offset: undefined,
+                })
+              }
+            >
+              <option value={allStatesValue}>{discovery.allStates}</option>
+              {USStateCodeSchema.options.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </Select>
+          </Field>
           <Field labelText={copy.resources.tagLabel}>
             <Select
               value={directory.tag}

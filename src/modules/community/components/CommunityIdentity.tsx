@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui';
+import { Badge, NavigationLink } from '@/components/ui';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import type { CommunityAuthor } from '../models/communityAuthor';
 
@@ -29,7 +29,16 @@ export function CommunityIdentity({
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <p className="m-0 text-sm font-semibold text-primary wrap-anywhere">
-            {name}
+            {author ? (
+              <NavigationLink
+                href={`/community/parents/${encodeURIComponent(author.id)}`}
+                className="relative z-10 hover:underline"
+              >
+                {name}
+              </NavigationLink>
+            ) : (
+              name
+            )}
           </p>
           {own && <Badge>{copy.ownLabel}</Badge>}
         </div>

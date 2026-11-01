@@ -1,3 +1,4 @@
+import { BlogService } from '@/modules/blog/services/blogService';
 import { ContactService } from '@/modules/contact/services/contactService';
 import { BrowserApiClient } from '@/services/api/browserApiClient';
 import { EngagementService } from '@/modules/engagement/services/engagementService';
@@ -17,5 +18,11 @@ export function createPublicEngagementService() {
 export function createPublicContactService() {
   return new ContactService(
     new BrowserApiClient('/api/public', { redirectOnUnauthorized: false }),
+  );
+}
+
+export function createPublicBlogReadService() {
+  return new BlogService(
+    new BrowserApiClient('/api', { redirectOnUnauthorized: false }),
   );
 }

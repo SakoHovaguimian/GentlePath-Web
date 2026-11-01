@@ -17,6 +17,7 @@ export function useResourceDirectory() {
     ...directory,
     category: category.success ? category.data : '',
     tag: params.get('tag') ?? '',
+    stateCode: params.get('state') ?? '',
     sort,
     mode:
       params.get('mode') === 'collections'
@@ -27,6 +28,7 @@ export function useResourceDirectory() {
         query: undefined,
         status: undefined,
         tag: undefined,
+        state: undefined,
         offset: undefined,
       }),
   };

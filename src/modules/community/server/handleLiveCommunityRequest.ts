@@ -2,7 +2,10 @@ import 'server-only';
 import { PlatformAvailabilityTransportSchema } from '@/modules/portal/models/platformAvailabilityTransport';
 import { z } from 'zod';
 import { NotFoundError, ValidationError } from '@/errors/domainErrors';
-import { CommunityPostInputSchema } from '../models/communityPost';
+import {
+  CommunityPostInputSchema,
+  CommunityPostUpdateInputSchema,
+} from '../models/communityPost';
 import {
   CommunityCommentInputSchema,
   CommunityCommentUpdateInputSchema,
@@ -13,6 +16,10 @@ import { ReportResolutionSchema } from '@/modules/portal/models/moderationReport
 import { CommunityCommentQuerySchema } from '../models/communityCommentQuery';
 import { CommunityPostQuerySchema } from '../models/communityPostQuery';
 import { CommunityReportQuerySchema } from '../models/communityReportQuery';
+import { CommunityProfileSchema } from '../models/communityProfile';
+import { CommunityProfileActivityKindSchema } from '../models/communityProfileActivityKind';
+import { CommunityPagingSchema } from '../models/communityPaging';
+import { gentlePathCommunityDiscoveryStrings as discovery } from '@/strings';
 import { communityQueryParams } from '../communityQueryParams';
 import { CommunityPageMetadataSchema } from '../models/communityPageMetadata';
 import { CommunityPostTransportSchema } from './models/communityPostTransport';
@@ -128,6 +135,62 @@ export async function handleLiveCommunityRequest(
       }
       throw new NotFoundError();
     }
+    if (resource === 'profiles' && id && method === 'GET') {
+      const profile = await read(
+        CommunityProfileSchema,
+        `/community-profiles/${encodeURIComponent(id)}`,
+      );
+      if (!action) return json(profile);
+      const kind = CommunityProfileActivityKindSchema.parse(action);
+      const paging = CommunityPagingSchema.parse(rawQuery);
+      const paths = {
+        posts: '/posts',
+        polls: '/polls',
+        tips: '/tips',
+        post_comments: '/post-comments',
+        poll_comments: '/poll-comments',
+      };
+      const params = communityQueryParams({
+        user_id: id,
+        ...paging,
+        ...(kind === 'tips' ? { approval_status: 'APPROVED' } : {}),
+      });
+      const rows = await read(
+        pageSchema(
+          z.object({
+            id: z.string(),
+            title: z.string().optional(),
+            body: z.string().optional(),
+            message: z.string().optional(),
+            created_at: z.string(),
+            post_id: z.string().optional(),
+            poll_id: z.string().optional(),
+          }),
+        ),
+        `${paths[kind]}?${params}`,
+      );
+      return json({
+        data: rows.data.map((item) => ({
+          id: item.id,
+          title:
+            item.title ??
+            (kind === 'tips' ? discovery.activity.tips : discovery.commentLink),
+          body: item.body ?? item.message ?? '',
+          createdAt: item.created_at,
+          href:
+            kind === 'posts'
+              ? `/community/${encodeURIComponent(item.id)}`
+              : kind === 'polls'
+                ? `/polls/${encodeURIComponent(item.id)}`
+                : kind === 'tips'
+                  ? `/tips?tip=${encodeURIComponent(item.id)}`
+                  : kind === 'post_comments'
+                    ? `/community/${encodeURIComponent(item.post_id ?? '')}`
+                    : `/polls/${encodeURIComponent(item.poll_id ?? '')}`,
+        })),
+        page: rows.page,
+      });
+    }
     if (resource === 'status' && !id && method === 'GET') {
       const settings = await read(
         PlatformAvailabilityTransportSchema,
@@ -139,6 +202,11 @@ export async function handleLiveCommunityRequest(
       if (!id && method === 'GET') {
         const query = CommunityPostQuerySchema.parse(rawQuery);
         const params = communityQueryParams({
+          post_kind: query.postKind,
+          age_band: query.ageBand,
+          state_code: query.stateCode,
+          milestone_id: query.milestoneId,
+          user_id: query.userId,
           query: query.query,
           tag: query.tag,
           limit: query.limit,
@@ -166,6 +234,9 @@ export async function handleLiveCommunityRequest(
           '/posts',
           'POST',
           {
+            post_kind: body.postKind,
+            milestone_ids: body.milestoneIds,
+            ...(body.childId ? { child_id: body.childId } : {}),
             title: body.title,
             body: body.body,
             image_url: body.imageUrl,
@@ -187,12 +258,14 @@ export async function handleLiveCommunityRequest(
           return json(mapCommunityPost(post, hasLiked));
         }
         if (method === 'PATCH') {
-          const body = CommunityPostInputSchema.parse(await readInput());
+          const body = CommunityPostUpdateInputSchema.parse(await readInput());
           const post = await read(
             CommunityPostTransportSchema,
             targetPath,
             'PUT',
             {
+              post_kind: body.postKind,
+              milestone_ids: body.milestoneIds,
               title: body.title,
               body: body.body,
               image_url: body.imageUrl,

@@ -1,5 +1,6 @@
 'use client';
 
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import { CommunityAttachments } from './components/CommunityAttachments';
 
 import {
@@ -131,6 +132,9 @@ export function CommunityReportsScreen() {
                       <p className="gp-community-body mt-3">
                         {report.snapshot.body}
                       </p>
+                      <MilestoneLinkList
+                        ids={report.snapshot.milestoneIds ?? []}
+                      />
                       <CommunityAttachments
                         items={report.snapshot.attachments ?? []}
                       />

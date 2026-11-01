@@ -1,5 +1,6 @@
 import 'server-only';
 import {
+  gentlePathExpandedResourceCatalogue,
   gentlePathDemoStrings,
   gentlePathEditorialStrings,
   gentlePathPortalStrings,
@@ -10,7 +11,7 @@ import type { DemoResourceCollectionSeed } from '../models/demoResourceCollectio
 const copy = gentlePathPortalStrings.resources;
 const tags = copy.demoTags;
 
-export const demoResourceCatalogueVersion = 1;
+export const demoResourceCatalogueVersion = 2;
 
 export const demoResourceCollectionSeeds = [
   {
@@ -151,6 +152,7 @@ export const demoResourceCollectionSeeds = [
       copy.demoResources.communityOptions,
     ],
   },
+  ...gentlePathExpandedResourceCatalogue,
 ] as const satisfies readonly DemoResourceCollectionSeed[];
 
 const originalCollectionIndexes = [0, 2, 1, 9, 3, 10] as const;
@@ -179,6 +181,11 @@ export function createDemoResourceCatalogue(
   ): EditorialResource => ({
     id,
     content_type: 'RESOURCE',
+    version: 1,
+    milestone_ids: [`milestone-${(age % 3) + 1}`],
+    state_codes: age % 5 === 0 ? ['CA'] : age % 7 === 0 ? ['NY'] : [],
+    official_source_url: age % 2 === 0 ? 'https://www.ed.gov/' : null,
+    verified_at: age % 4 === 0 ? now : null,
     title: content.title,
     description: content.description,
     parent_id: collection.id,
@@ -239,6 +246,11 @@ export function createDemoResourceCatalogue(
       (collection, index): EditorialResource => ({
         id: collection.id,
         content_type: 'RESOURCE',
+        version: 1,
+        milestone_ids: [`milestone-${(index % 3) + 1}`],
+        state_codes: [],
+        official_source_url: null,
+        verified_at: null,
         title: collection.content.title,
         description: collection.content.description,
         parent_id: null,

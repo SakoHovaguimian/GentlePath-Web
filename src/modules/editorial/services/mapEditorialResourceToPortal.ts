@@ -15,6 +15,10 @@ export function mapEditorialResourceToPortal(
       : 5;
   return {
     id: resource.id,
+    milestone_ids: resource.milestone_ids,
+    state_codes: resource.state_codes,
+    official_source_url: resource.official_source_url,
+    verified_at: resource.verified_at,
     title: resource.title,
     description: resource.description,
     category: category.success ? category.data : 'everyday',

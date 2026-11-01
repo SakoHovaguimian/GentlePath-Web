@@ -1,3 +1,4 @@
+import { MilestoneLinksSchema } from '@/modules/milestone-admin/models/milestoneLinks';
 import { CommunityAttachmentsSchema } from '@/modules/community/models/communityAttachment';
 import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
@@ -8,6 +9,7 @@ import { PollSelectionModeSchema } from './pollSelectionMode';
 
 export const PollInputSchema = z
   .object({
+    milestone_ids: MilestoneLinksSchema.optional(),
     title: z
       .string()
       .trim()
@@ -48,6 +50,7 @@ export const PollInputSchema = z
   })
   .strict();
 export const PollSchema = z.object({
+  milestone_ids: MilestoneLinksSchema.default([]),
   attachments: CommunityAttachmentsSchema.default([]),
   id: z.string().uuid(),
   userId: z.string().uuid().nullable(),

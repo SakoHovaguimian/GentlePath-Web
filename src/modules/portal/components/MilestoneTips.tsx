@@ -2,21 +2,35 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Button, EmptyState, QueryBoundary, UiIcon } from '@/components/ui';
+import {
+  Button,
+  EmptyState,
+  NavigationLink,
+  QueryBoundary,
+  UiIcon,
+} from '@/components/ui';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import { useFamilyTips } from '@/modules/milestone-admin/hooks';
 import { MilestonePagination } from '@/modules/milestone-admin/components/MilestonePagination';
 import { formatMilestoneDate } from '@/modules/milestone-admin/formatMilestoneDate';
 
-export function MilestoneTips({ milestoneId }: { milestoneId: string }) {
+export function MilestoneTips({
+  milestoneId,
+  pageSize = 9,
+}: {
+  milestoneId: string;
+  pageSize?: number;
+}) {
   const [offset, setOffset] = useState(0);
   const query = useFamilyTips('approved', {
     query: '',
     tag: '',
     milestone_id: milestoneId,
-    limit: 9,
+    limit: pageSize,
     offset,
   });
+  if (!query.isFetching && query.data && !query.data.data.length && offset > 0)
+    setOffset(Math.max(0, offset - pageSize));
   return (
     <div className="grid gap-5">
       <QueryBoundary query={query} loadingMessage={copy.loadingTips}>
@@ -32,14 +46,18 @@ export function MilestoneTips({ milestoneId }: { milestoneId: string }) {
                     {tip.message}
                   </p>
                   <div className="flex flex-wrap justify-between gap-2 text-xs text-tertiary">
-                    <span>
-                      {tip.author
-                        ? copy.authorName(
-                            tip.author.first_name,
-                            tip.author.last_name,
-                          )
-                        : copy.unavailableAuthor}
-                    </span>
+                    {tip.author ? (
+                      <NavigationLink
+                        href={`/community/parents/${encodeURIComponent(tip.author.id)}`}
+                      >
+                        {copy.authorName(
+                          tip.author.first_name,
+                          tip.author.last_name,
+                        )}
+                      </NavigationLink>
+                    ) : (
+                      <span>{copy.unavailableAuthor}</span>
+                    )}
                     <time dateTime={tip.created_at}>
                       {formatMilestoneDate(tip.created_at)}
                     </time>

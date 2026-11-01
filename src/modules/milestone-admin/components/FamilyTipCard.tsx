@@ -1,4 +1,4 @@
-import { Badge, Card, CardOpenButton, IconMenu } from '@/components/ui';
+import { Badge, Card, CardOpenButton, IconMenu, NavigationLink } from '@/components/ui';
 import type { IconMenuItem } from '@/components/ui/models/iconMenuItem';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
@@ -100,10 +100,8 @@ export function FamilyTipCard({
       )}
       <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-secondary pt-4">
         <div className="grid gap-1 text-xs text-tertiary">
-          <span>
-            {tip.author
-              ? copy.authorName(tip.author.first_name, tip.author.last_name)
-              : copy.unavailableAuthor}
+          <span className="gp-milestone-tip-card__control">
+            {tip.author && tip.approval_status === 'APPROVED' ? <NavigationLink href={`/community/parents/${encodeURIComponent(tip.author.id)}`} className="relative z-10 hover:underline">{copy.authorName(tip.author.first_name, tip.author.last_name)}</NavigationLink> : copy.unavailableAuthor}
           </span>
           <time dateTime={tip.created_at}>
             {formatMilestoneDate(tip.created_at)}

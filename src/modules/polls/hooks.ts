@@ -8,6 +8,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { communityQueryKeys } from '@/modules/community/queryKeys';
 import { useServiceContainer } from '@/providers/AppProviders';
 import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
 import { portalQueryKeys } from '@/modules/portal/queryKeys';
@@ -58,6 +59,7 @@ function usePollMutation<T, R>(mutationFn: (input: T) => Promise<R>) {
     mutationFn,
     onSuccess: async () => {
       await Promise.all([
+        cache.invalidateQueries({ queryKey: communityQueryKeys.all }),
         cache.invalidateQueries({ queryKey: keys.all }),
         cache.invalidateQueries({ queryKey: engagementQueryKeys.all }),
         cache.invalidateQueries({ queryKey: portalQueryKeys.overview }),

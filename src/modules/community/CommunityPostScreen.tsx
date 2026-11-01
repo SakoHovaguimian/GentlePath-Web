@@ -1,6 +1,7 @@
 'use client';
 
 import type { Route } from 'next';
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import {
@@ -18,7 +19,11 @@ import { useSessionState } from '@/providers/AppProviders';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
 import { MutationError } from '@/modules/portal/components/MutationError';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
-import { gentlePathCommunityStrings as copy, strings } from '@/strings';
+import {
+  gentlePathCommunityDiscoveryStrings as discovery,
+  gentlePathCommunityStrings as copy,
+  strings,
+} from '@/strings';
 import { useCommunityPost, useCommunityStatus } from './hooks';
 import { communityReturnPath } from './useCommunityDirectory';
 import { useCommunityPostActions } from './useCommunityPostActions';
@@ -168,8 +173,14 @@ function CommunityPostDetail({
           <PageHeader title={post.title} eyebrow={copy.postTitle} />
         </div>
         <div className="gp-community-thread__content">
+          <div className="flex flex-wrap gap-2">
+            <Badge>{discovery.kinds[post.postKind]}</Badge>
+            {post.ageBand && <Badge>{discovery.ages[post.ageBand]}</Badge>}
+            {post.stateCode && <Badge>{post.stateCode}</Badge>}
+          </div>
           <p className="gp-community-body">{post.body}</p>
           <CommunityAttachments items={post.attachments} />
+          <MilestoneLinkList ids={post.milestoneIds} />
           {post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (

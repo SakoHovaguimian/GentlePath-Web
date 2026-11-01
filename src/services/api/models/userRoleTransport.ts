@@ -1,11 +1,16 @@
-import type { UserRole } from '@/models/userRole';
+import { z } from 'zod';
+import { UserRoleSchema } from '@/models/userRole';
 
-export type UserRoleTransport =
-  | UserRole
-  | 'USER'
-  | 'ADMIN'
-  | 'SUPER_ADMIN'
-  | 'OWNER'
-  | 'MANAGER'
-  | 'EMPLOYEE'
-  | 'RECEPTIONIST';
+export const UserRoleTransportSchema = z.union([
+  UserRoleSchema,
+  z.enum([
+    'USER',
+    'ADMIN',
+    'SUPER_ADMIN',
+    'OWNER',
+    'MANAGER',
+    'EMPLOYEE',
+    'RECEPTIONIST',
+  ]),
+]);
+export type UserRoleTransport = z.infer<typeof UserRoleTransportSchema>;

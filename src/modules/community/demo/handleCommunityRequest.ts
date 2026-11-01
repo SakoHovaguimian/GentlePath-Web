@@ -17,6 +17,7 @@ import {
 } from '@/strings';
 import {
   CommunityPostInputSchema,
+  CommunityPostUpdateInputSchema,
   type CommunityPost,
 } from '../models/communityPost';
 import {
@@ -35,6 +36,14 @@ import { CommunityReportQuerySchema } from '../models/communityReportQuery';
 import type { DemoCommunityPost } from './models/demoCommunityPost';
 import type { DemoCommunityComment } from './models/demoCommunityComment';
 import { getDemoCommunityState } from './communityState';
+import { getDemoOnboardingSettings } from '@/modules/onboarding/demo/onboardingState';
+import {
+  validateDemoMilestoneLinks,
+  visibleDemoMilestoneIds,
+} from '@/modules/milestone-admin/server/demoMilestoneLinks';
+import { demoCommunityProfile } from './communityProfiles';
+import { getDemoEffectiveTimezone } from '@/modules/notification-inbox/demo/notificationInboxState';
+import { childAgeBand } from '../models/ageBand';
 
 export {
   resetDemoCommunityState,
@@ -122,6 +131,10 @@ export async function handleCommunityRequest(
   const postData = (post: DemoCommunityPost): CommunityPost => ({
     id: post.id,
     userId: post.userId,
+    postKind: post.postKind ?? 'DISCUSSION',
+    stateCode: post.stateCode,
+    ageBand: post.ageBand,
+    milestoneIds: visibleDemoMilestoneIds(post.milestoneIds),
     title: post.title,
     body: post.body,
     imageUrl: post.imageUrl,
@@ -165,6 +178,8 @@ export async function handleCommunityRequest(
       },
     };
   };
+  if (resource === 'profiles' && id && method === 'GET')
+    return json(demoCommunityProfile(id, action, rawQuery, context));
   if (resource === 'status' && !id && method === 'GET')
     return json({ enabled: portal.settings.communityEnabled });
   if (resource === 'posts') {
@@ -177,6 +192,14 @@ export async function handleCommunityRequest(
             visiblePost(post) &&
             (query.scope !== 'mine' || post.userId === current.id) &&
             (!query.tag || post.tags.includes(query.tag)) &&
+            (!query.postKind || post.postKind === query.postKind) &&
+            (!query.ageBand || post.ageBand === query.ageBand) &&
+            (!query.stateCode || post.stateCode === query.stateCode) &&
+            (!query.userId || post.userId === query.userId) &&
+            (!query.milestoneId ||
+              visibleDemoMilestoneIds(post.milestoneIds).includes(
+                query.milestoneId,
+              )) &&
             `${post.title} ${post.body}`.toLocaleLowerCase().includes(search),
         )
         .sort(newest);
@@ -189,9 +212,26 @@ export async function handleCommunityRequest(
       if (body.attachments !== undefined)
         body.imageUrl =
           body.attachments.find((item) => item.kind === 'IMAGE')?.url ?? null;
+      const { childId, ...publicBody } = body;
+      const child = childId
+        ? portal.children.find(
+            (item) => item.id === childId && item.userId === current.id,
+          )
+        : undefined;
+      if (childId && !child) throw new OwnershipError();
+      validateDemoMilestoneLinks(body.milestoneIds);
       const now = new Date().toISOString();
-      const post = {
-        ...body,
+      const post: DemoCommunityPost = {
+        ...publicBody,
+        postKind: body.postKind ?? 'DISCUSSION',
+        milestoneIds: body.milestoneIds ?? [],
+        stateCode: getDemoOnboardingSettings(current.id).state_code,
+        ageBand: child
+          ? childAgeBand(
+              child.dateOfBirth,
+              getDemoEffectiveTimezone(current.id),
+            )
+          : null,
         id: crypto.randomUUID(),
         userId: current.id,
         createdAt: now,
@@ -208,7 +248,10 @@ export async function handleCommunityRequest(
       if (method === 'PATCH' || method === 'DELETE') {
         if (post.userId !== current.id) throw new OwnershipError();
         if (method === 'PATCH') {
-          const body = CommunityPostInputSchema.parse(await input(request));
+          const body = CommunityPostUpdateInputSchema.parse(
+            await input(request),
+          );
+          validateDemoMilestoneLinks(body.milestoneIds);
           if (body.attachments !== undefined)
             body.imageUrl =
               body.attachments.find((item) => item.kind === 'IMAGE')?.url ??
@@ -362,6 +405,10 @@ export async function handleCommunityRequest(
         body: target.body,
         ...('title' in target
           ? {
+              postKind: target.postKind,
+              stateCode: target.stateCode,
+              ageBand: target.ageBand,
+              milestoneIds: visibleDemoMilestoneIds(target.milestoneIds),
               tags: [...target.tags],
               imageUrl: target.imageUrl,
               attachments: structuredClone(target.attachments ?? []),

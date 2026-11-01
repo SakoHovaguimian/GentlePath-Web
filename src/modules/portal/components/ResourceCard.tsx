@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import { ResourceSourceStatus } from '@/modules/editorial/components/ResourceSourceStatus';
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import Link from 'next/link';
 import { BookmarkButton, IconMenu } from '@/components/ui';
 import { gentlePathPortalStrings as copy } from '@/strings';
@@ -83,6 +85,12 @@ export function ResourceCard({
         <p className="m-0 flex-1 text-sm leading-relaxed text-secondary">
           {resource.description}
         </p>
+        <ResourceSourceStatus
+          stateCodes={resource.state_codes}
+          officialSourceUrl={resource.official_source_url}
+          verifiedAt={resource.verified_at}
+        />
+        <MilestoneLinkList ids={resource.milestone_ids} />
         <ResourceRatingSummary ratings={resource.ratings} compact />
         <div className="gp-resource-card__footer">
           <span className="text-xs text-tertiary">

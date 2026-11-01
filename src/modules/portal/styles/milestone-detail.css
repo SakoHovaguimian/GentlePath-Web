@@ -1,0 +1,72 @@
+.gp-milestone-detail {
+  gap: 2rem;
+}
+
+.gp-milestone-detail__header {
+  overflow: hidden;
+  border: 1px solid var(--gp-border);
+  border-radius: 1.25rem;
+  background: var(--gp-paper);
+}
+
+.gp-milestone-detail__header .ui-page-header {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.gp-milestone-detail__cover {
+  position: relative;
+  height: clamp(12rem, 26vw, 22rem);
+  overflow: hidden;
+  background: var(--gp-sage);
+}
+
+.gp-milestone-detail__cover[data-fallback] {
+  background: var(--gp-artwork-canvas);
+}
+
+.gp-milestone-detail__navigation {
+  display: grid;
+  gap: 0.75rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--gp-border);
+}
+
+.gp-milestone-detail__section {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--gp-border);
+  scroll-margin-top: 2rem;
+}
+
+.gp-milestone-detail__section:last-child {
+  border-bottom: 0;
+}
+
+.gp-milestone-detail__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.gp-milestone-detail__cards--community {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.gp-milestone-detail__cards > .ui-empty-state {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 79.99rem) {
+  .gp-milestone-detail__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .gp-milestone-detail__cards,
+  .gp-milestone-detail__cards--community {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

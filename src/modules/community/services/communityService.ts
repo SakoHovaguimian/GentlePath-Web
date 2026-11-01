@@ -2,6 +2,7 @@ import type { ApiClientInterface } from '@/services/api/apiClientInterface';
 import { validateInput } from '@/utils/validateInput';
 import {
   CommunityPostInputSchema,
+  CommunityPostUpdateInputSchema,
   CommunityPostSchema,
   type CommunityPostInput,
 } from '../models/communityPost';
@@ -38,6 +39,10 @@ import {
 import { communityQueryParams } from '../communityQueryParams';
 import { CommunityStatusSchema } from '../models/communityStatus';
 
+import { CommunityProfileSchema } from '../models/communityProfile';
+import { CommunityProfileActivityPageSchema } from '../models/communityProfileActivityPage';
+import type { CommunityProfileActivityKind } from '../models/communityProfileActivityKind';
+
 const base = '/portal/community';
 const postPath = (id: string) => `${base}/posts/${encodeURIComponent(id)}`;
 const commentPath = (id: string) =>
@@ -46,6 +51,27 @@ const commentPath = (id: string) =>
 export class CommunityService {
   constructor(private readonly api: ApiClientInterface) {}
 
+  async profile(id: string, signal?: AbortSignal) {
+    return CommunityProfileSchema.parse(
+      await this.api.request(`${base}/profiles/${encodeURIComponent(id)}`, {
+        signal,
+        cache: 'no-store',
+      }),
+    );
+  }
+  async profileActivity(
+    id: string,
+    kind: CommunityProfileActivityKind,
+    offset: number,
+    signal?: AbortSignal,
+  ) {
+    return CommunityProfileActivityPageSchema.parse(
+      await this.api.request(
+        `${base}/profiles/${encodeURIComponent(id)}/${kind}?limit=9&offset=${offset}`,
+        { signal, cache: 'no-store' },
+      ),
+    );
+  }
   async status(signal?: AbortSignal) {
     return CommunityStatusSchema.parse(
       await this.api.request(`${base}/status`, { signal }),
@@ -68,7 +94,10 @@ export class CommunityService {
     return CommunityPostSchema.parse(
       await this.api.request(id ? postPath(id) : `${base}/posts`, {
         method: id ? 'PATCH' : 'POST',
-        body: validateInput(CommunityPostInputSchema, input),
+        body: validateInput(
+          id ? CommunityPostUpdateInputSchema : CommunityPostInputSchema,
+          input,
+        ),
       }),
     );
   }

@@ -170,6 +170,22 @@ export async function handleLiveEditorialRequest(
     if (id && request.method === 'DELETE') return forward(request, targetPath);
   }
   if (
+    resource === 'resources' &&
+    id &&
+    action === 'verify-source' &&
+    !subaction &&
+    request.method === 'PATCH'
+  ) {
+    const body = z
+      .object({ version: z.number().int().positive(), verified: z.boolean() })
+      .strict()
+      .parse(await input(request));
+    return forward(
+      withMethod(request, 'PATCH', body),
+      `${targetPath}/verify-source`,
+    );
+  }
+  if (
     resource === 'guides' &&
     id &&
     action === 'items' &&

@@ -16,6 +16,7 @@ import type { ObservationInput } from './models/milestone';
 import { portalQueryKeys as keys } from './queryKeys';
 import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
 import { documentVaultQueryKeys } from '@/modules/documents/hooks';
+import { communityQueryKeys } from '@/modules/community/queryKeys';
 import { milestoneAdminKeys } from '@/modules/milestone-admin/queryKeys';
 
 export function usePortalOverview() {
@@ -74,6 +75,7 @@ export function useSaveChild() {
   return usePortalMutation(
     ({ input, id }: { input: ChildProfileInput; id?: string }) =>
       service.saveChild(input, id),
+    [communityQueryKeys.all],
   );
 }
 export function useDeleteChild() {
@@ -81,6 +83,7 @@ export function useDeleteChild() {
   return usePortalMutation(
     (id: string) => service.deleteChild(id),
     [
+      communityQueryKeys.all,
       documentVaultQueryKeys.all,
       milestoneAdminKeys.all,
       applicationQueryKeys.all,

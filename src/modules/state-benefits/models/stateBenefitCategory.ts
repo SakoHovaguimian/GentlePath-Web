@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
 export const StateBenefitCategorySchema = z.enum([
-  'HEALTHCARE',
-  'EARLY_SUPPORT',
-  'FAMILY_SUPPORT',
+  'MEDICAID_WAIVERS',
+  'RESPITE',
+  'EARLY_INTERVENTION',
+  'SCHOOL_SUPPORT',
+  'DISABILITY_SERVICES',
 ]);
 export type StateBenefitCategory = z.infer<typeof StateBenefitCategorySchema>;

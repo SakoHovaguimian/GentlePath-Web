@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { ResourceSourceStatus } from '@/modules/editorial/components/ResourceSourceStatus';
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import Image from 'next/image';
 import {
   Badge,
@@ -106,6 +108,13 @@ export function ResourceDetailScreen({ id }: { id: string }) {
                 />
               }
             />
+            <ResourceSourceStatus
+              stateCodes={resource.state_codes}
+              officialSourceUrl={resource.official_source_url}
+              verifiedAt={resource.verified_at}
+              detail
+            />
+            <MilestoneLinkList ids={resource.milestone_ids} />
             <MutationError error={mutation.error} />
             <ResourceRelatedContent resource={resource} resources={resources} />
             <Card className="gp-resource-detail__body">

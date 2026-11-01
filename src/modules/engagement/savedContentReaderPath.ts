@@ -12,6 +12,7 @@ export function savedContentReaderPath(
   )
     return null;
   const key = encodeURIComponent(id);
+  if (type === 'MILESTONE') return `/milestones/${key}`;
   if (type === 'RESOURCE') return `/resources/${key}`;
   if (type === 'GUIDED_STEP') return `/guides/${key}`;
   if (type === 'BLOG')

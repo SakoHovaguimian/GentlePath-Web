@@ -9,6 +9,10 @@ export const ResourceCategorySchema = z.enum([
 ]);
 export const ResourceSchema = z.object({
   id: z.string(),
+  milestone_ids: z.array(z.string()).default([]),
+  state_codes: z.array(z.string()).default([]),
+  official_source_url: z.string().nullable().default(null),
+  verified_at: z.string().nullable().default(null),
   title: z.string(),
   description: z.string(),
   category: ResourceCategorySchema,

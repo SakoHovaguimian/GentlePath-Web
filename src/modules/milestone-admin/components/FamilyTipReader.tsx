@@ -1,4 +1,4 @@
-import { Button, Modal } from '@/components/ui';
+import { Button, Modal, NavigationLink } from '@/components/ui';
 import { gentlePathMilestoneAdminStrings as copy } from '@/strings';
 import type { FamilyTip } from '../models/familyTip';
 import { formatMilestoneDate } from '../formatMilestoneDate';
@@ -36,9 +36,7 @@ export function FamilyTipReader({
           <div>
             <dt className="font-medium">{copy.authorLabel}</dt>
             <dd className="m-0">
-              {tip.author
-                ? copy.authorName(tip.author.first_name, tip.author.last_name)
-                : copy.unavailableAuthor}
+              {tip.author && tip.approval_status === 'APPROVED' ? <NavigationLink href={`/community/parents/${encodeURIComponent(tip.author.id)}`} className="hover:underline">{copy.authorName(tip.author.first_name, tip.author.last_name)}</NavigationLink> : tip.author ? copy.authorName(tip.author.first_name, tip.author.last_name) : copy.unavailableAuthor}
             </dd>
           </div>
           <div>

@@ -9,10 +9,12 @@ import { LandingInvitation } from './components/LandingInvitation';
 import { LandingQuestions } from './components/LandingQuestions';
 import { LandingStories } from './components/LandingStories';
 import { LandingSupport } from './components/LandingSupport';
+import { LandingAnchorSync } from './components/LandingAnchorSync';
 
 export function LandingPage() {
   return (
-    <div className="gp-public">
+    <div className="gp-public gp-landing">
+      <LandingAnchorSync />
       <a href="#main-content" className="gp-skip-link">
         {copy.skipAction}
       </a>

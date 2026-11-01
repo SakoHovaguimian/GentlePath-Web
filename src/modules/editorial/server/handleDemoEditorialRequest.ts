@@ -1,3 +1,8 @@
+import { hasResourceSourceChanges } from './hasResourceSourceChanges';
+import {
+  visibleDemoMilestoneIds,
+  validateDemoMilestoneLinks,
+} from '@/modules/milestone-admin/server/demoMilestoneLinks';
 import 'server-only';
 import { z } from 'zod';
 import {
@@ -13,6 +18,7 @@ import { canManageContent } from '@/services/auth/permissions';
 import { getDemoState } from '@/services/demo/demoState';
 import { getDemoPortalState } from '@/services/demo/demoPortalState';
 import {
+  gentlePathEditorialDiscoveryStrings as discovery,
   gentlePathDemoStrings,
   gentlePathEditorialStrings as copy,
 } from '@/strings';
@@ -163,6 +169,13 @@ export async function handleEditorialRequest(
     const query = EditorialQuerySchema.parse({
       ...Object.fromEntries(url.searchParams),
       root_only: url.searchParams.get('root_only') === 'true' || undefined,
+      exclude_collections: url.searchParams.has('exclude_collections')
+        ? url.searchParams.get('exclude_collections') === 'true'
+          ? true
+          : url.searchParams.get('exclude_collections') === 'false'
+            ? false
+            : url.searchParams.get('exclude_collections')
+        : undefined,
     });
     const all =
       resource === 'guides'
@@ -173,6 +186,20 @@ export async function handleEditorialRequest(
       : all
           .filter((item) => {
             if (
+              query.milestone_id &&
+              !visibleDemoMilestoneIds(item.milestone_ids).includes(query.milestone_id)
+            )
+              return false;
+            if (
+              item.content_type === 'RESOURCE' &&
+              query.state_code &&
+              item.state_codes.length &&
+              !item.state_codes.includes(
+                query.state_code as (typeof item.state_codes)[number],
+              )
+            )
+              return false;
+            if (
               !`${item.title} ${item.description}`
                 .toLocaleLowerCase()
                 .includes(query.query.toLocaleLowerCase())
@@ -181,6 +208,7 @@ export async function handleEditorialRequest(
             if (item.content_type === 'RESOURCE')
               return (
                 (!query.type || item.type === query.type) &&
+                (!query.exclude_collections || item.type !== 'COLLECTION') &&
                 (!query.parent_id || item.parent_id === query.parent_id) &&
                 (!query.root_only || item.parent_id === null)
               );
@@ -194,7 +222,7 @@ export async function handleEditorialRequest(
     const data = filtered.slice(query.offset, query.offset + query.limit);
     const hasMore = query.offset + query.limit < filtered.length;
     return json({
-      data,
+      data: data.map((item) => ({ ...item, milestone_ids: visibleDemoMilestoneIds(item.milestone_ids) })),
       page: {
         limit: query.limit,
         offset: query.offset,
@@ -206,6 +234,7 @@ export async function handleEditorialRequest(
   if (resource === 'guides') {
     if (!id && method === 'POST' && !action) {
       const input = GuideInputSchema.parse(await readInput(request));
+      validateDemoMilestoneLinks(input.milestone_ids);
       if (input.items.some((item) => item.id))
         throw new ValidationError(copy.validation.itemOwnershipDescription);
       const now = new Date().toISOString();
@@ -213,26 +242,29 @@ export async function handleEditorialRequest(
         ...input,
         id: crypto.randomUUID(),
         content_type: 'GUIDED_STEP',
+        milestone_ids: input.milestone_ids ?? [],
         items: [],
         created_at: now,
         updated_at: now,
       };
       guide.items = replaceItems(guide, input.items);
       state.guides.push(guide);
-      return json(guide, 201);
+      return json({ ...guide, milestone_ids: visibleDemoMilestoneIds(guide.milestone_ids) }, 201);
     }
     const guide = getVisibleDemoGuides().find((item) => item.id === id);
     if (!guide) throw new NotFoundError();
     if (!action && !subaction) {
-      if (method === 'GET') return json(guide);
+      if (method === 'GET') return json({ ...guide, milestone_ids: visibleDemoMilestoneIds(guide.milestone_ids) });
       if (method === 'PUT') {
         const input = GuideInputSchema.parse(await readInput(request));
+        validateDemoMilestoneLinks(input.milestone_ids);
         const items = replaceItems(guide, input.items);
         Object.assign(guide, input, {
+          milestone_ids: input.milestone_ids ?? guide.milestone_ids,
           items,
           updated_at: new Date().toISOString(),
         });
-        return json(guide);
+        return json({ ...guide, milestone_ids: visibleDemoMilestoneIds(guide.milestone_ids) });
       }
       if (method === 'DELETE') {
         state.deletedGuides.add(guide.id);
@@ -261,20 +293,50 @@ export async function handleEditorialRequest(
         }));
       } else throw new NotFoundError();
       guide.updated_at = new Date().toISOString();
-      return json(guide);
+      return json({ ...guide, milestone_ids: visibleDemoMilestoneIds(guide.milestone_ids) });
     }
+  }
+  if (
+    resource === 'resources' &&
+    id &&
+    action === 'verify-source' &&
+    !subaction &&
+    method === 'PATCH'
+  ) {
+    const record = state.resources.find(
+      (item) =>
+        item.id === id &&
+        getVisibleDemoResources().some((visible) => visible.id === id),
+    );
+    if (!record) throw new NotFoundError();
+    const body = z
+      .object({ version: z.number().int().positive(), verified: z.boolean() })
+      .strict()
+      .parse(await readInput(request));
+    if (body.version !== record.version)
+      throw new ApiError(discovery.versionConflictDescription, 409);
+    if (body.verified && !record.official_source_url)
+      throw new ValidationError(discovery.sourceRequiredDescription);
+    const now = new Date().toISOString();
+    record.verified_at = body.verified ? now : null;
+    record.updated_at = now;
+    record.version += 1;
+    syncDemoPortalResources();
+    return json(getVisibleDemoResources().find((item) => item.id === id));
   }
   if (resource === 'resources' && !action && !subaction) {
     if (!id && method === 'POST') {
       const input = EditorialResourceInputSchema.parse(
         await readInput(request),
       );
+      validateDemoMilestoneLinks(input.milestone_ids);
       validateParent(input);
       const now = new Date().toISOString();
       const item = {
         ...input,
         id: crypto.randomUUID(),
         content_type: 'RESOURCE' as const,
+        milestone_ids: input.milestone_ids ?? [],
         created_at: now,
         updated_at: now,
         resource_details: {
@@ -284,6 +346,8 @@ export async function handleEditorialRequest(
         },
         ratings: { count: 0, average: null },
         children_count: 0,
+        verified_at: null,
+        version: 1,
       };
       state.resources.push(item);
       syncDemoPortalResources();
@@ -301,9 +365,15 @@ export async function handleEditorialRequest(
       const input = EditorialResourceInputSchema.parse(
         await readInput(request),
       );
+      validateDemoMilestoneLinks(input.milestone_ids);
       validateParent(input, id);
       const now = new Date().toISOString();
       Object.assign(resource, input, {
+        milestone_ids: input.milestone_ids ?? resource.milestone_ids,
+        version: resource.version + 1,
+        verified_at: hasResourceSourceChanges(resource, input)
+          ? null
+          : resource.verified_at,
         updated_at: now,
         resource_details: {
           ...input.resource_details,

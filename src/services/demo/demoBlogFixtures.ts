@@ -52,6 +52,7 @@ export function createDemoBlogArticles(): BlogArticle[] {
     };
     return BlogArticleSchema.parse({
       ...fields,
+      milestone_ids: [`milestone-${(index % 3) + 1}`],
       content:
         index === 0
           ? [

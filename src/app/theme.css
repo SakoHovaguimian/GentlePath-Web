@@ -2320,6 +2320,13 @@
   --gp-muted: #53625b;
   --gp-border: #d9dfd5;
   --gp-leaf: #78a18a;
+  --landing-hero-background: #12483f;
+  --landing-hero-foreground: var(--gp-light-paper);
+  --landing-hero-muted: #eef0e5;
+  --landing-hero-action: #f8d877;
+  --landing-hero-action-hover: #ffe4a1;
+  --landing-hero-action-foreground: #123e39;
+  --landing-hero-scrim: #123e39;
   --color-celebration-primary: var(--gp-forest);
   --color-firework-mint: #91d8ba;
   --color-firework-lilac: #bca0ec;

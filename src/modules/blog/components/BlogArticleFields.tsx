@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { MilestoneLinksField } from '@/modules/milestone-admin/components/MilestoneLinksField';
 import { Button, Field, Input, SplitSection, TextArea } from '@/components/ui';
 import { gentlePathBlogStrings as copy } from '@/strings';
 import type { BlogArticleDraft } from '../models/blogArticle';
@@ -176,6 +177,11 @@ export function BlogArticleFields({
           {error('cover')}
         </div>
       </div>
+      <MilestoneLinksField
+        value={form.milestone_ids}
+        disabled={disabled}
+        onChange={(value) => update('milestone_ids', value)}
+      />
       <p className="m-0 text-xs text-tertiary">{copy.reusableOptionsHint}</p>
       {BlogCoverSchema.safeParse(form.cover).success && (
         <div className={styles.editorCover} data-cover={form.cover}>

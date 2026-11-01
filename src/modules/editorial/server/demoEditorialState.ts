@@ -12,6 +12,7 @@ import {
   demoResourceCatalogueVersion,
 } from './demoResourceCatalogue';
 import { upgradeDemoResourceCatalogue } from './upgradeDemoResourceCatalogue';
+import { visibleDemoMilestoneIds } from '@/modules/milestone-admin/server/demoMilestoneLinks';
 
 const globalEditorial = globalThis as typeof globalThis & {
   gentlePathEditorialState?: DemoEditorialState;
@@ -27,6 +28,7 @@ function createState(): DemoEditorialState {
     return {
       id,
       content_type: 'GUIDED_STEP' as const,
+      milestone_ids: [`milestone-${(index % 3) + 1}`],
       title: seed.title,
       description: seed.description,
       image_url: null,
@@ -68,8 +70,15 @@ export function getDemoEditorialState(): DemoEditorialState {
     getDemoState().users.find((user) => user.role === 'admin')?.id ?? '',
     new Date().toISOString(),
   );
-  for (const record of state.resources)
+  for (const record of state.resources) {
     record.tags = normalizeContentTags(record.tags);
+    record.milestone_ids ??= [];
+    record.state_codes ??= [];
+    record.official_source_url ??= null;
+    record.verified_at ??= null;
+    record.version ??= 1;
+  }
+  for (const guide of state.guides) guide.milestone_ids ??= [];
   return state;
 }
 
@@ -87,6 +96,7 @@ export function getVisibleDemoResources() {
   const ratingSummaries = getDemoResourceRatingSummaries();
   return resources.map((resource) => ({
     ...resource,
+    milestone_ids: visibleDemoMilestoneIds(resource.milestone_ids),
     ratings: ratingSummaries.get(resource.id) ?? { count: 0, average: null },
     children_count: resources.filter((item) => item.parent_id === resource.id)
       .length,

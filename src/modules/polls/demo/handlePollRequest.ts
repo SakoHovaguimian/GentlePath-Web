@@ -1,3 +1,7 @@
+import {
+  visibleDemoMilestoneIds,
+  validateDemoMilestoneLinks,
+} from '@/modules/milestone-admin/server/demoMilestoneLinks';
 import { isDemoCommentVisible } from '@/modules/community/demo/isDemoCommentVisible';
 import 'server-only';
 import { z } from 'zod';
@@ -142,6 +146,7 @@ export async function handlePollRequest(
       attachments: poll.attachments ?? [],
       selectionMode: poll.selectionMode,
       tags: [...poll.tags],
+      milestone_ids: visibleDemoMilestoneIds(poll.milestone_ids),
       author: author(poll.userId),
       options: options.map((option) => ({
         id: option.id,
@@ -221,6 +226,8 @@ export async function handlePollRequest(
           (query.scope !== 'mine' || poll.userId === current.id) &&
           (!query.selectionMode ||
             query.selectionMode === poll.selectionMode) &&
+          (!query.milestone_id ||
+            visibleDemoMilestoneIds(poll.milestone_ids).includes(query.milestone_id)) &&
           (!query.tag || poll.tags.includes(query.tag)) &&
           (!query.createdAfter ||
             Date.parse(poll.createdAt) >= Date.parse(query.createdAfter)) &&
@@ -237,6 +244,7 @@ export async function handlePollRequest(
   }
   if (!id && method === 'POST') {
     const input = PollInputSchema.parse(await readInput(request));
+    validateDemoMilestoneLinks(input.milestone_ids);
     if (input.options.some((option) => option.id))
       throw new ValidationError(copy.validation.optionsDescription);
     const now = new Date().toISOString();
@@ -269,6 +277,7 @@ export async function handlePollRequest(
         return noContent();
       }
       const input = PollInputSchema.parse(await readInput(request));
+      validateDemoMilestoneLinks(input.milestone_ids);
       const activeOptions = poll.options.filter((option) => !option.deleted);
       if (
         input.options.some(
@@ -324,6 +333,7 @@ export async function handlePollRequest(
         message: input.message,
         selectionMode: input.selectionMode,
         tags: input.tags,
+        milestone_ids: input.milestone_ids ?? poll.milestone_ids ?? [],
         ...(input.attachments !== undefined
           ? { attachments: input.attachments }
           : {}),

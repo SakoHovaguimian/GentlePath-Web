@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import {
   Badge,
   Button,
@@ -36,6 +37,7 @@ function GuideReader({ guide }: { guide: Guide }) {
       {guide.image_url && (
         <EditorialImage src={guide.image_url} alt={guide.title} />
       )}
+      <MilestoneLinkList ids={guide.milestone_ids} />
       <GuideSteps steps={guide.items} />
       <Button asChild variant="ghost" className="justify-self-start">
         <Link href="/guides">

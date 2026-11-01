@@ -30,8 +30,11 @@ export function pollReturnPath(value: string | null) {
   try {
     const url = new URL(value, 'https://gentlepath.internal');
     return url.origin === 'https://gentlepath.internal' &&
-      url.pathname === '/polls'
-      ? `${url.pathname}${url.search}`
+      (url.pathname === '/polls' ||
+        url.pathname === '/milestones' ||
+        /^\/milestones\/[a-zA-Z0-9_-]+$/.test(url.pathname) ||
+        /^\/community\/parents\/[^/]+$/.test(url.pathname))
+      ? `${url.pathname}${url.search}${url.hash}`
       : '/polls';
   } catch {
     return '/polls';

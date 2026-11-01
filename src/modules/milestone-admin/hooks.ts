@@ -5,6 +5,11 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { communityQueryKeys } from '@/modules/community/queryKeys';
+import { editorialQueryKeys } from '@/modules/editorial/queryKeys';
+import { blogQueryKeys } from '@/modules/blog/queryKeys';
+import { pollQueryKeys } from '@/modules/polls/queryKeys';
+import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
 import { useServiceContainer } from '@/providers/AppProviders';
 import { portalQueryKeys } from '@/modules/portal/queryKeys';
 import { milestoneAdminKeys as keys } from './queryKeys';
@@ -49,6 +54,14 @@ export function useMilestoneProgressSummary(childId: string) {
     enabled: Boolean(childId),
   });
 }
+export function useFamilyTip(id: string) {
+  const { milestoneAdminService: service } = useServiceContainer();
+  return useQuery({
+    queryKey: [...keys.all, 'tip', id],
+    queryFn: ({ signal }) => service.tip(id, signal),
+    enabled: Boolean(id),
+  });
+}
 export function useFamilyTips(
   scope: 'approved' | 'mine' | 'review',
   query: MilestoneAdminQuery,
@@ -65,6 +78,11 @@ function useMilestoneMutation<T>(mutationFn: (input: T) => Promise<unknown>) {
     mutationFn,
     onSuccess: async () => {
       await Promise.all([
+        cache.invalidateQueries({ queryKey: communityQueryKeys.all }),
+        cache.invalidateQueries({ queryKey: editorialQueryKeys.all }),
+        cache.invalidateQueries({ queryKey: blogQueryKeys.all }),
+        cache.invalidateQueries({ queryKey: pollQueryKeys.all }),
+        cache.invalidateQueries({ queryKey: engagementQueryKeys.all }),
         cache.invalidateQueries({ queryKey: keys.all }),
         cache.invalidateQueries({ queryKey: portalQueryKeys.all }),
       ]);

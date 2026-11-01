@@ -18,7 +18,10 @@ import {
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { useGuardedNavigate } from '@/providers/useGuardedNavigate';
 import { DomainError } from '@/errors/domainErrors';
-import { gentlePathEditorialStrings as copy } from '@/strings';
+import {
+  gentlePathEditorialDiscoveryStrings as discovery,
+  gentlePathEditorialStrings as copy,
+} from '@/strings';
 import { formatBlogDate } from '@/modules/blog/formatBlogDate';
 import type { EditorialResource } from '../models/editorialResource';
 import { createResourceDraft } from '../models/resourceDraft';
@@ -27,7 +30,7 @@ import {
   validateResourceDraft,
 } from '../services/validateEditorialDraft';
 import { useEditorialDraft } from '../useEditorialDraft';
-import { useEditorialMutations } from '../hooks';
+import { useEditorialMutations, useEditorialResource } from '../hooks';
 import { ResourceFields } from './ResourceFields';
 import { SourceFields } from './SourceFields';
 import { MetadataField } from './MetadataField';
@@ -48,7 +51,9 @@ export function ResourceEditor({
   const mutations = useEditorialMutations();
   const [resource, setResource] = useState(initialResource);
   const [confirming, setConfirming] = useState(false);
-  const busy = mutations.isPending || confirming;
+  const [reloading, setReloading] = useState(false);
+  const sourceRead = useEditorialResource(resource?.id);
+  const busy = mutations.isPending || confirming || reloading;
   const draft = useEditorialDraft(
     () => ({
       ...createResourceDraft(initialResource),
@@ -187,6 +192,80 @@ export function ResourceEditor({
                     ]}
                   />
                 </Card>
+              )}
+              {resource && (
+                <div className="grid gap-3">
+                  <p className="m-0 text-sm text-secondary">
+                    {resource.verified_at
+                      ? discovery.checkedDescription(
+                          formatBlogDate(resource.verified_at),
+                        )
+                      : discovery.notChecked}
+                  </p>
+                  <p className="m-0 text-sm text-secondary">
+                    {discovery.verificationHint}
+                  </p>
+                  <Button
+                    variant="secondary"
+                    disabled={
+                      busy ||
+                      draft.dirty ||
+                      (!resource.official_source_url && !resource.verified_at)
+                    }
+                    loading={mutations.verifyResourceSource.isPending}
+                    onClick={async () => {
+                      if (!draft.lock()) return;
+                      draft.setFailure('');
+                      try {
+                        const saved =
+                          await mutations.verifyResourceSource.mutateAsync({
+                            id: resource.id,
+                            version: resource.version,
+                            verified: !resource.verified_at,
+                          });
+                        setResource(saved);
+                        draft.accept(createResourceDraft(saved));
+                      } catch (error) {
+                        failure(error);
+                      } finally {
+                        draft.release();
+                      }
+                    }}
+                  >
+                    {resource.verified_at
+                      ? discovery.clearVerification
+                      : discovery.verifySource}
+                  </Button>
+                  {mutations.verifyResourceSource.error && (
+                    <Button
+                      variant="secondary"
+                      disabled={busy}
+                      loading={reloading}
+                      onClick={async () => {
+                        if (!draft.lock()) return;
+                        setReloading(true);
+                        try {
+                          const result = await sourceRead.refetch({
+                            throwOnError: true,
+                          });
+                          if (result.data) {
+                            setResource(result.data);
+                            if (!draft.dirty)
+                              draft.accept(createResourceDraft(result.data));
+                            draft.setFailure('');
+                          }
+                        } catch (error) {
+                          failure(error);
+                        } finally {
+                          setReloading(false);
+                          draft.release();
+                        }
+                      }}
+                    >
+                      {discovery.refreshSource}
+                    </Button>
+                  )}
+                </div>
               )}
               <MetadataField
                 id="editorial-resource_details-additional_properties"

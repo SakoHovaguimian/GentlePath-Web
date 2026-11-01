@@ -7,6 +7,7 @@ import type { PlatformSettings } from '@/modules/portal/models/platformSettings'
 import type { DemoObservation } from './demoObservation';
 
 export interface DemoPortalState {
+  communityFixtureVersion?: number;
   children: ChildProfile[];
   journals: JournalEntry[];
   resources: Resource[];

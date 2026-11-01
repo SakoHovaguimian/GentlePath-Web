@@ -1,4 +1,5 @@
 import 'server-only';
+import { mapCommunityPublicMetadata } from '@/modules/community/server/models/communityPublicMetadataTransport';
 import { z } from 'zod';
 import {
   ApiError,
@@ -103,6 +104,7 @@ export async function handleLiveEngagementRequest(
       createdAt: value.created_at,
       target: target
         ? {
+            ...mapCommunityPublicMetadata(target),
             id: target.id,
             contentType: target.content_type,
             title: target.title,

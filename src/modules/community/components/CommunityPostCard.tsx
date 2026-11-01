@@ -1,8 +1,12 @@
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
 import { CommunityAttachments } from './CommunityAttachments';
 import { Badge, Button, Card, NavigationLink, UiIcon } from '@/components/ui';
 import { useNavigationGuard } from '@/providers/NavigationGuardProvider';
-import { gentlePathCommunityStrings as copy } from '@/strings';
+import {
+  gentlePathCommunityDiscoveryStrings as discovery,
+  gentlePathCommunityStrings as copy,
+} from '@/strings';
 import type { CommunityPost } from '../models/communityPost';
 import { CommunityIdentity } from './CommunityIdentity';
 import { CommunityReactionButton } from './CommunityReactionButton';
@@ -69,6 +73,12 @@ export function CommunityPostCard({
       <div className="gp-community-post__control">
         <CommunityAttachments items={post.attachments} />
       </div>
+      <div className="flex flex-wrap gap-2">
+        <Badge>{discovery.kinds[post.postKind]}</Badge>
+        {post.ageBand && <Badge>{discovery.ages[post.ageBand]}</Badge>}
+        {post.stateCode && <Badge>{post.stateCode}</Badge>}
+      </div>
+      <MilestoneLinkList ids={post.milestoneIds} />
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {post.tags.slice(0, 5).map((tag) => (

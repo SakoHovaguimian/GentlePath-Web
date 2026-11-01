@@ -1,4 +1,8 @@
-import { strings, gentlePathDemoStrings as copy } from '@/strings';
+import {
+  gentlePathCommunityDiscoveryStrings as communityCopy,
+  strings,
+  gentlePathDemoStrings as copy,
+} from '@/strings';
 import type {
   DashboardModelMetaTransport,
   FeatureRequestTransport,
@@ -10,6 +14,7 @@ const daysAgo = (days: number) =>
   new Date(now.getTime() - days * 86400000).toISOString();
 
 export const newDemoUserId = '55555555-5555-4555-8555-555555555555';
+export const communityParentDemoUserId = '66666666-6666-4666-8666-666666666666';
 export const onboardingDemoUserId = '44444444-4444-4444-8444-444444444444';
 
 export const users: DemoUser[] = [
@@ -83,10 +88,27 @@ export const users: DemoUser[] = [
     updated_at: new Date().toISOString(),
     deleted: false,
   },
+  {
+    id: communityParentDemoUserId,
+    external_id: 'firebase-demo-community-parent',
+    first_name: communityCopy.demoProfile.firstName,
+    last_name: communityCopy.demoProfile.lastName,
+    email: communityCopy.demoProfile.email,
+    role: 'user',
+    disabled: false,
+    phone_number: null,
+    date_of_birth: null,
+    created_at: daysAgo(30),
+    updated_at: daysAgo(1),
+    deleted: false,
+  },
 ];
 
 export const populatedDemoUsers = users.filter(
-  (user) => user.id !== onboardingDemoUserId && user.id !== newDemoUserId,
+  (user) =>
+    user.id !== onboardingDemoUserId &&
+    user.id !== newDemoUserId &&
+    user.id !== communityParentDemoUserId,
 );
 
 export const featureRequests: FeatureRequestTransport[] = [

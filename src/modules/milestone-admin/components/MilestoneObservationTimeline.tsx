@@ -1,3 +1,4 @@
+import { PrivateCommunityShareButton } from '@/modules/community/components/PrivateCommunityShareButton';
 import { useRef, useState } from 'react';
 import { Badge, Button, EmptyState, QueryBoundary } from '@/components/ui';
 import { usePresentationService } from '@/presentation/PresentationProvider';
@@ -90,6 +91,7 @@ export function MilestoneObservationTimeline({
                     </p>
                   )}
                   <div className="flex flex-wrap gap-2">
+                    <PrivateCommunityShareButton childId={childId} milestoneId={milestone.id} />
                     <Button
                       variant="secondary"
                       disabled={remove.isPending || confirming}

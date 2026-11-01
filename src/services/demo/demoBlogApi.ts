@@ -1,3 +1,7 @@
+import {
+  visibleDemoMilestoneIds,
+  validateDemoMilestoneLinks,
+} from '@/modules/milestone-admin/server/demoMilestoneLinks';
 import 'server-only';
 import {
   DomainError,
@@ -83,6 +87,8 @@ export async function handleDemoBlogRequest(
       .filter(
         (article) =>
           (!isPublic || article.status === 'published') &&
+          (!query.milestone_id ||
+            visibleDemoMilestoneIds(article.milestone_ids).includes(query.milestone_id)) &&
           (!query.category || article.category === query.category) &&
           (isPublic || !query.status || article.status === query.status) &&
           [
@@ -107,7 +113,7 @@ export async function handleDemoBlogRequest(
         )
       : 0;
     return json({
-      data: rows.slice(offset, offset + query.limit),
+      data: rows.slice(offset, offset + query.limit).map((article) => ({ ...article, milestone_ids: visibleDemoMilestoneIds(article.milestone_ids) })),
       total: rows.length,
       offset,
       limit: query.limit,
@@ -115,11 +121,13 @@ export async function handleDemoBlogRequest(
   }
   if (!isPublic && !id && request.method === 'POST') {
     const body = BlogMutationInputSchema.parse(await input());
+    validateDemoMilestoneLinks(body.milestone_ids);
     if (articles.some((article) => article.slug === body.slug))
       throw new ValidationError(copy.duplicateSlug);
     const now = new Date().toISOString();
     const article: BlogArticle = {
       ...body,
+      milestone_ids: body.milestone_ids ?? [],
       id: crypto.randomUUID(),
       createdAt: now,
       updatedAt: now,
@@ -128,7 +136,7 @@ export async function handleDemoBlogRequest(
       revision: 1,
     };
     articles.unshift(article);
-    return json(article, 201);
+    return json({ ...article, milestone_ids: visibleDemoMilestoneIds(article.milestone_ids) }, 201);
   }
   const publicIdentifier = isPublic && id === 'id' ? action : id;
   const article = articles.find((item) =>
@@ -139,19 +147,21 @@ export async function handleDemoBlogRequest(
   );
   if (!article) throw new NotFoundError(copy.missingArticle);
   if (request.method === 'GET' && (!action || (isPublic && id === 'id')))
-    return json(article);
+    return json({ ...article, milestone_ids: visibleDemoMilestoneIds(article.milestone_ids) });
   if (!isPublic && request.method === 'PATCH' && !action) {
     const body = BlogMutationInputSchema.parse(await input());
     checkRevision(article, body.revision);
+    validateDemoMilestoneLinks(body.milestone_ids);
     if (
       articles.some((item) => item.id !== article.id && item.slug === body.slug)
     )
       throw new ValidationError(copy.duplicateSlug);
     Object.assign(article, body, {
+      milestone_ids: body.milestone_ids ?? article.milestone_ids,
       updatedAt: new Date().toISOString(),
       revision: article.revision + 1,
     });
-    return json(article);
+    return json({ ...article, milestone_ids: visibleDemoMilestoneIds(article.milestone_ids) });
   }
   if (
     !isPublic &&
@@ -180,7 +190,7 @@ export async function handleDemoBlogRequest(
       updatedAt: now,
       revision: article.revision + 1,
     });
-    return json(article);
+    return json({ ...article, milestone_ids: visibleDemoMilestoneIds(article.milestone_ids) });
   }
   if (!isPublic && request.method === 'DELETE' && !action) {
     checkRevision(

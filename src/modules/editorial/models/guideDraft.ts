@@ -5,6 +5,7 @@ import type { ContentMetadata } from './contentMetadata';
 const empty = '';
 
 export interface GuideDraft {
+  milestoneIds: string[];
   title: string;
   description: string;
   imageUrl: string;
@@ -25,12 +26,14 @@ export function emptyGuideItem(id = crypto.randomUUID()): GuideDraftItem {
 export function createGuideDraft(guide?: Guide): GuideDraft {
   if (!guide)
     return {
+      milestoneIds: [],
       title: empty,
       description: empty,
       imageUrl: empty,
       items: [emptyGuideItem('draft-step-1')],
     };
   return {
+    milestoneIds: guide.milestone_ids,
     title: guide.title,
     description: guide.description,
     imageUrl: guide.image_url ?? '',

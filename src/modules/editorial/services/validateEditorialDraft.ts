@@ -83,6 +83,7 @@ export function validateGuideDraft(
     };
   });
   const result = GuideInputSchema.safeParse({
+    milestone_ids: draft.milestoneIds,
     title: draft.title,
     description: draft.description,
     image_url: draft.imageUrl.trim() || null,
@@ -114,8 +115,14 @@ export function validateResourceDraft(
   )
     errors.minutes = copy.validation.minutesDescription;
   const result = EditorialResourceInputSchema.safeParse({
+    milestone_ids: draft.milestoneIds,
     title: draft.title,
     description: draft.description,
+    state_codes: draft.stateCodes
+      .split(',')
+      .map((code) => code.trim().toUpperCase())
+      .filter(Boolean),
+    official_source_url: draft.officialSourceUrl.trim() || null,
     type: draft.type,
     format: draft.format || null,
     parent_id: draft.parentId || null,

@@ -3,15 +3,57 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { UiIcon } from '@/components/ui';
+import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import { isPublicImageReference } from '@/models/publicImageUrl';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import { resolveDemoMediaUrl } from '@/services/demo/demoMedia';
-import { strings, gentlePathPortalStrings as copy } from '@/strings';
+import {
+  strings,
+  gentlePathEditorialDiscoveryStrings as discovery,
+  gentlePathPortalStrings as copy,
+} from '@/strings';
 
-export function MilestoneCoverImage({ src }: { src: string }) {
+export function MilestoneCoverImage({
+  src,
+  variant = 'card',
+  title = copy.common.decorativeAlt,
+}: {
+  src: string | null;
+  variant?: 'card' | 'header';
+  title?: string;
+}) {
   const { demoMode } = useRuntimeConfig();
   const [failed, setFailed] = useState(false);
-  if (!isPublicImageReference(src)) return null;
+  const valid = Boolean(src && isPublicImageReference(src));
+  if (variant === 'header') {
+    const fallback = !valid || failed;
+    return (
+      <div
+        className="gp-milestone-detail__cover"
+        data-fallback={fallback || undefined}
+      >
+        <Image
+          unoptimized
+          fill
+          priority
+          sizes="(max-width: 1023px) 100vw, 1100px"
+          src={
+            fallback
+              ? gentlePathIllustrations.milestoneGarden
+              : resolveDemoMediaUrl(src!, demoMode)
+          }
+          alt={
+            fallback
+              ? discovery.milestoneCoverFallbackAlt
+              : discovery.milestoneCoverAlt(title)
+          }
+          className={fallback ? 'object-contain p-6' : 'object-cover'}
+          onError={fallback ? undefined : () => setFailed(true)}
+        />
+      </div>
+    );
+  }
+  if (!valid) return null;
   return (
     <div className="gp-milestone-card__image">
       {failed ? (
@@ -27,7 +69,7 @@ export function MilestoneCoverImage({ src }: { src: string }) {
           unoptimized
           fill
           sizes="(max-width: 767px) 100vw, (max-width: 1280px) 50vw, 640px"
-          src={resolveDemoMediaUrl(src, demoMode)}
+          src={resolveDemoMediaUrl(src!, demoMode)}
           alt={copy.common.decorativeAlt}
           className="object-cover"
           onError={() => setFailed(true)}

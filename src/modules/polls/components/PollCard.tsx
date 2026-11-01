@@ -1,3 +1,4 @@
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
 import { CommunityAttachments } from '@/modules/community/components/CommunityAttachments';
 import { Badge, Button, Card, UiIcon } from '@/components/ui';
@@ -69,6 +70,7 @@ export function PollCard({
         </NavigationLink>
       </h2>
       <p className="gp-poll-body line-clamp-3">{poll.message}</p>
+      <MilestoneLinkList ids={poll.milestone_ids} />
       <CommunityAttachments items={poll.attachments} />
       <PollVote poll={poll} writable={writable} compact />
       {poll.tags.length > 0 && (

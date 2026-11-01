@@ -16,6 +16,9 @@ export function browseResources(
         (!filters.mode ||
           isResourceCollection(resource) ===
             (filters.mode === 'collections')) &&
+        (!filters.stateCode ||
+          !resource.state_codes.length ||
+          resource.state_codes.includes(filters.stateCode)) &&
         (!filters.savedOnly || resource.saved) &&
         (!filters.category || resource.category === filters.category) &&
         (!filters.tag || resource.tags.includes(filters.tag)) &&

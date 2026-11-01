@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import type { Route } from 'next';
 import {
   Badge,
   Button,
@@ -26,6 +28,7 @@ import { CommunityPostEditor } from './components/CommunityPostEditor';
 import { CommunityReportDialog } from './components/CommunityReportDialog';
 import { CommunityPagination } from './components/CommunityPagination';
 import { CommunityHub } from './components/CommunityHub';
+import { CommunityDiscoveryFilters } from './components/CommunityDiscoveryFilters';
 import '@/modules/portal/styles/portal.css';
 import './styles/community.css';
 
@@ -33,7 +36,12 @@ const myPostsScope = 'mine';
 
 export function CommunityScreen() {
   const directory = useCommunityDirectory();
+  const router = useRouter();
   const query = useCommunityPosts({
+    postKind: directory.postKind,
+    ageBand: directory.ageBand,
+    stateCode: directory.stateCode,
+    milestoneId: directory.milestoneId,
     query: directory.query,
     tag: directory.tag,
     scope: directory.scope,
@@ -44,6 +52,7 @@ export function CommunityScreen() {
   const writable = status.data?.enabled === true;
   const { session } = useSessionState();
   const { confirmNavigation } = useNavigationGuard();
+  const [starterTitle, setStarterTitle] = useState('');
   const [editor, setEditor] = useState<CommunityPost | 'new' | null>(null);
   const [report, setReport] = useState<CommunityReportTarget | null>(null);
   const remove = useCommunityPostActions(() => {
@@ -52,10 +61,20 @@ export function CommunityScreen() {
   });
   const feedPreference = useCommunityFeedPreference();
   const filtered = Boolean(
-    directory.query || directory.tag || directory.scope === 'mine',
+    directory.query ||
+    directory.tag ||
+    directory.scope === 'mine' ||
+    directory.postKind ||
+    directory.ageBand ||
+    directory.stateCode ||
+    directory.milestoneId,
   );
   function clearFilters() {
     directory.update({
+      kind: undefined,
+      age: undefined,
+      state: undefined,
+      milestone: undefined,
       query: undefined,
       tag: undefined,
       scope: undefined,
@@ -89,7 +108,14 @@ export function CommunityScreen() {
         </Card>
       )}
       {status.isError && <MutationError error={status.error} />}
-      <Card className="p-4 sm:p-5">
+      <Card className="grid gap-5 p-4 sm:p-5">
+        <CommunityDiscoveryFilters
+          directory={directory}
+          onStart={(title) => {
+            setStarterTitle(title);
+            setEditor('new');
+          }}
+        />
         <DirectoryFilters
           id="community-search"
           value={{
@@ -224,12 +250,24 @@ export function CommunityScreen() {
           </>
         )}
       </QueryBoundary>
-      {editor && (
+      {(editor || directory.compose) && (
         <CommunityPostEditor
-          key={editor === 'new' ? 'new' : editor.id}
-          post={editor === 'new' ? undefined : editor}
+          key={!editor || editor === 'new' ? 'new' : editor.id}
+          post={!editor || editor === 'new' ? undefined : editor}
+          initialTitle={starterTitle}
+          initialKind={directory.postKind}
+          initialMilestoneIds={
+            directory.milestoneId ? [directory.milestoneId] : []
+          }
           writable={writable}
-          onClose={() => setEditor(null)}
+          onClose={() => {
+            setEditor(null);
+            setStarterTitle('');
+            if (directory.composeReturnTo)
+              router.push(directory.composeReturnTo as Route);
+            else if (directory.compose)
+              directory.update({ compose: undefined });
+          }}
           onDeleted={() => {
             if (query.data?.data.length === 1 && directory.offset)
               directory.setOffset(Math.max(0, directory.offset - 9));

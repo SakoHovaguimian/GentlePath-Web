@@ -45,6 +45,7 @@ export function getDemoPollState(): DemoPollState {
       selectionMode: item.selectionMode,
       votingLocked: index < 2,
       tags: [],
+      milestone_ids: [`milestone-${index + 1}`],
       attachments: (index === 0
         ? [
             {
@@ -106,6 +107,7 @@ export function getDemoPollState(): DemoPollState {
   for (const record of globalPolls.gentlePathPollState.polls) {
     record.tags = normalizeContentTags(record.tags);
     record.attachments ??= [];
+    record.milestone_ids ??= [];
   }
   for (const comment of globalPolls.gentlePathPollState.comments)
     comment.parentCommentId ??= null;

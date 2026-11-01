@@ -140,6 +140,7 @@ export async function handleLivePollRequest(
     if (!id && method === 'GET') {
       const query = PollQuerySchema.parse(Object.fromEntries(url.searchParams));
       const params = pollQueryParams({
+        milestone_id: query.milestone_id,
         query: query.query,
         tag: query.tag,
         selection_mode: query.selectionMode,
@@ -175,6 +176,7 @@ export async function handleLivePollRequest(
             : {}),
           selection_mode: body.selectionMode,
           tags: body.tags,
+          milestone_ids: body.milestone_ids,
           options: body.options.map((option) => ({
             ...(option.id ? { id: option.id } : {}),
             option_text: option.text,

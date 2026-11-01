@@ -8,7 +8,10 @@ const demoGlobal = globalThis as typeof globalThis & {
 };
 export function getDemoBlogState(): BlogArticle[] {
   demoGlobal.gentlePathDemoBlog ??= createDemoBlogArticles();
-  for (const article of demoGlobal.gentlePathDemoBlog) article.content ??= [];
+  for (const article of demoGlobal.gentlePathDemoBlog) {
+    article.content ??= [];
+    article.milestone_ids ??= [];
+  }
   return demoGlobal.gentlePathDemoBlog;
 }
 export function resetDemoBlogState(): void {

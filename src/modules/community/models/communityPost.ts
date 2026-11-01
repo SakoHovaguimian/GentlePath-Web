@@ -4,9 +4,16 @@ import { z } from 'zod';
 import { gentlePathCommunityStrings as copy } from '@/strings';
 import { CommunityAuthorSchema } from './communityAuthor';
 import { CommunityPublicUrlSchema } from './communityPublicUrl';
+import { PostKindSchema } from './postKind';
+import { AgeBandSchema } from './ageBand';
+import { USStateCodeSchema } from '@/modules/onboarding/models/usStateCode';
+import { MilestoneLinksSchema } from '@/modules/milestone-admin/models/milestoneLinks';
 
 export const CommunityPostInputSchema = z
   .object({
+    postKind: PostKindSchema.optional(),
+    milestoneIds: MilestoneLinksSchema.optional(),
+    childId: z.string().min(1).optional(),
     title: z
       .string()
       .trim()
@@ -38,7 +45,14 @@ export const CommunityPostInputSchema = z
       ),
   })
   .strict();
-export const CommunityPostSchema = CommunityPostInputSchema.extend({
+export const CommunityPostUpdateInputSchema = CommunityPostInputSchema.omit({
+  childId: true,
+});
+export const CommunityPostSchema = CommunityPostUpdateInputSchema.extend({
+  postKind: PostKindSchema.default('DISCUSSION'),
+  milestoneIds: MilestoneLinksSchema.default([]),
+  stateCode: USStateCodeSchema.nullable().default(null),
+  ageBand: AgeBandSchema.nullable().default(null),
   attachments: CommunityAttachmentsSchema.default([]),
   id: z.string(),
   userId: z.string().nullable(),

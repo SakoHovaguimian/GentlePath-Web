@@ -3,7 +3,12 @@ import 'server-only';
 import { demoMedia } from '@/services/demo/demoMedia';
 import type { CommunityAttachment } from '../models/communityAttachment';
 import { getDemoState } from '@/services/demo/demoState';
-import { gentlePathCommunityStrings as copy } from '@/strings';
+import {
+  gentlePathCommunityDiscoveryStrings as discovery,
+  gentlePathCommunityStrings as copy,
+} from '@/strings';
+import { AgeBandSchema } from '../models/ageBand';
+import { PostKindSchema } from '../models/postKind';
 import type { DemoCommunityState } from './models/demoCommunityState';
 
 const globalCommunity = globalThis as typeof globalThis & {
@@ -14,44 +19,55 @@ function createCommunityState(): DemoCommunityState {
   const users = getDemoState().users.filter((user) => !user.deleted);
   const daysAgo = (days: number) =>
     new Date(Date.now() - days * 86400000).toISOString();
-  const posts = copy.demo.posts.map((seed, index) => ({
-    ...seed,
-    tags: [...seed.tags],
-    id: `community-post-${index + 1}`,
-    userId: users[index % users.length].id,
-    imageUrl: index === 0 ? demoMedia.connection : null,
-    attachments: (index === 0
-      ? [
-          {
-            kind: 'IMAGE',
-            url: demoMedia.connection,
-            description: copy.demo.connectionImage,
-          },
-          {
-            kind: 'IMAGE',
-            url: demoMedia.reading,
-            description: copy.demo.readingImage,
-          },
-        ]
-      : index === 1
+  const posts = [...copy.demo.posts, ...discovery.demoPosts].map(
+    (seed, index) => ({
+      ...seed,
+      postKind: PostKindSchema.options[index % PostKindSchema.options.length],
+      ageBand: index % 8 === 7 ? null : AgeBandSchema.options[index % 7],
+      stateCode:
+        index % 3 === 0
+          ? ('CA' as const)
+          : index % 3 === 1
+            ? ('NY' as const)
+            : null,
+      milestoneIds: [`milestone-${(index % 3) + 1}`],
+      tags: [...seed.tags],
+      id: `community-post-${index + 1}`,
+      userId: users[index % users.length].id,
+      imageUrl: index === 0 ? demoMedia.connection : null,
+      attachments: (index === 0
         ? [
             {
               kind: 'IMAGE',
-              url: demoMedia.community,
-              description: copy.demo.communityImage,
+              url: demoMedia.connection,
+              description: copy.demo.connectionImage,
             },
             {
-              kind: 'LINK',
-              url: 'https://gentlepath.app/resources',
-              description: copy.demo.resourcesLink,
+              kind: 'IMAGE',
+              url: demoMedia.reading,
+              description: copy.demo.readingImage,
             },
           ]
-        : []) as CommunityAttachment[],
-    createdAt: daysAgo(index + 1),
-    updatedAt: daysAgo(index + 1),
-    deleted: false,
-    hidden: false,
-  }));
+        : index === 1
+          ? [
+              {
+                kind: 'IMAGE',
+                url: demoMedia.community,
+                description: copy.demo.communityImage,
+              },
+              {
+                kind: 'LINK',
+                url: 'https://gentlepath.app/resources',
+                description: copy.demo.resourcesLink,
+              },
+            ]
+          : []) as CommunityAttachment[],
+      createdAt: daysAgo(index + 1),
+      updatedAt: daysAgo(index + 1),
+      deleted: false,
+      hidden: index === copy.demo.posts.length + discovery.demoPosts.length - 1,
+    }),
+  );
   const comments = posts.flatMap((post, postIndex) =>
     copy.demo.comments.slice(0, postIndex % 2 ? 1 : 3).map((body, index) => ({
       id: `community-comment-${postIndex + 1}-${index + 1}`,
@@ -67,6 +83,7 @@ function createCommunityState(): DemoCommunityState {
     })),
   );
   return {
+    fixtureVersion: 1,
     posts,
     comments,
     postLikes: new Map(
@@ -83,9 +100,27 @@ function createCommunityState(): DemoCommunityState {
 export function getDemoCommunityState(): DemoCommunityState {
   const state = (globalCommunity.gentlePathCommunityState ??=
     createCommunityState());
+  if (!state.fixtureVersion) {
+    const fixtures = createCommunityState();
+    const additions = fixtures.posts.slice(copy.demo.posts.length);
+    for (const seed of additions)
+      if (!state.posts.some((post) => post.id === seed.id))
+        state.posts.push(seed);
+    for (const seed of fixtures.comments.filter((comment) =>
+      additions.some((post) => post.id === comment.postId),
+    )) {
+      if (!state.comments.some((comment) => comment.id === seed.id))
+        state.comments.push(seed);
+    }
+    state.fixtureVersion = 1;
+  }
   for (const record of state.posts) {
     record.tags = normalizeContentTags(record.tags);
     record.attachments ??= [];
+    record.postKind ??= 'DISCUSSION';
+    record.milestoneIds ??= [];
+    record.stateCode ??= null;
+    record.ageBand ??= null;
   }
   for (const comment of state.comments) comment.parentCommentId ??= null;
   return state;

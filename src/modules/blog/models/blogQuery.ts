@@ -3,6 +3,7 @@ import { BlogCategorySchema } from './blogCategory';
 import { BlogStatusSchema } from './blogStatus';
 
 export const BlogQuerySchema = z.object({
+  milestone_id: z.string().min(1).optional(),
   query: z.string().trim().max(200).default(''),
   category: BlogCategorySchema.optional(),
   status: BlogStatusSchema.optional(),
@@ -12,6 +13,7 @@ export const BlogQuerySchema = z.object({
 export type BlogQuery = z.infer<typeof BlogQuerySchema>;
 export function blogQueryParams(query: BlogQuery) {
   const params = new URLSearchParams();
+  if (query.milestone_id) params.set('milestone_id', query.milestone_id);
   if (query.query) params.set('query', query.query);
   if (query.category) params.set('category', query.category);
   if (query.status) params.set('status', query.status);

@@ -1,11 +1,14 @@
 'use client';
 
+import { useMemo } from 'react';
+import { createPublicBlogReadService } from '@/publicClientContainer';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServiceContainer } from '@/providers/AppProviders';
 import type { BlogMutationInput } from './models/blogArticle';
 import type { BlogQuery } from './models/blogQuery';
 import { blogQueryKeys } from './queryKeys';
 import { adminQueryKeys } from '@/modules/portal/queryKeys';
+import { engagementQueryKeys } from '@/modules/engagement/queryKeys';
 
 export function useBlogOptions() {
   const { blogService } = useServiceContainer();
@@ -22,6 +25,13 @@ export function useBlogArticles(query: BlogQuery) {
     staleTime: 15000,
   });
 }
+export function usePublicBlogArticles(query: BlogQuery) {
+  const blogService = useMemo(() => createPublicBlogReadService(), []);
+  return useQuery({
+    queryKey: [...blogQueryKeys.all, 'published', query],
+    queryFn: ({ signal }) => blogService.listPublic(query, signal),
+  });
+}
 export function useBlogArticle(id?: string) {
   const { blogService } = useServiceContainer();
   return useQuery({
@@ -35,6 +45,7 @@ export function useBlogMutations() {
   const queryClient = useQueryClient();
   const refresh = () => {
     void queryClient.invalidateQueries({ queryKey: blogQueryKeys.all });
+    void queryClient.invalidateQueries({ queryKey: engagementQueryKeys.all });
     void queryClient.invalidateQueries({ queryKey: adminQueryKeys.all });
   };
   const save = useMutation({

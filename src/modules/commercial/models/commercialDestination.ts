@@ -10,8 +10,6 @@ export const CommercialDestinationSchema = z.object({
   href: z.string().startsWith('/'),
 });
 export function commercialWebRoute(route: string) {
-  if (route.startsWith('/milestones/'))
-    return `/tips?milestone_id=${encodeURIComponent(route.split('/')[2]!)}`;
   return route
     .replace(/^\/family-discounts(?=\/|$)/, '/discounts')
     .replace(/^\/guided-steps(?=\/|$)/, '/guides')

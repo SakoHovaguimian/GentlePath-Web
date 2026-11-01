@@ -17,6 +17,28 @@ import type { CommunityPostQuery } from './models/communityPostQuery';
 import type { CommunityReportQuery } from './models/communityReportQuery';
 import { communityQueryKeys as keys } from './queryKeys';
 
+export function useCommunityProfile(id: string) {
+  const { communityService: service } = useServiceContainer();
+  return useQuery({
+    queryKey: [...keys.all, 'profile', id],
+    queryFn: ({ signal }) => service.profile(id, signal),
+    staleTime: 0,
+    gcTime: 0,
+  });
+}
+export function useCommunityProfileActivity(
+  id: string,
+  kind: import('./models/communityProfileActivityKind').CommunityProfileActivityKind,
+  offset: number,
+) {
+  const { communityService: service } = useServiceContainer();
+  return useQuery({
+    queryKey: [...keys.all, 'profile', id, kind, offset],
+    queryFn: ({ signal }) => service.profileActivity(id, kind, offset, signal),
+    staleTime: 0,
+    gcTime: 0,
+  });
+}
 export function useCommunityStatus() {
   const { communityService: service } = useServiceContainer();
   return useQuery({

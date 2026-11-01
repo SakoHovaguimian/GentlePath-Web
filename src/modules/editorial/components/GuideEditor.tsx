@@ -1,5 +1,7 @@
 'use client';
 
+import { MilestoneLinksField } from '@/modules/milestone-admin/components/MilestoneLinksField';
+
 import { PublicImageField } from '@/services/media/components/PublicImageField';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -180,6 +182,13 @@ export function GuideEditor({ initialGuide }: { initialGuide?: Guide }) {
             title={copy.itemsTitle}
             description={copy.itemsDescription}
           >
+            <MilestoneLinksField
+              value={form.milestoneIds}
+              disabled={busy}
+              onChange={(milestoneIds) =>
+                draft.update({ ...form, milestoneIds })
+              }
+            />
             <GuideItemsEditor
               items={form.items}
               disabled={busy}

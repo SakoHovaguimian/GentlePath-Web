@@ -7,6 +7,7 @@ import type { EditorialResourceFormat } from './resourceFormat';
 const empty = '';
 
 export interface ResourceDraft {
+  milestoneIds: string[];
   title: string;
   description: string;
   type: EditorialResourceType;
@@ -14,6 +15,8 @@ export interface ResourceDraft {
   parentId: string;
   url: string;
   tags: string;
+  stateCodes: string;
+  officialSourceUrl: string;
   category: ResourceCategory;
   minutes: string;
   sourceName: string;
@@ -26,6 +29,7 @@ export function createResourceDraft(
 ): ResourceDraft {
   if (!resource)
     return {
+      milestoneIds: [],
       title: empty,
       description: empty,
       type: 'ARTICLE',
@@ -33,6 +37,8 @@ export function createResourceDraft(
       parentId: empty,
       url: empty,
       tags: empty,
+      stateCodes: empty,
+      officialSourceUrl: empty,
       category: 'everyday',
       minutes: '5',
       sourceName: empty,
@@ -48,6 +54,7 @@ export function createResourceDraft(
     details.additional_properties.family_category,
   );
   return {
+    milestoneIds: resource.milestone_ids,
     title: resource.title,
     description: resource.description,
     type: resource.type,
@@ -55,6 +62,8 @@ export function createResourceDraft(
     parentId: resource.parent_id ?? '',
     url: resource.url ?? '',
     tags: resource.tags.join(', '),
+    stateCodes: resource.state_codes.join(', '),
+    officialSourceUrl: resource.official_source_url ?? '',
     category: category.success ? category.data : 'everyday',
     minutes:
       typeof details.additional_properties.estimated_minutes === 'number'

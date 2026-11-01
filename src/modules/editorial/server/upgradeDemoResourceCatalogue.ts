@@ -84,6 +84,15 @@ export function upgradeDemoResourceCatalogue(
       state.resources.push(seed);
       continue;
     }
+    // Add new metadata to unchanged catalogue rows only. Staff writes update the
+    // review timestamp alongside updated_at; original seeds stagger those dates.
+    if (resource.updated_at !== resource.resource_details.reviewed_at) {
+      resource.milestone_ids ??= seed.milestone_ids;
+      resource.state_codes ??= seed.state_codes;
+      resource.official_source_url ??= seed.official_source_url;
+      resource.verified_at ??= seed.verified_at;
+      resource.version ??= 1;
+    }
     const originalIndex = /^resource-([1-6])$/.exec(resource.id);
     if (
       originalIndex &&

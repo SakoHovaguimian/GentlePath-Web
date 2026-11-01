@@ -8,6 +8,7 @@ export const PollPagingSchema = z.object({
   offset: z.coerce.number().int().nonnegative().safe().default(0),
 });
 export const PollQuerySchema = PollPagingSchema.extend({
+  milestone_id: z.string().min(1).optional(),
   query: z.string().trim().max(500).default(''),
   selectionMode: PollSelectionModeSchema.optional(),
   scope: z.enum(['all', 'mine']).default('all'),

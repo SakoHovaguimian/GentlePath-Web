@@ -1,4 +1,5 @@
 'use client';
+import { MilestoneLinkList } from '@/modules/milestone-admin/components/MilestoneLinkList';
 import Link from 'next/link';
 import type { Route } from 'next';
 import {
@@ -56,6 +57,7 @@ export function SavedContentDetailScreen({ id }: { id: string }) {
             <p className="m-0 whitespace-pre-wrap wrap-anywhere text-secondary">
               {item.target?.preview || copy.unavailableDescription}
             </p>
+            <MilestoneLinkList ids={item.target?.milestoneIds ?? []} />
             {item.target?.readerPath && (
               <Button asChild className="justify-self-start">
                 <Link href={item.target.readerPath as Route}>

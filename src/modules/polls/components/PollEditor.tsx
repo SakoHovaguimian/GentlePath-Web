@@ -21,6 +21,7 @@ import type { PollOptionDraft } from '../models/pollOptionDraft';
 import { PollSelectionModeSchema } from '../models/pollSelectionMode';
 import { useSavePoll } from '../hooks';
 import { usePollActions } from '../usePollActions';
+import { MilestoneLinksField } from '@/modules/milestone-admin/components/MilestoneLinksField';
 import { CommunityAttachmentsEditor } from '@/modules/community/components/CommunityAttachmentsEditor';
 
 export function PollEditor({
@@ -38,6 +39,7 @@ export function PollEditor({
 }) {
   const formId = useId();
   const [input, setInput] = useState<Omit<PollInput, 'options'>>({
+    milestone_ids: poll?.milestone_ids ?? [],
     attachments: poll?.attachments ?? [],
     title: poll?.title ?? '',
     message: poll?.message ?? '',
@@ -351,6 +353,11 @@ export function PollEditor({
             {copy.tagsHint}
           </p>
         </div>
+        <MilestoneLinksField
+          value={input.milestone_ids ?? []}
+          disabled={disabled}
+          onChange={(value) => change('milestone_ids', value)}
+        />
         <CommunityAttachmentsEditor
           value={input.attachments ?? []}
           disabled={disabled || locked}

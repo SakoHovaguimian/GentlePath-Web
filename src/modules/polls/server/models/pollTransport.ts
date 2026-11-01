@@ -13,6 +13,7 @@ export const PollTransportSchema = z.object({
   expires_at: z.string().datetime({ offset: true }).nullable().optional(),
   is_expired: z.boolean().optional(),
   voting_locked: z.boolean().optional(),
+  milestone_ids: z.array(z.string()).default([]),
   tags: z.array(z.string()),
   author: PollAuthorTransportSchema.nullable().optional(),
   options: z.array(PollOptionTransportSchema).optional(),

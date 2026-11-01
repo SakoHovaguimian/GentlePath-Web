@@ -1,3 +1,4 @@
+import { MilestoneLinksSchema } from '@/modules/milestone-admin/models/milestoneLinks';
 import { z } from 'zod';
 import { gentlePathBlogStrings as copy } from '@/strings';
 import { BlogCategorySchema } from './blogCategory';
@@ -8,6 +9,7 @@ import { StoredBlogContentsSchema } from './storedBlogContent';
 import { gentlePathBlogBuilderStrings as builderCopy } from '@/strings';
 
 const BlogArticleFieldsSchema = z.object({
+  milestone_ids: MilestoneLinksSchema.default([]),
   id: z.string().uuid(),
   slug: z
     .string()
@@ -38,6 +40,7 @@ const BlogArticleFieldsSchema = z.object({
 });
 export const BlogArticleSchema = BlogArticleFieldsSchema;
 export const BlogMutationInputSchema = BlogArticleFieldsSchema.pick({
+  milestone_ids: true,
   slug: true,
   title: true,
   description: true,
@@ -46,6 +49,7 @@ export const BlogMutationInputSchema = BlogArticleFieldsSchema.pick({
   cover: true,
 })
   .extend({
+    milestone_ids: MilestoneLinksSchema.optional(),
     title: z
       .string()
       .trim()
@@ -71,6 +75,7 @@ export type BlogArticle = z.infer<typeof BlogArticleSchema>;
 export type BlogMutationInput = z.infer<typeof BlogMutationInputSchema>;
 export type BlogArticleDraft = Pick<
   BlogArticle,
+  | 'milestone_ids'
   | 'slug'
   | 'title'
   | 'description'

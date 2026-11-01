@@ -1,3 +1,4 @@
+import { mapCommunityPublicMetadata } from './models/communityPublicMetadataTransport';
 import { CommunityContentKindSchema } from '../models/communityContentKind';
 import { CommunityReportSchema } from '../models/communityReport';
 import { CommunityPostSchema } from '../models/communityPost';
@@ -20,6 +21,10 @@ export function mapCommunityPost(
 ) {
   return CommunityPostSchema.parse({
     id: value.id,
+    postKind: value.post_kind,
+    stateCode: value.state_code,
+    ageBand: value.age_band,
+    milestoneIds: value.milestone_ids,
     userId: value.user_id,
     title: value.title,
     body: value.body,
@@ -72,6 +77,7 @@ export function mapCommunityReport(value: CommunityReportTransport) {
     reviewedAt: value.reviewed_at,
     createdAt: value.created_at,
     snapshot: {
+      ...mapCommunityPublicMetadata(snapshot),
       id: snapshot.id,
       targetType: snapshot.content_type.toLowerCase(),
       title: snapshot.title,

@@ -9,6 +9,7 @@
 @import '../components/ui/styles/imageMosaic.css';
 @import '../modules/landing/styles/public-shell.css';
 @import '../modules/landing/styles/landing.css';
+@import '../modules/landing/styles/landing-hero.css';
 @import '../modules/auth/styles/auth.css';
 
 @plugin "tailwindcss-react-aria-components";

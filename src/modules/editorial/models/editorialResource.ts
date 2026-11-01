@@ -1,7 +1,10 @@
+import { MilestoneLinksSchema } from '@/modules/milestone-admin/models/milestoneLinks';
 import { normalizeContentTag } from '@/utils/normalizeContentTag';
 import { z } from 'zod';
 import { ResourceRatingSummarySchema } from '@/modules/engagement/models/resourceRatingSummary';
 import { gentlePathEditorialStrings as copy } from '@/strings';
+import { CommunityPublicUrlSchema } from '@/modules/community/models/communityPublicUrl';
+import { ResourceStateCodesSchema } from './resourceStateCodes';
 import { ContentUrlSchema } from './contentUrl';
 import { EditorialResourceTypeSchema } from './resourceType';
 import { EditorialResourceFormatSchema } from './resourceFormat';
@@ -12,10 +15,15 @@ import {
 
 export const EditorialResourceSchema = z.object({
   id: z.string(),
+  version: z.number().int().positive().default(1),
   content_type: z.literal('RESOURCE'),
   parent_id: z.string().nullable(),
   type: EditorialResourceTypeSchema,
   format: EditorialResourceFormatSchema.nullable(),
+  milestone_ids: MilestoneLinksSchema.default([]),
+  state_codes: ResourceStateCodesSchema.default([]),
+  official_source_url: CommunityPublicUrlSchema.nullable().default(null),
+  verified_at: z.iso.datetime({ offset: true }).nullable().default(null),
   tags: z.array(z.string().transform(normalizeContentTag)).default([]),
   title: z.string(),
   url: z.string().nullable(),
@@ -32,6 +40,9 @@ export const EditorialResourceInputSchema = z
     parent_id: z.uuid(copy.validation.parentDescription).nullable(),
     type: EditorialResourceTypeSchema,
     format: EditorialResourceFormatSchema.nullable(),
+    milestone_ids: MilestoneLinksSchema.optional(),
+    state_codes: ResourceStateCodesSchema.default([]),
+    official_source_url: CommunityPublicUrlSchema.nullable().default(null),
     tags: z
       .array(
         z

@@ -134,6 +134,10 @@ export function getDemoNotificationInboxState(): DemoNotificationInboxState {
   }
   return globalInbox.gentlePathNotificationInboxState;
 }
+export function getDemoEffectiveTimezone(userId: string): string {
+  const settings = getDemoNotificationInboxState().settings.get(userId);
+  return settings?.timezone ?? settings?.lastTimezone ?? 'UTC';
+}
 export function resetDemoNotificationInboxState() {
   globalInbox.gentlePathNotificationInboxState = undefined;
 }

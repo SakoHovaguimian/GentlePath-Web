@@ -26,6 +26,7 @@ import { GoalStatusBadge } from './components/GoalStatusBadge';
 import { GoalMediaPreview } from './components/GoalMediaPreview';
 import { GoalNoteEditor } from './components/GoalNoteEditor';
 import '@/modules/portal/styles/portal.css';
+import { PrivateCommunityShareButton } from '@/modules/community/components/PrivateCommunityShareButton';
 import { goalUnavailable } from './services/goalUnavailable';
 
 export function GoalDetailScreen({ id }: { id: string }) {
@@ -195,6 +196,7 @@ function GoalDetail({
         </Card>
       )}
       <div className="flex flex-wrap gap-3">
+        <PrivateCommunityShareButton childId={goal.child_id} />
         {goal.status !== 'COMPLETED' && (
           <Button
             loading={actions.status.isPending}

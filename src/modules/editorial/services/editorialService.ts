@@ -101,6 +101,14 @@ export class EditorialService {
       ),
     );
   }
+  async verifyResourceSource(id: string, version: number, verified: boolean) {
+    return EditorialResourceSchema.parse(
+      await this.api.request(
+        `${write}/resources/${encodeURIComponent(id)}/verify-source`,
+        { method: 'PATCH', body: { version, verified } },
+      ),
+    );
+  }
   async deleteResource(id: string) {
     await this.api.request(`${write}/resources/${encodeURIComponent(id)}`, {
       method: 'DELETE',

@@ -1,4 +1,5 @@
 'use client';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import {
   Badge,
@@ -20,6 +21,7 @@ import styles from '@/modules/portal/Admin.module.css';
 import {
   useDeleteFamilyTip,
   useFamilyTips,
+  useFamilyTip,
   useMilestoneChoices,
 } from './hooks';
 import type { FamilyTip } from './models/familyTip';
@@ -41,6 +43,9 @@ interface FamilyTipsScreenProps {
 }
 export function FamilyTipsScreen({ staff = false }: FamilyTipsScreenProps) {
   const directory = useMilestoneDirectory();
+  const params = useSearchParams();
+  const linkedTipId = !staff ? (params.get('tip') ?? '') : '';
+  const linkedTip = useFamilyTip(linkedTipId);
   const { session } = useSessionState();
   const scope = staff ? 'review' : directory.scope;
   const query = useFamilyTips(scope, {
@@ -359,8 +364,22 @@ export function FamilyTipsScreen({ staff = false }: FamilyTipsScreenProps) {
         <FamilyTipReader
           tip={reader}
           milestone={name(reader.milestone_id)}
-          onClose={() => setReader(null)}
+          onClose={() => {
+            setReader(null);
+            if (linkedTipId) directory.update({ tip: undefined });
+          }}
         />
+      )}
+      {!reader && linkedTipId && (
+        <QueryBoundary query={linkedTip}>
+          {(tip) => (
+            <FamilyTipReader
+              tip={tip}
+              milestone={name(tip.milestone_id)}
+              onClose={() => directory.update({ tip: undefined })}
+            />
+          )}
+        </QueryBoundary>
       )}
       {review && (
         <TipReviewEditor

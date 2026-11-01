@@ -1,5 +1,6 @@
 import 'server-only';
 import {
+  communityParentDemoUserId,
   newDemoUserId,
   populatedDemoUsers,
 } from '@/services/demo/demoFixtures';
@@ -41,6 +42,7 @@ export function getDemoOnboardingSettings(userId: string): FamilyPreferences {
     Boolean(
       user &&
       (user.id === newDemoUserId ||
+        user.id === communityParentDemoUserId ||
         populatedDemoUsers.some((seed) => seed.id === user.id)),
     ),
   );

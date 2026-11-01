@@ -4,14 +4,28 @@ import {
   Button,
   Field,
   Input,
+  InlineLoading,
   Modal,
+  Select,
   TextArea,
   UiIcon,
 } from '@/components/ui';
 import { useUnsavedFormGuard } from '@/providers/useUnsavedFormGuard';
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { MutationError } from '@/modules/portal/components/MutationError';
-import { gentlePathCommunityStrings as copy } from '@/strings';
+import {
+  addressCountries,
+  gentlePathCommunityDiscoveryStrings as discovery,
+  gentlePathCommunityStrings as copy,
+  strings,
+} from '@/strings';
+import { useChildren } from '@/modules/portal/hooks';
+import { useNotificationSettings } from '@/modules/notification-inbox/hooks';
+import { useFamilyPreferences } from '@/modules/onboarding/hooks';
+import { MilestoneLinksField } from '@/modules/milestone-admin/components/MilestoneLinksField';
+import { useSessionState } from '@/providers/AppProviders';
+import { childAgeBand } from '../models/ageBand';
+import { PostKindSchema, type PostKind } from '../models/postKind';
 import {
   CommunityPostInputSchema,
   type CommunityPost,
@@ -21,20 +35,56 @@ import { useCommunityPostActions } from '../useCommunityPostActions';
 import type { CommunityAttachment } from '../models/communityAttachment';
 import { CommunityAttachmentsEditor } from './CommunityAttachmentsEditor';
 
+const noChildValue = '';
+
 interface CommunityPostEditorProps {
   post?: CommunityPost;
+  initialTitle?: string;
+  initialChildId?: string;
+  initialKind?: PostKind;
+  initialMilestoneIds?: string[];
   writable: boolean;
   onClose: () => void;
   onDeleted?: () => void;
 }
 export function CommunityPostEditor({
   post,
+  initialTitle = '',
+  initialChildId = '',
+  initialKind = 'DISCUSSION',
+  initialMilestoneIds = [],
   writable,
   onClose,
   onDeleted,
 }: CommunityPostEditorProps) {
   const formId = useId();
-  const [title, setTitle] = useState(post?.title ?? '');
+  const [title, setTitle] = useState(post?.title ?? initialTitle);
+  const [postKind, setPostKind] = useState<PostKind>(
+    post?.postKind ?? initialKind,
+  );
+  const [milestoneIds, setMilestoneIds] = useState(
+    post?.milestoneIds ?? initialMilestoneIds,
+  );
+  const [childId, setChildId] = useState(initialChildId);
+  const [contextChanged, setContextChanged] = useState(false);
+  const [checkingContext, setCheckingContext] = useState(false);
+  const { session } = useSessionState();
+  const children = useChildren();
+  const preferences = useFamilyPreferences();
+  const timezone = useNotificationSettings();
+  const child = children.data?.find((item) => item.id === childId);
+  const stateCode = post
+    ? post.stateCode
+    : (preferences.data?.state_code ?? null);
+  const ageBand = post
+    ? post.ageBand
+    : child
+      ? childAgeBand(
+          child.dateOfBirth,
+          timezone.data?.effectiveTimezone ?? 'UTC',
+        )
+      : null;
+  const contextKey = `${preferences.data?.user_id ?? session?.user.id ?? ''}:${stateCode ?? ''}:${ageBand ?? ''}:${childId}:${timezone.data?.effectiveTimezone ?? ''}`;
   const [body, setBody] = useState(post?.body ?? '');
   const [tags, setTags] = useState(post?.tags.join(', ') ?? '');
   const [attachments, setAttachments] = useState<CommunityAttachment[]>(
@@ -50,7 +100,7 @@ export function CommunityPostEditor({
     onClose();
     onDeleted?.();
   });
-  const pending = mutation.isPending || remove.isPending;
+  const pending = mutation.isPending || remove.isPending || checkingContext;
   const { showToast } = usePresentationService();
   function change(key: string, update: (value: string) => void, value: string) {
     dirty.current = true;
@@ -68,6 +118,9 @@ export function CommunityPostEditor({
     const parsed = CommunityPostInputSchema.safeParse({
       title,
       body,
+      postKind,
+      milestoneIds,
+      ...(!post && childId ? { childId } : {}),
       tags: tags
         .split(',')
         .map((value) => value.trim())
@@ -96,6 +149,30 @@ export function CommunityPostEditor({
     }
     busy.current = true;
     try {
+      if (!post) {
+        setCheckingContext(true);
+        const [freshChildren, freshPreferences, freshTimezone] =
+          await Promise.all([
+            children.refetch(),
+            preferences.refetch(),
+            timezone.refetch(),
+          ]);
+        if (
+          freshChildren.error ||
+          freshPreferences.error ||
+          freshTimezone.error
+        )
+          return;
+        const freshChild = freshChildren.data?.find(
+          (item) => item.id === childId,
+        );
+        const freshKey = `${freshPreferences.data?.user_id ?? ''}:${freshPreferences.data?.state_code ?? ''}:${freshChild ? childAgeBand(freshChild.dateOfBirth, freshTimezone.data?.effectiveTimezone ?? 'UTC') : ''}:${freshChild ? childId : ''}:${freshTimezone.data?.effectiveTimezone ?? ''}`;
+        if (freshKey !== contextKey) {
+          if (childId && !freshChild) setChildId('');
+          setContextChanged(true);
+          return;
+        }
+      }
       await mutation.mutateAsync({ input: parsed.data, id: post?.id });
       dirty.current = false;
       void showToast({
@@ -107,6 +184,7 @@ export function CommunityPostEditor({
       /* The draft remains in the form. */
     } finally {
       busy.current = false;
+      setCheckingContext(false);
     }
   }
   return (
@@ -138,8 +216,12 @@ export function CommunityPostEditor({
           <BookmarkButton
             type="submit"
             form={formId}
-            loading={mutation.isPending}
-            disabled={remove.isPending || !writable}
+            loading={mutation.isPending || checkingContext}
+            disabled={
+              remove.isPending ||
+              !writable ||
+              (!post && (!preferences.data || !children.data || !timezone.data))
+            }
           >
             {post ? copy.savePost : copy.publish}
           </BookmarkButton>
@@ -147,6 +229,22 @@ export function CommunityPostEditor({
       }
     >
       <form id={formId} noValidate onSubmit={submit} className="grid gap-5">
+        <Field labelText={discovery.postKind}>
+          <Select
+            value={postKind}
+            disabled={pending || !writable}
+            onValueChange={(value) => {
+              dirty.current = true;
+              setPostKind(PostKindSchema.parse(value));
+            }}
+          >
+            {PostKindSchema.options.map((kind) => (
+              <option key={kind} value={kind}>
+                {discovery.kinds[kind]}
+              </option>
+            ))}
+          </Select>
+        </Field>
         <Field labelText={copy.titleLabel}>
           <Input
             name="title"
@@ -196,6 +294,83 @@ export function CommunityPostEditor({
             {copy.tagsHint}
           </p>
         </div>
+        <MilestoneLinksField
+          value={milestoneIds}
+          disabled={pending || !writable}
+          onChange={(value) => {
+            dirty.current = true;
+            setMilestoneIds(value);
+          }}
+        />
+        {!post && (
+          <Field labelText={discovery.child}>
+            <Select
+              value={childId}
+              disabled={pending || !children.data}
+              onValueChange={(value) => {
+                dirty.current = true;
+                setChildId(value);
+                setContextChanged(false);
+              }}
+            >
+              <option value={noChildValue}>{discovery.noChild}</option>
+              {(children.data ?? []).map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        )}
+        {post || (children.data && preferences.data && timezone.data) ? (
+          <div
+            className="grid gap-2 rounded-lg border border-secondary bg-secondary_subtle p-4"
+            aria-live="polite"
+          >
+            <h3 className="m-0 text-sm font-semibold text-primary">
+              {discovery.contextTitle}
+            </h3>
+            <p className="m-0 text-sm text-secondary">
+              {post ? discovery.preservedContext : discovery.contextHint}
+            </p>
+            <p className="m-0 text-sm text-secondary">
+              {stateCode
+                ? (addressCountries
+                    .find((country) => country.code === 'US')
+                    ?.regions.find((state) => state.code === stateCode)?.name ??
+                  stateCode)
+                : discovery.noState}
+            </p>
+            <p className="m-0 text-sm text-secondary">
+              {ageBand ? discovery.ages[ageBand] : discovery.noAge}
+            </p>
+            {contextChanged && (
+              <p role="status" className="m-0 text-sm text-secondary">
+                {discovery.contextChanged}
+              </p>
+            )}
+          </div>
+        ) : !(children.error || preferences.error || timezone.error) ? (
+          <InlineLoading message={discovery.contextLoadingDescription} />
+        ) : null}
+        <MutationError
+          error={children.error ?? preferences.error ?? timezone.error}
+        />
+        {(children.error || preferences.error || timezone.error) && (
+          <Button
+            variant="secondary"
+            loading={checkingContext}
+            onClick={() => {
+              setCheckingContext(true);
+              void Promise.all([
+                children.refetch(),
+                preferences.refetch(),
+              ]).finally(() => setCheckingContext(false));
+            }}
+          >
+            {strings.ui.queryBoundary.tryAgain}
+          </Button>
+        )}
         <CommunityAttachmentsEditor
           value={attachments}
           disabled={pending || !writable}

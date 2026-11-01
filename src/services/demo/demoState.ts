@@ -22,7 +22,7 @@ const globalDemo = globalThis as typeof globalThis & {
 export function getDemoState(): DemoState {
   if (!globalDemo.portalDemoState) {
     globalDemo.portalDemoState = {
-      accountFixtureVersion: 1,
+      accountFixtureVersion: 2,
       users: structuredClone(users),
       featureRequests: structuredClone(featureRequests),
       credentials: new Map(
@@ -56,6 +56,19 @@ export function getDemoState(): DemoState {
       );
     }
     state.accountFixtureVersion = 1;
+  }
+  if ((state.accountFixtureVersion ?? 0) < 2) {
+    const parent = users.find(
+      (user) => user.external_id === 'firebase-demo-community-parent',
+    )!;
+    if (!state.users.some((user) => user.id === parent.id)) {
+      state.users.push(structuredClone(parent));
+      state.credentials.set(
+        parent.external_id,
+        passwordRecord(gentlePathDemoStrings.seedPassword),
+      );
+    }
+    state.accountFixtureVersion = 2;
   }
   return state;
 }

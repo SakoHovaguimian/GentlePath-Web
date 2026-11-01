@@ -35,7 +35,10 @@ export function ResourcesScreen({
   const { showToast } = usePresentationService();
   const collections = browse && directory.mode === 'collections';
   const hasFilters = Boolean(
-    directory.query || directory.category || directory.tag,
+    directory.query ||
+    directory.category ||
+    directory.tag ||
+    directory.stateCode,
   );
   async function toggle(resource: Resource) {
     if (mutation.isPending) return;
@@ -52,6 +55,7 @@ export function ResourcesScreen({
     if (directory.query) params.set('query', directory.query);
     if (directory.category) params.set('status', directory.category);
     if (directory.tag) params.set('tag', directory.tag);
+    if (directory.stateCode) params.set('state', directory.stateCode);
     if (directory.sort !== 'title') params.set('sort', directory.sort);
     return { pathname: '/resources/browse', query: Object.fromEntries(params) };
   }
@@ -120,6 +124,7 @@ export function ResourcesScreen({
           const filters = {
             query: directory.query,
             category: directory.category,
+            stateCode: directory.stateCode,
             tag: directory.tag,
             sort: directory.sort,
             savedOnly,
