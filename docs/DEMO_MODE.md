@@ -6,12 +6,13 @@ Run `DEMO_MODE=true npm run dev`, or use the sample `.env.local`. Demo mode prov
 
 All sample accounts use `password123`:
 
-| Account                      | Role          |
-| ---------------------------- | ------------- |
-| `user@gentlepath.demo`       | Family Member |
-| `admin@gentlepath.demo`      | Admin         |
-| `superadmin@gentlepath.demo` | SuperAdmin    |
-| `onboarding@gentlepath.demo` | Family Member, Fresh Setup |
+| Preset              | Account                      | Starting State                                                                      |
+| ------------------- | ---------------------------- | ----------------------------------------------------------------------------------- |
+| New User            | `new@gentlepath.demo`        | Setup complete, California and No Preference saved, no children or private activity |
+| Onboarding New User | `onboarding@gentlepath.demo` | Setup restarts at every sign-in through the demo login form                         |
+| Family Member       | `user@gentlepath.demo`       | Populated family space and application follow-ups                                   |
+| Admin               | `admin@gentlepath.demo`      | Content administration and its own populated family space                           |
+| SuperAdmin          | `superadmin@gentlepath.demo` | Platform administration and its own populated family space                          |
 
 Signup creates an ordinary demo account and an immediate session without email verification. Roles and disabled/deleted status are rechecked against current server records; browser fields cannot grant permissions. Developer role switching signs in a trusted seed identity and clears the previous account's client state. Blog fixtures store Markdown in canonical sections; new writes reject retired body-only payloads and unknown fields, and public slug/UUID reads expose published articles only.
 
@@ -56,7 +57,9 @@ Demo platform flags can block registration/community writes/member maintenance a
 
 ## Fixture Coverage
 
-Fresh demo processes and explicit resets seed two children per account: a complete profile with optional gender and all support answers, and a lightly filled profile. Six reflections cover multiple/empty feelings, both children, and an unlinked personal entry. Milestones cover all four standard answers plus unanswered items and a second child with no observations. All 18 catalogue milestones have distinct seeded Picsum header URLs; retained state fills only missing image fields and preserves staff edits or explicit removal. Polls cover single/multiple selection, mixed vote shares, recorded ballots, and a poll without votes; community discussions include ordered image/link attachments and replies. Guided Steps includes a different image for each step, the first structured blog includes an image and gallery, and four offers expose distinct creation/expiry/title orders.
+Fresh demo processes and explicit resets seed two children per populated Family Member/Admin/SuperAdmin account: a complete profile with optional gender and all support answers, and a lightly filled profile. Six reflections cover multiple/empty feelings, both children, and an unlinked personal entry. Milestones cover all four standard answers plus unanswered items and a second child with no observations. All 18 catalogue milestones have distinct seeded Picsum header URLs; retained state fills only missing image fields and preserves staff edits or explicit removal. Polls cover single/multiple selection, mixed vote shares, recorded ballots, and a poll without votes; community discussions include ordered image/link attachments and replies. Guided Steps includes a different image for each step, the first structured blog includes an image and gallery, and four offers expose distinct creation/expiry/title orders.
+
+Resources include 48 individual reads and tools across 12 canonical collections, each with four children in a fresh catalogue. The catalogue spans four categories, 21 topic tags, three family formats, varied dates, and 3–16 minute reads for search, sorting, saved-content, and pagination checks. Retained previews receive a one-time additive catalogue upgrade that preserves staff edits, deleted-resource tombstones, favorites, and private records; explicit reset restores the full catalogue.
 
 [demoMedia](../src/services/demo/demoMedia.ts) assigns fixed public-looking identifiers to bundled illustrations. Demo readers resolve only those exact identifiers to local artwork; live URL validation and media loading remain unchanged. Bundled illustration fixtures need no external host; the requested milestone Picsum placeholders load from picsum.photos and use the card fallback if unavailable. Fixture edits apply to a new process or an explicit reset; they do not overwrite records in an already-running preview.
 
@@ -68,13 +71,14 @@ Implement demo operations with the same models, statuses, paging, ownership, and
 
 Use [verification](VERIFICATION.md) for checks and manual flows. Exercise multiple accounts, foreign/private denial, mutation recovery, finite loading, empty state, and reset without deleting another developer's work on a shared preview.
 
-### Onboarding Demo
+### Empty And Onboarding Presets
 
-The Onboarding Demo login preset selects `onboarding@gentlepath.demo`, an ordinary family identity with no seeded children or private activity. Existing populated presets retain their records and completed setup. New signup creates an incomplete resumable setup; merely signing into the onboarding identity never resets its progress.
+New User is a separate ordinary family identity with only the basic required profile/setup information filled in: state California, explicit No Preference, completed setup, and Add Children Later. It has no seeded children, reflections, saved content, applications, Goals, documents, or inbox records. It opens My Path directly and retains any records created during exploration until a global demo reset.
 
-The preset includes an unchecked Restart Setup option. After successful sign-in, this explicit action calls the developer-only, same-origin `POST /api/dev-settings/onboarding-restart`; it verifies the authenticated onboarding identity, clears only that identity's private family activity, and restarts its setup state. Other identities are rejected and other accounts keep their data. Global fixture reset also resets the onboarding store.
+Onboarding New User selects `onboarding@gentlepath.demo`. Every successful sign-in through the demo login form automatically calls the developer-only, same-origin `POST /api/dev-settings/onboarding-restart`, then opens `/onboarding`; no additional checkbox is required. The authenticated restart accepts only that onboarding identity and clears its children, reflections, observations, favorites, applications, Goals, and Goal uploads before restarting setup. Other identities are rejected and other accounts keep their data. New signup still creates an ordinary incomplete, resumable setup; it does not use this repeatable demo-tour behavior.
+
+A versioned additive account-fixture upgrade makes the New User identity available in a retained development process without resetting existing accounts or repeatedly recreating a deleted account. Global fixture reset restores all five presets.
 
 The demo onboarding service validates the same sequential steps, explicit children-later answer, approach/no-preference exclusivity, and completion requirements as the live API. State benefit samples mirror the API-owned templates for 50 states plus DC and match only the saved state. Empty simulation hides the benefit list without deleting preferences; setup settings stay usable.
 
-
-Services/applications and Goals use account-owned mutable stores with matching status, pagination, conflict, active-child, media-limit, and follow-up behavior. Only the original populated User/Admin/SuperAdmin identities receive seeded applications/Goals/activity. The onboarding identity and newly registered users start empty. Global reset restores all new stores; the explicit onboarding restart clears only that demo account's profile, child/activity, application, and Goal/upload records. Goal demo media uses an existing tracked illustration and local byte readers, never S3. The home commercial fixture has several eligible items and a six-second rotation interval.
+Services/applications and Goals use account-owned mutable stores with matching status, pagination, conflict, active-child, media-limit, and follow-up behavior. Only the original populated User/Admin/SuperAdmin identities receive seeded applications/Goals/activity. The New User, onboarding identity, and newly registered users start without private activity. Global reset restores all new stores; the automatic onboarding restart clears only that demo account's setup, child/activity, application, and Goal/upload records. Goal demo media uses an existing tracked illustration and local byte readers, never S3. Each populated account has five distinct applications: two overdue follow-ups, one due today, and two due in five and seven days. The approved application retains its pending follow-up in the same dashboard grid. A versioned fixture upgrade adds the scenarios to retained processes while preserving user edits and deletions. The home commercial fixture has several eligible items and a six-second rotation interval.

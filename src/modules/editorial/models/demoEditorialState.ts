@@ -6,4 +6,5 @@ export interface DemoEditorialState {
   guides: Guide[];
   deletedResources: Set<string>;
   deletedGuides: Set<string>;
+  resourceCatalogueVersion?: number;
 }

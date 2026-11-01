@@ -7,7 +7,7 @@ export function LandingQuestions() {
       className="gp-questions gp-container"
       aria-labelledby="gentlepath-questions-title"
     >
-      <div className="gp-section-heading">
+      <div className="gp-section-heading gp-section-heading-centered">
         <p className="gp-eyebrow">{copy.questions.eyebrowLabel}</p>
         <h2 id="gentlepath-questions-title">{copy.questions.title}</h2>
       </div>

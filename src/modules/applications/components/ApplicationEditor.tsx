@@ -26,6 +26,8 @@ import {
 } from '../models/serviceApplication';
 import { ServiceApplicationStatusSchema } from '../models/serviceApplicationStatus';
 import { useApplicationMutations } from '../hooks';
+import { ApplicationDateSchema } from '../models/applicationDate';
+import '../styles/applications.css';
 
 const emptyAssociation = '';
 
@@ -59,6 +61,9 @@ export function ApplicationEditor({
     reference: application?.reference ?? '',
   }));
   const initial = useRef(input);
+  const [followUpDueOn, setFollowUpDueOn] = useState('');
+  const [createdApplication, setCreatedApplication] =
+    useState<ServiceApplication>();
   const version = useRef(application?.updated_at);
   const dirty = useRef(false);
   const busy = useRef(false);
@@ -73,7 +78,9 @@ export function ApplicationEditor({
     value: ServiceApplicationCreate[Key],
   ) {
     const next = { ...input, [key]: value };
-    dirty.current = JSON.stringify(next) !== JSON.stringify(initial.current);
+    dirty.current =
+      Boolean(followUpDueOn) ||
+      JSON.stringify(next) !== JSON.stringify(initial.current);
     setInput(next);
     setValidation((current) => ({ ...current, [key]: '' }));
     mutation.reset();
@@ -82,13 +89,25 @@ export function ApplicationEditor({
     event.preventDefault();
     if (busy.current) return;
     const parsed = ServiceApplicationCreateSchema.safeParse(input);
-    if (!parsed.success) {
+    const dueDate =
+      !application && followUpDueOn
+        ? ApplicationDateSchema.safeParse(followUpDueOn)
+        : undefined;
+    if (!parsed.success || (dueDate && !dueDate.success)) {
       const issues: Record<string, string> = {};
-      for (const issue of parsed.error.issues)
-        issues[String(issue.path[0])] = issue.message;
+      if (!parsed.success) {
+        for (const issue of parsed.error.issues)
+          issues[String(issue.path[0])] = issue.message;
+      }
+      if (dueDate && !dueDate.success) issues.due_on = copy.validation.date;
       setValidation(issues);
+      const firstField = Object.keys(issues)[0];
       event.currentTarget
-        .querySelector<HTMLElement>(`[name="${Object.keys(issues)[0]}"]`)
+        .querySelector<HTMLElement>(
+          firstField === 'applied_on' || firstField === 'due_on'
+            ? `[data-field-name="${firstField}"] [role="spinbutton"]`
+            : `[name="${firstField}"]`,
+        )
         ?.focus();
       return;
     }
@@ -99,7 +118,15 @@ export function ApplicationEditor({
             id: application.id,
             input: { ...parsed.data, expected_updated_at: version.current! },
           })
-        : await mutations.create.mutateAsync(parsed.data);
+        : (createdApplication ??
+          (await mutations.create.mutateAsync(parsed.data)));
+      if (!application && !createdApplication) setCreatedApplication(result);
+      if (!application && dueDate?.success) {
+        await mutations.createFollowUp.mutateAsync({
+          id: result.id,
+          input: { due_on: dueDate.data, notes: '' },
+        });
+      }
       dirty.current = false;
       void showToast({ title: copy.savedTitle, intent: 'success' });
       router.push(`/applications/${result.id}` as Route);
@@ -133,7 +160,11 @@ export function ApplicationEditor({
       busy.current = false;
     }
   }
-  const pending = mutation.isPending || mutations.remove.isPending;
+  const pending =
+    mutation.isPending ||
+    mutations.remove.isPending ||
+    mutations.createFollowUp.isPending;
+  const detailsDisabled = pending || Boolean(createdApplication);
   return (
     <Card>
       <form noValidate onSubmit={submit} className="grid gap-5">
@@ -143,7 +174,7 @@ export function ApplicationEditor({
             name="title"
             value={input.title}
             maxLength={300}
-            disabled={pending}
+            disabled={detailsDisabled}
             onChange={(event) => change('title', event.target.value)}
             aria-invalid={Boolean(validation.title)}
             aria-describedby={
@@ -157,7 +188,7 @@ export function ApplicationEditor({
               name="provider"
               value={input.provider}
               maxLength={300}
-              disabled={pending}
+              disabled={detailsDisabled}
               onChange={(event) => change('provider', event.target.value)}
             />
           </Field>
@@ -165,7 +196,7 @@ export function ApplicationEditor({
             <Select
               name="status"
               value={input.status}
-              disabled={pending}
+              disabled={detailsDisabled}
               onValueChange={(value) =>
                 change('status', ServiceApplicationStatusSchema.parse(value))
               }
@@ -181,7 +212,7 @@ export function ApplicationEditor({
             <Select
               name="child_id"
               value={input.child_id ?? ''}
-              disabled={pending || children.isPending}
+              disabled={detailsDisabled || children.isPending}
               onValueChange={(value) => change('child_id', value || null)}
             >
               <option value={emptyAssociation}>{copy.personalOption}</option>
@@ -196,7 +227,7 @@ export function ApplicationEditor({
             label={copy.appliedLabel}
             name="applied_on"
             value={input.applied_on ?? ''}
-            disabled={pending}
+            disabled={detailsDisabled}
             onValueChange={(value) => change('applied_on', value || null)}
             invalid={Boolean(validation.applied_on)}
             describedBy={
@@ -208,7 +239,7 @@ export function ApplicationEditor({
           <Field labelText={copy.programLabel}>
             <Select
               value={input.benefit_program_key ?? ''}
-              disabled={pending}
+              disabled={detailsDisabled}
               onValueChange={(value) =>
                 change('benefit_program_key', value || null)
               }
@@ -227,7 +258,7 @@ export function ApplicationEditor({
             name="reference"
             value={input.reference}
             maxLength={300}
-            disabled={pending}
+            disabled={detailsDisabled}
             onChange={(event) => change('reference', event.target.value)}
           />
         </Field>
@@ -236,10 +267,35 @@ export function ApplicationEditor({
             name="notes"
             value={input.notes}
             maxLength={20000}
-            disabled={pending}
+            disabled={detailsDisabled}
             onChange={(event) => change('notes', event.target.value)}
           />
         </Field>
+        {!application && (
+          <div className="gp-application-follow-up-field">
+            <DatePicker
+              label={copy.optionalFollowUpLabel}
+              name="due_on"
+              value={followUpDueOn}
+              disabled={pending}
+              onValueChange={(value) => {
+                setFollowUpDueOn(value);
+                dirty.current =
+                  Boolean(createdApplication || value) ||
+                  JSON.stringify(input) !== JSON.stringify(initial.current);
+                setValidation((current) => ({ ...current, due_on: '' }));
+                mutations.createFollowUp.reset();
+              }}
+              invalid={Boolean(validation.due_on)}
+              describedBy={
+                validation.due_on
+                  ? 'application-validation'
+                  : 'application-follow-up-hint'
+              }
+            />
+            <p id="application-follow-up-hint">{copy.optionalFollowUpHint}</p>
+          </div>
+        )}
         {Object.values(validation).some(Boolean) && (
           <p
             id="application-validation"
@@ -250,6 +306,15 @@ export function ApplicationEditor({
           </p>
         )}
         <MutationError error={mutation.error} />
+        {createdApplication &&
+          followUpDueOn &&
+          !pending &&
+          !mutations.createFollowUp.isSuccess && (
+            <p role="status" className="m-0 text-sm text-secondary">
+              {copy.followUpPartialDescription}
+            </p>
+          )}
+        <MutationError error={mutations.createFollowUp.error} />
         <MutationError error={deleteError} />
         <MutationError error={children.error} />
         <MutationError
@@ -284,8 +349,8 @@ export function ApplicationEditor({
           <Button asChild variant="secondary" disabled={pending}>
             <NavigationLink
               href={
-                application
-                  ? `/applications/${application.id}`
+                application || createdApplication
+                  ? `/applications/${(application ?? createdApplication)!.id}`
                   : '/applications'
               }
               beforeNavigate={confirmLeave}
@@ -295,7 +360,7 @@ export function ApplicationEditor({
           </Button>
           <Button
             type="submit"
-            loading={mutation.isPending}
+            loading={mutation.isPending || mutations.createFollowUp.isPending}
             disabled={
               mutations.remove.isPending ||
               Boolean(
@@ -305,7 +370,11 @@ export function ApplicationEditor({
               )
             }
           >
-            {copy.saveAction}
+            {createdApplication
+              ? followUpDueOn
+                ? copy.followUpRetry
+                : copy.continueAction
+              : copy.saveAction}
           </Button>
         </div>
       </form>

@@ -86,6 +86,7 @@ function createPortalState(): DemoPortalState {
       readMinutes: 3 + index,
       saved: false,
       ratings: { count: 0, average: null },
+      tags: [categories[index]],
     })),
     milestones: copy.milestoneSeeds.map((seed, index) => ({
       id: `milestone-${index + 1}`,

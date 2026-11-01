@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef, type CSSProperties } from 'react';
 import { cn } from '../lib/cn';
 import { motionDuration } from '../lib/motionPreferences';
+import { playOnboardingFireworks } from '../lib/onboardingFireworks';
 import type { SuccessCelebrationProps } from '../models/successCelebrationProps';
 import styles from './SuccessCelebration.module.css';
 
@@ -12,6 +13,8 @@ export function SuccessCelebration({
   sequence = 0,
   active,
   ready = true,
+  variant = 'burst',
+  onComplete,
   className,
 }: SuccessCelebrationProps) {
   const surface = useRef<HTMLSpanElement>(null);
@@ -25,8 +28,22 @@ export function SuccessCelebration({
       (previousActive.current === false && active === true);
     previous.current = sequence;
     previousActive.current = active;
-    const duration = motionDuration('--motion-duration-celebration');
-    if (!changed || !duration || !surface.current) return;
+    const duration = motionDuration(
+      variant === 'onboarding'
+        ? '--motion-duration-onboarding-celebration'
+        : '--motion-duration-celebration',
+    );
+    if (!changed || !surface.current) return;
+    if (!duration) {
+      if (variant === 'onboarding') onComplete?.();
+      return;
+    }
+    if (variant === 'onboarding') {
+      if (active === false) return;
+      const canvas = surface.current.querySelector('canvas');
+      if (canvas) return playOnboardingFireworks(canvas, duration, onComplete);
+      return;
+    }
     const easing = getComputedStyle(surface.current)
       .getPropertyValue('--motion-ease-out')
       .trim();
@@ -61,21 +78,29 @@ export function SuccessCelebration({
       },
     );
     return () => animations.forEach((animation) => animation.cancel());
-  }, [active, ready, sequence]);
+  }, [active, ready, sequence, variant, onComplete]);
 
   return (
     <span
       ref={surface}
       aria-hidden="true"
-      className={cn(styles.celebration, className)}
+      className={cn(
+        styles.celebration,
+        variant === 'onboarding' && styles.onboarding,
+        className,
+      )}
     >
-      {particles.map((index) => (
-        <i
-          key={index}
-          className={styles.particle}
-          style={{ '--particle-index': index } as CSSProperties}
-        />
-      ))}
+      {variant === 'onboarding' ? (
+        <canvas className={styles.canvas} data-celebration-state="idle" />
+      ) : (
+        particles.map((index) => (
+          <i
+            key={index}
+            className={styles.particle}
+            style={{ '--particle-index': index } as CSSProperties}
+          />
+        ))
+      )}
     </span>
   );
 }

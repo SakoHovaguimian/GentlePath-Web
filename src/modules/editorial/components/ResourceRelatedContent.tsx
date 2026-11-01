@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, Card, PageSection, UiIcon } from '@/components/ui';
+import { Button, PageSection, UiIcon } from '@/components/ui';
 import { gentlePathEditorialStrings as copy } from '@/strings';
 import type { Resource } from '@/modules/portal/models/resource';
+import { ResourceCard } from '@/modules/portal/components/ResourceCard';
 import { ContentUrlSchema } from '../models/contentUrl';
 
 export function ResourceRelatedContent({
@@ -41,17 +42,9 @@ export function ResourceRelatedContent({
           title={copy.childrenTitle}
           description={copy.collectionChildCount(children.length)}
         >
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="gp-resource-grid">
             {children.map((item) => (
-              <Card key={item.id} className="grid content-start gap-2">
-                <Link
-                  className="font-display text-lg text-primary hover:text-brand-secondary"
-                  href={`/resources/${item.id}`}
-                >
-                  {item.title}
-                </Link>
-                <p className="m-0 text-sm text-secondary">{item.description}</p>
-              </Card>
+              <ResourceCard key={item.id} resource={item} headingLevel="h3" />
             ))}
           </div>
         </PageSection>

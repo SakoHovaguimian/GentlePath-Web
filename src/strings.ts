@@ -6684,6 +6684,12 @@ export const strings = {
     },
     profileScreen: {
       yourProfile: 'Your Profile',
+      // @sentence-case: Combined profile page introduction.
+      description: 'A little about you. A space shaped around your family.',
+      personalTitle: 'Your Details',
+      // @sentence-case: Personal information section introduction.
+      personalDescription:
+        'The everyday details that keep your account personal.',
       profileUpdated: 'Profile Updated',
       firstName: 'First Name',
       lastName: 'Last Name',
@@ -7510,6 +7516,11 @@ export const gentlePathDemoStrings = {
   seedPassword: 'password123',
   // @preserve-case: Sample account data retains its original spelling.
   accounts: {
+    newUser: {
+      firstName: 'Casey',
+      lastName: 'Parker',
+      email: 'new@gentlepath.demo',
+    },
     onboarding: {
       firstName: 'Taylor',
       lastName: 'Brooks',
@@ -8218,12 +8229,373 @@ export const gentlePathPortalStrings = {
   },
   resources: {
     title: 'Resources',
+    browseTitle: 'Browse Resources',
     collectionsTitle: 'Browse Collections',
+    collectionsDescription:
+      'Explore related reads and tools gathered around a shared topic.',
+    browseNavigationLabel: 'Resource Browsing',
+    viewAll: 'View All',
+    viewAllResourcesLabel: 'View All Resources',
+    viewAllCollectionsLabel: 'View All Collections',
+    tagLabel: 'Tag',
+    allTags: 'All Tags',
+    sortLabel: 'Sort By',
+    sortOptions: {
+      title: 'Title: A To Z',
+      'title-desc': 'Title: Z To A',
+      newest: 'Newest First',
+      rating: 'Highest Rated',
+      shortest: 'Shortest Read',
+    },
+    collectionLabel: 'Collection',
+    collectionCount: (count: number) =>
+      `${count} ${count === 1 ? 'Resource' : 'Resources'}`,
+    collectionSearchPlaceholder: 'Search collections and topics…',
+    emptyCollectionsTitle: 'No Collections Found',
+    emptyCollectionsHint:
+      'Collections group related resources. Try another search or clear your filters.',
     collectionAction: 'Explore Collection',
     // @sentence-case: Supporting descriptions for resource collection cards.
     collectionHints: {
       everyday: 'Ideas for familiar moments.',
       communication: 'Different ways to connect.',
+    },
+    // @title-case: Reviewed collection fixture titles and sentence-case descriptions.
+    demoCollections: {
+      everyday: {
+        title: 'Everyday Life',
+        description: 'Ideas and practical tools for familiar family moments.',
+      },
+      communication: {
+        title: 'Communication',
+        description:
+          'Explore different ways to understand and connect with your child.',
+      },
+      school: {
+        title: 'School Partnerships',
+        description:
+          'Prepare for conversations, classroom changes, and shared learning plans.',
+      },
+      transitions: {
+        title: 'Comfortable Transitions',
+        description:
+          'Make room for preparation, pauses, and flexible changes of plan.',
+      },
+      sensory: {
+        title: 'Sensory Comfort',
+        description:
+          'Notice the sounds, textures, movement, and spaces that feel comfortable.',
+      },
+      play: {
+        title: 'Play And Shared Interests',
+        description:
+          'Follow your child’s interests and find enjoyable ways to spend time together.',
+      },
+      evenings: {
+        title: 'Sleep And Evening Routines',
+        description:
+          'Create a flexible wind-down and keep useful observations about rest.',
+      },
+      mealtimes: {
+        title: 'Food And Mealtimes',
+        description:
+          'Explore everyday ways to make shared meals more predictable and comfortable.',
+      },
+      outings: {
+        title: 'Outings And Appointments',
+        description:
+          'Plan accessible visits with familiar supports and room to leave early.',
+      },
+      caregivers: {
+        title: 'Caregiver Wellbeing',
+        description:
+          'Small check-ins, practical help, and space for the person doing the caring.',
+      },
+      family: {
+        title: 'Family Connection',
+        description:
+          'Celebrate strengths, include siblings, and share support in ways that fit your family.',
+      },
+      planning: {
+        title: 'Planning And Practical Supports',
+        description:
+          'Organize questions, documents, appointments, and next steps at your own pace.',
+      },
+    },
+    demoTags: {
+      routines: 'Routines',
+      choices: 'Choices',
+      communication: 'Communication',
+      AAC: 'AAC',
+      school: 'School',
+      advocacy: 'Advocacy',
+      transitions: 'Transitions',
+      sensory: 'Sensory Comfort',
+      play: 'Play',
+      interests: 'Shared Interests',
+      rest: 'Rest',
+      mealtimes: 'Mealtimes',
+      planning: 'Planning',
+      appointments: 'Appointments',
+      accessibility: 'Accessibility',
+      caregivers: 'Caregiver Support',
+      connection: 'Connection',
+      siblings: 'Siblings',
+      strengths: 'Strengths',
+      documents: 'Documents',
+      community: 'Community',
+    },
+    demoResources: {
+      morningChoices: {
+        title: 'Two Choices For A Busy Morning',
+        description:
+          'Offer small decisions without turning the morning into a long list of questions.',
+        body: 'Try offering two familiar choices at a moment when there is time to wait: a blue cup or a green cup, socks before breakfast or afterward. Show the objects or pictures if that makes the choice clearer. Accept pointing, reaching, looking, speech, or another reliable response.\n\nKeep essential boundaries clear and let optional choices stay optional. If choosing feels tiring, return to a familiar default and try again another day. The aim is a little more agency, not a perfect morning.',
+      },
+      homeLandingSpot: {
+        title: 'A Landing Spot For Everyday Things',
+        description:
+          'Create a familiar place for the items your family reaches for most often.',
+        body: 'Choose one accessible spot for a few everyday items: a bag, a favorite comfort object, a communication tool, or shoes. A basket, a low shelf, or a simple picture label can make the location easier to recognize. Try the arrangement together before adding more items.\n\nNotice whether the spot is reachable and whether putting things away asks too much at the end of a busy day. Change the location if it does not fit how your family moves through the home.',
+      },
+      flexibleWeekend: {
+        title: 'A Flexible Weekend Picture Plan',
+        description:
+          'Show a few anchors for the day while leaving space for changes and rest.',
+        body: 'Choose two or three likely parts of the day and represent them with drawings, photos, objects, or written words. Include a clear way to show a change of plan. Keep the plan somewhere your child can revisit without having to ask an adult.\n\nA picture plan is information, not a contract. Check in before moving an activity, offer time to process the change, and include an easy way to pause. A quieter day can still be a good day.',
+      },
+      communicationWait: {
+        title: 'Leaving Space For An Answer',
+        description:
+          'Build a little waiting time into everyday conversations and shared activities.',
+        body: 'After a question or invitation, pause without repeating it immediately. Stay available and notice responses through movement, expression, pictures, a communication device, sounds, or words. A response may arrive after the moment when an adult would usually speak again.\n\nTry this in a calm, familiar activity rather than a rushed situation. If there is no response, continue gently without making your child perform. Keep access to their usual communication tools throughout the activity.',
+      },
+      communicationPreferences: {
+        title: 'A Communication Preferences Card',
+        description:
+          'Share a short introduction to the ways your child likes to communicate.',
+        body: 'Write a few practical details about communication: how your child shows yes or no, how they ask for a break, and which tools should stay within reach. Include what helps a conversation feel comfortable, such as extra time or fewer spoken questions.\n\nInvite your child to contribute in their own way and share only what is useful for the setting. Review the card when preferences change. It should help other people listen, not replace getting to know your child.',
+      },
+      AACEveryday: {
+        title: 'Keeping Communication Tools Within Reach',
+        description:
+          'Think through everyday access to an AAC device, pictures, signs, or other supports.',
+        body: 'Look at a few ordinary moments: leaving home, eating, playing, and resting. Check whether your child can reach their communication tools in each place and whether a backup is available when a device is charging. Include the words and messages your child wants to use, including refusal and requests to stop.\n\nAsk the professional supporting your child’s communication for help with individual setup questions. Communication access belongs throughout the day and should never depend on completing another task.',
+      },
+      schoolStrengths: {
+        title: 'A Strengths-First Introduction For School',
+        description:
+          'Introduce your child through interests, communication, and helpful supports.',
+        body: 'Start with what your child enjoys and what makes them feel understood. Add a few concrete supports, such as a quieter arrival, a written cue, or time to answer. Describe a successful moment so staff can picture what support looks like in practice.\n\nKeep the introduction short enough to use and invite your child’s input. Ask how the information will reach the people who need it, and choose a date to check whether the supports are helping.',
+      },
+      schoolFollowUp: {
+        title: 'After The School Meeting',
+        description:
+          'Turn a long conversation into a short record of agreed next steps.',
+        body: 'Soon after the meeting, note what was agreed, who will do each step, and when you will check in again. Mark any questions that remain open. Ask for clarification if a phrase or timeline is unclear.\n\nKeep your own observations alongside the meeting notes. A simple follow-up message can confirm everyone’s understanding without retelling the whole discussion. Store only the information you need and choose carefully who receives private details about your child.',
+      },
+      classroomChange: {
+        title: 'Getting To Know A New Classroom',
+        description:
+          'Collect useful information before a room, teacher, or school routine changes.',
+        body: 'Ask what will be different and what can stay familiar: the entrance, a quiet space, the daily schedule, and the person your child can approach for help. Photos or a brief visit may make the new setting easier to recognize if your child welcomes them.\n\nChoose a small amount of information at a time. Let the school know which preparation your child prefers, and plan an early check-in after the change rather than assuming one visit answers every question.',
+      },
+      transitionWarnings: {
+        title: 'A Clear Cue Before A Change',
+        description:
+          'Find a transition signal your child can recognize without adding pressure.',
+        body: 'Try one consistent cue before a familiar change: a picture, a short phrase, a song, or showing the object for the next activity. Offer it early enough to allow processing time. Notice whether a countdown is reassuring or makes waiting harder.\n\nAvoid adding more and more warnings if they increase stress. Keep the next step small and allow a pause when possible. Your child’s response can guide whether the cue needs a different format or more flexibility.',
+      },
+      leavingPlay: {
+        title: 'Saving A Place In Unfinished Play',
+        description:
+          'Help an enjoyable activity feel easier to return to after a break.',
+        body: 'When play needs to pause, offer a way to save what matters: take a photo, leave a drawing in place, or set aside the next piece. Explain when you expect to return, using language or pictures that make sense to your child.\n\nSome activities cannot be preserved exactly. Acknowledge that disappointment and offer a small part to carry forward. The goal is to make the interruption understandable while respecting the work and enjoyment already invested.',
+      },
+      planChanges: {
+        title: 'When The Plan Changes',
+        description:
+          'Use clear information and a familiar next step when an expected activity is unavailable.',
+        body: 'State the change simply and show what remains the same. If possible, offer one or two available alternatives and time to respond. Avoid promising a replacement date unless you can reasonably keep it.\n\nA changed plan can still feel disappointing after it has been explained. Make room for that reaction and reduce extra demands while everyone adjusts. Later, note which supports helped so the next unexpected change has a more familiar starting point.',
+      },
+      soundComfort: {
+        title: 'Noticing The Sound Around You',
+        description:
+          'Map the everyday sounds your child seeks, tolerates, or wants to avoid.',
+        body: 'Notice where sound changes during the day: an appliance starting, a crowded corridor, music in a shop, or several people talking. Ask or observe which sounds feel comfortable and which invite a request to leave or cover ears.\n\nPlan practical options such as a quieter time, a different seat, a pause outside, or familiar hearing protection your child already uses. Keep the observations descriptive. A sound that feels manageable one day may feel very different when your child is tired.',
+      },
+      comfortCorner: {
+        title: 'A Resting Space Your Child Can Choose',
+        description:
+          'Create an accessible place to pause without making it a punishment or reward.',
+        body: 'Choose a spot with your child and begin with a few things they already find comfortable: a cushion, dimmer light, a favorite book, or room to move. Keep the space easy to enter and leave, and explain how other people will respect it.\n\nOffer the space without requiring your child to become calm on a schedule. Check whether it is still useful as preferences change. A rest area should support choice and comfort rather than isolate someone from family life.',
+      },
+      clothingComfort: {
+        title: 'Making Clothes More Comfortable',
+        description:
+          'Notice practical details about fabrics, seams, fit, and getting dressed.',
+        body: 'Start with clothes your child already chooses. Notice shared features such as soft fabric, loose sleeves, familiar fastenings, or a missing tag. Offer a small number of comfortable options and time to try them without a deadline.\n\nKeep an alternative available when weather or an occasion requires a change. Ask what can be adapted rather than insisting on a particular outfit. If discomfort persists or affects daily life, bring your observations to a qualified professional who knows your child.',
+      },
+      movementBreaks: {
+        title: 'Making Room For Preferred Movement',
+        description:
+          'Include familiar movement choices in the rhythm of an ordinary day.',
+        body: 'Notice the movement your child already enjoys, such as walking, stretching, dancing, or rocking. Offer safe space and a natural opportunity to choose it between activities. Some children prefer company; others want a little room around them.\n\nFollow your child’s cues and keep individual safety needs in mind. Movement does not have to be earned, and it does not need to make someone sit still afterward. Ask for individualized advice if you are unsure which activities are suitable.',
+      },
+      followInterest: {
+        title: 'Starting With What Your Child Loves',
+        description:
+          'Let a favorite topic or activity become an invitation to share time.',
+        body: 'Spend a few minutes noticing what holds your child’s interest. Join nearby with a related object, a comment, or quiet attention, then wait to see whether your involvement is welcome. You do not need to turn the interest into a lesson.\n\nRespect a request for space and try a different moment if needed. Shared enjoyment might be a brief glance, parallel activity, a fact exchanged, or simply staying comfortably together.',
+      },
+      parallelPlay: {
+        title: 'Enjoying Parallel Play',
+        description:
+          'Connect through doing similar things side by side without requiring turn-taking.',
+        body: 'Set out enough materials for each person to use independently. You might build with separate blocks, draw on separate pages, or look through different books. Sit where your child is comfortable and leave room for them to move away.\n\nA shared activity does not need constant conversation or eye contact. Follow invitations to interact, and let quiet side-by-side time count as connection too. End while the activity still feels manageable when possible.',
+      },
+      playInvitations: {
+        title: 'Invitations That Leave Room For No',
+        description:
+          'Offer shared play while protecting your child’s ability to decline or change direction.',
+        body: 'Make an invitation clear and easy to refuse: show a puzzle, offer a ball, or ask about joining a game. Wait for the response your child uses. If the answer is no, acknowledge it and keep other comfortable options available.\n\nDuring play, watch for changes in interest or energy. Pausing or choosing something different can be part of a good interaction. The invitation is successful when it is understandable and respectful, even if the activity never starts.',
+      },
+      interestNotebook: {
+        title: 'A Small Map Of Shared Interests',
+        description:
+          'Collect ideas for enjoyable time together across different energy levels.',
+        body: 'Write or draw a few things your child likes and ways to enjoy them at home, outside, or while resting. A favorite vehicle might lead to a book, a drawing, watching from a window, or a visit when the day allows.\n\nInclude your child’s suggestions and mark options they do not want. Keep the list as a source of possibilities rather than a schedule to finish. Interests can deepen, change, or stay wonderfully familiar.',
+      },
+      eveningAnchors: {
+        title: 'A Few Familiar Evening Anchors',
+        description:
+          'Build a wind-down around a small number of predictable, comfortable steps.',
+        body: 'Choose a few evening activities that already fit your household, such as washing, a familiar book, or lowering the lights. Show the order in a way your child can revisit. Keep enough flexibility for a different caregiver or a busier day.\n\nNotice which parts feel restful and which create extra work. This is a way to understand your routine, not a promise about sleep. Bring persistent sleep concerns to a qualified healthcare professional.',
+      },
+      sleepObservations: {
+        title: 'A Simple Rest And Sleep Note',
+        description:
+          'Record a few useful observations without turning bedtime into a score.',
+        body: 'For a short period, note approximate sleep and waking times, how the evening felt, and anything unusual about the day. Include your child’s own comments when they want to share them. A few plain observations are more useful than guessing at a cause.\n\nKeep the notes private and stop if recording adds stress. If sleep is persistently difficult, share the observations with a qualified healthcare professional who can consider your child’s individual needs.',
+      },
+      bedtimeChoices: {
+        title: 'Small Choices At Wind-Down Time',
+        description:
+          'Offer manageable decisions within a familiar evening routine.',
+        body: 'Look for a small choice that does not change an essential boundary: which familiar story, which comfortable pajamas, or whether a lamp stays on while reading. Show the options and give time to answer.\n\nFewer choices may be kinder when everyone is tired. Keep a familiar default and accept a change of mind when it is practical. Notice whether the choice adds comfort or makes the evening more demanding.',
+      },
+      nighttimeSupport: {
+        title: 'Sharing The Evening Care Plan',
+        description:
+          'Help another trusted caregiver understand a familiar wind-down.',
+        body: 'Write the evening sequence in a short, practical format. Include communication preferences, familiar comfort items, and how your child asks for help. Clarify which details matter most and which can be flexible.\n\nIntroduce a different caregiver gradually when possible and invite your child’s input. Keep emergency and health information in the appropriate family plan rather than relying on a routine note. Review the handover after the first evening together.',
+      },
+      mealtimePredictability: {
+        title: 'A More Predictable Place At The Table',
+        description:
+          'Look at seating, sound, timing, and familiar items around shared meals.',
+        body: 'Notice the setting before changing the food: a chair that feels steady, a familiar plate, a quieter seat, or clearer information about when the meal will happen. Ask your child which parts of the setting they want to keep the same.\n\nTry one practical adjustment at a time. The purpose is everyday comfort, not making someone eat a particular amount. Discuss feeding, nutrition, choking, or growth concerns with an appropriate healthcare professional.',
+      },
+      foodPreferences: {
+        title: 'Describing Food Preferences Clearly',
+        description:
+          'Use specific, respectful observations when sharing mealtime information.',
+        body: 'Note the foods your child currently enjoys and concrete features such as temperature, texture, shape, brand, or how foods are served. Include ways your child communicates enough, more, or no. Avoid labels that turn preferences into a character judgment.\n\nShare only the information a caregiver or professional needs. This note can support a conversation, but it is not a nutrition assessment or a plan for changing intake. Seek individual advice for health or feeding concerns.',
+      },
+      sharedMealRoles: {
+        title: 'Joining In Without Eating The Same Thing',
+        description:
+          'Find comfortable ways to take part in a family meal or its preparation.',
+        body: 'Participation might mean choosing a napkin, carrying a safe item, naming a favorite food, or sitting nearby for part of the meal. Offer a role your child is interested in and able to leave. Follow the food-safety practices appropriate for your home.\n\nSharing time does not require everyone to eat the same food. Keep participation separate from pressure to taste, and make space for the supports your child already uses.',
+      },
+      mealsAway: {
+        title: 'Planning For A Meal Away From Home',
+        description:
+          'Gather practical information before eating in an unfamiliar setting.',
+        body: 'Check the setting, likely waiting time, food options, and whether familiar items can come with you. Ask about quieter seating or a takeaway option if those would help. Tell your child what you know and what is still uncertain.\n\nBring the supports your family already relies on and keep a realistic exit plan. Confirm allergy and other safety requirements directly with the venue and your child’s care plan. A shorter visit can still be a useful experience.',
+      },
+      appointmentQuestions: {
+        title: 'Questions Before An Appointment',
+        description:
+          'Ask about the visit so your family can prepare for the practical details.',
+        body: 'Ask how long the visit may take, what will happen first, whether waiting somewhere quieter is possible, and what communication or sensory supports can be used. Request accessible information if a spoken explanation is not enough.\n\nWrite down the questions your child wants answered too. Share relevant needs with the team before the visit when possible. The appointment staff can explain which adjustments are available and which steps are essential for the visit.',
+      },
+      outingBag: {
+        title: 'An Outing Bag That Fits Your Family',
+        description:
+          'Choose a small set of familiar supports for time away from home.',
+        body: 'Start with what your child already uses: communication tools, a comfort item, practical supplies, and information needed for the visit. Ask which items they want to carry themselves and which an adult should keep accessible.\n\nCheck the bag before leaving rather than adding everything you might ever need. Plan for charging or a communication backup where relevant. Update the contents after the outing based on what was actually useful.',
+      },
+      quietVisit: {
+        title: 'Finding A Quieter Time To Visit',
+        description:
+          'Use practical questions to choose a more accessible outing.',
+        body: 'Contact a venue to ask about busy periods, noise, lighting, queues, accessible entrances, and places to take a break. Ask what a quiet session actually changes rather than relying on the name alone.\n\nShare the information with your child in their preferred format and decide together where possible. Keep a backup plan if the setting feels different on arrival. Leaving early is a valid response to an outing that is not working.',
+      },
+      visitDebrief: {
+        title: 'A Gentle Check-In After A Visit',
+        description:
+          'Notice what helped without asking your child to review every difficult moment.',
+        body: 'Allow recovery time before asking about a busy outing or appointment. Later, offer a simple way to share one comfortable part and one thing to change, using pictures, choices, drawing, speech, or another familiar method.\n\nRecord practical observations rather than judging the visit as a success or failure. Your child may not want to discuss it. Adult notes about timing, the environment, and useful supports can still guide the next plan.',
+      },
+      askForHelp: {
+        title: 'A Specific Ask For Practical Help',
+        description:
+          'Turn a general need for support into one clear, manageable request.',
+        body: 'Choose one task that would make the week easier: collecting groceries, making a meal, sitting with you during a call, or helping organize paperwork. Ask a trusted person for a specific task and time, leaving room for an honest answer.\n\nYou do not need to explain every private detail to ask for help. If the first person is unavailable, consider another person or a local service. Keep the request small enough that accepting support feels manageable too.',
+      },
+      caregiverEnergy: {
+        title: 'An Energy Check Before Adding A Task',
+        description: 'Make room to notice what is realistic for you today.',
+        body: 'Before adding another activity, pause to name what is already on your plate and what support is available. Ask which task is essential, which can wait, and which could be shared. A brief note can make competing demands easier to see.\n\nThis check-in is not a measure of how well you care. Some days require a simpler plan. If strain feels persistent or unmanageable, consider reaching out to a qualified professional or trusted support network.',
+      },
+      supportCircle: {
+        title: 'Mapping Your Support Circle',
+        description:
+          'Notice who can offer listening, practical help, information, or shared experience.',
+        body: 'List a few people or groups you trust and the kind of support each can offer. Someone may be good company but unable to help with childcare; another may know a local service. Include the contact method that is easiest for you.\n\nCheck privacy, boundaries, and availability before sharing family information. You can keep the map small and change it over time. Different needs can be met by different people.',
+      },
+      siblingTime: {
+        title: 'A Little One-To-One Time With Siblings',
+        description:
+          'Create a small, realistic moment for each child to choose a shared activity.',
+        body: 'Offer a short period when one child can choose an activity with a trusted adult. The plan can be ordinary: a walk, a game, cooking together, or a few pages of a book. Explain the timing in a way every child can understand.\n\nKeep expectations realistic and avoid making siblings responsible for one another’s support. Invite questions and feelings without asking for a particular response. Small moments of attention can be adapted to the week you actually have.',
+      },
+      familyCommunication: {
+        title: 'Helping Relatives Listen Well',
+        description:
+          'Share a few concrete ways family members can make time together more comfortable.',
+        body: 'Choose two or three practical requests, such as waiting for an answer, keeping communication tools nearby, or asking before a hug. Explain how your child shows interest, refusal, and a need for space.\n\nInvite relatives to ask respectful questions and keep private information limited to what is useful. Your child does not have to demonstrate a skill or accept touch to welcome someone. Revisit the conversation when preferences or circumstances change.',
+      },
+      celebrateStrengths: {
+        title: 'Remembering An Ordinary Good Moment',
+        description:
+          'Notice connection and strengths without turning family life into a performance.',
+        body: 'Record a moment that mattered: shared laughter, a clear preference, patient problem-solving, or enjoying a familiar interest. Describe what happened and what made the setting supportive. A sentence, drawing, or photo kept privately may be enough.\n\nLet your child decide whether a moment is shared with other people when possible. There is no need to compare it with anyone else’s progress. Ordinary enjoyment is worth noticing on its own.',
+      },
+      documentFolder: {
+        title: 'A Small Folder For Important Papers',
+        description:
+          'Organize a few frequently needed documents without sorting everything at once.',
+        body: 'Start with the papers you use most often, such as an appointment summary, school contact details, or a form you are working on. Give files clear names and keep a short list of what is inside. Choose a storage method that fits your family’s privacy needs.\n\nYou do not have to organize every old record in one sitting. Check who can access the folder and share copies only with the people who need them. Remove unnecessary duplicates when you have time.',
+      },
+      serviceQuestions: {
+        title: 'Questions When Exploring A Service',
+        description:
+          'Gather clear information about access, costs, fit, and next steps.',
+        body: 'Ask who the service supports, how referrals work, what it costs, how long people wait, and which accessibility adjustments are available. Ask how family and child preferences shape the work. Write down who answered and when to follow up.\n\nA service description is not a promise of eligibility or benefit. Confirm details directly with the provider and take time to consider whether the approach fits your family. You can ask for information in writing.',
+      },
+      followUpPlan: {
+        title: 'One Next Step And A Follow-Up Date',
+        description: 'Make an open task easier to return to after a busy week.',
+        body: 'Choose a concrete next step, such as finding a contact number, sending a form, or asking one question. Note who will do it and choose a realistic date to check back. Keep a place for the response so you do not have to reconstruct the conversation.\n\nA follow-up date is a reminder, not a judgment. Move it when circumstances change and keep a brief note about what you are waiting for. Start with one task rather than building a complete plan at once.',
+      },
+      communityOptions: {
+        title: 'Finding A Community Space That Fits',
+        description:
+          'Explore a group or activity with practical questions and clear boundaries.',
+        body: 'Ask about the group’s purpose, accessibility, cost, moderation, and expectations for participation. You might prefer a quiet local activity, a parent group, or an online space where listening is welcome. Check how private information and photographs are handled.\n\nTry a small amount of participation before committing more time. Your family can leave or choose another space if the fit is wrong. Shared experience can be helpful without requiring everyone to make the same choices.',
+      },
     },
     description:
       'Practical reads and thoughtful tools for the questions that come with family life.',
@@ -8524,7 +8896,9 @@ export const gentlePathPortalStrings = {
     signupDescription:
       'Make space for the everyday moments, the questions, and the small steps that matter to your family.',
     demoRoleLabel: 'Explore As',
-    demoRoles: {
+    demoAccounts: {
+      newUser: 'New User',
+      onboarding: 'Onboarding New User',
       user: 'Family Member',
       admin: 'Admin',
       superadmin: 'SuperAdmin',
@@ -8547,6 +8921,14 @@ export const gentlePathLandingStrings = {
     title: 'GentlePath — You’re Not Alone. Grow Together.',
     description:
       'Support for families navigating autism. Set child goals, track applications and follow-ups, explore sample state programs, and connect with community.',
+    // @sentence-case: Description of the social sharing image.
+    previewAlt:
+      'GentlePath. You’re not alone. Let’s grow together. A winding path through a soft botanical garden.',
+    // @sentence-case: Share-preview headline.
+    previewHeading: 'You’re not alone.',
+    // @sentence-case: Share-preview supporting line.
+    previewSupporting: 'Let’s grow together.',
+    previewEyebrow: 'A Little Support. A Path Together.',
   },
   navigation: {
     supportLabel: 'How It Helps',
@@ -8827,9 +9209,22 @@ export const gentlePathAuthStrings = {
     'Choose a sample account to explore. You can edit the email and password below.',
   // @preserve-case: Sample account credentials are displayed and must retain their exact spelling.
   demoEmails: {
+    newUser: gentlePathDemoStrings.accounts.newUser.email,
+    onboarding: gentlePathDemoStrings.accounts.onboarding.email,
     user: 'user@gentlepath.demo',
     admin: 'admin@gentlepath.demo',
     superadmin: 'superadmin@gentlepath.demo',
+  },
+  // @sentence-case: These descriptions explain the demo account's starting state.
+  demoAccountHints: {
+    newUser:
+      'Setup is complete. Start with an empty family space and no children.',
+    onboarding: 'The setup tour starts from the beginning at every sign-in.',
+    user: 'Explore a family space with children, reflections, goals, and application follow-ups.',
+    admin:
+      'Explore content administration and this account’s own family records.',
+    superadmin:
+      'Explore platform administration and this account’s own family records.',
   },
   // @preserve-case: Demo credential; casing must stay exact.
   demoPassword: 'password123',
@@ -11098,6 +11493,36 @@ export const gentlePathHelpFaqSections = [
 
 export const gentlePathApplicationStrings = {
   title: 'Services & Applications',
+  navigationTitle: 'Applications',
+  trackerEyebrow: 'One Step At A Time',
+  nextStepTitle: 'Your Next Step',
+  nextStepEmptyHint: 'Set a follow-up date when you are ready to check in.',
+  // @sentence-case: Supporting guidance when a follow-up has no private notes.
+  nextStepNotesEmpty: 'Check in on this application.',
+  dashboardTitle: 'Applications & Follow-Ups',
+  allFollowUpsAction: 'All Follow-Ups',
+  dashboardDescription:
+    'Keep your next steps together, with the earliest follow-up dates first.',
+  noDueDate: 'No Date Set',
+  optionalFollowUpLabel: 'Follow-Up Due Date (Optional)',
+  optionalFollowUpHint:
+    'Add a reminder to check progress. You can leave this empty and add one later.',
+  followUpRetry: 'Save Follow-Up',
+  continueAction: 'Open Application',
+  followUpPartialDescription:
+    'Your application is saved. The follow-up could not be saved yet. Retry below, or open the application to add it later.',
+  nextFollowUpLabel: 'Next Follow-Up',
+  countdownLabel: (days: number) =>
+    days < 0
+      ? Math.abs(days) === 1
+        ? 'Day Overdue'
+        : 'Days Overdue'
+      : days === 0
+        ? 'Due Today'
+        : days === 1
+          ? 'Day Remaining'
+          : 'Days Remaining',
+  countdownValue: (days: number) => (days === 0 ? '0' : String(Math.abs(days))),
   description:
     'Keep your applications, decisions, and next steps together. You control every update.',
   // @sentence-case: Supporting prose and validation remain sentence case.
@@ -11152,7 +11577,7 @@ export const gentlePathApplicationStrings = {
     'Set a date to check progress, call a provider, or gather information.',
   // @sentence-case: Supporting prose and validation remain sentence case.
   followUpsEmpty: 'No follow ups yet.',
-  followUpAdd: 'Add Follow Up',
+  followUpAdd: 'Add Follow-Up',
   followUpEdit: 'Edit Follow Up',
   followUpSave: 'Save Follow Up',
   followUpDelete: 'Delete Follow Up',
@@ -11211,6 +11636,26 @@ export const gentlePathApplicationStrings = {
   demo: {
     applicationTitle: 'Early Support Intake',
     provider: 'Family Support Team',
+    speechTitle: 'Speech Support Enrollment',
+    speechProvider: 'Community Speech Network',
+    schoolTitle: 'School Services Review',
+    schoolProvider: 'Family School Support Office',
+    respiteTitle: 'Respite Care Application',
+    respiteProvider: 'Caregiver Resource Center',
+    transportTitle: 'Family Transport Support',
+    transportProvider: 'Regional Access Services',
+    // @sentence-case: Sample private follow-up notes are supporting prose.
+    speechFollowUp:
+      'Ask whether an appointment has opened on the waiting list.',
+    // @sentence-case: Sample private follow-up notes are supporting prose.
+    schoolFollowUp:
+      'Confirm the meeting time and gather questions for the school team.',
+    // @sentence-case: Sample private follow-up notes are supporting prose.
+    respiteFollowUp:
+      'Check which documents are needed for the care assessment.',
+    // @sentence-case: Sample private follow-up notes are supporting prose.
+    transportFollowUp:
+      'Confirm the first pickup and ask about the approved travel schedule.',
     // @sentence-case: Sample private notes are supporting prose.
     notes: 'Keep intake notes and questions here while waiting for a decision.',
     // @sentence-case: Sample private notes are supporting prose.
@@ -11298,7 +11743,7 @@ export const gentlePathOnboardingStrings = {
   state: 'State',
   chooseState: 'Choose Your State',
   stateHint:
-    'We use your state to show sample state benefit programs. You can change it in Settings.',
+    'We use your state to show sample state benefit programs. You can change it in your profile.',
   childrenHint:
     'Create a profile for each child, or add them later. There is no rush to fill everything in.',
   addChildrenLater: 'Add Children Later',
@@ -11328,9 +11773,11 @@ export const gentlePathOnboardingStrings = {
     // @sentence-case: Confirmation after successful account setup.
     saved: 'Your setup is saved. Make yourself at home.',
     continue: 'Let’s Get Started',
+    skipCelebration: 'Skip Celebration',
+    replay: 'Celebrate Again',
   },
   finishHint:
-    'Your state and discovery preferences are saved. You can update them anytime in Settings.',
+    'Your state and discovery preferences are saved. You can update them anytime in your profile.',
   // @sentence-case: Supporting prose or validation.
   finishChildrenLater:
     'You chose to add children later. Your family profiles will be here when you are ready.',
@@ -11358,14 +11805,8 @@ export const gentlePathOnboardingStrings = {
   incomplete: 'Complete every setup step before finishing.',
   // @preserve-case: Demo identity address.
   onboardingDemoEmail: 'onboarding@gentlepath.demo',
-  demoPreset: 'Onboarding Demo',
-  restartDemo: 'Restart Setup For This Demo Account',
-  restartDemoHint:
-    'After signing in, clear this demo account’s setup progress and private family activity. Other accounts keep their data.',
   // @sentence-case: Supporting prose or validation.
   restartDemoFailed: 'Unable to restart the onboarding demo. Try again.',
-  demoFirstName: 'New',
-  demoLastName: 'Family',
 } as const;
 
 export const gentlePathStateBenefitsStrings = {
@@ -11460,6 +11901,8 @@ export const gentlePathStateBenefitsStrings = {
 } as const;
 
 export const gentlePathGoalStrings = {
+  // @sentence-case: Alternative text for the default goal cover.
+  defaultCoverAlt: 'GentlePath logo on an accent-colored background',
   title: 'Goals',
   // @sentence-case: Supporting prose and validation.
   description:

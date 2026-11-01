@@ -4,9 +4,7 @@ import { useEffect } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 import {
-  Badge,
   Button,
-  Card,
   DirectoryFilters,
   DirectoryPagination,
   EmptyState,
@@ -22,6 +20,8 @@ import { usePortalDirectory } from '@/modules/portal/usePortalDirectory';
 import { useChildren } from '@/modules/portal/hooks';
 import { useApplications } from './hooks';
 import { ServiceApplicationStatusSchema } from './models/serviceApplicationStatus';
+import { ApplicationCard } from './components/ApplicationCard';
+import './styles/applications.css';
 import '@/modules/portal/styles/portal.css';
 
 const allRecordsFilter = '';
@@ -56,6 +56,7 @@ export function ApplicationsScreen() {
     <Page className="gp-portal-page">
       <PageHeader
         title={copy.title}
+        eyebrow={copy.trackerEyebrow}
         description={copy.description}
         action={
           <Button asChild>
@@ -114,41 +115,20 @@ export function ApplicationsScreen() {
         {(result) => (
           <div className="grid gap-5">
             {result.data.length ? (
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div
+                className="gp-applications-grid"
+                data-single={result.data.length === 1 || undefined}
+              >
                 {result.data.map((application) => (
-                  <Card
+                  <ApplicationCard
                     key={application.id}
-                    className="relative grid gap-4 hover:border-brand focus-within:border-brand"
-                  >
-                    <div className="flex flex-wrap gap-2">
-                      <Badge intent="brand">
-                        {copy.statuses[application.status]}
-                      </Badge>
-                      <Badge intent="neutral">
-                        {application.child_id
-                          ? (children.data?.find(
-                              (item) => item.id === application.child_id,
-                            )?.name ?? copy.childLabel)
-                          : copy.personalOption}
-                      </Badge>
-                    </div>
-                    <h2 className="m-0 font-display text-xl text-primary wrap-anywhere">
-                      <NavigationLink
-                        className="ui-card-open outline-none"
-                        href={`/applications/${application.id}`}
-                      >
-                        {application.title}
-                      </NavigationLink>
-                    </h2>
-                    <p className="m-0 text-sm text-secondary wrap-anywhere">
-                      {application.provider || copy.providerEmpty}
-                    </p>
-                    {application.applied_on && (
-                      <p className="m-0 text-xs text-tertiary">
-                        {copy.dateDescription(application.applied_on)}
-                      </p>
-                    )}
-                  </Card>
+                    application={application}
+                    childName={
+                      children.data?.find(
+                        (item) => item.id === application.child_id,
+                      )?.name
+                    }
+                  />
                 ))}
               </div>
             ) : (

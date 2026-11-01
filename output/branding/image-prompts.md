@@ -1,0 +1,38 @@
+# GentlePath Image Prompts
+
+Generated with the built-in `image_gen__imagegen` tool. The code-assistance agents used GPT-6.1 Sol High; the image-direction agent used GPT-6.1 Sol Max. The image tool chooses its own image model.
+
+## Family Illustration
+
+Use case: precise-object-edit.
+Asset type: Transparent GentlePath family illustration, sibling replacement of the supplied PNG.
+Input image 1 is the EDIT TARGET. Make a very faithful version of this exact illustration with ONLY the people's hair, skin and child gender appearance adjusted.
+Primary request: the seated parent is a white mother with fair warm ivory skin and blonde hair; the small child is a boy with fair warm ivory skin and brown-blonde hair (light golden brown/dark blonde). Keep both faces warm and expressive. Mother's hair remains an abundant soft wavy/curly high bun silhouette with loose tendrils, now clearly honey blonde with restrained warm darker line detail. Boy has softly tousled short-to-medium loose brown-blonde curls, clearly a young boy, no hair bows or ponytail.
+Strict invariants: keep EXACTLY the same mother-left / boy-right arrangement, seated crossed legs, mother's cheek resting in one hand, boy pointing into the open book, the cream oval rug, same illustrated shape book, same toy blocks in foreground, all existing lavender and sage clothing colors, same scale, poses, framing and visual balance. Keep the whole silhouette and toy shapes within the square canvas. Keep the small yellow earring.
+Style/medium: match the supplied illustration precisely: polished hand-drawn flat children's-book/editorial artwork, fine dark forest outlines, rounded shapes, delicate paper grain, restrained sage green, lavender, ivory and small sunlight-yellow accents. Preserve drawing quality and natural hands. Avoid photorealism, painterly scenery, 3D, heavy shading or a new artistic style.
+Output: square illustration in a PNG with a genuinely transparent background, clean alpha edges. No solid background, no new scenery, no text, no logo, no watermark. This is a close edit, not a new composition.
+
+## Share Preview Background
+
+Use case: ads-marketing.
+Asset type: polished GentlePath social-share / browser Suggested and Recently Visited preview BACKGROUND ART, a wide landscape composition approximately 1200 by 630 pixels (1.905:1).
+Reference image 1 is a STYLE AND MOTIF REFERENCE for the established winding path, forest outlines, stylized hills, simple yellow sun and lilac butterfly. Reference image 2 is a STYLE REFERENCE for fine outlines, flat rounded illustration and restrained paper texture. Do not reproduce the people, book or toys.
+Primary request: create beautiful spacious editorial illustrated background art for a reassuring family-support product. The canvas is fully opaque warm cream (#fffdf8). Reserve the left 54 percent and upper-middle as uninterrupted very quiet cream space, because exact brand mark and typography will be composited there separately. All illustrative narrative concentrates in the right 46 percent with graceful edges.
+Scene/composition: a luminous flat sunlight-yellow sun, two soft sage and forest-green hills and an ivory path winding gently toward the horizon. A few large elegant outlined leaves form a sparse botanical silhouette along the far right edge and lower right corner, with one small lilac butterfly near the sun. The hills start low toward the center and grow into the right portion, leaving a broad clean left area. The path sweeps from the lower-right foreground toward the right-side horizon. Let the composition breathe with generous cream sky and no visual clutter. Shapes must remain legible in a small website thumbnail. Fine restrained paper grain is welcome.
+Style/medium: high-end flat illustrated editorial artwork that belongs to the supplied existing GentlePath illustrations: clean fine dark forest outlines, rounded graphic shapes, controlled grain, sage/lilac/ivory/sunlight palette. Sophisticated and calm; cheerful and reassuring without looking childish or generic.
+Color palette: cream #fffdf8, oat #faf8f2, deep forest #174e46 and #123e39, muted sage, pale lavender, warm sunlight yellow. Opaque full-bleed cream background.
+Constraints: NO text of any kind, NO letters, NO logo, NO watermark, NO UI, NO cards, NO mockup or phone, NO people, NO collage, NO unnecessary objects. No gradients, glowing halos, photorealism, realistic watercolor scenery, dense foliage, heavy dimensional shading or dark vignette. This image is only the finished illustration background; keep left blank for later compositing.
+
+The final share-preview PNG adds the existing native G/P mark and exact local fonts using `scripts/generate-brand-assets.mjs`. Opaque icon exports derive from the maintained SVG mark rather than image generation.
+
+## Parent And Child Drawing Illustration
+
+Generated with built-in `image_gen__imagegen`; `transparent_background: true`. Edit target: `public/gentlepath/parent-and-child.png`. Hair and skin identity reference: `public/gentlepath/family-connection-blonde.png`. Result: `public/gentlepath/parent-and-child-blonde.png`, 1254 × 1254, RGBA, transparent alpha range 0–255. Original retained.
+
+Use case: precise-object-edit.
+Asset type: Transparent GentlePath parent-and-child drawing-scene illustration, sibling replacement of input image 1.
+Input image 1 is the EDIT TARGET. Input image 2 is ONLY the HAIR AND SKIN IDENTITY REFERENCE, never a composition reference.
+Primary request: edit only the people's hair/skin and child's boy appearance in IMAGE 1. The seated parent is a white mother with fair warm ivory skin and honey blonde hair, matching the mother's blonde coloring in image 2. The young child is a boy with fair warm ivory skin and brown-blonde hair (light golden brown/dark blonde), matching image 2's boy's coloring. Keep the illustration's own warm faces and expressions. Mother retains the same softly wavy high bun silhouette with loose tendrils, now blonde. Boy retains the same tousled short-to-medium loose curls silhouette, now brown-blonde, with no bows or ponytail.
+STRICT INVARIANTS: preserve image 1's EXACT drawing scene, composition and pose. Mother sits on the LEFT wearing the same DARK FOREST GREEN long-sleeve top and IVORY trousers, her cheek resting in her hand, other hand holding the same green drawing pencil over the foreground paper. The boy sits on the RIGHT wearing the same PALE LILAC top and SAGE GREEN trousers, proudly holding the same upright cream sheet with the same sketched green leaves and tiny yellow rays. Preserve the potted green plant at the far left, the cream/sage ground shape, drawing paper and leaves in the foreground, and the TWO yellow and purple toy cubes at the lower right. Keep bare feet, all hands, all exact object positions, clothing colors, proportions, visual balance, natural anatomy, and generous square-canvas transparent margins of image 1. Do NOT switch to image 2's reading-book scene. Do NOT add image 2's clothes, earring, rug, books or toys.
+Style/medium: match IMAGE 1 precisely: polished hand-drawn flat children's-book/editorial illustration with fine dark forest outlines, rounded graphic shapes, restrained paper grain, soft sage/lilac/ivory/forest palette and small yellow accents. Preserve the original drawing quality. No photorealism, no 3D, no new painterly style, no heavy shading.
+Output: one square PNG illustration with genuine transparent background, clean alpha edges and complete uncut silhouette. No solid or patterned background, no new scenery, no new objects, no text, no logo, no watermark. This is a very close edit of IMAGE 1, not a new composition.

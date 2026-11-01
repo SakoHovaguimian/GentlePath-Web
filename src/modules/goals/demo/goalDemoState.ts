@@ -15,7 +15,7 @@ const globalState = globalThis as typeof globalThis & {
 function createState(): DemoGoalState {
   const uploads = new Map<string, DemoGoalUpload>();
   const image = readFileSync(
-    join(process.cwd(), 'public/gentlepath/family-connection.png'),
+    join(process.cwd(), 'public/gentlepath/family-connection-blonde.png'),
   );
   const goals = populatedDemoUsers.flatMap((user) => {
     const child = getDemoPortalState().children.find(
@@ -36,7 +36,7 @@ function createState(): DemoGoalState {
         user_id: user.id,
         child_id: child.id,
         upload_session_id: mediaId,
-        original_file_name: 'family-connection.png',
+        original_file_name: 'family-connection-blonde.png',
         mime_type: 'image/png',
         size_bytes: image.length,
         position: 0,

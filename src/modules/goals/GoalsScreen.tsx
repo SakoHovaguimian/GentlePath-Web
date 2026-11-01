@@ -23,6 +23,8 @@ import { useGoals } from './hooks';
 import { GoalStatusSchema } from './models/goalStatus';
 import { goalStatusLabel } from './services/goalStatusLabel';
 import { GoalMediaPreview } from './components/GoalMediaPreview';
+import { GoalCoverFallback } from './components/GoalCoverFallback';
+import { GoalStatusBadge } from './components/GoalStatusBadge';
 import '@/modules/portal/styles/portal.css';
 
 const allItems = '';
@@ -147,25 +149,25 @@ export function GoalsScreen() {
                             key={goal.id}
                             className="relative flex flex-col overflow-hidden p-0 sm:p-0"
                           >
-                            {cover && (
+                            {cover ? (
                               <GoalMediaPreview
                                 goalId={goal.id}
                                 media={cover}
                                 compact
                               />
+                            ) : (
+                              <GoalCoverFallback />
                             )}
-                            <div className="grid flex-1 gap-3 p-5">
-                              <div className="flex flex-wrap gap-2">
-                                <Badge intent="brand">
-                                  {goalStatusLabel(goal.status)}
-                                </Badge>
+                            <div className="flex flex-1 flex-col gap-3 p-5">
+                              <div className="flex flex-wrap items-start gap-2">
+                                <GoalStatusBadge status={goal.status} />
                                 <Badge intent="neutral">
                                   {profiles.find(
                                     (child) => child.id === goal.child_id,
                                   )?.name ?? copy.child}
                                 </Badge>
                               </div>
-                              <h2 className="m-0 font-display text-2xl">
+                              <h2 className="m-0 font-display text-2xl font-normal">
                                 <NavigationLink
                                   href={`/goals/${goal.id}`}
                                   className="ui-card-open"

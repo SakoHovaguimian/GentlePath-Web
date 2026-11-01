@@ -24,6 +24,8 @@ import {
   ApplicationPageSchema,
   ApplicationPriorityPageSchema,
 } from '../models/applicationPage';
+import { activeApplicationStatuses } from '../models/activeApplicationStatuses';
+import type { ApplicationDashboardItem } from '../models/applicationDashboardItem';
 
 const base = '/portal/applications';
 
@@ -49,6 +51,56 @@ export class ApplicationService {
     return ServiceApplicationSchema.parse(
       await this.api.request(`${base}/${encodeURIComponent(id)}`, { signal }),
     );
+  }
+
+  async active(limit = 3, signal?: AbortSignal) {
+    const pages = await Promise.all(
+      activeApplicationStatuses.map((status) =>
+        this.list(
+          { query: '', status, personal_only: false, limit, offset: 0 },
+          signal,
+        ),
+      ),
+    );
+    return pages
+      .flatMap((page) => page.data)
+      .sort(
+        (a, b) =>
+          (b.updated_at ?? '').localeCompare(a.updated_at ?? '') ||
+          b.id.localeCompare(a.id),
+      )
+      .slice(0, limit);
+  }
+
+  async dashboard(
+    limit = 6,
+    signal?: AbortSignal,
+  ): Promise<ApplicationDashboardItem[]> {
+    const [priority, active] = await Promise.all([
+      this.priority(limit, 0, signal),
+      this.active(limit, signal),
+    ]);
+    const applicationIds = [
+      ...new Set(priority.data.map((item) => item.application_id)),
+    ];
+    const byId = new Map(
+      active.map((application) => [application.id, application]),
+    );
+    const applications = await Promise.all(
+      applicationIds
+        .filter((id) => !byId.has(id))
+        .map((id) => this.get(id, signal)),
+    );
+    for (const application of applications)
+      byId.set(application.id, application);
+    const pending = priority.data.map((followUp): ApplicationDashboardItem => ({
+      application: byId.get(followUp.application_id)!,
+      followUp,
+    }));
+    const additional = active
+      .filter((application) => !applicationIds.includes(application.id))
+      .map((application): ApplicationDashboardItem => ({ application }));
+    return [...pending, ...additional].slice(0, limit);
   }
 
   async priority(limit = 3, offset = 0, signal?: AbortSignal) {

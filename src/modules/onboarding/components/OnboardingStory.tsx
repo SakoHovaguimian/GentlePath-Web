@@ -5,10 +5,10 @@ import type { OnboardingStep } from '../models/onboardingStep';
 
 const artwork = {
   STATE: gentlePathIllustrations.onboardingStateGarden,
-  CHILDREN: '/gentlepath/family-connection.png',
+  CHILDREN: gentlePathIllustrations.familyConnection,
   DISCOVERY: gentlePathIllustrations.guidedSteps,
-  FINISH: '/gentlepath/growing-together-v2.png',
-  COMPLETE: '/gentlepath/growing-together-v2.png',
+  FINISH: gentlePathIllustrations.growingTogether,
+  COMPLETE: gentlePathIllustrations.growingTogether,
 } as const;
 
 export function OnboardingStory({ step }: { step: OnboardingStep }) {
@@ -29,7 +29,9 @@ export function OnboardingStory({ step }: { step: OnboardingStep }) {
           fill
           sizes="(max-width: 599px) 112px, (max-width: 899px) 250px, 480px"
           className="object-contain"
+          unoptimized={step === 'CHILDREN'}
           preload={step === 'STATE'}
+          loading={step === 'STATE' ? undefined : 'eager'}
         />
       </div>
     </aside>

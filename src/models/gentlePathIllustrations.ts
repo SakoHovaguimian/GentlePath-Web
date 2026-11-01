@@ -5,6 +5,8 @@ import offThePath from '../../public/gentlepath/off-the-path.png';
 import onboardingStateGarden from '../../public/gentlepath/onboarding-state-garden.png';
 import guidedSteps from '../../public/gentlepath/guided-steps.png';
 import milestoneGarden from '../../public/gentlepath/milestone-garden.png';
+import familyConnection from '../../public/gentlepath/family-connection-blonde.png';
+import growingTogether from '../../public/gentlepath/growing-together-v2.png';
 
 /** Static imports let Next.js refresh optimized URLs when the artwork changes. */
 export const gentlePathIllustrations = {
@@ -15,4 +17,6 @@ export const gentlePathIllustrations = {
   onboardingStateGarden: onboardingStateGarden.src,
   guidedSteps: guidedSteps.src,
   milestoneGarden: milestoneGarden.src,
+  familyConnection: familyConnection.src,
+  growingTogether: growingTogether.src,
 } as const;

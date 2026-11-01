@@ -10,7 +10,9 @@ export function motionDuration(
   token:
     | '--motion-duration-fast'
     | '--motion-duration-base'
-    | '--motion-duration-celebration',
+    | '--motion-duration-enter'
+    | '--motion-duration-celebration'
+    | '--motion-duration-onboarding-celebration',
 ) {
   if (prefersReducedMotion()) return 0;
   const value = getComputedStyle(document.documentElement)

@@ -1,5 +1,5 @@
 import 'server-only';
-import { users as seedAccounts } from '@/services/demo/demoFixtures';
+import { populatedDemoUsers as seedAccounts } from '@/services/demo/demoFixtures';
 import { gentlePathAccountToolsStrings as copy } from '@/strings';
 import type { DemoAccountToolsState } from './models/demoAccountToolsState';
 import { AccountDeviceTypeSchema } from '../models/accountDevice';

@@ -1,12 +1,22 @@
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { Button, UiIcon } from '@/components/ui';
 import { gentlePathOnboardingStrings as copy } from '@/strings';
 
-export function OnboardingWelcome({ onContinue }: { onContinue: () => void }) {
+export function OnboardingWelcome({
+  celebrating,
+  onReady,
+  onCelebrationChange,
+  onContinue,
+}: {
+  celebrating: boolean;
+  onReady: () => void;
+  onCelebrationChange: () => void;
+  onContinue: () => void;
+}) {
   const heading = useRef<HTMLHeadingElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     heading.current?.focus();
   }, []);
 
@@ -32,16 +42,28 @@ export function OnboardingWelcome({ onContinue }: { onContinue: () => void }) {
           alt={copy.welcome.artAlt}
           fill
           sizes="320px"
+          loading="eager"
+          onLoad={onReady}
+          onError={onReady}
         />
       </div>
       <p className="gp-onboarding-welcome-saved">
         <UiIcon name="check" className="size-4" />
         {copy.welcome.saved}
       </p>
-      <Button onClick={onContinue}>
-        {copy.welcome.continue}
-        <UiIcon name="arrowRight" className="size-4" />
-      </Button>
+      <div className="gp-onboarding-welcome-actions">
+        <Button onClick={onContinue}>
+          {copy.welcome.continue}
+          <UiIcon name="arrowRight" className="size-4" />
+        </Button>
+        <Button variant="ghost" onClick={onCelebrationChange}>
+          <UiIcon
+            name={celebrating ? 'close' : 'sparkles'}
+            className="size-4"
+          />
+          {celebrating ? copy.welcome.skipCelebration : copy.welcome.replay}
+        </Button>
+      </div>
     </section>
   );
 }

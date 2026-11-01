@@ -11,7 +11,6 @@ import type { DemoContext } from '@/models/demoContext';
 import type { ServerSession } from '@/services/session/models/serverSession';
 import { getDemoState } from '@/services/demo/demoState';
 import { getDemoPortalState } from '@/services/demo/demoPortalState';
-import { getDemoNotificationInboxState } from '@/modules/notification-inbox/demo/notificationInboxState';
 import { gentlePathApplicationStrings as copy } from '@/strings';
 import {
   ServiceApplicationCreateSchema,
@@ -29,8 +28,8 @@ import { ApplicationPriorityQuerySchema } from '../models/applicationPriorityQue
 import { ApplicationQuerySchema } from '../models/applicationQuery';
 import { getDemoApplicationState } from './applicationDemoState';
 import { getDemoStateBenefitProgramById } from '@/modules/state-benefits/demo/stateBenefitPrograms';
+import { demoApplicationCalendarDay } from './applicationCalendarDay';
 
-const numericYear = 'numeric';
 const successMessage = 'success!';
 
 const json = (body: unknown, status = 200) =>
@@ -70,22 +69,7 @@ export async function handleApplicationRequest(
       (!application.child_id ||
         children.some((child) => child.id === application.child_id)),
   );
-  const timezone =
-    getDemoNotificationInboxState().settings.get(current.id)
-      ?.effectiveTimezone ?? 'UTC';
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: timezone,
-    year: numericYear,
-    month: '2-digit',
-    day: '2-digit',
-  }).formatToParts(new Date());
-  const value = (type: string) =>
-    parts.find((part) => part.type === type)!.value;
-  const today = Date.UTC(
-    Number(value('year')),
-    Number(value('month')) - 1,
-    Number(value('day')),
-  );
+  const today = demoApplicationCalendarDay(current.id);
   const detailedFollowUp = (
     followUp: ApplicationFollowUp,
   ): ApplicationFollowUp => {

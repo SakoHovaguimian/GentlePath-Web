@@ -1,5 +1,8 @@
 import 'server-only';
-import { gentlePathOnboardingStrings as copy } from '@/strings';
+import {
+  newDemoUserId,
+  populatedDemoUsers,
+} from '@/services/demo/demoFixtures';
 import { getDemoState } from '@/services/demo/demoState';
 import type { FamilyPreferences } from '../models/familyPreferences';
 
@@ -19,7 +22,11 @@ export function initializeDemoOnboarding(
     discovery_approaches: [],
     discovery_preferences_answered: completed,
     onboarding_step: completed ? 'COMPLETE' : 'STATE',
-    onboarding_children_response: completed ? 'ADDED' : null,
+    onboarding_children_response: completed
+      ? userId === newDemoUserId
+        ? 'LATER'
+        : 'ADDED'
+      : null,
     onboarding_completed_at: completed ? new Date().toISOString() : null,
   };
   store().set(userId, settings);
@@ -31,8 +38,11 @@ export function getDemoOnboardingSettings(userId: string): FamilyPreferences {
   const user = getDemoState().users.find((item) => item.id === userId);
   return initializeDemoOnboarding(
     userId,
-    user?.email !== copy.onboardingDemoEmail &&
-      user?.email.endsWith('@gentlepath.demo') === true,
+    Boolean(
+      user &&
+      (user.id === newDemoUserId ||
+        populatedDemoUsers.some((seed) => seed.id === user.id)),
+    ),
   );
 }
 export function saveDemoOnboardingSettings(settings: FamilyPreferences) {

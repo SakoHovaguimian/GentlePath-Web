@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import type { Route } from 'next';
 import {
   buttonClassName,
-  Badge,
   Button,
   Card,
   IconMenu,
@@ -23,7 +22,7 @@ import type { Goal } from './models/goal';
 import type { GoalMedia } from './models/goalMedia';
 import type { GoalNote } from './models/goalNote';
 import type { GoalStatus } from './models/goalStatus';
-import { goalStatusLabel } from './services/goalStatusLabel';
+import { GoalStatusBadge } from './components/GoalStatusBadge';
 import { GoalMediaPreview } from './components/GoalMediaPreview';
 import { GoalNoteEditor } from './components/GoalNoteEditor';
 import '@/modules/portal/styles/portal.css';
@@ -167,7 +166,7 @@ function GoalDetail({
         description={copy.private}
         meta={
           <>
-            <Badge intent="brand">{goalStatusLabel(goal.status)}</Badge>
+            <GoalStatusBadge status={goal.status} />
             <span>
               {children.data?.find((child) => child.id === goal.child_id)?.name}
             </span>

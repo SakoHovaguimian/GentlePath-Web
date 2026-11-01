@@ -3,7 +3,7 @@ import { gentlePathIllustrations } from '@/models/gentlePathIllustrations';
 import { gentlePathLandingStrings as copy } from '@/strings';
 
 const supportIllustrations = [
-  '/gentlepath/family-connection.png',
+  '/gentlepath/family-connection-blonde.png',
   gentlePathIllustrations.guidedSteps,
   '/gentlepath/community-messages.png',
 ] as const;

@@ -1,9 +1,11 @@
 'use client';
 import Image from 'next/image';
+import { useState } from 'react';
 import { Button, InlineLoading } from '@/components/ui';
 import { gentlePathGoalStrings as copy } from '@/strings';
 import { useGoalMediaUrl } from '../hooks';
 import type { GoalMedia } from '../models/goalMedia';
+import { GoalCoverFallback } from './GoalCoverFallback';
 
 export function GoalMediaPreview({
   goalId,
@@ -15,6 +17,7 @@ export function GoalMediaPreview({
   compact?: boolean;
 }) {
   const url = useGoalMediaUrl(goalId, media.id);
+  const [failedUrl, setFailedUrl] = useState<string>();
   if (url.isPending)
     return compact ? (
       <div className="aspect-video bg-secondary_subtle" />
@@ -22,12 +25,16 @@ export function GoalMediaPreview({
       <InlineLoading message={copy.loading} />
     );
   if (url.isError)
-    return compact ? null : (
+    return compact ? (
+      <GoalCoverFallback />
+    ) : (
       <Button variant="secondary" onClick={() => void url.refetch()}>
         {copy.retry}
       </Button>
     );
-  if (!url.data) return null;
+  if (!url.data) return compact ? <GoalCoverFallback /> : null;
+  const mediaUrl = url.data.url;
+  if (compact && failedUrl === mediaUrl) return <GoalCoverFallback />;
   if (media.mime_type.startsWith('image/'))
     return (
       <Image
@@ -36,6 +43,7 @@ export function GoalMediaPreview({
         height={750}
         src={url.data.url}
         alt={media.original_file_name}
+        onError={() => setFailedUrl(mediaUrl)}
         className={
           compact
             ? 'aspect-video w-full object-cover'

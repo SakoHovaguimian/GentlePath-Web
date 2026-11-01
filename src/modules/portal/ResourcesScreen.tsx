@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import {
   Button,
-  DirectoryFilters,
-  EmptyState,
   Page,
   PageHeader,
   QueryBoundary,
@@ -13,28 +11,34 @@ import {
 import { usePresentationService } from '@/presentation/PresentationProvider';
 import { gentlePathPortalStrings as copy } from '@/strings';
 import { useResources, useSaveResource } from './hooks';
-import { usePortalDirectory } from './usePortalDirectory';
-import { ResourceCard } from './components/ResourceCard';
+import { useResourceDirectory } from './useResourceDirectory';
+import { ResourceFilters } from './components/ResourceFilters';
+import { ResourceResults } from './components/ResourceResults';
 import { MutationError } from './components/MutationError';
-import {
-  CollectionPagination,
-  collectionOffset,
-} from './components/CollectionPagination';
 import type { Resource } from './models/resource';
 import { PortalBanner } from './components/PortalBanner';
-import { resourceArtwork } from './components/resourceArtwork';
+import { getResourceArtwork } from './components/resourceArtwork';
+import { browseResources, isResourceCollection } from './resourceBrowsing';
 import './styles/portal.css';
+import './styles/resources.css';
 
 export function ResourcesScreen({
   savedOnly = false,
+  browse = false,
 }: {
   savedOnly?: boolean;
+  browse?: boolean;
 }) {
   const query = useResources();
   const mutation = useSaveResource();
-  const directory = usePortalDirectory();
+  const directory = useResourceDirectory();
   const { showToast } = usePresentationService();
+  const collections = browse && directory.mode === 'collections';
+  const hasFilters = Boolean(
+    directory.query || directory.category || directory.tag,
+  );
   async function toggle(resource: Resource) {
+    if (mutation.isPending) return;
     try {
       await mutation.mutateAsync({ id: resource.id, saved: !resource.saved });
       if (!resource.saved)
@@ -43,137 +47,195 @@ export function ResourcesScreen({
       /* Inline recovery. */
     }
   }
+  function browseHref(mode: 'resources' | 'collections') {
+    const params = new URLSearchParams({ mode });
+    if (directory.query) params.set('query', directory.query);
+    if (directory.category) params.set('status', directory.category);
+    if (directory.tag) params.set('tag', directory.tag);
+    if (directory.sort !== 'title') params.set('sort', directory.sort);
+    return { pathname: '/resources/browse', query: Object.fromEntries(params) };
+  }
   return (
     <Page className="gp-portal-page gp-resources">
       <PageHeader
-        title={savedOnly ? copy.resources.savedTitle : copy.resources.title}
+        title={
+          savedOnly
+            ? copy.resources.savedTitle
+            : browse
+              ? collections
+                ? copy.resources.collectionsTitle
+                : copy.resources.browseTitle
+              : copy.resources.title
+        }
         description={
           savedOnly
             ? copy.resources.savedDescription
-            : copy.resources.description
+            : collections
+              ? copy.resources.collectionsDescription
+              : copy.resources.description
         }
         eyebrow={copy.navigation.resources}
         action={
-          savedOnly ? (
+          savedOnly || browse ? (
             <Button asChild variant="secondary">
               <Link href="/resources">{copy.resources.explore}</Link>
             </Button>
           ) : undefined
         }
       />
-      <DirectoryFilters
-        id="resource-search"
-        value={{
-          query: directory.query,
-          status: directory.status || undefined,
-        }}
-        onChange={(value) =>
-          directory.update({
-            query: value.query,
-            status: value.status,
-            offset: undefined,
-          })
-        }
-        statuses={Object.entries(copy.resources.categories).map(
-          ([value, label]) => ({ value, label }),
-        )}
-        copy={{
-          search: copy.common.search,
-          placeholder: copy.resources.searchPlaceholder,
-          clear: copy.common.clear,
-          status: copy.common.category,
-          allStatuses: copy.common.allCategories,
-        }}
-      />
-      {!savedOnly && !directory.query && !directory.status && (
-        <section className="gp-resource-collections">
-          <div className="gp-portal-section-heading">
-            <h2>{copy.resources.collectionsTitle}</h2>
-          </div>
-          <div className="gp-resource-collections__grid">
-            {(['everyday', 'communication'] as const).map((category) => (
-              <PortalBanner
-                key={category}
-                title={copy.resources.categories[category]}
-                headingLevel="h3"
-                description={copy.resources.collectionHints[category]}
-                image={resourceArtwork[category].src}
-                tone={category === 'communication' ? 'lilac' : 'sage'}
-                landscape={resourceArtwork[category].landscape}
-                action={
-                  <Button
-                    onClick={() =>
-                      directory.update({
-                        status: category,
-                        offset: undefined,
-                      })
-                    }
-                  >
-                    {copy.resources.collectionAction}
-                    <UiIcon name="arrowRight" className="size-4" />
-                  </Button>
-                }
-              />
-            ))}
-          </div>
-        </section>
+      {browse && (
+        <nav
+          className="gp-resource-browse-nav"
+          aria-label={copy.resources.browseNavigationLabel}
+        >
+          {(['resources', 'collections'] as const).map((mode) => (
+            <Button
+              key={mode}
+              asChild
+              variant={directory.mode === mode ? 'primary' : 'secondary'}
+            >
+              <Link
+                href={browseHref(mode)}
+                aria-current={directory.mode === mode ? 'page' : undefined}
+              >
+                {mode === 'resources'
+                  ? copy.resources.browseTitle
+                  : copy.resources.collectionsTitle}
+              </Link>
+            </Button>
+          ))}
+        </nav>
       )}
+      <ResourceFilters
+        resources={(query.data ?? []).filter((resource) =>
+          savedOnly || !browse
+            ? true
+            : isResourceCollection(resource) === collections,
+        )}
+        directory={directory}
+      />
       <MutationError error={mutation.error} />
       <QueryBoundary query={query}>
         {(resources) => {
-          const filtered = resources.filter(
-            (resource) =>
-              (!savedOnly || resource.saved) &&
-              (!directory.status || resource.category === directory.status) &&
-              `${resource.title} ${resource.description}`
-                .toLocaleLowerCase()
-                .includes(directory.query.toLocaleLowerCase()),
-          );
-          const offset = collectionOffset(directory.offset, filtered.length);
-          return filtered.length ? (
+          const filters = {
+            query: directory.query,
+            category: directory.category,
+            tag: directory.tag,
+            sort: directory.sort,
+            savedOnly,
+          };
+          const results = browseResources(resources, {
+            ...filters,
+            mode: savedOnly
+              ? undefined
+              : collections
+                ? 'collections'
+                : 'resources',
+          });
+          const collectionPreview = browseResources(resources, {
+            ...filters,
+            mode: 'collections',
+          }).slice(0, 2);
+          return (
             <>
-              <div className="gp-resource-grid">
-                {filtered.slice(offset, offset + 9).map((resource) => (
-                  <ResourceCard
-                    key={resource.id}
-                    resource={resource}
-                    busy={
-                      mutation.isPending &&
-                      mutation.variables.id === resource.id
-                    }
-                    onSave={(item) => {
-                      void toggle(item);
-                    }}
-                  />
-                ))}
-              </div>
-              <CollectionPagination
-                total={filtered.length}
-                offset={offset}
-                onNavigate={directory.setOffset}
-              />
+              {!savedOnly && !browse && (
+                <section
+                  className="gp-resource-collections"
+                  aria-labelledby="resource-collections-heading"
+                >
+                  <div className="gp-portal-section-heading">
+                    <h2 id="resource-collections-heading">
+                      {copy.resources.collectionsTitle}
+                    </h2>
+                    <Button asChild variant="ghost">
+                      <Link
+                        href={browseHref('collections')}
+                        aria-label={copy.resources.viewAllCollectionsLabel}
+                      >
+                        {copy.resources.viewAll}
+                        <UiIcon name="arrowRight" className="size-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                  {collectionPreview.length ? (
+                    <div className="gp-resource-collections__grid">
+                      {collectionPreview.map((collection) => {
+                        const artwork = getResourceArtwork(collection);
+                        return (
+                          <PortalBanner
+                            key={collection.id}
+                            title={collection.title}
+                            headingLevel="h3"
+                            description={collection.description}
+                            image={artwork.src}
+                            tone={
+                              collection.category === 'communication'
+                                ? 'lilac'
+                                : 'sage'
+                            }
+                            landscape={artwork.landscape}
+                            action={
+                              <Button asChild>
+                                <Link href={`/resources/${collection.id}`}>
+                                  {copy.resources.collectionAction}
+                                  <UiIcon
+                                    name="arrowRight"
+                                    className="size-4"
+                                  />
+                                </Link>
+                              </Button>
+                            }
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="m-0 text-sm text-secondary">
+                      {copy.resources.emptyCollectionsHint}
+                    </p>
+                  )}
+                </section>
+              )}
+              <section
+                className="gp-resource-results"
+                aria-labelledby="resource-results-heading"
+              >
+                <div className="gp-portal-section-heading">
+                  <h2 id="resource-results-heading">
+                    {savedOnly
+                      ? copy.resources.savedTitle
+                      : collections
+                        ? copy.resources.collectionsTitle
+                        : copy.resources.browseTitle}
+                  </h2>
+                  {!savedOnly && !browse && (
+                    <Button asChild variant="ghost">
+                      <Link
+                        href={browseHref('resources')}
+                        aria-label={copy.resources.viewAllResourcesLabel}
+                      >
+                        {copy.resources.viewAll}
+                        <UiIcon name="arrowRight" className="size-4" />
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+                <ResourceResults
+                  resources={results}
+                  offset={directory.offset}
+                  onNavigate={directory.setOffset}
+                  onSave={(resource) => {
+                    void toggle(resource);
+                  }}
+                  busyId={
+                    mutation.isPending ? mutation.variables.id : undefined
+                  }
+                  savedEmpty={savedOnly && !hasFilters}
+                  collections={collections}
+                  onClear={directory.clear}
+                />
+              </section>
             </>
-          ) : (
-            <EmptyState
-              icon="file"
-              title={
-                savedOnly && !directory.query && !directory.status
-                  ? copy.resources.emptySavedTitle
-                  : copy.common.noResultsTitle
-              }
-              description={
-                savedOnly && !directory.query && !directory.status
-                  ? copy.resources.emptySavedHint
-                  : copy.common.noResultsHint
-              }
-              action={
-                <Button asChild variant="secondary">
-                  <Link href={savedOnly ? '/resources' : '/resources'}>
-                    {savedOnly ? copy.resources.explore : copy.common.clear}
-                  </Link>
-                </Button>
-              }
-            />
           );
         }}
       </QueryBoundary>

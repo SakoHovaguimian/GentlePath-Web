@@ -2238,6 +2238,7 @@
 /* Shared interaction timing: short presses, settled selection, restrained entrances. */
 :root {
   --motion-duration-celebration: 520ms;
+  --motion-duration-onboarding-celebration: 8000ms;
   --motion-duration-press: 90ms;
   --motion-duration-fast: 140ms;
   --motion-duration-base: 200ms;
@@ -2319,6 +2320,14 @@
   --gp-muted: #53625b;
   --gp-border: #d9dfd5;
   --gp-leaf: #78a18a;
+  --color-celebration-primary: var(--gp-forest);
+  --color-firework-mint: #91d8ba;
+  --color-firework-lilac: #bca0ec;
+  --color-firework-sunlight: #f9cb6b;
+  --color-firework-peach: #f3aaa5;
+  --color-firework-sky: #9fcdf2;
+  --color-celebration-secondary: var(--gp-plum);
+  --color-celebration-gold: var(--color-fg-warning-primary);
   --color-rating-active: var(--gp-forest);
   --color-rating-inactive: var(--gp-muted);
   --color-rating-surface: color-mix(

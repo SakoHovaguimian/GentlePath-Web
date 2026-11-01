@@ -11,7 +11,7 @@ export const demoMedia = {
 const bundledDemoMedia: Record<keyof typeof demoMedia, string> = {
   transition: gentlePathIllustrations.pathLandscape,
   reading: gentlePathIllustrations.readingGarden,
-  connection: '/gentlepath/parent-and-child.png',
+  connection: '/gentlepath/parent-and-child-blonde.png',
   community: gentlePathIllustrations.communityGarden,
 };
 

@@ -85,6 +85,14 @@
   flex-shrink: 0;
   color: var(--gp-forest);
 }
+.gp-onboarding-welcome-actions {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
 .gp-onboarding-progress {
   padding-block: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--gp-border);

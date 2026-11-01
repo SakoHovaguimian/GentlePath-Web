@@ -71,7 +71,8 @@ export function AppSidebarContent({
           aria-current={
             activePath === '/profile' ||
             activePath === '/settings/account' ||
-            activePath === '/settings/devices'
+            activePath === '/settings/devices' ||
+            activePath === '/settings/family-preferences'
               ? 'page'
               : undefined
           }

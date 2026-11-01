@@ -1,0 +1,15 @@
+.gp-resource-results {
+  display: grid;
+  min-width: 0;
+  gap: 1.1rem;
+}
+
+.gp-resource-browse-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.gp-resources .gp-portal-section-heading {
+  flex-wrap: wrap;
+}

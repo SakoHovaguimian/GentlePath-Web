@@ -43,19 +43,26 @@
 .gp-brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.45rem;
   color: var(--color-text-primary);
   vertical-align: middle;
 }
 
 .gp-brand-mark {
+  display: block;
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 0.65rem;
+  border-radius: var(--radius-lg);
   background: var(--dashboard-sidebar-bg);
-  object-fit: contain;
   flex: none;
-  overflow: visible;
+  overflow: hidden;
+}
+
+.gp-brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .gp-brand-wordmark {

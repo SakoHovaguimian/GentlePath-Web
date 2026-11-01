@@ -9,7 +9,7 @@ import type { StateBenefitProgram } from '../models/stateBenefitProgram';
 const artwork = {
   HEALTHCARE: '/gentlepath/caregiver-community.png',
   EARLY_SUPPORT: '/gentlepath/growing-together-v2.png',
-  FAMILY_SUPPORT: '/gentlepath/family-connection.png',
+  FAMILY_SUPPORT: '/gentlepath/family-connection-blonde.png',
 } as const;
 export function StateBenefitImage({
   program,

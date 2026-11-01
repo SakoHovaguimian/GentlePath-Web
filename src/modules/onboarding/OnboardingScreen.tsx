@@ -1,6 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Button,
@@ -66,6 +72,11 @@ function OnboardingForm({
   const [completed, setCompleted] = useState(
     Boolean(settings.onboarding_completed_at),
   );
+  const [celebrationSequence, setCelebrationSequence] = useState(0);
+  const [celebrating, setCelebrating] = useState(false);
+  const [welcomeReady, setWelcomeReady] = useState(false);
+  const markWelcomeReady = useCallback(() => setWelcomeReady(true), []);
+  const finishCelebration = useCallback(() => setCelebrating(false), []);
   const [step, setStep] = useState<OnboardingStep>(
     settings.onboarding_step === 'COMPLETE'
       ? 'FINISH'
@@ -105,6 +116,8 @@ function OnboardingForm({
       dirty.current = false;
       if (input.step === 'FINISH') {
         setCompleted(true);
+        setCelebrating(true);
+        setCelebrationSequence((sequence) => sequence + 1);
       } else {
         setStep(steps[steps.indexOf(input.step) + 1]);
       }
@@ -145,9 +158,24 @@ function OnboardingForm({
         .join(', ');
   return (
     <div className="gp-onboarding-content">
-      <SuccessCelebration sequence={completed ? 1 : 0} />
+      <SuccessCelebration
+        variant="onboarding"
+        sequence={celebrationSequence}
+        active={celebrating}
+        ready={welcomeReady}
+        onComplete={finishCelebration}
+      />
       {completed ? (
         <OnboardingWelcome
+          celebrating={celebrating}
+          onReady={markWelcomeReady}
+          onCelebrationChange={() => {
+            if (celebrating) finishCelebration();
+            else {
+              setCelebrating(true);
+              setCelebrationSequence((sequence) => sequence + 1);
+            }
+          }}
           onContinue={() => {
             router.replace(resolveAuthRedirect(redirectTo));
             router.refresh();

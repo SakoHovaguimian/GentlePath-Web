@@ -1,0 +1,49 @@
+.gp-profile {
+  --page-header-tint: var(--gp-lilac);
+}
+
+.gp-profile .ui-page-header .ui-avatar {
+  width: 3.75rem;
+  height: 3.75rem;
+  background: var(--gp-paper);
+  color: var(--gp-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+}
+
+.gp-profile .ui-split-section > div:first-child h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.gp-profile .ui-split-section > div:first-child p {
+  margin-top: 0.5rem;
+  max-width: 25rem;
+}
+
+.gp-profile-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+
+.gp-profile-nav a {
+  padding-block: 0.25rem 0.75rem;
+  border-bottom: 2px solid var(--color-transparent);
+  color: var(--gp-forest);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.gp-profile-nav a:hover {
+  border-bottom-color: var(--gp-forest);
+}
+
+.gp-profile-nav a:focus-visible {
+  outline: 2px solid var(--color-border-brand);
+  outline-offset: 4px;
+}

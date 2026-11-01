@@ -24,6 +24,9 @@ export const ResourceSchema = z.object({
   reviewedByUserId: z.string().optional(),
   parentId: z.string().nullable().optional(),
   resourceType: z.string().optional(),
+  tags: z.array(z.string()).default([]),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
   childrenCount: z.number().optional(),
   url: z.string().nullable().optional(),
 });

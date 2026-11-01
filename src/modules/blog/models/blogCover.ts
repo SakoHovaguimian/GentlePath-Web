@@ -18,7 +18,7 @@ export const blogCoverAssets: Record<
   z.infer<typeof BlogCoverPresetSchema>,
   string
 > = {
-  family: '/gentlepath/parent-and-child.png',
+  family: '/gentlepath/parent-and-child-blonde.png',
   community: '/gentlepath/caregiver-community.png',
   journal: '/gentlepath/care-notes.png',
   growth: '/gentlepath/growing-together-v2.png',

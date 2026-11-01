@@ -1,4 +1,4 @@
-import { gentlePathGoalStrings, gentlePathOnboardingStrings } from '@/strings';
+import { gentlePathGoalStrings } from '@/strings';
 import {
   gentlePathApplicationStrings,
   gentlePathStateBenefitsStrings,
@@ -46,7 +46,7 @@ export function portalNavigation(
     },
     {
       href: '/applications',
-      label: gentlePathApplicationStrings.title,
+      label: gentlePathApplicationStrings.navigationTitle,
       icon: <UiIcon name="file" />,
     },
     {
@@ -147,12 +147,6 @@ export function portalNavigation(
       label: navigationCopy.help,
       ...(adminArea ? { sectionLabel: navigationCopy.supportGroup } : {}),
       icon: <UiIcon name="file" />,
-    },
-    {
-      href: '/settings/family-preferences',
-      label: gentlePathOnboardingStrings.preferencesTitle,
-      icon: <UiIcon name="user" />,
-      placement: 'bottom',
     },
     {
       href: '/settings/appearance',

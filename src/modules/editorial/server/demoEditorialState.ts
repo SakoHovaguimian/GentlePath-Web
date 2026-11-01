@@ -7,6 +7,11 @@ import { gentlePathEditorialStrings as copy } from '@/strings';
 import type { DemoEditorialState } from '../models/demoEditorialState';
 import { mapEditorialResourceToPortal } from '../services/mapEditorialResourceToPortal';
 import { getDemoResourceRatingSummaries } from '@/modules/engagement/demo/engagementState';
+import {
+  createDemoResourceCatalogue,
+  demoResourceCatalogueVersion,
+} from './demoResourceCatalogue';
+import { upgradeDemoResourceCatalogue } from './upgradeDemoResourceCatalogue';
 
 const globalEditorial = globalThis as typeof globalThis & {
   gentlePathEditorialState?: DemoEditorialState;
@@ -16,38 +21,7 @@ function createState(): DemoEditorialState {
   const now = new Date().toISOString();
   const reviewer =
     getDemoState().users.find((user) => user.role === 'admin')?.id ?? '';
-  const resources = getDemoPortalState().resources.map((resource) => ({
-    id: resource.id,
-    content_type: 'RESOURCE' as const,
-    title: resource.title,
-    description: resource.description,
-    parent_id: null,
-    type:
-      resource.format === 'guide'
-        ? ('GUIDE' as const)
-        : resource.format === 'toolkit'
-          ? ('TOOLKIT' as const)
-          : ('ARTICLE' as const),
-    format: 'WEB_PAGE' as const,
-    tags: [resource.category],
-    url: null,
-    resource_details: {
-      source_name: copy.demo.sourceName,
-      source_url: copy.demo.sourceUrl,
-      source_published_at: null,
-      reviewed_at: now,
-      reviewed_by_user_id: reviewer,
-      additional_properties: {
-        family_category: resource.category,
-        estimated_minutes: resource.readMinutes,
-        body: resource.body,
-      },
-    },
-    created_at: now,
-    updated_at: now,
-    ratings: { count: 0, average: null },
-    children_count: 0,
-  }));
+  const resources = createDemoResourceCatalogue(reviewer, now);
   const guides = copy.demo.guides.map((seed, index) => {
     const id = `36000000-0000-4000-8000-${String(index + 1).padStart(12, '0')}`;
     return {
@@ -83,11 +57,17 @@ function createState(): DemoEditorialState {
     guides,
     deletedResources: new Set(),
     deletedGuides: new Set(),
+    resourceCatalogueVersion: demoResourceCatalogueVersion,
   };
 }
 
 export function getDemoEditorialState(): DemoEditorialState {
   const state = (globalEditorial.gentlePathEditorialState ??= createState());
+  upgradeDemoResourceCatalogue(
+    state,
+    getDemoState().users.find((user) => user.role === 'admin')?.id ?? '',
+    new Date().toISOString(),
+  );
   for (const record of state.resources)
     record.tags = normalizeContentTags(record.tags);
   return state;

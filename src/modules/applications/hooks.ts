@@ -22,7 +22,21 @@ export const applicationQueryKeys = {
     ['portal', 'applications', userId, 'detail', id] as const,
   priority: (limit: number, offset: number, userId?: string) =>
     ['portal', 'applications', userId, 'priority', limit, offset] as const,
+  dashboard: (limit: number, userId?: string) =>
+    ['portal', 'applications', userId, 'dashboard', limit] as const,
 };
+
+export function useApplicationDashboard(limit = 6) {
+  const { session } = useSessionState();
+  const userId = session?.user.id;
+  const { applicationService } = useServiceContainer();
+  return useQuery({
+    enabled: Boolean(userId),
+    refetchInterval: 60_000,
+    queryKey: applicationQueryKeys.dashboard(limit, userId),
+    queryFn: ({ signal }) => applicationService.dashboard(limit, signal),
+  });
+}
 
 export function useApplications(query: ApplicationQuery) {
   const { session } = useSessionState();

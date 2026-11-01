@@ -2,9 +2,9 @@
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import type { Route } from 'next';
 import {
   Button,
-  Checkbox,
   Card,
   Field,
   Input,
@@ -13,11 +13,9 @@ import {
   UiIcon,
 } from '@/components/ui';
 import { LoginInputSchema, type LoginInput } from '@/models/loginInput';
-import { UserRoleSchema, type UserRole } from '@/models/userRole';
 import { useRuntimeConfig } from '@/providers/RuntimeProvider';
 import {
   gentlePathAuthStrings as authCopy,
-  gentlePathOnboardingStrings as onboardingCopy,
   gentlePathPortalStrings,
   gentlePathAccountToolsStrings as accountCopy,
   strings,
@@ -31,7 +29,10 @@ import {
   restartOnboardingDemo,
 } from './sessionClient';
 
-const onboardingPreset = 'onboarding';
+import {
+  DemoAccountPresetSchema,
+  type DemoAccountPreset,
+} from './models/demoAccountPreset';
 
 export function LoginScreen({
   redirectTo,
@@ -42,8 +43,7 @@ export function LoginScreen({
 }) {
   const router = useRouter();
   const { demoMode, devSettingsEnabled } = useRuntimeConfig();
-  const [demoRole, setDemoRole] = useState<UserRole | 'onboarding'>('user');
-  const [restartSetup, setRestartSetup] = useState(false);
+  const [demoPreset, setDemoPreset] = useState<DemoAccountPreset>('user');
   const [email, setEmail] = useState(demoMode ? authCopy.demoEmails.user : '');
   const [password, setPassword] = useState(
     demoMode ? authCopy.demoPassword : '',
@@ -93,14 +93,15 @@ export function LoginScreen({
     setPending(true);
     try {
       const session = await createSession({ action: 'login', ...parsed.data });
-      if (
-        demoMode &&
-        restartSetup &&
-        session.user.email === onboardingCopy.onboardingDemoEmail
-      ) {
+      if (demoMode && session.user.email === authCopy.demoEmails.onboarding) {
         await restartOnboardingDemo();
       }
-      router.push(authDestination(session.user.role, redirectTo));
+      const destination = authDestination(session.user.role, redirectTo);
+      router.push(
+        demoMode && session.user.email === authCopy.demoEmails.onboarding
+          ? (`/onboarding?redirectTo=${encodeURIComponent(destination)}` as Route)
+          : destination,
+      );
       router.refresh();
     } catch (caughtError) {
       form.querySelector('input')?.focus();
@@ -142,51 +143,29 @@ export function LoginScreen({
           <div className="gp-auth-demo-role">
             <Field labelText={gentlePathPortalStrings.auth.demoRoleLabel}>
               <Select
-                value={demoRole}
+                value={demoPreset}
                 disabled={pending}
                 leadingIcon={<UiIcon name="user" />}
                 onValueChange={(value) => {
-                  if (value === 'onboarding') {
-                    setDemoRole('onboarding');
-                    setEmail(onboardingCopy.onboardingDemoEmail);
-                    setPassword(authCopy.demoPassword);
-                    setRestartSetup(false);
-                    setError(null);
-                    setFieldErrors({});
-                    return;
-                  }
-                  const role = UserRoleSchema.safeParse(value);
-                  if (!role.success) return;
-                  setDemoRole(role.data);
-                  setRestartSetup(false);
-                  setEmail(authCopy.demoEmails[role.data]);
+                  const preset = DemoAccountPresetSchema.safeParse(value);
+                  if (!preset.success) return;
+                  setDemoPreset(preset.data);
+                  setEmail(authCopy.demoEmails[preset.data]);
                   setPassword(authCopy.demoPassword);
                   setError(null);
                   setFieldErrors({});
                 }}
               >
-                {Object.entries(gentlePathPortalStrings.auth.demoRoles).map(
-                  ([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ),
-                )}
-                <option value={onboardingPreset}>
-                  {onboardingCopy.demoPreset}
-                </option>
+                {DemoAccountPresetSchema.options.map((preset) => (
+                  <option key={preset} value={preset}>
+                    {gentlePathPortalStrings.auth.demoAccounts[preset]}
+                  </option>
+                ))}
               </Select>
             </Field>
-            {demoRole === 'onboarding' && (
-              <Checkbox
-                label={onboardingCopy.restartDemo}
-                description={onboardingCopy.restartDemoHint}
-                checked={restartSetup}
-                disabled={pending}
-                onChange={(event) => setRestartSetup(event.target.checked)}
-                className="mt-3"
-              />
-            )}
+            <p className="mt-3 mb-0 text-xs text-secondary">
+              {authCopy.demoAccountHints[demoPreset]}
+            </p>
           </div>
         ) : null}
         <div>

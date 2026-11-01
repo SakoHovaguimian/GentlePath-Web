@@ -1,0 +1,15 @@
+.gp-goal-cover-fallback {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  place-items: center;
+  background: var(--color-bg-brand-solid);
+}
+
+.gp-goal-cover-fallback img {
+  width: 42%;
+  max-width: 9rem;
+  height: auto;
+  border-radius: var(--radius-2xl);
+  object-fit: contain;
+}

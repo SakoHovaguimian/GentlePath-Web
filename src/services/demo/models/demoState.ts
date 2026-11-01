@@ -2,6 +2,7 @@ import type { FeatureRequestTransport } from '@/services/api/models';
 import type { DemoUser } from './demoUser';
 import type { ChatMessage } from '@/modules/chat/models/chatMessage';
 export interface DemoState {
+  accountFixtureVersion?: number;
   users: DemoUser[];
   featureRequests: FeatureRequestTransport[];
   messages: ChatMessage[];

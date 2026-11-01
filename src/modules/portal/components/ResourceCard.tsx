@@ -6,6 +6,7 @@ import type { ResourceCardProps } from '../models/resourceCardProps';
 import { getResourceArtwork } from './resourceArtwork';
 import { ResourceRatingSummary } from '@/modules/engagement/components/ResourceRatingSummary';
 import { SavedContentButton } from '@/modules/engagement/components/SavedContentButton';
+import { isResourceCollection } from '../resourceBrowsing';
 
 export function ResourceCard({
   resource,
@@ -15,6 +16,7 @@ export function ResourceCard({
 }: ResourceCardProps) {
   const Heading = headingLevel;
   const illustration = getResourceArtwork(resource);
+  const collection = isResourceCollection(resource);
   return (
     <article className="gp-resource-card" data-category={resource.category}>
       {onSave ? (
@@ -65,7 +67,9 @@ export function ResourceCard({
             {copy.resources.categories[resource.category]}
           </span>
           <span className="text-xs text-tertiary">
-            {copy.common.minutes(resource.readMinutes)}
+            {collection
+              ? copy.resources.collectionCount(resource.childrenCount ?? 0)
+              : copy.common.minutes(resource.readMinutes)}
           </span>
         </div>
         <Heading>
@@ -82,7 +86,9 @@ export function ResourceCard({
         <ResourceRatingSummary ratings={resource.ratings} compact />
         <div className="gp-resource-card__footer">
           <span className="text-xs text-tertiary">
-            {copy.resources.formats[resource.format]}
+            {collection
+              ? copy.resources.collectionLabel
+              : copy.resources.formats[resource.format]}
           </span>
           {onSave ? (
             <BookmarkButton

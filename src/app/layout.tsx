@@ -10,12 +10,48 @@ import { gentlePathLandingStrings, strings } from '@/strings';
 import { ThemeScript } from '@/components/ui';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.PORTAL_APP_ORIGIN ||
+      `http://localhost:${process.env.PORT || 3001}`,
+  ),
   title: {
     default: gentlePathLandingStrings.metadata.title,
     template: `%s | ${strings.app.name}`,
   },
   description: gentlePathLandingStrings.metadata.description,
-  icons: { icon: '/gentlepath/brand-blocks.png' },
+  icons: {
+    icon: [
+      { url: '/gentlepath/app-icon.svg', type: 'image/svg+xml' },
+      { url: '/gentlepath/favicon-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/gentlepath/app-icon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    shortcut: '/gentlepath/favicon-32.png',
+    apple: {
+      url: '/gentlepath/apple-touch-icon.png',
+      sizes: '180x180',
+      type: 'image/png',
+    },
+  },
+  openGraph: {
+    type: 'website',
+    siteName: gentlePathLandingStrings.brandTitle,
+    title: gentlePathLandingStrings.metadata.title,
+    description: gentlePathLandingStrings.metadata.description,
+    images: [
+      {
+        url: '/gentlepath/share-preview.png',
+        width: 1200,
+        height: 630,
+        alt: gentlePathLandingStrings.metadata.previewAlt,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: gentlePathLandingStrings.metadata.title,
+    description: gentlePathLandingStrings.metadata.description,
+    images: ['/gentlepath/share-preview.png'],
+  },
 };
 
 const bodyFont = localFont({

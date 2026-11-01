@@ -9,6 +9,7 @@ const now = new Date();
 const daysAgo = (days: number) =>
   new Date(now.getTime() - days * 86400000).toISOString();
 
+export const newDemoUserId = '55555555-5555-4555-8555-555555555555';
 export const onboardingDemoUserId = '44444444-4444-4444-8444-444444444444';
 
 export const users: DemoUser[] = [
@@ -68,10 +69,24 @@ export const users: DemoUser[] = [
     updated_at: new Date().toISOString(),
     deleted: false,
   },
+  {
+    id: newDemoUserId,
+    external_id: 'firebase-demo-new-user',
+    first_name: copy.accounts.newUser.firstName,
+    last_name: copy.accounts.newUser.lastName,
+    email: copy.accounts.newUser.email,
+    role: 'user',
+    disabled: false,
+    phone_number: null,
+    date_of_birth: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted: false,
+  },
 ];
 
 export const populatedDemoUsers = users.filter(
-  (user) => user.id !== onboardingDemoUserId,
+  (user) => user.id !== onboardingDemoUserId && user.id !== newDemoUserId,
 );
 
 export const featureRequests: FeatureRequestTransport[] = [

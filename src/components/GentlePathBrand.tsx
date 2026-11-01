@@ -10,14 +10,14 @@ export function GentlePathBrand({
 }) {
   return (
     <span className={`gp-brand ${className}`}>
-      <Image
-        className="gp-brand-mark"
-        src="/gentlepath/brand-blocks.png"
-        width={48}
-        height={48}
-        alt={gentlePathLandingStrings.decorativeAlt}
-        aria-hidden="true"
-      />
+      <span className="gp-brand-mark" aria-hidden="true">
+        <Image
+          src="/gentlepath/app-icon.png"
+          width={48}
+          height={48}
+          alt={gentlePathLandingStrings.decorativeAlt}
+        />
+      </span>
       <span className={compact ? 'sr-only' : 'gp-brand-wordmark'}>
         {gentlePathLandingStrings.brandTitle}
       </span>

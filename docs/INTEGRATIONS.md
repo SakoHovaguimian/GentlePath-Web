@@ -6,15 +6,15 @@ The browser talks to same-origin Next.js routes. The server owns authentication,
 
 [.env.example](../.env.example) is the complete configuration reference.
 
-| Setting                                   | Purpose                                                                |
-| ----------------------------------------- | ---------------------------------------------------------------------- |
-| `DEMO_MODE`                               | Server default for isolated demo versus live services                  |
-| `PORTAL_API_URL`, `APP_VERSION`           | Backend base URL including its prefix, plus forwarded version          |
-| `SESSION_SECRET`, `FIREBASE_WEB_API_KEY`  | Required live encrypted-session secret and Firebase REST configuration |
-| `PORTAL_APP_ORIGIN`                       | Canonical public origin when an ingress changes request origin         |
-| `PORTAL_SOCKET_URL`                       | Optional browser-reachable Socket.IO origin                            |
-| Firebase web configuration / VAPID values | Optional Messaging public identifiers, never Admin credentials         |
-| `AMPLITUDE_API_KEY`                       | Optional public analytics project key; explicit consent still required |
+| Setting                                   | Purpose                                                                     |
+| ----------------------------------------- | --------------------------------------------------------------------------- |
+| `DEMO_MODE`                               | Server default for isolated demo versus live services                       |
+| `PORTAL_API_URL`, `APP_VERSION`           | Backend base URL including its prefix, plus forwarded version               |
+| `SESSION_SECRET`, `FIREBASE_WEB_API_KEY`  | Required live encrypted-session secret and Firebase REST configuration      |
+| `PORTAL_APP_ORIGIN`                       | Canonical public origin for absolute share images and ingress origin checks |
+| `PORTAL_SOCKET_URL`                       | Optional browser-reachable Socket.IO origin                                 |
+| Firebase web configuration / VAPID values | Optional Messaging public identifiers, never Admin credentials              |
+| `AMPLITUDE_API_KEY`                       | Optional public analytics project key; explicit consent still required      |
 
 Live sessions require a random secret of at least 32 characters. Rotating it signs users out. Never expose backend URLs, private keys, refresh tokens, or backend storage credentials through public config. S3 and provider management credentials belong to the backend.
 
@@ -91,7 +91,6 @@ Poll transport preserves `voting_locked`, `expires_at`, and `is_expired` from th
 Public Email Us follows screen → useContactRequest → ContactService → BrowserApiClient → `/api/public/contact` → API `POST /support`. The form collects name, reply email, topic, and message without requiring an account. Topics are `INITIAL_CONTACT`, `FEATURE_REQUEST`, `BUG_REPORT`, and `FEEDBACK`. The proxy validates the body and origin, forwards only the validated payload with the app-version header, and never exposes backend credentials. The API validates again, applies its shared rate limiter (five requests per source per 15 minutes), limits the body to 32 KiB, and uses the existing container-owned email service with a fixed support recipient and the submitted reply-to address. A success response means the email provider accepted the message, not that it was read or delivered to an inbox.
 
 Demo mode validates the same input, observes configured latency/error simulation, and returns an explicit local-only receipt without contacting the backend or email provider. Contact has no automatic retry; failure preserves the full draft. The form stays embedded in the landing page; anchor navigation and appearance changes preserve its mounted draft. Confirmed success clears the fields and shows a shared success toast while keeping the form available for another message. Demo success retains its explicit local-only receipt in the toast. Live SMTP acceptance and delivery require configured integration verification.
-
 
 ## Family discovery, applications, and goals
 

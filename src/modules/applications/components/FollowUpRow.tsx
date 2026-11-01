@@ -9,6 +9,7 @@ import type { ApplicationFollowUp } from '../models/applicationFollowUp';
 import { useApplicationMutations } from '../hooks';
 import { FollowUpEditor } from './FollowUpEditor';
 import { useChildren } from '@/modules/portal/hooks';
+import { useFollowUpCompletion } from '../useFollowUpCompletion';
 
 export function FollowUpRow({
   followUp,
@@ -17,7 +18,9 @@ export function FollowUpRow({
   followUp: ApplicationFollowUp;
   priority?: boolean;
 }) {
-  const { completeFollowUp, deleteFollowUp } = useApplicationMutations();
+  const { deleteFollowUp } = useApplicationMutations();
+  const { mutation: completeFollowUp, complete } =
+    useFollowUpCompletion(followUp);
   const children = useChildren();
   const childName = children.data?.find(
     (child) => child.id === followUp.child_id,
@@ -25,28 +28,6 @@ export function FollowUpRow({
   const [editing, setEditing] = useState(false);
   const busy = useRef(false);
   const { showAlert, showToast } = usePresentationService();
-  async function complete() {
-    if (busy.current) return;
-    busy.current = true;
-    try {
-      await completeFollowUp.mutateAsync({
-        id: followUp.application_id,
-        followUpId: followUp.id,
-        input: {
-          completed: !followUp.completed_at,
-          expected_updated_at: followUp.updated_at!,
-        },
-      });
-      void showToast({
-        title: followUp.completed_at ? copy.reopenedTitle : copy.completedTitle,
-        intent: 'success',
-      });
-    } catch {
-      // Retain the row and show a safe inline error.
-    } finally {
-      busy.current = false;
-    }
-  }
   async function remove() {
     if (busy.current) return;
     busy.current = true;

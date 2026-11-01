@@ -43,7 +43,7 @@ export function AuthCardShell({
         <div className="gp-auth-story-content">
           <div className="gp-auth-story-art">
             <Image
-              src="/gentlepath/parent-and-child.png"
+              src="/gentlepath/parent-and-child-blonde.png"
               width={1280}
               height={1280}
               alt={gentlePathAuthStrings.storyArtAlt}
@@ -84,7 +84,7 @@ export function AuthCardShell({
         </Link>
         <div className="gp-auth-mobile-art" aria-hidden="true">
           <Image
-            src="/gentlepath/parent-and-child.png"
+            src="/gentlepath/parent-and-child-blonde.png"
             width={1280}
             height={1280}
             alt={gentlePathAuthStrings.storyArtAlt}

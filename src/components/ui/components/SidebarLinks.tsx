@@ -41,7 +41,9 @@ export function SidebarLinks({
           <span className="ui-sidebar-icon inline-flex shrink-0 items-center justify-center">
             {item.icon}
           </span>
-          <span className="min-w-0 text-left wrap-anywhere">{item.label}</span>
+          <span className="min-w-0 text-left whitespace-nowrap">
+            {item.label}
+          </span>
         </span>
       </NavigationLink>
     </Fragment>

@@ -22,6 +22,7 @@ const globalDemo = globalThis as typeof globalThis & {
 export function getDemoState(): DemoState {
   if (!globalDemo.portalDemoState) {
     globalDemo.portalDemoState = {
+      accountFixtureVersion: 1,
       users: structuredClone(users),
       featureRequests: structuredClone(featureRequests),
       credentials: new Map(
@@ -42,7 +43,21 @@ export function getDemoState(): DemoState {
       ],
     };
   }
-  return globalDemo.portalDemoState;
+  const state = globalDemo.portalDemoState;
+  if (!state.accountFixtureVersion) {
+    const newUser = users.find(
+      (user) => user.external_id === 'firebase-demo-new-user',
+    )!;
+    if (!state.users.some((user) => user.id === newUser.id)) {
+      state.users.push(structuredClone(newUser));
+      state.credentials.set(
+        newUser.external_id,
+        passwordRecord(gentlePathDemoStrings.seedPassword),
+      );
+    }
+    state.accountFixtureVersion = 1;
+  }
+  return state;
 }
 
 export function resetDemoState() {

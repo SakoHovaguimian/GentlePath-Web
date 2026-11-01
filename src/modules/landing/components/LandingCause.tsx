@@ -19,7 +19,7 @@ export function LandingCause() {
           <p className="gp-cause-note">{copy.cause.noteDescription}</p>
         </div>
         <Image
-          src="/gentlepath/parent-and-child.png"
+          src="/gentlepath/parent-and-child-blonde.png"
           width={1280}
           height={1280}
           alt={copy.cause.artAlt}
