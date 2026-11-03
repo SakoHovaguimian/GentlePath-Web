@@ -50,8 +50,10 @@ html:has(.gp-landing) {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-block-size: calc(100vh - var(--gp-public-header-height));
-  min-block-size: calc(100svh - var(--gp-public-header-height));
+  min-block-size: min(
+    calc(100svh - var(--gp-public-header-height)),
+    max(40rem, 56.25vw)
+  );
   overflow: hidden;
   isolation: isolate;
   background: var(--landing-hero-background);
@@ -288,8 +290,13 @@ html:has(.gp-landing) {
   }
 }
 
-@media (max-width: 760px), (max-aspect-ratio: 1/1) {
+@media (max-width: 760px) {
+  .gp-hero {
+    min-block-size: 0;
+  }
+
   .gp-hero-content {
+    flex: none;
     align-items: flex-start;
     padding: 2rem var(--gp-hero-gutter) clamp(12rem, 27svh, 23rem);
   }
